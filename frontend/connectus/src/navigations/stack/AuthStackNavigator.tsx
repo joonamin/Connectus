@@ -1,6 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import AuthHomeScreen from '../../screens/auth/AuthHomeScreen';
+import AuthHomeScreen from '@/screens/auth/AuthHomeScreen';
 
 export type AuthStackParamList = {
   AuthHome: undefined;
