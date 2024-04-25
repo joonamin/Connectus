@@ -12,5 +12,6 @@ export default function MainText({children, style, ...props}: TextProps) {
 const styles = StyleSheet.create({
   mainText: {
     fontFamily: 'GmarketSansTTFMedium',
+    fontSize: 24,
   },
 });
