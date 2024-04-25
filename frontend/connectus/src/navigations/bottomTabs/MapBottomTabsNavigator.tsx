@@ -1,11 +1,11 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import MapHomeScreen from '../../screens/map/MapHomeScreen';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import EventScreen from '../../screens/event/EventHomeScreen';
-import FeedHomeScreen from '../../screens/feed/FeedHomeScreen';
-import MyHomeScreen from '../../screens/my/MyHomeScreen';
-import ShareHomeScreen from '../../screens/share/ShareHomeScreen';
+import MapHomeScreen from '@/screens/map/MapHomeScreen';
+import EventScreen from '@/screens/event/EventHomeScreen';
+import FeedHomeScreen from '@/screens/feed/FeedHomeScreen';
+import MyHomeScreen from '@/screens/my/MyHomeScreen';
+import ShareHomeScreen from '@/screens/share/ShareHomeScreen';
 const Tab = createBottomTabNavigator();
 
 export default function MapBottomTabsNavigator() {

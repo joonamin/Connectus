@@ -1,6 +1,6 @@
 import React from 'react';
-import AuthStackNavigator from '../stack/AuthStackNavigator';
 import MapBottomTabsNavigator from '../bottomTabs/MapBottomTabsNavigator';
+import AuthStackNavigator from '../stack/AuthStackNavigator';
 
 export default function RootNavigator() {
   return (
