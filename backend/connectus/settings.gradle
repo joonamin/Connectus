@@ -1,1 +1,3 @@
 rootProject.name = 'connectus'
+include 'discovery-service'
+
