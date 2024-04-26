@@ -1,0 +1,3 @@
+# 여기는 microservice 마다의 설정 파일들을 작성합니다.
+# 공통 설정 값들은 project-root의 application.yml을 참조합니다.
+```
