@@ -1,3 +1,16 @@
-# 여기는 microservice 마다의 설정 파일들을 작성합니다.
-# 공통 설정 값들은 project-root의 application.yml을 참조합니다.
-```
+server:
+  port: 8761
+
+spring:
+  application:
+    name: discovery-service
+  datasource:
+      url: jdbc:mysql://localhost:3306/demo?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+      username: ssafy
+      password: ssafy
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
