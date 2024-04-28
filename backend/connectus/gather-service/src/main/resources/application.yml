@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gather-service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/demo?serverTimezone=Asia/Seoul&characterEncoding=UTF-8 # Database이름 ?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    #    mysql에 생성한 사용자 계정 정보를 써야 합니다.
+    username: root
+    password: ssafy # 자신의 mysql 비밀번호
+
+eureka:
+  #  instance:
+  #    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
