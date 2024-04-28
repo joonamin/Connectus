@@ -1,3 +1,4 @@
+import colors from '@/constants/colors';
 import React from 'react';
 import {StyleSheet, Text, TextProps} from 'react-native';
 
@@ -13,5 +14,6 @@ const styles = StyleSheet.create({
   mainText: {
     fontFamily: 'GmarketSansTTFMedium',
     fontSize: 24,
+    color: colors.white
   },
 });

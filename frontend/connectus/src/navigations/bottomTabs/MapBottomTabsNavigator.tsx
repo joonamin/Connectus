@@ -6,12 +6,27 @@ import EventScreen from '@/screens/event/EventHomeScreen';
 import FeedHomeScreen from '@/screens/feed/FeedHomeScreen';
 import MyHomeScreen from '@/screens/my/MyHomeScreen';
 import ShareHomeScreen from '@/screens/share/ShareHomeScreen';
-const Tab = createBottomTabNavigator();
+import FeedStackNavigator, {
+  FeedStackParamList,
+} from '../stack/FeedStackNavigator';
+import {NavigatorScreenParams, RouteProp} from '@react-navigation/native';
 
-export default function MapBottomTabsNavigator() {
+export type BottomTabParamList = {
+  Share: undefined;
+  Feed: NavigatorScreenParams<FeedStackParamList>;
+  Map: undefined;
+  Event: undefined;
+  My: undefined;
+};
+
+const Tab = createBottomTabNavigator<BottomTabParamList>();
+
+export default function MapBottomTabsNavigator(
+  route: RouteProp<BottomTabParamList>,
+) {
   return (
     <Tab.Navigator
-      initialRouteName="MapHome"
+      initialRouteName="Map"
       screenOptions={{
         tabBarLabelStyle: {
           fontSize: 12,
@@ -19,7 +34,7 @@ export default function MapBottomTabsNavigator() {
       }}>
       <Tab.Screen
         name="Share"
-        component={FeedHomeScreen}
+        component={ShareHomeScreen}
         options={{
           title: '기록',
           headerTitle: '',
@@ -29,7 +44,7 @@ export default function MapBottomTabsNavigator() {
       />
       <Tab.Screen
         name="Feed"
-        component={ShareHomeScreen}
+        component={FeedStackNavigator}
         options={{
           title: '피드',
           headerTitle: '',
@@ -38,7 +53,7 @@ export default function MapBottomTabsNavigator() {
         }}
       />
       <Tab.Screen
-        name="MapHome"
+        name="Map"
         component={MapHomeScreen}
         options={{
           title: '메인',
