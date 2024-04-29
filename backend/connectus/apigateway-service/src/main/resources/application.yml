@@ -11,6 +11,14 @@ eureka:
 spring:
   application:
     name: apigateway-service
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: gather-service
+            uri: http://localhost:8080/
+            predicates:
+              - Path=/gather/**
   datasource:
     url: jdbc:mysql://localhost:3306/demo?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ssafy
