@@ -10,6 +10,14 @@ spring:
     #    mysql에 생성한 사용자 계정 정보를 써야 합니다.
     username: root
     password: ssafy # 자신의 mysql 비밀번호
+  jpa:
+    hibernate:
+      ddl-auto: create
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
+
 
 eureka:
   #  instance:
