@@ -1,25 +1,55 @@
-import {Pressable, PressableProps, StyleSheet, Text, View} from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  TouchableHighlight,
+  TouchableNativeFeedback,
+  TouchableWithoutFeedbackProps,
+} from 'react-native';
 import React from 'react';
-import colors from '@/constants/colors';
+import colors, {ColorCodes} from '@/constants/colors';
+import MainContainer from '@/components/containers/MainContainer';
 
-interface CustomButtonProps extends PressableProps {
-  label: string;
+/**
+ * CustomButton 생성 시 전달 인자 타입을 지정합니다
+ */
+export interface CustomButtonProps extends TouchableWithoutFeedbackProps {
+  /**
+   * CustomButton의 배경 색을 지정합니다
+   */
+  backgroundColor?: ColorCodes;
 }
 
-export default function CustomButton({label, ...props}: CustomButtonProps) {
-  return (
-    <Pressable style={styles.container} {...props}>
-      <Text>{label}</Text>
-    </Pressable>
+/**
+ * CustomButton을 생성합니다
+ *
+ * @returns CustomButton
+ */
+export default function CustomButton({
+  backgroundColor,
+  children,
+  ...props
+}: CustomButtonProps) {
+  const styles = StyleSheet.create({
+    container: {
+      borderRadius: 15,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: backgroundColor
+        ? backgroundColor
+        : colors.primaryColorBlue,
+    },
+  });
+
+  const content = (
+    <MainContainer style={styles.container}>{children}</MainContainer>
   );
-}
 
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.primaryColorBlue
-  },
-});
+  // Android일 시 feedback이 존재하는 Touchable 요소를 사용합니다
+  if (Platform.OS === 'android') {
+    return (
+      <TouchableNativeFeedback {...props}>{content}</TouchableNativeFeedback>
+    );
+  } else {
+    return <TouchableHighlight {...props}>{content}</TouchableHighlight>;
+  }
+}
