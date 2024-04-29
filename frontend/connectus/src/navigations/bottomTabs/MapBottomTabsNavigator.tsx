@@ -31,6 +31,7 @@ export default function MapBottomTabsNavigator(
         tabBarLabelStyle: {
           fontSize: 12,
         },
+        tabBarHideOnKeyboard: true,
       }}>
       <Tab.Screen
         name="Share"
