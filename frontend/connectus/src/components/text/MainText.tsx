@@ -14,6 +14,8 @@ const styles = StyleSheet.create({
   mainText: {
     fontFamily: 'GmarketSansTTFMedium',
     fontSize: 24,
-    color: colors.white
+    color: colors.white,
+    padding: 0,
+    margin: 0,
   },
 });
