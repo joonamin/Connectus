@@ -52,6 +52,7 @@ export default function FeedHomeScreen() {
               data={[1, 2, 3]}
               renderItem={({index}) => (
                 <FeedPreview
+                  isVisible={true}
                   isLiked={false}
                   likeNumber={12}
                   commentNumber={53}

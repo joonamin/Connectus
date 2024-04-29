@@ -18,7 +18,7 @@ function FeedStackNavigator() {
       screenOptions={{
         headerStyle: {
           backgroundColor: colors.background,
-          borderColor: colors.dividerColor
+          borderColor: colors.dividerColor,
         },
       }}>
       <Stack.Screen
@@ -28,7 +28,13 @@ function FeedStackNavigator() {
           title: '방명록 공유',
         }}
       />
-      <Stack.Screen name="FeedDetail" component={FeedDetailScreen} />
+      <Stack.Screen
+        name="FeedDetail"
+        component={FeedDetailScreen}
+        options={{
+          title: '',
+        }}
+      />
     </Stack.Navigator>
   );
 }

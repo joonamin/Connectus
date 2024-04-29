@@ -9,8 +9,14 @@ import {
   SafeAreaView,
 } from 'react-native';
 import React, {useState} from 'react';
-import MainText from '../text/MainText';
+import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+
+import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
+import {BottomTabParamList} from '@/navigations/bottomTabs/MapBottomTabsNavigator';
+import MainText from '../text/MainText';
 import colors from '@/constants/colors';
 
 type feedPreviewProps = {
@@ -21,6 +27,11 @@ type feedPreviewProps = {
   show?: () => void;
 };
 
+type Navigation = CompositeNavigationProp<
+  StackNavigationProp<FeedStackParamList>,
+  BottomTabNavigationProp<BottomTabParamList>
+>;
+
 export default function FeedPreview({
   isLiked,
   isVisible = false,
@@ -29,9 +40,13 @@ export default function FeedPreview({
   show,
 }: feedPreviewProps) {
   const [viewIsLiked, setViewIsLiked] = useState(isLiked);
-
+  const navigation = useNavigation<Navigation>();
   const handlePressLikeButton = () => {
     setViewIsLiked(!viewIsLiked);
+  };
+
+  const handlePressPressFeedDetail = () => {
+    navigation.navigate('FeedDetail');
   };
 
   return (
@@ -76,7 +91,7 @@ export default function FeedPreview({
         {isVisible ? (
           <Pressable
             style={styles.lockButton}
-            onPress={() => console.log('바로가기')}>
+            onPress={handlePressPressFeedDetail}>
             <MainText>게시글 바로보기</MainText>
             <Ionicons name="arrow-redo-circle" size={24} />
           </Pressable>
