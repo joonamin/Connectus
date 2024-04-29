@@ -11,4 +11,4 @@ export const defaultTheme = {
     border: colors.secondaryColor,
     card: colors.dividerColor,
   },
-};
+} as const;

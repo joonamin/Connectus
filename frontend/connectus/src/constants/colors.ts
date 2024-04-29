@@ -6,6 +6,6 @@ const colors = {
   secondaryColor: '#9b9b9b',
   dividerColor: '#414141',
   white: '#ffffff',
-};
+} as const;
 
 export default colors;
