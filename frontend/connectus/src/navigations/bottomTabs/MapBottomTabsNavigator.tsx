@@ -7,7 +7,11 @@ import ShareHomeScreen from '@/screens/share/ShareHomeScreen';
 import FeedStackNavigator, {
   FeedStackParamList,
 } from '../stack/FeedStackNavigator';
-import {NavigatorScreenParams, RouteProp} from '@react-navigation/native';
+import {
+  NavigatorScreenParams,
+  RouteProp,
+  getFocusedRouteNameFromRoute,
+} from '@react-navigation/native';
 import colors from '@/constants/colors';
 import MapStackNavigator, {MapStackParamList} from '../stack/MapStackNavigator';
 
@@ -30,7 +34,6 @@ export default function MapBottomTabsNavigator(
       initialRouteName="Map"
       screenOptions={({route}) => ({
         tabBarStyle: {
-          // display: route.name === 'Map' ? 'none' : 'flex',
           height: 70,
           shadowColor: colors.background,
           shadowOffset: {
@@ -70,12 +73,28 @@ export default function MapBottomTabsNavigator(
       <Tab.Screen
         name="Map"
         component={MapStackNavigator}
-        options={{
+        options={({route}) => ({
+          tabBarStyle: (route => {
+            const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+            console.log('route : ', routeName);
+            if (routeName === 'MapWalk') {
+              return {display: 'none'};
+            }
+            return {
+              height: 70,
+              shadowColor: colors.background,
+              shadowOffset: {
+                width: 2,
+                height: 4,
+              },
+              elevation: 4,
+            };
+          })(route),
           title: '메인',
           headerTitle: '',
           headerShown: false,
           tabBarIcon: () => <MaterialIcons name="directions-walk" size={30} />,
-        }}
+        })}
       />
       <Tab.Screen
         name="Event"

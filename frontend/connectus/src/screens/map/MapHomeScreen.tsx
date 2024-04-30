@@ -4,10 +4,25 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import useUserLocation from '../../hooks/useUserLocation';
 import CustomButton from '@/components/buttons/CustomButton';
 import MainText from '@/components/text/MainText';
+import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
+import {BottomTabParamList} from '@/navigations/bottomTabs/MapBottomTabsNavigator';
+
+type Navigation = CompositeNavigationProp<
+  StackNavigationProp<MapStackParamList>,
+  BottomTabNavigationProp<BottomTabParamList>
+>;
 
 export default function MapHomeScreen() {
   const mapRef = useRef<MapView | null>(null);
+  const navigation = useNavigation<Navigation>();
   const {userLocation} = useUserLocation();
+
+  const handlePressStart = () => {
+    navigation.navigate('MapWalk');
+  };
   return (
     <>
       <MapView
@@ -25,7 +40,7 @@ export default function MapHomeScreen() {
         {}
       </MapView>
       <View style={styles.buttonContainer}>
-        <CustomButton onPress={() => console.log('hello')}>
+        <CustomButton onPress={handlePressStart}>
           <MainText>산책시작</MainText>
         </CustomButton>
       </View>
