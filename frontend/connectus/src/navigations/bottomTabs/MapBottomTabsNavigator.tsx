@@ -10,6 +10,8 @@ import FeedStackNavigator, {
   FeedStackParamList,
 } from '../stack/FeedStackNavigator';
 import {NavigatorScreenParams, RouteProp} from '@react-navigation/native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import colors from '@/constants/colors';
 
 export type BottomTabParamList = {
   Share: undefined;
@@ -28,8 +30,18 @@ export default function MapBottomTabsNavigator(
     <Tab.Navigator
       initialRouteName="Map"
       screenOptions={{
+        tabBarStyle: {
+          height: 70,
+          shadowColor: colors.background,
+          shadowOffset: {
+            width: 2,
+            height: 4,
+          },
+          elevation: 4,
+        },
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontFamily: 'GmarketSansTTFMedium',
+          fontSize: 16,
         },
         tabBarHideOnKeyboard: true,
       }}>
@@ -50,7 +62,9 @@ export default function MapBottomTabsNavigator(
           title: '피드',
           headerTitle: '',
           headerShown: false,
-          tabBarIcon: () => <MaterialIcons name="feed" size={30} />,
+          tabBarIcon: () => (
+            <MaterialIcons name="feed" size={30} color={colors.white} />
+          ),
         }}
       />
       <Tab.Screen
