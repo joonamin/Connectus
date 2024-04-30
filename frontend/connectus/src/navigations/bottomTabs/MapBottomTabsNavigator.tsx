@@ -1,22 +1,20 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MapHomeScreen from '@/screens/map/MapHomeScreen';
 import EventScreen from '@/screens/event/EventHomeScreen';
-import FeedHomeScreen from '@/screens/feed/FeedHomeScreen';
 import MyHomeScreen from '@/screens/my/MyHomeScreen';
 import ShareHomeScreen from '@/screens/share/ShareHomeScreen';
 import FeedStackNavigator, {
   FeedStackParamList,
 } from '../stack/FeedStackNavigator';
 import {NavigatorScreenParams, RouteProp} from '@react-navigation/native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import colors from '@/constants/colors';
+import MapStackNavigator, {MapStackParamList} from '../stack/MapStackNavigator';
 
 export type BottomTabParamList = {
   Share: undefined;
   Feed: NavigatorScreenParams<FeedStackParamList>;
-  Map: undefined;
+  Map: NavigatorScreenParams<MapStackParamList>;
   Event: undefined;
   My: undefined;
 };
@@ -24,13 +22,15 @@ export type BottomTabParamList = {
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function MapBottomTabsNavigator(
+  navigation: any,
   route: RouteProp<BottomTabParamList>,
 ) {
   return (
     <Tab.Navigator
       initialRouteName="Map"
-      screenOptions={{
+      screenOptions={({route}) => ({
         tabBarStyle: {
+          // display: route.name === 'Map' ? 'none' : 'flex',
           height: 70,
           shadowColor: colors.background,
           shadowOffset: {
@@ -44,7 +44,7 @@ export default function MapBottomTabsNavigator(
           fontSize: 16,
         },
         tabBarHideOnKeyboard: true,
-      }}>
+      })}>
       <Tab.Screen
         name="Share"
         component={ShareHomeScreen}
@@ -69,7 +69,7 @@ export default function MapBottomTabsNavigator(
       />
       <Tab.Screen
         name="Map"
-        component={MapHomeScreen}
+        component={MapStackNavigator}
         options={{
           title: '메인',
           headerTitle: '',
