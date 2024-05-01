@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';
+import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import useUserLocation from '../../hooks/useUserLocation';
 import CustomButton from '@/components/buttons/CustomButton';
@@ -8,7 +8,7 @@ import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
-import {BottomTabParamList} from '@/navigations/bottomTabs/MapBottomTabsNavigator';
+import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
@@ -23,8 +23,9 @@ export default function MapHomeScreen() {
   const handlePressStart = () => {
     navigation.navigate('MapWalk');
   };
+
   return (
-    <SafeAreaView style={{flex:1}}>
+    <SafeAreaView style={{flex: 1}}>
       <MapView
         ref={mapRef}
         style={styles.container}
@@ -57,5 +58,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: Dimensions.get('screen').width,
     backgroundColor: 'transparent',
+  },
+  bottomSheetContainer: {
+    flex: 1,
+    alignItems: 'center',
   },
 });

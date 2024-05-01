@@ -14,7 +14,6 @@ import {
 } from '@react-navigation/native';
 import colors from '@/constants/colors';
 import MapStackNavigator, {MapStackParamList} from '../stack/MapStackNavigator';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SafeAreaView} from 'react-native';
 
 export type BottomTabParamList = {
