@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import useUserLocation from '@/hooks/useUserLocation';
@@ -6,10 +6,25 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import colors from '@/constants/colors';
 import MainText from '@/components/text/MainText';
+import useInterval from '@/hooks/useInterval';
+import {convertSecondsToTime, formatTime} from '@/utils';
 
 export default function MapWalkScreen() {
-  const mapRef = useRef<MapView | null>(null);
   const {userLocation} = useUserLocation();
+  const mapRef = useRef<MapView | null>(null);
+  const [time, setTime] = useState<number>(0);
+  const [indicagteTime, setIndicateTime] = useState<string | null>(null);
+
+  // 1초마다 time을 증가시키기 위해 useInterval에 넣어줄 코드입니다
+  const tick = () => {
+    setTime(prev => prev + 1);
+  };
+  useInterval(tick, 1000);
+
+  useEffect(() => {
+    const {seconds, minutes, hours} = convertSecondsToTime(time);
+    setIndicateTime(formatTime(hours, minutes, seconds));
+  }, [time]);
 
   return (
     <>
@@ -31,7 +46,7 @@ export default function MapWalkScreen() {
         <View style={styles.indicatorContainer}>
           <View style={styles.timeTextContainer}>
             <Ionicons name="timer-outline" size={32} />
-            <MainText style={styles.timeText}>{'12:53'}</MainText>
+            <MainText style={styles.timeText}>{indicagteTime}</MainText>
           </View>
           <View style={styles.distanceTextContainer}>
             <FontAwesome5 name={'walking'} size={28} />
@@ -52,7 +67,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width,
     height: 70,
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.white,
     position: 'absolute',
@@ -60,11 +74,9 @@ const styles = StyleSheet.create({
   },
   indicatorContainer: {
     position: 'absolute',
-    left: 0,
-    paddingHorizontal: 15,
     width: '80%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems:'center',
   },
   timeTextContainer: {
     gap: 5,
@@ -76,6 +88,8 @@ const styles = StyleSheet.create({
     color: colors.background,
   },
   distanceTextContainer: {
+    position:'absolute',
+    right: 0,
     gap: 5,
     flexDirection: 'row',
     justifyContent: 'center',

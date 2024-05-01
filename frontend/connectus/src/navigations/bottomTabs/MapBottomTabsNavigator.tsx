@@ -14,6 +14,8 @@ import {
 } from '@react-navigation/native';
 import colors from '@/constants/colors';
 import MapStackNavigator, {MapStackParamList} from '../stack/MapStackNavigator';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native';
 
 export type BottomTabParamList = {
   Share: undefined;
@@ -30,92 +32,96 @@ export default function MapBottomTabsNavigator(
   route: RouteProp<BottomTabParamList>,
 ) {
   return (
-    <Tab.Navigator
-      initialRouteName="Map"
-      screenOptions={({route}) => ({
-        tabBarStyle: {
-          height: 70,
-          shadowColor: colors.background,
-          shadowOffset: {
-            width: 2,
-            height: 4,
+    <SafeAreaView style={{flex: 1}}>
+      <Tab.Navigator
+        initialRouteName="Map"
+        screenOptions={({route}) => ({
+          tabBarStyle: {
+            height: 70,
+            shadowColor: colors.background,
+            shadowOffset: {
+              width: 2,
+              height: 4,
+            },
+            elevation: 4,
           },
-          elevation: 4,
-        },
-        tabBarLabelStyle: {
-          fontFamily: 'GmarketSansTTFMedium',
-          fontSize: 16,
-        },
-        tabBarHideOnKeyboard: true,
-      })}>
-      <Tab.Screen
-        name="Share"
-        component={ShareHomeScreen}
-        options={{
-          title: '기록',
-          headerTitle: '',
-          headerShown: false,
-          tabBarIcon: () => <MaterialIcons name="share" size={30} />,
-        }}
-      />
-      <Tab.Screen
-        name="Feed"
-        component={FeedStackNavigator}
-        options={{
-          title: '피드',
-          headerTitle: '',
-          headerShown: false,
-          tabBarIcon: () => (
-            <MaterialIcons name="feed" size={30} color={colors.white} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Map"
-        component={MapStackNavigator}
-        options={({route}) => ({
-          tabBarStyle: (route => {
-            const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-            console.log('route : ', routeName);
-            if (routeName === 'MapWalk') {
-              return {display: 'none'};
-            }
-            return {
-              height: 70,
-              shadowColor: colors.background,
-              shadowOffset: {
-                width: 2,
-                height: 4,
-              },
-              elevation: 4,
-            };
-          })(route),
-          title: '메인',
-          headerTitle: '',
-          headerShown: false,
-          tabBarIcon: () => <MaterialIcons name="directions-walk" size={30} />,
-        })}
-      />
-      <Tab.Screen
-        name="Event"
-        component={EventScreen}
-        options={{
-          title: '이벤트',
-          headerTitle: '',
-          headerShown: false,
-          tabBarIcon: () => <MaterialIcons name="star-border" size={30} />,
-        }}
-      />
-      <Tab.Screen
-        name="My"
-        component={MyHomeScreen}
-        options={{
-          title: '마이',
-          headerTitle: '',
-          headerShown: false,
-          tabBarIcon: () => <MaterialIcons name="person" size={30} />,
-        }}
-      />
-    </Tab.Navigator>
+          tabBarLabelStyle: {
+            fontFamily: 'GmarketSansTTFMedium',
+            fontSize: 16,
+          },
+          tabBarHideOnKeyboard: true,
+        })}>
+        <Tab.Screen
+          name="Share"
+          component={ShareHomeScreen}
+          options={{
+            title: '기록',
+            headerTitle: '',
+            headerShown: false,
+            tabBarIcon: () => <MaterialIcons name="share" size={30} />,
+          }}
+        />
+        <Tab.Screen
+          name="Feed"
+          component={FeedStackNavigator}
+          options={{
+            title: '피드',
+            headerTitle: '',
+            headerShown: false,
+            tabBarIcon: () => (
+              <MaterialIcons name="feed" size={30} color={colors.white} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Map"
+          component={MapStackNavigator}
+          options={({route}) => ({
+            tabBarStyle: (route => {
+              const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+              console.log('route : ', routeName);
+              if (routeName === 'MapWalk') {
+                return {display: 'none'};
+              }
+              return {
+                height: 70,
+                shadowColor: colors.background,
+                shadowOffset: {
+                  width: 2,
+                  height: 4,
+                },
+                elevation: 4,
+              };
+            })(route),
+            title: '메인',
+            headerTitle: '',
+            headerShown: false,
+            tabBarIcon: () => (
+              <MaterialIcons name="directions-walk" size={30} />
+            ),
+          })}
+        />
+        <Tab.Screen
+          name="Event"
+          component={EventScreen}
+          options={{
+            title: '이벤트',
+            headerTitle: '',
+            headerShown: false,
+            tabBarIcon: () => <MaterialIcons name="star-border" size={30} />,
+          }}
+        />
+        <Tab.Screen
+          name="My"
+          component={MyHomeScreen}
+          options={{
+            title: '마이',
+            headerTitle: '',
+            headerShown: false,
+            tabBarIcon: () => <MaterialIcons name="person" size={30} />,
+          }}
+        />
+      </Tab.Navigator>
+    </SafeAreaView>
   );
 }

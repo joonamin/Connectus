@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {Dimensions, SafeAreaView, StyleSheet, View} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import useUserLocation from '../../hooks/useUserLocation';
 import CustomButton from '@/components/buttons/CustomButton';
@@ -24,7 +24,7 @@ export default function MapHomeScreen() {
     navigation.navigate('MapWalk');
   };
   return (
-    <>
+    <SafeAreaView style={{flex:1}}>
       <MapView
         ref={mapRef}
         style={styles.container}
@@ -44,7 +44,7 @@ export default function MapHomeScreen() {
           <MainText>산책시작</MainText>
         </CustomButton>
       </View>
-    </>
+    </SafeAreaView>
   );
 }
 
