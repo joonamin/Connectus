@@ -15,7 +15,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 
 import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
-import {BottomTabParamList} from '@/navigations/bottomTabs/MapBottomTabsNavigator';
+import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
 import MainText from '../text/MainText';
 import colors from '@/constants/colors';
 

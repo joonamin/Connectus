@@ -1,19 +1,28 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-import useUserLocation from '@/hooks/useUserLocation';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import BottomSheet from '@gorhom/bottom-sheet';
+
+import useUserLocation from '@/hooks/useUserLocation';
 import colors from '@/constants/colors';
 import MainText from '@/components/text/MainText';
 import useInterval from '@/hooks/useInterval';
 import {convertSecondsToTime, formatTime} from '@/utils';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import MapBottomSheetNavigator from '@/navigations/Tabs/MapBottomSheetNavigator';
 
 export default function MapWalkScreen() {
   const {userLocation} = useUserLocation();
   const mapRef = useRef<MapView | null>(null);
+  const bottomSheetRef = useRef<BottomSheet>(null);
   const [time, setTime] = useState<number>(0);
   const [indicagteTime, setIndicateTime] = useState<string | null>(null);
+  const snapPoints = useMemo(() => ['25%', '50%'], []);
+
+  const handleBottomSheetOpen = () => bottomSheetRef.current?.expand();
 
   // 1초마다 time을 증가시키기 위해 useInterval에 넣어줄 코드입니다
   const tick = () => {
@@ -53,8 +62,21 @@ export default function MapWalkScreen() {
             <MainText style={styles.distanceText}>{'00:42KM'}</MainText>
           </View>
         </View>
-        <Ionicons style={styles.menuButton} name="menu" size={42} />
+        <Pressable style={styles.menuButton} onPress={handleBottomSheetOpen}>
+          <Ionicons name="menu" size={42} />
+        </Pressable>
       </View>
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={-1}
+        snapPoints={snapPoints}
+        enablePanDownToClose={true}>
+        <SafeAreaProvider>
+          <NavigationContainer independent={true}>
+            <MapBottomSheetNavigator />
+          </NavigationContainer>
+        </SafeAreaProvider>
+      </BottomSheet>
     </>
   );
 }
@@ -76,7 +98,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '80%',
     flexDirection: 'row',
-    alignItems:'center',
+    alignItems: 'center',
   },
   timeTextContainer: {
     gap: 5,
@@ -88,7 +110,7 @@ const styles = StyleSheet.create({
     color: colors.background,
   },
   distanceTextContainer: {
-    position:'absolute',
+    position: 'absolute',
     right: 0,
     gap: 5,
     flexDirection: 'row',
