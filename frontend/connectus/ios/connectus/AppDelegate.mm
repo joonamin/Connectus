@@ -7,7 +7,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [GMSServices provideAPIKey:@"AIzaSyDNTzbW6kHQON587gFzdEgGgiQ0Si0fAEw"];
+  [GMSServices provideAPIKey:@"AIzaSyAvUmjpYFwTKiBG2l66IqIxh3S3LHUFNNA"];
   self.moduleName = @"connectus";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
