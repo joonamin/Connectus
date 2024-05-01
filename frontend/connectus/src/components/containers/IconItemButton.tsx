@@ -21,7 +21,6 @@ type IconItemButtonProps = CustomButtonProps & IconListItemProps;
 export default function IconItemButton({style, ...props}: IconItemButtonProps) {
   const styles = StyleSheet.create({
     listItem: {
-      padding: 0,
       backgroundColor: 'transparent',
     },
   });

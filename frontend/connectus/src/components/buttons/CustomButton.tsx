@@ -4,6 +4,7 @@ import {
   TouchableHighlight,
   TouchableNativeFeedback,
   TouchableWithoutFeedbackProps,
+  View,
   ViewStyle,
 } from 'react-native';
 import React from 'react';
@@ -42,7 +43,7 @@ export default function CustomButton({
   });
 
   const content = (
-    <MainContainer style={styles.container}>{children}</MainContainer>
+    <View style={styles.container}>{children}</View>
   );
 
   // Android일 시 feedback이 존재하는 Touchable 요소를 사용합니다
