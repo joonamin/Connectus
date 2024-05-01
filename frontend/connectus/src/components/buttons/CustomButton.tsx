@@ -4,6 +4,7 @@ import {
   TouchableHighlight,
   TouchableNativeFeedback,
   TouchableWithoutFeedbackProps,
+  ViewStyle,
 } from 'react-native';
 import React from 'react';
 import colors, {ColorCodes} from '@/constants/colors';
@@ -16,7 +17,7 @@ export interface CustomButtonProps extends TouchableWithoutFeedbackProps {
   /**
    * CustomButton의 배경 색을 지정합니다
    */
-  backgroundColor?: ColorCodes;
+  backgroundColor?: ViewStyle['backgroundColor'];
 }
 
 /**
