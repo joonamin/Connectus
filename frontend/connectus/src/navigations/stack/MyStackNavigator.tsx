@@ -24,6 +24,7 @@ function MyStackNavigator() {
         component={MyHomeScreen}
         options={{
           title: '마이페이지',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
