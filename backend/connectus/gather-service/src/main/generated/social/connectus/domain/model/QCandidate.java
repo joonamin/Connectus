@@ -22,6 +22,8 @@ public class QCandidate extends EntityPathBase<Candidate> {
 
     public static final QCandidate candidate = new QCandidate("candidate");
 
+    public final NumberPath<Long> candidate_id = createNumber("candidate_id", Long.class);
+
     public final QGather gather;
 
     public final NumberPath<Long> user_id = createNumber("user_id", Long.class);

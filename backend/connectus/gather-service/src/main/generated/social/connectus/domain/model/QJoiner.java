@@ -24,6 +24,8 @@ public class QJoiner extends EntityPathBase<Joiner> {
 
     public final QGather gather;
 
+    public final NumberPath<Long> joiner_id = createNumber("joiner_id", Long.class);
+
     public final NumberPath<Long> user_id = createNumber("user_id", Long.class);
 
     public QJoiner(String variable) {
