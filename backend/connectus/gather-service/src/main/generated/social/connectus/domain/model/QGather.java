@@ -20,7 +20,7 @@ public class QGather extends EntityPathBase<Gather> {
 
     public static final QGather gather = new QGather("gather");
 
-    public final ListPath<Long, NumberPath<Long>> candidateList = this.<Long, NumberPath<Long>>createList("candidateList", Long.class, NumberPath.class, PathInits.DIRECT2);
+    public final ListPath<Candidate, QCandidate> candidateList = this.<Candidate, QCandidate>createList("candidateList", Candidate.class, QCandidate.class, PathInits.DIRECT2);
 
     public final StringPath content = createString("content");
 
@@ -32,7 +32,7 @@ public class QGather extends EntityPathBase<Gather> {
 
     public final BooleanPath isClosed = createBoolean("isClosed");
 
-    public final ListPath<Long, NumberPath<Long>> joinerList = this.<Long, NumberPath<Long>>createList("joinerList", Long.class, NumberPath.class, PathInits.DIRECT2);
+    public final ListPath<Joiner, QJoiner> joinerList = this.<Joiner, QJoiner>createList("joinerList", Joiner.class, QJoiner.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> maxJoiner = createNumber("maxJoiner", Integer.class);
 
