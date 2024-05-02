@@ -10,7 +10,6 @@ import {
 
 type PermissionType = 'LOCATION' | 'PHOTO';
 
-// 키가 PermissionType 이면서
 type PermissionOS = {
   [key in PermissionType]: Permission;
 };
