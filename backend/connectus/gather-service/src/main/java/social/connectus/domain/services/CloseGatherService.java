@@ -31,6 +31,8 @@ public class CloseGatherService implements CloseGatherUseCase {
         if(gather.getHostId() != user_id)
             throw new InvalidHostIdException(GatherConstants.INVALID_HOST_ID + user_id);
 
+        gather.setClosed(true);
+
         closeGatherPort.closeGather(gather);
     }
 }
