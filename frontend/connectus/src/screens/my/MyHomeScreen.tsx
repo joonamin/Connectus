@@ -45,31 +45,22 @@ export default function MyHomeScreen() {
         </MainContainer>
         <MainContainer style={styles.listGroup}>
           <IconItemButton
-            backgroundColor={colors.buttonBackground}
             iconType="MaterialIcons"
             iconName="person"
             text="아바타 변경"
           />
+          <IconItemButton iconType="Ionicons" iconName="trophy" text="업적" />
           <IconItemButton
-            backgroundColor={colors.buttonBackground}
-            iconType="Ionicons"
-            iconName="trophy"
-            text="업적"
-          />
-          <IconItemButton
-            backgroundColor={colors.buttonBackground}
             iconType="MaterialIcons"
             iconName="list"
             text="외출 기록"
           />
           <IconItemButton
-            backgroundColor={colors.buttonBackground}
             iconType="MaterialIcons"
             iconName="chat"
             text="작성 댓글"
           />
           <IconItemButton
-            backgroundColor={colors.buttonBackground}
             iconType="Ionicons"
             iconName="heart"
             text="좋아요 기록"
