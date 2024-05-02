@@ -12,7 +12,6 @@ public class CloseGatherAdapter implements CloseGatherPort {
 
     @Override
     public void closeGather(Gather gather) {
-        gather.setClosed(true);
         gatherRepository.save(gather);
     }
 }
