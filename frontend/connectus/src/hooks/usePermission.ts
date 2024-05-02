@@ -36,21 +36,22 @@ const alerts = {
   },
 } as const;
 
+/**
+ * 유저에게 LOCATION 혹은 PHOTO의 접근 권한을 요청하는 customHook입니다.
+ * @param type
+ */
 function usePermission(type: PermissionType) {
   useEffect(() => {
     (async () => {
       const isAndroid = Platform.OS === 'android';
       const permissionOS = isAndroid ? androidPermissions : iosPermissions;
       const checked = await check(permissionOS[type]);
-      console.log('실행확인좀');
       const showPermissionAlert = () => {
-        // Alert.alert('제목', '설명', [옵션]);
         Alert.alert(
           alerts[`${type}_PERMISSION`].TITLE,
           alerts[`${type}_PERMISSION`].DESCRIPTION,
           [
             {
-              // 직접 유저에게 설정창을 열어주는 과정
               text: '설정하기',
               onPress: () => Linking.openSettings(),
             },
@@ -68,7 +69,6 @@ function usePermission(type: PermissionType) {
             showPermissionAlert();
             return;
           }
-          // DENIED상태일때는 request를 사용해 요청을 다시 보내도록 함
           await request(permissionOS[type]);
           break;
         case RESULTS.BLOCKED:
