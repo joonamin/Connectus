@@ -14,8 +14,8 @@ public class GetGatherService implements GetGatherUseCase {
     private GetGatherIdPort getGatherIdPort;
 
     @Override
-    public Gather getGather(long gather_id) throws ResourceNotFoundException {
-        return getGatherIdPort.getGatherById(gather_id)
-                .orElseThrow(() -> new ResourceNotFoundException(GatherConstants.GATHER_NOT_FOUND + gather_id));
+    public Gather getGather(long gatherId) throws ResourceNotFoundException {
+        return getGatherIdPort.getGatherById(gatherId)
+                .orElseThrow(() -> new ResourceNotFoundException(GatherConstants.GATHER_NOT_FOUND + gatherId));
     }
 }

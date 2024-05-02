@@ -33,7 +33,7 @@ public class CustomExceptionHandler {
         return new ResponseEntity(errorDetails, HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(ClosedGatherException.class)
+    @ExceptionHandler(InvalidHostIdException.class)
     public ResponseEntity invalidHostIdException(InvalidHostIdException ex, WebRequest request){
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
         log.error(ex.getMessage(), ex);

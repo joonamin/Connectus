@@ -14,7 +14,7 @@ public class GetGatherIdAdapter implements GetGatherIdPort {
     private GatherRepository gatherRepository;
 
     @Override
-    public Optional<Gather> getGatherById(long gather_id) {
-        return gatherRepository.findById(gather_id);
+    public Optional<Gather> getGatherById(long gatherId) {
+        return gatherRepository.findById(gatherId);
     }
 }

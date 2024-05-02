@@ -12,9 +12,14 @@ public class Candidate {
     private long candidate_id;
 
     @Column(nullable = false)
-    private long user_id;
+    private long userId;
 
     @JoinColumn(name="gather_id")
     @ManyToOne
     private Gather gather;
+
+    public Candidate(long userId, Gather gather) {
+        this.userId = userId;
+        this.gather = gather;
+    }
 }
