@@ -16,7 +16,10 @@ export default function MapBottomSheetNavigator() {
     <Tab.Navigator
       initialRouteName="QuickMenu"
       screenOptions={{
-        tabBarLabelStyle: {fontFamily: 'GmarketSansTTFLight'},
+        tabBarLabelStyle: {
+          fontSize: 18,
+          fontFamily: 'GmarketSansTTFMedium',
+        },
       }}>
       <Tab.Screen
         name="QuickMenu"
