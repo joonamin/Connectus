@@ -1,8 +1,7 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import React from 'react';
 import MainContainer from '@/components/containers/MainContainer';
 import CustomButton from '@/components/buttons/CustomButton';
-import colors from '@/constants/colors';
 import IconItemButton from '@/components/containers/IconItemButton';
 import ProfileOverview from '@/components/my/ProfileOverview';
 import LightText from '@/components/text/LightText';
