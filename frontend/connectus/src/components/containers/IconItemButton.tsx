@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import CustomButton, {
   CustomButtonProps,
 } from '@/components/buttons/CustomButton';
@@ -20,6 +20,10 @@ type IconItemButtonProps = CustomButtonProps & IconListItemProps;
  */
 export default function IconItemButton({style, ...props}: IconItemButtonProps) {
   const styles = StyleSheet.create({
+    buttonContainer: {
+      borderRadius: 15,
+      overflow: 'hidden',
+    },
     listItem: {
       backgroundColor: 'transparent',
     },
@@ -37,8 +41,10 @@ export default function IconItemButton({style, ...props}: IconItemButtonProps) {
   }
 
   return (
-    <CustomButton {...buttonProps}>
-      <IconListItem style={[styles.listItem, style]} {...containerProps} />
-    </CustomButton>
+    <View style={styles.buttonContainer}>
+      <CustomButton {...buttonProps}>
+        <IconListItem style={[styles.listItem, style]} {...containerProps} />
+      </CustomButton>
+    </View>
   );
 }
