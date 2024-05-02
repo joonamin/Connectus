@@ -16,6 +16,7 @@ function FeedStackNavigator() {
     <Stack.Navigator
       initialRouteName="FeedHome"
       screenOptions={{
+        gestureEnabled: false,
         headerStyle: {
           backgroundColor: colors.background,
           borderColor: colors.dividerColor,

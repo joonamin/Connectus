@@ -13,7 +13,7 @@ const Stack = createStackNavigator<MapStackParamList>();
 
 export default function MapStackNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{gestureEnabled: false}}>
       <Stack.Screen
         name="MapHome"
         component={MapHomeScreen}
