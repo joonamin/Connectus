@@ -5,11 +5,10 @@ spring:
   application:
     name: gather-service
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/demo?serverTimezone=Asia/Seoul&characterEncoding=UTF-8 # Database이름 ?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    #    mysql에 생성한 사용자 계정 정보를 써야 합니다.
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://gather.mariadb.connectus.social:3306/post?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
-    password: ssafy # 자신의 mysql 비밀번호
+    password: ssafyE106!
   jpa:
     hibernate:
       ddl-auto: update
