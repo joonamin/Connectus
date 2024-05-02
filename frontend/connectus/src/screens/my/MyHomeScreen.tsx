@@ -6,6 +6,16 @@ import IconItemButton from '@/components/containers/IconItemButton';
 import ProfileOverview from '@/components/my/ProfileOverview';
 import LightText from '@/components/text/LightText';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {MyStackParamList} from '@/navigations/stack/MyStackNavigator';
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
+
+type Navigation = CompositeNavigationProp<
+  StackNavigationProp<MyStackParamList>,
+  BottomTabNavigationProp<BottomTabParamList>
+>;
 
 export default function MyHomeScreen() {
   const styles = StyleSheet.create({
@@ -24,6 +34,12 @@ export default function MyHomeScreen() {
       gap: 5,
     },
   });
+
+  const navigation = useNavigation<Navigation>();
+
+  const gotoAchievements = () => {
+    navigation.navigate('MyAchievements');
+  };
 
   return (
     <ScrollView>
@@ -48,7 +64,12 @@ export default function MyHomeScreen() {
             iconName="person"
             text="아바타 변경"
           />
-          <IconItemButton iconType="Ionicons" iconName="trophy" text="업적" />
+          <IconItemButton
+            iconType="Ionicons"
+            iconName="trophy"
+            text="업적"
+            onPress={gotoAchievements}
+          />
           <IconItemButton
             iconType="MaterialIcons"
             iconName="list"
