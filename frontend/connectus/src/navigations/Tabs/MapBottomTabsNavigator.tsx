@@ -2,7 +2,6 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import EventScreen from '@/screens/event/EventHomeScreen';
-import MyHomeScreen from '@/screens/my/MyHomeScreen';
 import ShareHomeScreen from '@/screens/share/ShareHomeScreen';
 import FeedStackNavigator, {
   FeedStackParamList,
@@ -15,6 +14,7 @@ import {
 import colors from '@/constants/colors';
 import MapStackNavigator, {MapStackParamList} from '../stack/MapStackNavigator';
 import {SafeAreaView} from 'react-native';
+import MyStackNavigator from '../stack/MyStackNavigator';
 
 export type BottomTabParamList = {
   Share: undefined;
@@ -112,7 +112,7 @@ export default function MapBottomTabsNavigator(
         />
         <Tab.Screen
           name="My"
-          component={MyHomeScreen}
+          component={MyStackNavigator}
           options={{
             title: '마이',
             headerTitle: '',
