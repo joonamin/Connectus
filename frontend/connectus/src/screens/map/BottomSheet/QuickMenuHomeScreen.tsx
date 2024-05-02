@@ -15,6 +15,10 @@ export default function QuickMenuHomeScreen() {
     navigation.navigate('FeedCreate');
   };
 
+  const handlePressCreteGather = () => {
+    navigation.navigate('GatherCreate');
+  }
+
   return (
     <View style={styles.mainContainer}>
       <Pressable style={styles.moveButton} onPress={handlePressCreateFeed}>
@@ -23,7 +27,7 @@ export default function QuickMenuHomeScreen() {
       <Pressable style={styles.moveButton}>
         <MainText>채팅</MainText>
       </Pressable>
-      <Pressable style={styles.moveButton}>
+      <Pressable style={styles.moveButton} onPress={handlePressCreteGather}>
         <MainText>모여라 작성</MainText>
       </Pressable>
     </View>
