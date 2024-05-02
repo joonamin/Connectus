@@ -13,6 +13,6 @@ const styles = StyleSheet.create({
   achievementContainer: {
     padding: 15,
     flex: 1,
-    alignItems:'center',
+    alignItems: 'center',
   },
 });

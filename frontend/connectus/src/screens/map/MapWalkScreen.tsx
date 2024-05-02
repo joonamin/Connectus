@@ -20,7 +20,7 @@ export default function MapWalkScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [time, setTime] = useState<number>(0);
   const [indicagteTime, setIndicateTime] = useState<string | null>(null);
-  const snapPoints = useMemo(() => ['25%', '50%'], []);
+  const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
 
   const handleBottomSheetOpen = () => bottomSheetRef.current?.expand();
 
@@ -29,7 +29,6 @@ export default function MapWalkScreen() {
     setTime(prev => prev + 1);
   };
   useInterval(tick, 1000);
-
   useEffect(() => {
     const {seconds, minutes, hours} = convertSecondsToTime(time);
     setIndicateTime(formatTime(hours, minutes, seconds));

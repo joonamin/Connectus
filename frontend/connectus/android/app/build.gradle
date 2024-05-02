@@ -81,6 +81,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        // image-crop-picker 사용을 위한 추가 코드
+        vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
         debug {

@@ -3,13 +3,14 @@ import BottomSheetAchievmentsScreen from '@/screens/map/BottomSheetAchievmentsSc
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import React from 'react';
 import BottomSheetQuickStackNavigator from '../stack/BottomSheetQuickStackNavigator';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/core';
 
-export type MapTabParamList = {
+export type MapBottomSheetTabParamList = {
   Achievements: undefined;
   QuickMenu: undefined;
   Event: undefined;
 };
-const Tab = createMaterialTopTabNavigator<MapTabParamList>();
+const Tab = createMaterialTopTabNavigator<MapBottomSheetTabParamList>();
 
 export default function MapBottomSheetNavigator() {
   return (
@@ -24,9 +25,18 @@ export default function MapBottomSheetNavigator() {
       <Tab.Screen
         name="QuickMenu"
         component={BottomSheetQuickStackNavigator}
-        options={{
+        options={({route}) => ({
+          tabBarStyle: (route => {
+            const routeName = getFocusedRouteNameFromRoute(route) ?? '';
+            if (routeName === 'FeedCreate') {
+              return {display: 'none'};
+            }
+            return {
+              display: 'flex',
+            };
+          })(route),
           title: '빠른메뉴',
-        }}
+        })}
       />
       <Tab.Screen
         name="Achievements"

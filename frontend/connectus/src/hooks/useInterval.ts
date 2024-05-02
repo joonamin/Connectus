@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import {useEffect, useRef} from 'react';
 
 /**
  * setInterval의 단점을 없애기 위한 Dan형님의 슈퍼파월 훅입니다
