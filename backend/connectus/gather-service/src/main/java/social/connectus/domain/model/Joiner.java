@@ -9,12 +9,13 @@ import lombok.Data;
 public class Joiner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long joiner_id;
+    private long joinerId;
 
     @Column(nullable = false)
-    private long user_id;
+    private long userId;
 
     @JoinColumn(name="gather_id")
     @ManyToOne
     private Gather gather;
+
 }

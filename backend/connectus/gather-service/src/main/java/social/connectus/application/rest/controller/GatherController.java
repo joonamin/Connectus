@@ -1,8 +1,6 @@
 package social.connectus.application.rest.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import social.connectus.application.rest.request.CloseGatherRequest;
@@ -42,8 +40,8 @@ public class GatherController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Gather> getGather(@PathVariable(value="id") long gather_id) throws ResourceNotFoundException {
-        Gather gather = getGatherUseCase.getGather(gather_id);
+    public ResponseEntity<Gather> getGather(@PathVariable(value="id") long gatherId) throws ResourceNotFoundException {
+        Gather gather = getGatherUseCase.getGather(gatherId);
         return ResponseEntity.ok().body(gather);
     }
 
@@ -54,9 +52,9 @@ public class GatherController {
     }
 
     @PatchMapping("/want_join")
-    ResponseEntity<WantJoinGatherResponse> wantJoinGather(@RequestBody WantJoinGatherRequest wantJoinGatherRequest) throws ResourceNotFoundException, GlobalException{
+    ResponseEntity<WantJoinGatherResponse> wantJoinGather(@RequestBody WantJoinGatherRequest wantJoinGatherRequest) throws ResourceNotFoundException, GlobalException, ClosedGatherException {
         wantJoinGatherUseCase.wantJoinGather(wantJoinGatherRequest);
-        return ResponseEntity.ok().body(WantJoinGatherResponse.builder().msg("User "+wantJoinGatherRequest.getUser_id()+" is saved as candidates successfully.").build());
+        return ResponseEntity.ok().body(WantJoinGatherResponse.builder().msg("User "+wantJoinGatherRequest.getUserId()+" is saved as candidates successfully.").build());
     }
 
 }
