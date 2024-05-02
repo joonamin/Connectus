@@ -1,12 +1,14 @@
 import {
   Image,
   Keyboard,
+  Modal,
   Pressable,
   StyleSheet,
+  Text,
   TextInput,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import MainContainer from '@/components/containers/MainContainer';
 import MainText from '@/components/text/MainText';
 import colors from '@/constants/colors';
@@ -33,7 +35,7 @@ export default function CreateFeedScreen() {
   const imagePicker = useImagePicker();
   // axios요청시 보낼 유저 위치
   const {userLocation} = useUserLocation();
-
+  const [content, setContent] = useState<string>('');
   usePermission('PHOTO');
 
   const keyBoardDismiss = () => {
@@ -41,6 +43,9 @@ export default function CreateFeedScreen() {
   };
 
   const handlePressSubmit = () => {
+    console.log(
+      `userLocation: ${userLocation.latitude}, ${userLocation.longitude} , content : ${content}`,
+    );
     navigation.navigate('Home');
   };
 
@@ -58,7 +63,7 @@ export default function CreateFeedScreen() {
         <View style={{width: '100%'}}>
           <TouchableOpacity
             style={styles.addImageButton}
-            onPress={imagePicker.handleChange}>
+            onPress={imagePicker.useCamera}>
             <MainText>
               {imagePicker.imageData ? '사진 변경하기' : '사진 첨부하기'}
             </MainText>
@@ -67,6 +72,10 @@ export default function CreateFeedScreen() {
         <TextInput
           style={styles.contentInput}
           returnKeyType="done"
+          placeholder="피드 내용을 입력해주세요"
+          value={content}
+          onChangeText={text => setContent(text)}
+          placeholderTextColor={colors.white}
           multiline={true}
           numberOfLines={5}
         />
@@ -78,6 +87,13 @@ export default function CreateFeedScreen() {
           </TouchableOpacity>
         </View>
       </MainContainer>
+      <Modal visible={false} transparent={true} animationType="slide">
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text>왜지...</Text>
+          </View>
+        </View>
+      </Modal>
     </TouchableWithoutFeedback>
   );
 }
@@ -115,5 +131,25 @@ const styles = StyleSheet.create({
   feedImage: {
     width: '100%',
     height: '100%',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
