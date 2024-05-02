@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: post-service
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: 1234
+    url: jdbc:mariadb://localhost:3306/connectus
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
