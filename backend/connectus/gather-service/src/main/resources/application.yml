@@ -12,7 +12,7 @@ spring:
     password: ssafy # 자신의 mysql 비밀번호
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 #    properties:
 #      hibernate:
 #        show_sql: true
