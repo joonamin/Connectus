@@ -3,10 +3,12 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import QuickMenuHomeScreen from '@/screens/map/BottomSheet/QuickMenuHomeScreen';
 import CreateFeedScreen from '@/screens/map/BottomSheet/CreateFeedScreen';
+import CreateGatherScreen from '@/screens/map/BottomSheet/CreateGatherScreen';
 
 export type BottomSheetStackParamList = {
   Home: undefined;
   FeedCreate: undefined;
+  GatherCreate: undefined;
 };
 
 const Stack = createStackNavigator();
@@ -30,8 +32,14 @@ export default function BottomSheetQuickStackNavigator() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name={'GatherCreate'}
+        component={CreateGatherScreen}
+        options={{
+          headerTitle: '',
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({});

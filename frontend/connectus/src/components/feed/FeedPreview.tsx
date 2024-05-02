@@ -5,8 +5,6 @@ import {
   View,
   Image,
   Dimensions,
-  Modal,
-  SafeAreaView,
 } from 'react-native';
 import React, {useState} from 'react';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';

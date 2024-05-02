@@ -5,21 +5,23 @@ function useImagePicker() {
   const [imageData, setImageData] = useState<Image | null>(null);
 
   const useGallery = () => {
-    ImagePicker.openPicker({
-      mediaType: 'photo',
-      includeBase64: true,
-      maxFiles: 1,
-      cropperChooseText: '완료',
-      cropperCancelText: '취소',
-    }).then(async image => {
-      const img = await ImagePicker.openCropper({
+    setTimeout(() => {
+      ImagePicker.openPicker({
         mediaType: 'photo',
-        path: image.path,
-        width: 1000,
-        height: 1000,
+        includeBase64: true,
+        maxFiles: 1,
+        cropperChooseText: '완료',
+        cropperCancelText: '취소',
+      }).then(async image => {
+        const img = await ImagePicker.openCropper({
+          mediaType: 'photo',
+          path: image.path,
+          width: 1000,
+          height: 1000,
+        });
+        setImageData(img);
       });
-      setImageData(img);
-    });
+    }, 700);
   };
 
   const useCamera = () => {

@@ -3,6 +3,7 @@ import {
   Keyboard,
   Modal,
   Pressable,
+  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -22,6 +23,7 @@ import {BottomSheetStackParamList} from '@/navigations/stack/BottomSheetQuickSta
 import useImagePicker from '@/hooks/useImagePicker';
 import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
+import useModal from '@/hooks/useModal';
 
 type Navigation = CompositeNavigationProp<
   MaterialTopTabNavigationProp<MapBottomSheetTabParamList>,
@@ -36,6 +38,7 @@ export default function CreateFeedScreen() {
   // axios요청시 보낼 유저 위치
   const {userLocation} = useUserLocation();
   const [content, setContent] = useState<string>('');
+  const {isVisible, show, hide} = useModal();
   usePermission('PHOTO');
 
   const keyBoardDismiss = () => {
@@ -61,9 +64,7 @@ export default function CreateFeedScreen() {
           </View>
         )}
         <View style={{width: '100%'}}>
-          <TouchableOpacity
-            style={styles.addImageButton}
-            onPress={imagePicker.useCamera}>
+          <TouchableOpacity style={styles.addImageButton} onPress={show}>
             <MainText>
               {imagePicker.imageData ? '사진 변경하기' : '사진 첨부하기'}
             </MainText>
@@ -86,14 +87,26 @@ export default function CreateFeedScreen() {
             <MainText>피드 저장</MainText>
           </TouchableOpacity>
         </View>
+        <Modal visible={isVisible} transparent={true} animationType="slide">
+          <SafeAreaView style={styles.centeredView} onTouchEnd={hide}>
+            <View style={styles.modalView}>
+              <Pressable
+                style={styles.addImageButton}
+                onPress={imagePicker.useCamera}>
+                <MainText>카메라</MainText>
+              </Pressable>
+              <Pressable
+                style={styles.addImageButton}
+                onPress={() => {
+                  hide();
+                  imagePicker.useGallery();
+                }}>
+                <MainText>갤러리</MainText>
+              </Pressable>
+            </View>
+          </SafeAreaView>
+        </Modal>
       </MainContainer>
-      <Modal visible={false} transparent={true} animationType="slide">
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text>왜지...</Text>
-          </View>
-        </View>
-      </Modal>
     </TouchableWithoutFeedback>
   );
 }
@@ -112,6 +125,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
   },
+
   saveFeedButtonContainer: {
     width: 200,
   },
@@ -134,16 +148,21 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalView: {
+    width: '70%',
+    height: 200,
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
+    justifyContent: 'center',
     shadowColor: '#000',
+    gap: 15,
     shadowOffset: {
       width: 0,
       height: 2,
