@@ -25,4 +25,13 @@ public class CustomExceptionHandler {
         log.error(ex.getMessage(), ex);
         return new ResponseEntity(errorDetails, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ClosedGatherException.class)
+    public ResponseEntity closedGatherException(ClosedGatherException ex, WebRequest request){
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity(errorDetails, HttpStatus.CONFLICT);
+    }
+
+
 }
