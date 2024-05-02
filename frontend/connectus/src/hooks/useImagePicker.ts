@@ -1,20 +1,39 @@
-import ImagePickr from 'react-native-image-crop-picker';
+import {getFormDataImages} from '@/utils/images';
+import {useState} from 'react';
+import ImagePicker, {Image} from 'react-native-image-crop-picker';
+
+interface ImageUri {
+  id?: number;
+  uri: string;
+}
+
+interface UseImagePickerProps {
+  initialImages: ImageUri;
+}
 
 function useImagePicker() {
+  const [imageData, setImageData] = useState<Image | null>(null);
   const handleChange = () => {
-    ImagePickr.openPicker({
+    ImagePicker.openPicker({
       mediaType: 'photo',
-      multiple: true,
       includeBase64: true,
       maxFiles: 1,
       cropperChooseText: '완료',
       cropperCancelText: '취소',
-    }).then(images => {
-      console.log(images);
+    }).then(async image => {
+      const img = await ImagePicker.openCropper({
+        mediaType: 'photo',
+        path: image.path,
+        width: 1000,
+        height: 1000,
+      });
+      const formData = getFormDataImages('image', img);
+      setImageData(img);
     });
   };
 
   return {
+    imageData,
     handleChange,
   };
 }
