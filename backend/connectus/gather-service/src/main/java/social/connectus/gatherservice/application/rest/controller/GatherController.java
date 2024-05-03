@@ -4,10 +4,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import social.connectus.gatherservice.application.rest.request.CloseGatherRequest;
+import social.connectus.gatherservice.application.rest.request.CreateGatherRequest;
 import social.connectus.gatherservice.application.rest.request.JoinGatherRequest;
 import social.connectus.gatherservice.application.rest.request.WantJoinGatherRequest;
 import social.connectus.gatherservice.application.rest.response.*;
 import social.connectus.gatherservice.common.exception.*;
+import social.connectus.gatherservice.domain.command.CloseGatherCommand;
+import social.connectus.gatherservice.domain.command.CreateGatherCommand;
 import social.connectus.gatherservice.domain.model.Gather;
 import social.connectus.gatherservice.domain.ports.inbound.GatherUseCase;
 
@@ -24,9 +27,9 @@ public class GatherController {
     }
 
     @PostMapping
-    ResponseEntity<CreateGatherResponse> createGather(@RequestBody Gather gather){
-        gatherUseCase.createGather(gather);
-        return ResponseEntity.ok().body(CreateGatherResponse.builder().id(gather.getId()).build());
+    ResponseEntity<CreateGatherResponse> createGather(@RequestBody CreateGatherRequest request){
+        CreateGatherResponse response = gatherUseCase.createGather(CreateGatherCommand.from(request));
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
@@ -37,7 +40,7 @@ public class GatherController {
 
     @PatchMapping("/close")
     ResponseEntity<CloseGatherResponse> closeGather(@RequestBody CloseGatherRequest request) throws ResourceNotFoundException, InvalidHostIdException, ClosedGatherException {
-        gatherUseCase.closeGather(request);
+        gatherUseCase.closeGather(CloseGatherCommand.from(request));
         return ResponseEntity.ok().body(CloseGatherResponse.builder().msg("Gather is closed successfully.").build());
     }
 

@@ -3,11 +3,9 @@ package social.connectus.gatherservice.domain.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import social.connectus.gatherservice.domain.command.CreateGatherCommand;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -41,4 +39,13 @@ public class Gather extends BaseEntity{
 
     @Column(nullable = false)
     private String endTime;
+
+    public static Gather from(CreateGatherCommand command){
+        return Gather.builder()
+                .hostId(command.getHostId())
+                .content(command.getContent())
+                .maxJoiner(command.getMaxJoiner())
+                .endTime(command.getEndTime())
+                .build();
+    }
 }
