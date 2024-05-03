@@ -6,11 +6,6 @@ import org.modelmapper.ModelMapper;
 
 import com.social.eventservice.domain.model.Event;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EventDetailsDto {
+public class EventDetailsResponse {
 
 	private Long id;
 
@@ -38,8 +33,8 @@ public class EventDetailsDto {
 
 	private List<Long> spotIdList;
 
-	public static EventDetailsDto from(Event event) {
+	public static EventDetailsResponse from(Event event) {
 		ModelMapper mapper = new ModelMapper();
-		return mapper.map(event, EventDetailsDto.class);
+		return mapper.map(event, EventDetailsResponse.class);
 	}
 }

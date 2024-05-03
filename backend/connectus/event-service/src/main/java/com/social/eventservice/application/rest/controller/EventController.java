@@ -1,5 +1,7 @@
 package com.social.eventservice.application.rest.controller;
 
+import java.io.IOException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +20,8 @@ public class EventController {
 	private final EventUseCase eventUseCase;
 
 	@PostMapping("")
-	public ResponseEntity<Void> makeEvent(MakeEventRequest request) {
-
-		int result = eventUseCase.makeEvent(request);
-		if (result < 0)
-			throw new RuntimeException("ㅋㅋ안됨");
+	public ResponseEntity<Void> makeEvent(MakeEventRequest request) throws IOException {
+		eventUseCase.makeEvent(request);
 		return ResponseEntity.accepted().build();
 	}
 

@@ -11,3 +11,16 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
     show-sql: true
+
+  cloud:
+    aws:
+      s3:
+        bucket: e106-connectus
+      credentials:
+        access-key: accessKey
+        secret-key: secretKey
+      region:
+        static: ap-northeast-2
+        auto: false
+      stack:
+        auto: false

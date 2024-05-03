@@ -1,19 +1,21 @@
 package com.social.eventservice.infrastructure.mariadb;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.social.eventservice.application.rest.request.MakeEventRequest;
-import com.social.eventservice.application.rest.response.EventDetailsDto;
-import com.social.eventservice.common.type.Pings;
+import com.social.eventservice.application.rest.response.EventDetailsResponse;
+import com.social.eventservice.common.exception.NotFoundException;
+import com.social.eventservice.common.type.Ping;
 import com.social.eventservice.common.type.Spot;
 import com.social.eventservice.domain.dto.MakeEventCommand;
 import com.social.eventservice.domain.model.Event;
+import com.social.eventservice.domain.port.outbound.EventAcheivementPort;
 import com.social.eventservice.domain.port.outbound.EventPort;
-import com.social.eventservice.infrastructure.external.FileAdapter;
+import com.social.eventservice.infrastructure.client.SpotServiceClient;
 import com.social.eventservice.infrastructure.mariadb.repository.EventRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -23,18 +25,12 @@ import lombok.RequiredArgsConstructor;
 public class EventAdapter implements EventPort {
 
 	private final EventRepository eventRepository;
-	private final ModelMapper modelMapper;
-	private final FileAdapter fileAdapter;
+	private final EventAcheivementPort eventAcheivementPort;
+	private final SpotServiceClient spotServiceClient;
 
 	@Override
 	@Transactional
 	public void makeEvent(MakeEventCommand request) {
-
-		// 지정된 spot을 저장한 다음, 저장된 아이디들을 받아오는 리스트를 만든다
-		// 해당 로직을 service단에서 해야할 지 걱정이긴하다.
-		// service단에서, spot service를 호출하여 해당 정보들을 저장한 다음,
-		// 가져오는 형식으로 구현하는 것이 좋을 것 같다.
-		// service 단에서 처리하는걸로 ㅎ.ㅎ
 		List<Long> spotIdList = request.getSpotList().stream().map(Spot::getId).toList();
 		Event event = Event.builder()
 			.reward(request.getReward())
@@ -48,12 +44,26 @@ public class EventAdapter implements EventPort {
 	}
 
 	@Override
-	public EventDetailsDto detailsEvent(Long eventId) {
-		return null;
+	public EventDetailsResponse detailsEvent(Long eventId) {
+		Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("이벤트를 찾을 수 없습니다"));
+		return EventDetailsResponse.from(event);
 	}
 
 	@Override
-	public List<Pings> spreadPings(Long userId, Long eventId) {
+	public List<Ping> spreadPings(Long userId, Long eventId) {
+		// 특정 유저가 참여한 이벤트에 속해있는 핑들 중, 달성하지 않은 ping들을 뿌려준다.
+		Event event = eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("not found event!"));
+		Map<Long, Boolean> uncleared = new HashMap<>();
+		event.getSpotIdList().forEach(id -> uncleared.putIfAbsent(id, true));
+
+		List<Long> clearedPingIds = eventAcheivementPort.getClearedPingIds(userId, eventId);
+		clearedPingIds.forEach(id -> uncleared.remove(id));
+
+		List<Long> unclearedPingIds = uncleared.entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).toList();
+		// todo: implement this stub
+		unclearedPingIds.stream()
+			.map(id -> spotServiceClient.getSpotById(id).orElseThrow(() -> new NotFoundException("not found spot id")))
+			// .map()
 		return null;
 	}
 }
