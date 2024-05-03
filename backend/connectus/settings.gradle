@@ -1,1 +1,5 @@
 rootProject.name = 'connectus'
+include 'apigateway-service'
+include 'discovery-service'
+include 'gather-service'
+
