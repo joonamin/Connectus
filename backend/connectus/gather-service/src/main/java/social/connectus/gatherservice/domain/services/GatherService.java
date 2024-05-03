@@ -5,10 +5,13 @@ import org.modelmapper.ModelMapper;
 import social.connectus.gatherservice.application.rest.request.CloseGatherRequest;
 import social.connectus.gatherservice.application.rest.request.JoinGatherRequest;
 import social.connectus.gatherservice.application.rest.request.WantJoinGatherRequest;
+import social.connectus.gatherservice.application.rest.response.CreateGatherResponse;
 import social.connectus.gatherservice.application.rest.response.GetGatherResponse;
 import social.connectus.gatherservice.common.constants.GatherConstants;
 import social.connectus.gatherservice.common.customannotations.UseCase;
 import social.connectus.gatherservice.common.exception.*;
+import social.connectus.gatherservice.domain.command.CloseGatherCommand;
+import social.connectus.gatherservice.domain.command.CreateGatherCommand;
 import social.connectus.gatherservice.domain.command.JoinGatherCommand;
 import social.connectus.gatherservice.domain.command.WantJoinGatherCommand;
 import social.connectus.gatherservice.domain.model.Gather;
@@ -22,9 +25,9 @@ public class GatherService implements GatherUseCase {
     private final GatherPort gatherPort;
     private final ModelMapper modelMapper;
     @Override
-    public void closeGather(CloseGatherRequest request) throws ResourceNotFoundException, ClosedGatherException, InvalidHostIdException {
-        long gatherId = request.getGatherId();
-        long userId = request.getUserId();
+    public void closeGather(CloseGatherCommand command) throws ResourceNotFoundException, ClosedGatherException, InvalidHostIdException {
+        long gatherId = command.getGatherId();
+        long userId = command.getUserId();
         // gather의 주최자가 user_id인지 확인
         Gather gather = gatherPort.getGatherById(gatherId)
                         .orElseThrow(()-> new ResourceNotFoundException(GatherConstants.GATHER_NOT_FOUND + gatherId));
@@ -34,12 +37,12 @@ public class GatherService implements GatherUseCase {
         if(gather.getHostId() != userId)
             throw new InvalidHostIdException(GatherConstants.INVALID_HOST_ID + userId);
 
-        gatherPort.closeGather(request);
+        gatherPort.closeGather(command);
     }
 
     @Override
-    public void createGather(Gather gather) {
-        gatherPort.createGather(gather);
+    public CreateGatherResponse createGather(CreateGatherCommand command) {
+        return gatherPort.createGather(command);
     }
 
     @Override
@@ -47,19 +50,6 @@ public class GatherService implements GatherUseCase {
         Gather gather = gatherPort.getGatherById(gatherId)
                 .orElseThrow(() -> new ResourceNotFoundException(GatherConstants.GATHER_NOT_FOUND + gatherId));
         return modelMapper.map(gather, GetGatherResponse.class);
-
-//        List<Long> candidateUserList = new ArrayList<>();
-//        for(Candidate candidate : gather.getCandidateList()){
-//            candidateUserList.add(candidate.getUserId());
-//        }
-//        getGatherResponse.setCandidateList(candidateUserList);
-//
-//        List<Long> joinerUserList = new ArrayList<>();
-//        for(Joiner joiner : gather.getJoinerList()){
-//            joinerUserList.add(joiner.getUserId());
-//        }
-//        getGatherResponse.setJoinerList(joinerUserList);
-//        return getGatherResponse;
     }
 
     @Override
