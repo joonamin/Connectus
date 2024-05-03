@@ -3,6 +3,10 @@ import {useEffect, useState} from 'react';
 import {LatLng} from 'react-native-maps';
 import useAppState from './useAppState';
 
+/**
+ * 유저의 위치에 접근해 위도, 경도 좌표를 반환합니다
+ * @returns {latitude, longitude}
+ */
 function useUserLocation() {
   // null 값을 방지하기 위해 미리 녹산동의 주소를 입력했습니다.
   const [userLocation, setUserLocation] = useState<LatLng>({
