@@ -15,6 +15,7 @@ import colors from '@/constants/colors';
 import MapStackNavigator, {MapStackParamList} from '../stack/MapStackNavigator';
 import {SafeAreaView} from 'react-native';
 import MyStackNavigator from '../stack/MyStackNavigator';
+import ShareStackNavigator from '../stack/ShareStackNavigator';
 
 export type BottomTabParamList = {
   Share: undefined;
@@ -52,12 +53,14 @@ export default function MapBottomTabsNavigator(
         })}>
         <Tab.Screen
           name="Share"
-          component={ShareHomeScreen}
+          component={ShareStackNavigator}
           options={{
             title: '기록',
             headerTitle: '',
             headerShown: false,
-            tabBarIcon: () => <MaterialIcons name="share" size={30} />,
+            tabBarIcon: () => (
+              <MaterialIcons name="share" size={30} color={colors.white} />
+            ),
           }}
         />
         <Tab.Screen
@@ -96,7 +99,11 @@ export default function MapBottomTabsNavigator(
             headerTitle: '',
             headerShown: false,
             tabBarIcon: () => (
-              <MaterialIcons name="directions-walk" size={30} />
+              <MaterialIcons
+                name="directions-walk"
+                size={30}
+                color={colors.white}
+              />
             ),
           })}
         />
@@ -107,7 +114,13 @@ export default function MapBottomTabsNavigator(
             title: '이벤트',
             headerTitle: '',
             headerShown: false,
-            tabBarIcon: () => <MaterialIcons name="star-border" size={30} />,
+            tabBarIcon: () => (
+              <MaterialIcons
+                name="star-border"
+                size={30}
+                color={colors.white}
+              />
+            ),
           }}
         />
         <Tab.Screen
@@ -117,7 +130,9 @@ export default function MapBottomTabsNavigator(
             title: '마이',
             headerTitle: '',
             headerShown: false,
-            tabBarIcon: () => <MaterialIcons name="person" size={30} />,
+            tabBarIcon: () => (
+              <MaterialIcons name="person" size={30} color={colors.white} />
+            ),
           }}
         />
       </Tab.Navigator>
