@@ -15,8 +15,12 @@ export default function QuickMenuHomeScreen() {
     navigation.navigate('FeedCreate');
   };
 
-  const handlePressCreteGather = () => {
+  const handlePressCreateGather = () => {
     navigation.navigate('GatherCreate');
+  };
+
+  const handlePressChatList = () => {
+    navigation.navigate('ChatList');
   };
 
   return (
@@ -24,10 +28,10 @@ export default function QuickMenuHomeScreen() {
       <Pressable style={styles.moveButton} onPress={handlePressCreateFeed}>
         <MainText>방명록 작성</MainText>
       </Pressable>
-      <Pressable style={styles.moveButton}>
+      <Pressable style={styles.moveButton} onPress={handlePressChatList}>
         <MainText>채팅</MainText>
       </Pressable>
-      <Pressable style={styles.moveButton} onPress={handlePressCreteGather}>
+      <Pressable style={styles.moveButton} onPress={handlePressCreateGather}>
         <MainText>모여라 작성</MainText>
       </Pressable>
     </View>

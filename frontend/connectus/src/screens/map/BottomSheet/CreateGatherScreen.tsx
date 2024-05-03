@@ -18,6 +18,7 @@ import {
 } from '@gorhom/bottom-sheet';
 import HeadCountInput from '@/components/map/HeadCountInput';
 import {NativeViewGestureHandler} from 'react-native-gesture-handler';
+import {getSubmitDate} from '@/utils/date';
 
 // 유저가 설정 가능한 시간
 const GATHERTIME = [5, 10, 15, 20, 30];
@@ -50,8 +51,9 @@ export default function CreateGatherScreen() {
   };
 
   const handleGatherPress = () => {
-    console.log(`gather info : ${headCount}. ${gatherTime}, ${content}`);
-    console.log(new Date());
+    if (gatherTime !== null) {
+      console.log(getSubmitDate(gatherTime));
+    }
   };
 
   return (

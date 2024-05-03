@@ -5,14 +5,16 @@ import QuickMenuHomeScreen from '@/screens/map/BottomSheet/QuickMenuHomeScreen';
 import CreateFeedScreen from '@/screens/map/BottomSheet/CreateFeedScreen';
 import CreateGatherScreen from '@/screens/map/BottomSheet/CreateGatherScreen';
 import {fonts} from '@/constants';
+import ChatListScreen from '@/screens/map/BottomSheet/ChatListScreen';
 
 export type BottomSheetStackParamList = {
   Home: undefined;
   FeedCreate: undefined;
   GatherCreate: undefined;
+  ChatList: undefined;
 };
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<BottomSheetStackParamList>();
 
 /**
  * 바텀시트에서 빠른메뉴에서 표시할 스크린들을 관리할 네비게이터입니다.
@@ -46,6 +48,13 @@ export default function BottomSheetQuickStackNavigator() {
         component={CreateGatherScreen}
         options={{
           headerTitle: '모여라',
+        }}
+      />
+      <Stack.Screen
+        name={'ChatList'}
+        component={ChatListScreen}
+        options={{
+          headerTitle: '채팅',
         }}
       />
     </Stack.Navigator>

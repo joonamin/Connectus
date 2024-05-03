@@ -88,7 +88,9 @@ export default function CreateFeedScreen() {
         </View>
         <Modal visible={isVisible} transparent={true} animationType="slide">
           <SafeAreaView style={styles.centeredView} onTouchEnd={hide}>
-            <View style={styles.modalView}>
+            <View
+              style={styles.modalView}
+              onTouchEnd={e => e.stopPropagation()}>
               <Pressable
                 style={styles.addImageButton}
                 onPress={imagePicker.useCamera}>
