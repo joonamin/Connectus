@@ -21,6 +21,7 @@ function FeedStackNavigator() {
           backgroundColor: colors.background,
           borderColor: colors.dividerColor,
         },
+        headerTitleAlign: 'center',
       }}>
       <Stack.Screen
         name="FeedHome"
