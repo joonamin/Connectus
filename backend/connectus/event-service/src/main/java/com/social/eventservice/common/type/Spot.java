@@ -9,8 +9,6 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@SuperBuilder
-@Builder
 public class Spot extends Position {
 	long id;
 
