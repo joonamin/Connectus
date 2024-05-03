@@ -3,7 +3,7 @@ package social.connectus.gatherservice.common.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value= HttpStatus.CONFLICT)
+@ResponseStatus(value= HttpStatus.ALREADY_REPORTED)
 public class ClosedGatherException extends Exception {
     public ClosedGatherException(String msg){
         super(msg);
