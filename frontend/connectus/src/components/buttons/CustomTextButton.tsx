@@ -3,6 +3,7 @@ import CustomButton, {
   CustomButtonProps,
 } from '@/components/buttons/CustomButton';
 import MainText from '@/components/text/MainText';
+import {StyleSheet} from 'react-native';
 
 /**
  * CustomTextButton 생성 시 전달 인자 타입을 지정합니다
@@ -23,11 +24,18 @@ export interface CustomTextButtonProps extends CustomButtonProps {
  */
 export default function CustomTextButton({
   label,
+  style,
   ...props
 }: CustomTextButtonProps) {
   return (
-    <CustomButton {...props}>
+    <CustomButton style={[styles.button, style]} {...props}>
       <MainText>{label}</MainText>
     </CustomButton>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    padding: 15,
+  },
+});
