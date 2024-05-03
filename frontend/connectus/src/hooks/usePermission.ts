@@ -37,6 +37,7 @@ const alerts = {
 
 /**
  * 유저에게 LOCATION 혹은 PHOTO의 접근 권한을 요청하는 customHook입니다.
+ * 페이지에 접근했을때, 권한을 확인하고, 권한이 없다면 바로 요청하게 해줄 수 있습니다
  * @param type
  */
 function usePermission(type: PermissionType) {
