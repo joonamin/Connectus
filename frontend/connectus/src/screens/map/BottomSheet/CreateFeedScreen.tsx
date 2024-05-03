@@ -5,7 +5,6 @@ import {
   Pressable,
   SafeAreaView,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from 'react-native';
@@ -127,7 +126,7 @@ const styles = StyleSheet.create({
   },
 
   saveFeedButtonContainer: {
-    width: 200,
+    width: '100%',
   },
   contentInput: {
     width: '100%',

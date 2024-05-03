@@ -4,6 +4,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import QuickMenuHomeScreen from '@/screens/map/BottomSheet/QuickMenuHomeScreen';
 import CreateFeedScreen from '@/screens/map/BottomSheet/CreateFeedScreen';
 import CreateGatherScreen from '@/screens/map/BottomSheet/CreateGatherScreen';
+import {fonts} from '@/constants';
 
 export type BottomSheetStackParamList = {
   Home: undefined;
@@ -13,9 +14,18 @@ export type BottomSheetStackParamList = {
 
 const Stack = createStackNavigator();
 
+/**
+ * 바텀시트에서 빠른메뉴에서 표시할 스크린들을 관리할 네비게이터입니다.
+ */
 export default function BottomSheetQuickStackNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: fonts.medium,
+        },
+      }}>
       <Stack.Screen
         name={'Home'}
         component={QuickMenuHomeScreen}
@@ -28,16 +38,14 @@ export default function BottomSheetQuickStackNavigator() {
         name={'FeedCreate'}
         component={CreateFeedScreen}
         options={{
-          headerTitle: '',
-          headerShown: false,
+          headerTitle: '글작성',
         }}
       />
       <Stack.Screen
         name={'GatherCreate'}
         component={CreateGatherScreen}
         options={{
-          headerTitle: '',
-          headerShown: false,
+          headerTitle: '모여라',
         }}
       />
     </Stack.Navigator>

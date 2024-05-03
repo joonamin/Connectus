@@ -17,7 +17,7 @@ export default function QuickMenuHomeScreen() {
 
   const handlePressCreteGather = () => {
     navigation.navigate('GatherCreate');
-  }
+  };
 
   return (
     <View style={styles.mainContainer}>
