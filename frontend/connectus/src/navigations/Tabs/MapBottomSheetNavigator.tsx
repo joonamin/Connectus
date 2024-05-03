@@ -32,7 +32,11 @@ export default function MapBottomSheetNavigator() {
         options={({route}) => ({
           tabBarStyle: (route => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-            if (routeName === 'FeedCreate' || routeName === 'GatherCreate') {
+            if (
+              routeName === 'FeedCreate' ||
+              routeName === 'GatherCreate' ||
+              routeName === 'ChatList'
+            ) {
               return {display: 'none'};
             }
             return {
