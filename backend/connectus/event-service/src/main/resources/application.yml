@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: event-service
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: 1234
+    url: jdbc:mariadb://localhost:3306/connectus
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+
+  cloud:
+    aws:
+      s3:
+        bucket: e106-connectus
+      credentials:
+        access-key: accessKey
+        secret-key: secretKey
+      region:
+        static: ap-northeast-2
+        auto: false
+      stack:
+        auto: false
