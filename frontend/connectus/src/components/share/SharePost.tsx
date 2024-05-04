@@ -26,7 +26,7 @@ export default function SharePost() {
   };
   return (
     <>
-      <View style={styles.feedContainer}>
+      <View style={styles.shareContainer}>
         <View style={styles.profileContainer}>
           <View style={styles.imageContainer}>
             <Image
@@ -34,7 +34,7 @@ export default function SharePost() {
               style={styles.profileImage}
             />
           </View>
-          <View style={styles.feedInfoContainer}>
+          <View style={styles.shareInfoContainer}>
             <MainText>{'userName'}</MainText>
             <Text style={styles.postDate}>{'2024-04-29'}</Text>
           </View>
@@ -44,13 +44,13 @@ export default function SharePost() {
             </Text>
           </Pressable>
         </View>
-        <View style={styles.feedImageContainer}>
+        <View style={styles.shareImageContainer}>
           <Image
-            style={styles.feedImage}
+            style={styles.shareImage}
             source={require('@/assets/map.png')}
           />
         </View>
-        <View style={styles.feedIndicator}>
+        <View style={styles.shareIndicator}>
           {viewIsLiked ? (
             <Pressable onPress={handlePressLikeButton}>
               <Ionicons name="heart" size={32} color={'red'} />
@@ -60,8 +60,8 @@ export default function SharePost() {
               <Ionicons name="heart-outline" size={32} color={'white'} />
             </Pressable>
           )}
-          <Text style={styles.feedIndicatorText}>좋아요 {likeNumber}개</Text>
-          <Text style={styles.feedIndicatorText}>
+          <Text style={styles.shareIndicatorText}>좋아요 {likeNumber}개</Text>
+          <Text style={styles.shareIndicatorText}>
             같이 걸은 사람 {commentNumber}명
           </Text>
         </View>
@@ -71,7 +71,7 @@ export default function SharePost() {
 }
 
 const styles = StyleSheet.create({
-  feedContainer: {gap: 5},
+  shareContainer: {gap: 5},
   profileContainer: {
     flexDirection: 'row',
     height: 44,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  feedInfoContainer: {justifyContent: 'center', paddingLeft: 10},
+  shareInfoContainer: {justifyContent: 'center', paddingLeft: 10},
   userName: {fontSize: 24, color: colors.white},
   postDate: {
     fontFamily: 'GmarketSansTTFLight',
@@ -109,15 +109,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.white,
   },
-  feedImageContainer: {
+  shareImageContainer: {
     width: '100%',
     height: Dimensions.get('screen').width - 30,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  feedImage: {width: '100%', height: '100%'},
-  feedIndicator: {flexDirection: 'row', alignItems: 'center', gap: 10},
-  feedIndicatorText: {
+  shareImage: {width: '100%', height: '100%'},
+  shareIndicator: {flexDirection: 'row', alignItems: 'center', gap: 10},
+  shareIndicatorText: {
     fontFamily: 'GmarketSansTTFLight',
     color: colors.white,
     fontSize: 18,
