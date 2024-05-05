@@ -5,12 +5,12 @@ spring:
   application:
     name: spot-service
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://spot.mariadb.connectus.social/spot?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://spot.mariadb.connectus.social/spot?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: ssafyE106!
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+#    database-platform: org.hibernate.dialect.H2Dialect
     open-in-view: false
     hibernate:
       ddl-auto: create-drop
@@ -19,9 +19,6 @@ spring:
         show_sql: true
         format_sql: true
     show-sql: true
-  h2:
-    console:
-      enabled: true
 
 eureka:
   #  instance:
