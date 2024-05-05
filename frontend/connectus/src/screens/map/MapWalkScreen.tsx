@@ -19,6 +19,7 @@ import MapBottomSheetNavigator from '@/navigations/Tabs/MapBottomSheetNavigator'
 import EventIndicator from '@/components/my/EventIndicator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
+import QuickMenuHomeScreen from './BottomSheet/QuickMenuHomeScreen';
 
 type Navigation = StackNavigationProp<MapStackParamList>;
 
@@ -94,9 +95,10 @@ export default function MapWalkScreen() {
         snapPoints={snapPoints}
         enablePanDownToClose={true}>
         <SafeAreaProvider>
-          <NavigationContainer independent={true}>
+          {/* <NavigationContainer independent={true}>
             <MapBottomSheetNavigator />
-          </NavigationContainer>
+          </NavigationContainer> */}
+          <QuickMenuHomeScreen />
         </SafeAreaProvider>
       </BottomSheet>
     </>

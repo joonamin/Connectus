@@ -4,11 +4,15 @@ import {createStackNavigator} from '@react-navigation/stack';
 import MapHomeScreen from '@/screens/map/MapHomeScreen';
 import MapWalkScreen from '@/screens/map/MapWalkScreen';
 import MapResultScreen from '@/screens/map/MapResultScreen';
+import BottomSheetQuickStackNavigator from './BottomSheetQuickStackNavigator';
+import MapBottomSheetNavigator from '../Tabs/MapBottomSheetNavigator';
+import CreateFeedScreen from '@/screens/map/BottomSheet/CreateFeedScreen';
 
 export type MapStackParamList = {
   MapHome: undefined;
   MapWalk: undefined;
   MapResult: undefined;
+  BottomSheet: undefined;
 };
 
 const Stack = createStackNavigator<MapStackParamList>();
@@ -39,6 +43,10 @@ export default function MapStackNavigator() {
           headerTitle: '',
           headerShown: false,
         }}
+      />
+      <Stack.Screen
+        name="BottomSheet"
+        component={BottomSheetQuickStackNavigator}
       />
     </Stack.Navigator>
   );
