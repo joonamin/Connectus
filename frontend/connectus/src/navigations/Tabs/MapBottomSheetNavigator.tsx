@@ -11,6 +11,10 @@ export type MapBottomSheetTabParamList = {
   Event: undefined;
 };
 
+type BottomSheetQuickStackNavigatorProps = {
+  navigateToResultScreen: () => void; // navigateToResultScreen 함수를 props로 받음
+};
+
 const Tab = createMaterialTopTabNavigator<MapBottomSheetTabParamList>();
 
 /**

@@ -12,7 +12,7 @@ import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
-  BottomTabNavigationProp<BottomTabParamList>
+  BottomTabNavigationProp<BottomTabParamList>,
 >;
 
 export default function MapHomeScreen() {

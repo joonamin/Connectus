@@ -23,6 +23,7 @@ export type BottomTabParamList = {
   Map: NavigatorScreenParams<MapStackParamList>;
   Event: undefined;
   My: undefined;
+  BottomSheet: undefined;
 };
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
