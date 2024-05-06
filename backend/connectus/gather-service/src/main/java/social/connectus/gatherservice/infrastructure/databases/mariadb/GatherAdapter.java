@@ -9,6 +9,7 @@ import social.connectus.gatherservice.application.rest.request.CloseGatherReques
 import social.connectus.gatherservice.application.rest.response.CreateGatherResponse;
 import social.connectus.gatherservice.common.constants.GatherConstants;
 import social.connectus.gatherservice.common.exception.ResourceNotFoundException;
+import social.connectus.gatherservice.domain.command.CloseGatherCommand;
 import social.connectus.gatherservice.domain.command.CreateGatherCommand;
 import social.connectus.gatherservice.domain.command.JoinGatherCommand;
 import social.connectus.gatherservice.domain.command.WantJoinGatherCommand;
@@ -30,14 +31,14 @@ public class GatherAdapter implements GatherPort {
 
     @Override
     @Transactional
-    public void closeGather(CloseGatherRequest request) throws ResourceNotFoundException {
-        long gatherId = request.getGatherId();
+    public void closeGather(CloseGatherCommand command) throws ResourceNotFoundException {
+        long gatherId = command.getGatherId();
         Gather beforeUpdate = gatherRepository.findById(gatherId)
                 .orElseThrow(() -> new ResourceNotFoundException(GatherConstants.GATHER_NOT_FOUND + gatherId));
         // gather의 closed를 true로 변경
         Gather gather = Gather.builder()
-                .id(request.getGatherId())
-                .hostId(request.getUserId())
+                .id(command.getGatherId())
+                .hostId(command.getUserId())
                 .isClosed(true)
                 .content(beforeUpdate.getContent())
                 .endTime(beforeUpdate.getEndTime())
