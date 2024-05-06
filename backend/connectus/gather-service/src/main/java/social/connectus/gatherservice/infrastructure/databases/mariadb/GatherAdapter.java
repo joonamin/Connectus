@@ -25,8 +25,9 @@ public class GatherAdapter implements GatherPort {
     private final GatherRepository gatherRepository;
 
     @Override
-    public Optional<Gather> getGatherById(long gatherId) {
-        return gatherRepository.findById(gatherId);
+    public Gather getGatherById(long gatherId) {
+        return gatherRepository.findById(gatherId)
+                .orElseThrow(()-> new ResourceNotFoundException(GatherConstants.GATHER_NOT_FOUND + gatherId));
     }
 
     @Override
