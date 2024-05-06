@@ -23,6 +23,7 @@ import useImagePicker from '@/hooks/useImagePicker';
 import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import useModal from '@/hooks/useModal';
+import usePostStore from '@/store/usePostStore';
 
 type Navigation = CompositeNavigationProp<
   MaterialTopTabNavigationProp<MapBottomSheetTabParamList>,
@@ -38,6 +39,8 @@ export default function CreateFeedScreen() {
   const {userLocation} = useUserLocation();
   const [content, setContent] = useState<string>('');
   const {isVisible, show, hide} = useModal();
+  // 전역 store에 작성 기록을 저장하기 위한 store를 import 받아옵니다.
+  const {posts, setAddPost} = usePostStore();
   usePermission('PHOTO');
 
   const keyBoardDismiss = () => {
@@ -48,6 +51,12 @@ export default function CreateFeedScreen() {
     console.log(
       `userLocation: ${userLocation.latitude}, ${userLocation.longitude} , content : ${content}`,
     );
+    setAddPost({
+      content: content,
+      image: imagePicker.imageData,
+      postLocation: userLocation,
+    });
+    console.log(posts);
     navigation.navigate('Home');
   };
 
