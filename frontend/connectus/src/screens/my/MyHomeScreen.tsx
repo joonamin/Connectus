@@ -40,6 +40,9 @@ export default function MyHomeScreen() {
   const gotoAchievements = () => {
     navigation.navigate('MyAchievements');
   };
+  const gotoHistory = () => {
+    navigation.navigate("MyWalkHistory");
+  }
 
   return (
     <ScrollView>
@@ -74,6 +77,7 @@ export default function MyHomeScreen() {
             iconType="MaterialIcons"
             iconName="list"
             text="외출 기록"
+            onPress={gotoHistory}
           />
           <IconItemButton
             iconType="MaterialIcons"
