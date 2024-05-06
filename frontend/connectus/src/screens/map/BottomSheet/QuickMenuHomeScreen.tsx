@@ -14,7 +14,6 @@ type Navigation = CompositeNavigationProp<
 
 export default function QuickMenuHomeScreen() {
   const navigation = useNavigation<Navigation>();
-
   const handlePressCreateFeed = () => {
     navigation.navigate('FeedCreate');
   };
@@ -28,7 +27,7 @@ export default function QuickMenuHomeScreen() {
   };
 
   const handlePressQuit = () => {
-    navigation.navigate('MapResult');
+    // navigateToResultScreen;
   };
 
   return (

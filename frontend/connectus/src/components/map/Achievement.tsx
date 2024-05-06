@@ -44,7 +44,7 @@ export default function Achievement({achievs}: PropsType) {
                 <Text style={styles.mainText}>{achieve.title}</Text>
                 <Text
                   numberOfLines={1}
-                  ellipsizeMode={'tail'}
+                  ellipsizeMode={'middle'}
                   style={styles.subText}>
                   {achieve.description}
                 </Text>
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.buttonBackground,
   },
   textContainer: {
+    width: '80%',
     justifyContent: 'space-between',
   },
 });
