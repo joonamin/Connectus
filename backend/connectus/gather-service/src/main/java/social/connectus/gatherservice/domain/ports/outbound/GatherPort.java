@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface GatherPort {
     void closeGather(CloseGatherCommand command) throws ResourceNotFoundException;
     CreateGatherResponse createGather(CreateGatherCommand  command);
-    Optional<Gather> getGatherById(long gatherId) throws ResourceNotFoundException;
+    Gather getGatherById(long gatherId) throws ResourceNotFoundException;
     void wantJoinGather(WantJoinGatherCommand command) throws ResourceNotFoundException;
 
     void joinGather(JoinGatherCommand command) throws ResourceNotFoundException;
