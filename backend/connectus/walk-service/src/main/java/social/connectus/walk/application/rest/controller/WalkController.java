@@ -1,8 +1,8 @@
 package social.connectus.walk.application.rest.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import social.connectus.walk.application.rest.request.CreateWalkRequest;
 
 @RestController
 @RequestMapping("/walk")
@@ -11,4 +11,10 @@ public class WalkController {
     public String health_check(){
         return "It's walking on Walk-Service!";
     }
+
+//    @PostMapping
+//    public ResponseEntity<CreateWalkResponse> createWalk(CreateWalkRequest request){
+//        CreateWalkResponse response = WalkUseCase.createWalk(CreateWalkCommand.from(request));
+//        return ResponseEntity.ok(response);
+//    }
 }

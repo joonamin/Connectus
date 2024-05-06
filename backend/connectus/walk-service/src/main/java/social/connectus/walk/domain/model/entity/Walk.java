@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import social.connectus.walk.domain.model.VO.PostOnWalk;
 import social.connectus.walk.domain.model.VO.Route;
 
 import java.util.List;
@@ -39,5 +40,5 @@ public class Walk extends BaseEntity{
     private Long participateEvent;
 
     @Column(nullable = false)
-    private List<Long> postList;
+    private List<PostOnWalk> postList;
 }
