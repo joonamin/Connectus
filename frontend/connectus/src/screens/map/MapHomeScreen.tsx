@@ -1,5 +1,12 @@
 import React, {useRef} from 'react';
-import {Dimensions, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import useUserLocation from '../../hooks/useUserLocation';
 import CustomButton from '@/components/buttons/CustomButton';
@@ -9,10 +16,11 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
+import colors from '@/constants/colors';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
-  BottomTabNavigationProp<BottomTabParamList>,
+  BottomTabNavigationProp<BottomTabParamList>
 >;
 
 export default function MapHomeScreen() {
@@ -41,9 +49,9 @@ export default function MapHomeScreen() {
         {}
       </MapView>
       <View style={styles.buttonContainer}>
-        <CustomButton onPress={handlePressStart}>
+        <Pressable style={styles.startButton} onPress={handlePressStart}>
           <MainText>산책시작</MainText>
-        </CustomButton>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -62,5 +70,13 @@ const styles = StyleSheet.create({
   bottomSheetContainer: {
     flex: 1,
     alignItems: 'center',
+  },
+  startButton: {
+    width: '100%',
+    backgroundColor: colors.primaryColorBlue,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 15,
+    borderRadius: 15,
   },
 });

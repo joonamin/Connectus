@@ -95,10 +95,12 @@ export default function MapWalkScreen() {
         snapPoints={snapPoints}
         enablePanDownToClose={true}>
         <SafeAreaProvider>
-          {/* <NavigationContainer independent={true}>
-            <MapBottomSheetNavigator />
-          </NavigationContainer> */}
-          <QuickMenuHomeScreen />
+          <NavigationContainer independent={true}>
+            <MapBottomSheetNavigator
+              navigateToResultScreen={navigateToResultScreen}
+            />
+          </NavigationContainer>
+          {/* <QuickMenuHomeScreen /> */}
         </SafeAreaProvider>
       </BottomSheet>
     </>
