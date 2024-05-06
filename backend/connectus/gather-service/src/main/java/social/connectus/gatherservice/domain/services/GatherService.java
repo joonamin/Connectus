@@ -92,8 +92,8 @@ public class GatherService implements GatherUseCase {
         gather = gatherPort.getGatherById(gatherId)
                 .orElseThrow(()-> new ResourceNotFoundException(GatherConstants.GATHER_NOT_FOUND + gatherId));
         if(gather.getJoinerList().size() == gather.getMaxJoiner()){
-            CloseGatherRequest closeGatherRequest = modelMapper.map(request, CloseGatherRequest.class);
-            closeGather(closeGatherRequest);
+            CloseGatherCommand closeGatherCommand = modelMapper.map(request, CloseGatherCommand.class);
+            closeGather(closeGatherCommand);
             return true;
         }
         return false;
