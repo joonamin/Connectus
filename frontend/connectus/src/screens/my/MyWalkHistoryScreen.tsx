@@ -101,6 +101,7 @@ export default function MyWalkHistoryScreen() {
   return (
     <ScrollView>
       <View style={styles.page}>
+        {/* 월별 데이터 반복 출력 */}
         {history.map(item => (
           <View
             key={
@@ -109,11 +110,13 @@ export default function MyWalkHistoryScreen() {
                 : item.month
             }
             style={styles.month}>
+            {/* 해당 월 이름 */}
             <MainContainer style={styles.monthlyItem}>
               <HeadingText>
                 {item.year}년 {item.month}월
               </HeadingText>
             </MainContainer>
+            {/* 해당 월 요약 정보 */}
             <MainContainer style={styles.monthlyItem}>
               <MonthlySummary
                 daysWalked={item.summary.daysWalked}
@@ -121,9 +124,11 @@ export default function MyWalkHistoryScreen() {
                 timeSpent={item.summary.timeSpent}
               />
             </MainContainer>
+            {/* 해당 월 산책 기록 */}
             <View style={styles.historyGrid}>
               {item.list.map(historyMonth => (
                 <>
+                  {/* 산책 기록을 일별로 분리 */}
                   <MainText style={styles.dateHeading}>
                     {item.month}월 {historyMonth.day}일
                   </MainText>
