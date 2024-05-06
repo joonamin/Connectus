@@ -3,9 +3,7 @@ package social.connectus.gatherservice.infrastructure.databases.mariadb;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import social.connectus.gatherservice.application.rest.request.CloseGatherRequest;
 import social.connectus.gatherservice.application.rest.response.CreateGatherResponse;
 import social.connectus.gatherservice.common.constants.GatherConstants;
 import social.connectus.gatherservice.common.exception.ResourceNotFoundException;
@@ -15,8 +13,6 @@ import social.connectus.gatherservice.domain.command.JoinGatherCommand;
 import social.connectus.gatherservice.domain.command.WantJoinGatherCommand;
 import social.connectus.gatherservice.domain.model.Gather;
 import social.connectus.gatherservice.domain.ports.outbound.GatherPort;
-
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor

@@ -2,7 +2,6 @@ package social.connectus.gatherservice.domain.services;
 
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import social.connectus.gatherservice.application.rest.request.CloseGatherRequest;
 import social.connectus.gatherservice.application.rest.request.JoinGatherRequest;
 import social.connectus.gatherservice.application.rest.request.WantJoinGatherRequest;
 import social.connectus.gatherservice.application.rest.response.CreateGatherResponse;
@@ -51,7 +50,7 @@ public class GatherService implements GatherUseCase {
     }
 
     @Override
-    public void wantJoinGather(WantJoinGatherRequest request) throws ResourceNotFoundException, ClosedGatherException, GlobalException, AlreadyJoinedException {
+    public void wantJoinGather(WantJoinGatherRequest request) throws ResourceNotFoundException, ClosedGatherException, AlreadyJoinedException {
         long gatherId = request.getGatherId();
         long userId = request.getUserId();
 
