@@ -1,10 +1,21 @@
+import CustomButton from '@/components/buttons/CustomButton';
 import MainContainer from '@/components/containers/MainContainer';
 import MonthlySummary from '@/components/my/MonthlySummary';
 import HeadingText from '@/components/text/HeadingText';
 import MainText from '@/components/text/MainText';
 import colors from '@/constants/colors';
+import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
+import {MyStackParamList} from '@/navigations/stack/MyStackNavigator';
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import React from 'react';
 import {Image, ScrollView, StyleSheet, View} from 'react-native';
+
+type Navigation = CompositeNavigationProp<
+  StackNavigationProp<MyStackParamList>,
+  BottomTabNavigationProp<BottomTabParamList>
+>;
 
 /**
  * 산책 기록을 표시합니다
@@ -12,6 +23,8 @@ import {Image, ScrollView, StyleSheet, View} from 'react-native';
  * @returns MyWalkHistoryScreen
  */
 export default function MyWalkHistoryScreen() {
+  const navigation = useNavigation<Navigation>();
+
   // 시험용 데이터
   const history = [
     {
@@ -126,18 +139,27 @@ export default function MyWalkHistoryScreen() {
             </MainContainer>
             {/* 해당 월 산책 기록 */}
             <View style={styles.historyGrid}>
-              {item.list.map(historyMonth => (
+              {item.list.map(historyDay => (
                 <>
                   {/* 산책 기록을 일별로 분리 */}
                   <MainText style={styles.dateHeading}>
-                    {item.month}월 {historyMonth.day}일
+                    {item.month}월 {historyDay.day}일
                   </MainText>
-                  {historyMonth.list.map(historyDay => (
-                    <Image
-                      key={historyDay.id}
+                  {historyDay.list.map(historyItem => (
+                    <CustomButton
                       style={styles.historyItem}
-                      source={defaultImage}
-                    />
+                      backgroundColor="transparent"
+                      onPress={() => {
+                        navigation.navigate('MyWalkDetail', {
+                          walkId: historyItem.id,
+                        });
+                      }}>
+                      <Image
+                        key={historyItem.id}
+                        style={styles.historyItemImage}
+                        source={defaultImage}
+                      />
+                    </CustomButton>
                   ))}
                 </>
               ))}
@@ -175,6 +197,12 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     borderWidth: 1,
     borderColor: colors.background,
+    borderRadius: 0,
+  },
+  historyItemImage: {
+    flexBasis: '100%',
+    flexShrink: 0,
+    resizeMode: 'cover',
   },
   dateHeading: {
     flex: 3,

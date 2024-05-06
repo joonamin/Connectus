@@ -4,11 +4,13 @@ import colors from '@/constants/colors';
 import MyHomeScreen from '@/screens/my/MyHomeScreen';
 import MyAchievementsScreen from '@/screens/my/MyAchievementsScreen';
 import MyWalkHistoryScreen from '@/screens/my/MyWalkHistoryScreen';
+import MyWalkDetailScreen from '@/screens/my/MyWalkDetailScreen';
 
 export type MyStackParamList = {
   MyHome: undefined;
   MyAchievements: undefined;
   MyWalkHistory: undefined;
+  MyWalkDetail: {walkId: number};
 };
 
 const Stack = createStackNavigator<MyStackParamList>();
@@ -40,6 +42,11 @@ function MyStackNavigator() {
         name="MyWalkHistory"
         component={MyWalkHistoryScreen}
         options={{title: '외출 기록'}}
+      />
+      <Stack.Screen
+        name="MyWalkDetail"
+        component={MyWalkDetailScreen}
+        options={{title: '기록 상세'}}
       />
     </Stack.Navigator>
   );
