@@ -1,6 +1,7 @@
 import MainContainer from '@/components/containers/MainContainer';
 import MonthlySummary from '@/components/my/MonthlySummary';
 import HeadingText from '@/components/text/HeadingText';
+import MainText from '@/components/text/MainText';
 import colors from '@/constants/colors';
 import React from 'react';
 import {Image, ScrollView, StyleSheet, View} from 'react-native';
@@ -23,19 +24,29 @@ export default function MyWalkHistoryScreen() {
       },
       list: [
         {
-          id: 5,
+          day: 15,
+          list: [
+            {
+              id: 11,
+            },
+            {
+              id: 10,
+            },
+          ],
         },
         {
-          id: 4,
-        },
-        {
-          id: 3,
-        },
-        {
-          id: 2,
-        },
-        {
-          id: 1,
+          day: 14,
+          list: [
+            {
+              id: 9,
+            },
+            {
+              id: 8,
+            },
+            {
+              id: 7,
+            },
+          ],
         },
       ],
     },
@@ -49,19 +60,37 @@ export default function MyWalkHistoryScreen() {
       },
       list: [
         {
-          id: 5,
+          day: 26,
+          list: [
+            {
+              id: 6,
+            },
+            {
+              id: 5,
+            },
+          ],
         },
         {
-          id: 4,
+          day: 21,
+          list: [
+            {
+              id: 4,
+            },
+          ],
         },
         {
-          id: 3,
-        },
-        {
-          id: 2,
-        },
-        {
-          id: 1,
+          day: 18,
+          list: [
+            {
+              id: 3,
+            },
+            {
+              id: 2,
+            },
+            {
+              id: 1,
+            },
+          ],
         },
       ],
     },
@@ -93,12 +122,19 @@ export default function MyWalkHistoryScreen() {
               />
             </MainContainer>
             <View style={styles.historyGrid}>
-              {item.list.map(historyItem => (
-                <Image
-                  key={historyItem.id}
-                  style={styles.historyItem}
-                  source={defaultImage}
-                />
+              {item.list.map(historyMonth => (
+                <>
+                  <MainText style={styles.dateHeading}>
+                    {item.month}월 {historyMonth.day}일
+                  </MainText>
+                  {historyMonth.list.map(historyDay => (
+                    <Image
+                      key={historyDay.id}
+                      style={styles.historyItem}
+                      source={defaultImage}
+                    />
+                  ))}
+                </>
               ))}
             </View>
           </View>
@@ -134,5 +170,11 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     borderWidth: 1,
     borderColor: colors.background,
+  },
+  dateHeading: {
+    flex: 3,
+    padding: 15,
+    flexBasis: '100%',
+    flexShrink: 0,
   },
 });
