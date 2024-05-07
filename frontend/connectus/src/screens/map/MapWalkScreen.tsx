@@ -7,7 +7,13 @@ import {
   View,
 } from 'react-native';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {
+  LatLng,
+  Marker,
+  PROVIDER_GOOGLE,
+  Polyline,
+  Region,
+} from 'react-native-maps';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -26,16 +32,41 @@ import EventIndicator from '@/components/my/EventIndicator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 
+const DUMMY_POSITION = [
+  {
+    latitude: 35.09198080366587,
+    longitude: 128.85326819627983,
+  },
+  {
+    latitude: 35.09056972684619,
+    longitude: 128.85331301309265,
+  },
+  {
+    latitude: 35.09613483737488,
+    longitude: 128.8535979719482,
+  },
+];
+
 type Navigation = StackNavigationProp<MapStackParamList>;
+
+type deltaType = {
+  latitudeDelta: number;
+  longitudeDelta: number;
+};
 
 export default function MapWalkScreen() {
   const navigation = useNavigation<Navigation>();
-
+  const [trackingMode, setTrackingMode] = useState<boolean>(true);
   const {userLocation} = useUserLocation();
+  const [mapDelta, setMapDelta] = useState<deltaType>({
+    latitudeDelta: 0.001,
+    longitudeDelta: 0.001,
+  });
   const mapRef = useRef<MapView | null>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [time, setTime] = useState<number>(0);
   const [indicagteTime, setIndicateTime] = useState<string | null>(null);
+  const [trace, setTrace] = useState<LatLng[]>([]);
   const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
 
   //  바텀시트를 열고닫을 코드
@@ -47,8 +78,11 @@ export default function MapWalkScreen() {
   const tick = () => {
     setTime(prev => prev + 1);
   };
+  const traceTick = () => {
+    setTrace(prev => [...prev, userLocation]);
+  };
   useInterval(tick, 1000);
-
+  useInterval(traceTick, 3000);
   /**
    * @todo 지금까지의 정보를 props로 넘겨주는 코드를 작성해야합니다(navigation에 params로 넣으면되지 않을까요?)
    * 걸은 시간, 거리, 좌표는 이 스크린에서 관리할 예정이며, 작성 post는 전역으로 관리합니다.
@@ -56,6 +90,11 @@ export default function MapWalkScreen() {
   const navigateToResultScreen = () => {
     handleBottomSheetClose();
     navigation.navigate('MapResult');
+  };
+
+  const handleChangeDelta = (region: Region) => {
+    const {latitudeDelta, longitudeDelta} = region;
+    setMapDelta({latitudeDelta, longitudeDelta});
   };
 
   // 디바이스 전체에 listener설정
@@ -76,23 +115,37 @@ export default function MapWalkScreen() {
       DeviceEventEmitter.removeAllListeners('navigateToResultScreen');
     };
   }, []);
-
   return (
     <>
-      <MapView
+      <MapView.Animated
         ref={mapRef}
         style={styles.container}
         provider={PROVIDER_GOOGLE}
         showsUserLocation
         followsUserLocation
         showsMyLocationButton={true}
-        region={{
-          ...userLocation,
-          latitudeDelta: 0.009,
-          longitudeDelta: 0.009,
-        }}>
-        {}
-      </MapView>
+        zoomEnabled={true}
+        region={
+          trackingMode
+            ? {
+                ...userLocation,
+                ...mapDelta,
+              }
+            : {
+                ...trace[trace.length - 1],
+                ...mapDelta,
+              }
+        }
+        onRegionChangeComplete={handleChangeDelta}>
+        <Polyline
+          coordinates={trace}
+          strokeWidth={8}
+          strokeColor={colors.primaryColorBlue}
+        />
+        {DUMMY_POSITION.map(data => {
+          return <Marker coordinate={data} />;
+        })}
+      </MapView.Animated>
       <View style={[styles.eventIndicator, {top: inset.top || 20}]}>
         <EventIndicator />
       </View>
