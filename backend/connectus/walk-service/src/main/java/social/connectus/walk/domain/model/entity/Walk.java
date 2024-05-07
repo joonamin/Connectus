@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import social.connectus.walk.domain.model.VO.PostOnWalk;
 import social.connectus.walk.domain.model.VO.Route;
 
@@ -24,21 +25,22 @@ public class Walk extends BaseEntity{
     @Column(nullable = false)
     private Long userId;
 
-    @Column(nullable = false)
     private String title;
 
     @ElementCollection(fetch = FetchType.LAZY)
     private Route route;
 
+    private int walkTime;
+
+    private int walkDistance;   // 산책 거리
+
     @Column(nullable = false)
+    @ColumnDefault("0")
     private int likeCount;
 
-    @Column(nullable = false)
     private List<Long> completedAchievement;
 
-    @Column(nullable = false)
     private Long participateEvent;
 
-    @Column(nullable = false)
     private List<PostOnWalk> postList;
 }

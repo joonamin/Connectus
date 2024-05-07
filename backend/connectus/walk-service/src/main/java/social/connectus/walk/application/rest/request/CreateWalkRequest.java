@@ -2,6 +2,7 @@ package social.connectus.walk.application.rest.request;
 
 import jakarta.persistence.*;
 import lombok.*;
+import social.connectus.walk.domain.model.VO.PostOnWalk;
 import social.connectus.walk.domain.model.VO.Route;
 
 import java.util.List;
@@ -15,16 +16,9 @@ public class CreateWalkRequest {
     private Long userId;
     private String title;
     private Route route;
-
-    @Column(nullable = false)
-    private int likeCount;
-
-    @Column(nullable = false)
     private List<Long> completedAchievement;
-
-    @Column(nullable = false)
+    private int walkTime;
+    private int walkDistance;   // 산책 거
     private Long participateEvent;
-
-    @Column(nullable = false)
-    private List<Long> postList;
+    private List<PostOnWalk> postList;
 }
