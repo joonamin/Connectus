@@ -1,18 +1,13 @@
-import QuickMenuHomeScreen from '@/screens/map/BottomSheet/QuickMenuHomeScreen';
-import BottomSheetAchievmentsScreen from '@/screens/map/BottomSheetAchievmentsScreen';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import React from 'react';
-import BottomSheetQuickStackNavigator from '../stack/BottomSheetQuickStackNavigator';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/core';
+import BottomSheetAchievmentsScreen from '@/screens/map/BottomSheetAchievmentsScreen';
+import BottomSheetQuickStackNavigator from '../stack/BottomSheetQuickStackNavigator';
 
 export type MapBottomSheetTabParamList = {
-  QuickMenu: {navigateToResultScreen: () => void};
+  QuickMenu: undefined;
   Achievements: undefined;
   Event: undefined;
-};
-
-type BottomSheetQuickStackNavigatorProps = {
-  navigateToResultScreen: () => void; // navigateToResultScreen 함수를 props로 받음
 };
 
 const Tab = createMaterialTopTabNavigator<MapBottomSheetTabParamList>();
@@ -20,9 +15,7 @@ const Tab = createMaterialTopTabNavigator<MapBottomSheetTabParamList>();
 /**
  * 바텀 시트에서 초기 접근시 상단 탭을 표시해줄 네비게이터입니다
  */
-export default function MapBottomSheetNavigator({
-  navigateToResultScreen,
-}: BottomSheetQuickStackNavigatorProps) {
+export default function MapBottomSheetNavigator() {
   return (
     <Tab.Navigator
       initialRouteName={'QuickMenu'}
@@ -35,7 +28,6 @@ export default function MapBottomSheetNavigator({
       <Tab.Screen
         name="QuickMenu"
         component={BottomSheetQuickStackNavigator}
-        initialParams={{navigateToResultScreen}}
         options={({route}) => ({
           tabBarStyle: (route => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? '';

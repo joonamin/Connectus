@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import useUserLocation from '../../hooks/useUserLocation';
-import CustomButton from '@/components/buttons/CustomButton';
 import MainText from '@/components/text/MainText';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';

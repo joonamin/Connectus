@@ -1,23 +1,13 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {
-  StackNavigationProp,
-  createStackNavigator,
-} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import QuickMenuHomeScreen from '@/screens/map/BottomSheet/QuickMenuHomeScreen';
 import CreateFeedScreen from '@/screens/map/BottomSheet/CreateFeedScreen';
 import CreateGatherScreen from '@/screens/map/BottomSheet/CreateGatherScreen';
 import {fonts} from '@/constants';
 import ChatListScreen from '@/screens/map/BottomSheet/ChatListScreen';
-import {MaterialTopTabNavigationProp} from '@react-navigation/material-top-tabs';
-import {MapBottomSheetTabParamList} from '../Tabs/MapBottomSheetNavigator';
-
-type BottomSheetQuickStackNavigatorProps = {
-  navigateToResultScreen: () => void; // navigateToResultScreen 함수를 props로 받음
-};
 
 export type BottomSheetStackParamList = {
-  Home: {navigateToResultScreen: () => void};
+  Home: undefined;
   FeedCreate: undefined;
   GatherCreate: undefined;
   ChatList: undefined;
