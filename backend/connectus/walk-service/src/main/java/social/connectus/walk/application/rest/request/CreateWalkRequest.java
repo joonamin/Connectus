@@ -1,6 +1,5 @@
 package social.connectus.walk.application.rest.request;
 
-import jakarta.persistence.*;
 import lombok.*;
 import social.connectus.walk.domain.model.VO.PostOnWalk;
 import social.connectus.walk.domain.model.VO.Route;
