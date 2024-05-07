@@ -37,5 +37,10 @@ export default function CustomTextButton({
 const styles = StyleSheet.create({
   button: {
     padding: 15,
+    alignItems: 'center',
+  },
+  label: {
+    padding: 15,
+    textAlign: 'center',
   },
 });

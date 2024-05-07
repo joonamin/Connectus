@@ -26,6 +26,7 @@ export default function WalkHistoryThumbnail({id}: WalkHistoryThumbnailProps) {
   return (
     <CustomButton
       style={styles.historyItem}
+      containerStyle={styles.historyItemContainer}
       backgroundColor="transparent"
       onPress={() => {
         navigation.navigate('MyWalkDetail', {
@@ -38,16 +39,20 @@ export default function WalkHistoryThumbnail({id}: WalkHistoryThumbnailProps) {
 }
 
 const styles = StyleSheet.create({
-  historyItem: {
+  historyItemContainer: {
     flex: 1,
-    aspectRatio: '1 / 1',
     flexBasis: '33.33333%',
     flexGrow: 0,
     flexShrink: 0,
-    resizeMode: 'cover',
     borderWidth: 1,
     borderColor: colors.background,
     borderRadius: 0,
+  },
+  historyItem: {
+    flexBasis: '100%',
+    flexShrink: 0,
+    aspectRatio: '1 / 1',
+    resizeMode: 'cover',
   },
   historyItemImage: {
     flexBasis: '100%',
