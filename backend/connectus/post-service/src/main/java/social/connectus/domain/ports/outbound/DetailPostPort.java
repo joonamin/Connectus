@@ -8,5 +8,5 @@ import social.connectus.common.exception.BusinessException;
 public interface DetailPostPort {
 	DetailPostResponse detailPost(Long postId) throws BusinessException;
 	OpenedPostResponse openedPostByUserId(Long userId);
-	CoordinateRequestDto postLocationByPostId(Long postId);
+	CoordinateRequestDto postPositionByPostId(Long postId);
 }
