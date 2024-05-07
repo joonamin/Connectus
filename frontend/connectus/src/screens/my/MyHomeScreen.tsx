@@ -32,6 +32,7 @@ export default function MyHomeScreen() {
     listGroup: {
       padding: 0,
       gap: 5,
+      alignContent: 'stretch',
     },
   });
 
@@ -41,8 +42,8 @@ export default function MyHomeScreen() {
     navigation.navigate('MyAchievements');
   };
   const gotoHistory = () => {
-    navigation.navigate("MyWalkHistory");
-  }
+    navigation.navigate('MyWalkHistory');
+  };
 
   return (
     <ScrollView>
