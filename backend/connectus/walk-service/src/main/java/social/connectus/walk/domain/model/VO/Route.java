@@ -15,6 +15,4 @@ import java.util.List;
 @Builder
 public class Route{
     private List<Long> positionList;
-    private int walkTime;
-    private int walkDistance;   // 산책 거리
 }
