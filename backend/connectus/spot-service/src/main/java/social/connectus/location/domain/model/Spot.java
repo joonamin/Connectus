@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import social.connectus.location.common.type.PingType;
 
 @Entity
 @Getter
@@ -26,7 +27,7 @@ public class Spot extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PinType type;
+    private PingType type;
 
     @Column(name = "domain_id", nullable = false)
     private Long domainId;
