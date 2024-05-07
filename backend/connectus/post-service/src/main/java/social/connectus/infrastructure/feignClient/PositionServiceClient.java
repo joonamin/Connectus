@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import social.connectus.application.rest.request.CoordinateRequestDto;
 
-@FeignClient(name = "location-service")
-public interface LocationServiceClient {
-	@GetMapping("/location-service/{locationId}/coordinate")
-	CoordinateRequestDto getPostLocation(@PathVariable Long postId);
+@FeignClient(name = "position-service")
+public interface PositionServiceClient {
+	@GetMapping("/position-service/{locationId}/coordinate")
+	CoordinateRequestDto getPostPosition(@PathVariable Long postId);
 }

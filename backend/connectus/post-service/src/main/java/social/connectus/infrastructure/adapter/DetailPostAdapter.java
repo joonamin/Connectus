@@ -10,7 +10,7 @@ import social.connectus.domain.model.RDBMS.Post;
 import social.connectus.domain.ports.outbound.DetailPostPort;
 import social.connectus.infrastructure.databases.mariadb.repository.PostRepository;
 import social.connectus.infrastructure.feignClient.LikesServiceClient;
-import social.connectus.infrastructure.feignClient.LocationServiceClient;
+import social.connectus.infrastructure.feignClient.PositionServiceClient;
 import social.connectus.infrastructure.feignClient.UserServiceClient;
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class DetailPostAdapter implements DetailPostPort {
 	private final PostRepository postRepository;
 	private final UserServiceClient userServiceClient;
-	private final LocationServiceClient locationServiceClient;
+	private final PositionServiceClient positionServiceClient;
 	private final LikesServiceClient likesServiceClient;
 	@Override
 	public DetailPostResponse detailPost(Long postId) throws BusinessException {
@@ -36,7 +36,7 @@ public class DetailPostAdapter implements DetailPostPort {
 	}
 
 	@Override
-	public CoordinateRequestDto postLocationByPostId(Long postId) {
-		return locationServiceClient.getPostLocation(postId);
+	public CoordinateRequestDto postPositionByPostId(Long postId) {
+		return positionServiceClient.getPostPosition(postId);
 	}
 }

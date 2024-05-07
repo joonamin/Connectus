@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import social.connectus.application.rest.request.CoordinateRequestDto;
 import social.connectus.application.rest.request.CreateCommentRequestDto;
@@ -29,7 +30,7 @@ import social.connectus.domain.ports.inbound.FeedUseCase;
 import social.connectus.domain.ports.inbound.MainPostUseCase;
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/post-service")
 @RequiredArgsConstructor
 public class PostController {
 	private final CreatePostUseCase createPostUseCase;
@@ -71,6 +72,13 @@ public class PostController {
 		GlobalException {
 		DetailPostResponse response = detailPostUseCase.detailByLocation(postId,coordinate);
 		return ResponseEntity.ok().body(response);
+	}
+
+	@GetMapping("/{postId}")
+	public ResponseEntity<DetailPostResponse> detailPostById(@PathVariable Long postId, Long userId, CoordinateRequestDto coordinate) throws
+		BusinessException,
+		GlobalException {
+		return ResponseEntity.ok().body(detailPostUseCase.detailByPostId(postId, userId, coordinate));
 	}
 
 	@PostMapping("/{postId}/comment")

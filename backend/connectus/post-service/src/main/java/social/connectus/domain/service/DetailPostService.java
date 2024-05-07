@@ -16,6 +16,7 @@ import social.connectus.domain.ports.outbound.DetailPostPort;
 @RequiredArgsConstructor
 public class DetailPostService implements DetailPostUseCase {
 	private final DetailPostPort detailPostPort;
+	private final int R = 20;
 	@Override
 	public DetailPostResponse detailByUserExperience(Long postId, Long userId) throws GlobalException,
 		BusinessException {
@@ -39,13 +40,13 @@ public class DetailPostService implements DetailPostUseCase {
 
 	@Override
 	public DetailPostResponse detailByLocation(Long postId, CoordinateRequestDto userLocation) throws GlobalException, BusinessException {
-		CoordinateRequestDto postLocation = detailPostPort.postLocationByPostId(postId);
+		CoordinateRequestDto postLocation = detailPostPort.postPositionByPostId(postId);
 		try {
 			if(postId == null) {
 				throw new ParameterNotFoundException("postId");
 			}
 			// TODO : R 크기 정해지면 수정
-			if(getDistance(userLocation, postLocation) < 9) {
+			if(getDistance(userLocation, postLocation) < R) {
 				throw new BusinessException("post is too far");
 			}
 		} catch (Exception e) {
@@ -54,6 +55,30 @@ public class DetailPostService implements DetailPostUseCase {
 		DetailPostResponse response = detailPostPort.detailPost(postId);
 		return response;
 	}
+
+	@Override
+	public DetailPostResponse detailByPostId(Long postId, Long userId, CoordinateRequestDto userPosition) throws
+		GlobalException, BusinessException {
+		List<Long> openedPostListByUserId = detailPostPort.openedPostByUserId(userId).getOpenedPostList();
+		CoordinateRequestDto postPosition = detailPostPort.postPositionByPostId(postId);
+		try{
+			if(openedPostListByUserId == null ){
+				throw new BusinessException("can't contact userService");
+			}
+			if(postPosition == null) {
+				throw new BusinessException("can't contact positionService");
+			}
+			if(!openedPostListByUserId.contains(postId)) {
+				if(getDistance(userPosition, postPosition) > R) {
+					throw new BusinessException("post is too far");
+				}
+			}
+		}catch (Exception e) {
+			throw new GlobalException("DetailPostService : " + e.getMessage());
+		}
+		return detailPostPort.detailPost(postId);
+	}
+
 	private double getDistance(CoordinateRequestDto userLocation, CoordinateRequestDto postLocation) {
 		double dx, dy;
 		dx = Math.pow(userLocation.getLatitude() - postLocation.getLatitude(), 2.0);

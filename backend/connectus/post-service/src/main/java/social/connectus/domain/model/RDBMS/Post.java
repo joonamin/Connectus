@@ -29,6 +29,7 @@ public class Post extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Long authorId;
+	private Long walkId;
 	private String imageUrl;
 	private String content;
 	@OneToMany(targetEntity = Comment.class, mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
