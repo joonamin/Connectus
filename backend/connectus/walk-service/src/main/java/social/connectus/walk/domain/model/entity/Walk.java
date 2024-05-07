@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
-import social.connectus.walk.domain.model.VO.PostOnWalk;
 import social.connectus.walk.domain.model.VO.Route;
 
 import java.util.List;
@@ -41,6 +40,4 @@ public class Walk extends BaseEntity{
     private List<Long> completedAchievement;
 
     private Long participateEvent;
-
-    private List<PostOnWalk> postList;
 }
