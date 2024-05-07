@@ -21,10 +21,24 @@ public class WalkController {
     }
 
     @PostMapping
-    public ResponseEntity<CreateWalkResponse> createWalk(CreateWalkRequest request){
+    public ResponseEntity<CreateWalkResponse> createWalk(@RequestBody CreateWalkRequest request){
         // TODO: request 검증
+//        List<Long> positionIdList = new ArrayList<>();
+//        positionIdList.add(1L);
+//        positionIdList.add(2L);
+//        positionIdList.add(3L);
+//        Route route = new Route(positionIdList);
 
-        CreateWalkResponse response = walkUseCase.createWalk(CreateWalkCommand.from(request));
+        CreateWalkCommand command = CreateWalkCommand.builder()
+                .userId(request.getUserId())
+                .title(request.getTitle())
+                .completedAchievement(request.getCompletedAchievement())
+                .route(request.getRoute())
+                .walkTime(request.getWalkTime())
+                .walkDistance(request.getWalkDistance())
+                .participateEvent(request.getParticipateEvent())
+                .build();
+        CreateWalkResponse response = walkUseCase.createWalk(command);
         return ResponseEntity.ok(response);
     }
 

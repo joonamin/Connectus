@@ -6,7 +6,7 @@ spring:
     name: walk-service
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://walk.mariadb.connectus.social:3306/post?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mariadb://walk.mariadb.connectus.social:3306/walk?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: ssafyE106!
   jpa:
