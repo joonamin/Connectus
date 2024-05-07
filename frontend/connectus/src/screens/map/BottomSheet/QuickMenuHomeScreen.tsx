@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, StyleSheet, View} from 'react-native';
+import {DeviceEventEmitter, Pressable, StyleSheet, View} from 'react-native';
 import {useNavigation, CompositeNavigationProp} from '@react-navigation/core';
 import MainText from '@/components/text/MainText';
 import colors from '@/constants/colors';
@@ -27,7 +27,7 @@ export default function QuickMenuHomeScreen() {
   };
 
   const handlePressQuit = () => {
-    // navigateToResultScreen;
+    DeviceEventEmitter.emit('navigateToResultScreen');
   };
 
   return (
