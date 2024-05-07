@@ -14,6 +14,8 @@ import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
+import RouteMap from '@/components/map/RouteMap';
+import routes from '@/assets/sample-route.json';
 
 export type Navigation = CompositeNavigationProp<
   StackNavigationProp<MyStackParamList>,
@@ -77,6 +79,7 @@ export default function MyWalkDetailScreen({route}: MyWalkDetailProps) {
           style={styles.title}>
           {data.title}
         </HeadingText>
+        <RouteMap routes={routes} />
         <WalkResult time={elapsed} distance={data.distance} />
         <Achievement achievs={data.achievements} />
         <EventResult />
