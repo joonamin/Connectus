@@ -15,10 +15,13 @@ public class WalkController {
 
     private final WalkUseCase walkUseCase;
 
-    @GetMapping("/health_check")
-    public String health_check(){
+    @GetMapping("/health-check")
+    public String healthCheck(){
         return "It's walking on Walk-Service!";
     }
+
+    @GetMapping("/feign-health-check")
+    public String feignHealthCheck() { return walkUseCase.feignHealthCheck();}
 
     @PostMapping
     public ResponseEntity<CreateWalkResponse> createWalk(@RequestBody CreateWalkRequest request){

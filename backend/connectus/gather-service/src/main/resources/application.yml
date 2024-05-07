@@ -10,7 +10,7 @@ spring:
 #    username: ssafy
 #    password: ssafy
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://gather.mariadb.connectus.social:3306/post?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mariadb://gather.mariadb.connectus.social:3306/gather?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: ssafyE106!
   jpa:

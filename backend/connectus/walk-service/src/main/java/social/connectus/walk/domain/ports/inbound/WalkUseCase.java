@@ -6,4 +6,6 @@ import social.connectus.walk.domain.command.CreateWalkCommand;
 
 public interface WalkUseCase {
     public CreateWalkResponse createWalk(CreateWalkCommand command);
+
+    String feignHealthCheck();
 }
