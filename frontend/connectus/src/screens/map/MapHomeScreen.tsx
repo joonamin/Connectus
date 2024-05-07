@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   Pressable,
@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {LatLng, PROVIDER_GOOGLE} from 'react-native-maps';
 import useUserLocation from '../../hooks/useUserLocation';
 import MainText from '@/components/text/MainText';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
@@ -16,6 +16,7 @@ import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
 import colors from '@/constants/colors';
+import Geolocation from '@react-native-community/geolocation';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,

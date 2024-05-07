@@ -14,7 +14,6 @@ function useUserLocation() {
     longitude: 128.8503,
   });
   const [isUserLocationError, setIsUserLocationError] = useState(false);
-  const {isComback} = useAppState();
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -23,16 +22,18 @@ function useUserLocation() {
         setUserLocation({latitude, longitude});
         setIsUserLocationError(false);
       },
-      // 에러가 발생했을 시 작동할 코드.
       () => {
         setIsUserLocationError(true);
       },
       {
         // 상세 좌표를 요청하는 코드
         enableHighAccuracy: true,
+        distanceFilter: 0,
+        interval: 3000,
+        fastestInterval: 2000,
       },
     );
-  }, [isComback]);
+  }, [userLocation]);
   return {userLocation, isUserLocationError};
 }
 
