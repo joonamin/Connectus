@@ -27,4 +27,5 @@ public class WalkController {
         CreateWalkResponse response = walkUseCase.createWalk(CreateWalkCommand.from(request));
         return ResponseEntity.ok(response);
     }
+
 }

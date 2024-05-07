@@ -1,7 +1,6 @@
 package social.connectus.walk.application.rest.request;
 
 import lombok.*;
-import social.connectus.walk.domain.model.VO.PostOnWalk;
 import social.connectus.walk.domain.model.VO.Route;
 
 import java.util.List;
@@ -18,5 +17,4 @@ public class CreateWalkRequest {
     private int walkTime;
     private int walkDistance;   // 산책 거리
     private Long participateEvent;
-    private List<PostOnWalk> postList;
 }
