@@ -1,5 +1,11 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {Dimensions, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  DeviceEventEmitter,
+  Dimensions,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -19,7 +25,6 @@ import MapBottomSheetNavigator from '@/navigations/Tabs/MapBottomSheetNavigator'
 import EventIndicator from '@/components/my/EventIndicator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
-import QuickMenuHomeScreen from './BottomSheet/QuickMenuHomeScreen';
 
 type Navigation = StackNavigationProp<MapStackParamList>;
 
@@ -44,16 +49,33 @@ export default function MapWalkScreen() {
   };
   useInterval(tick, 1000);
 
-  // 바텀시트를 닫고 , 메인스크린을 옮기며, 지금까지의 정보를 props로 넘겨줘야합니다.
+  /**
+   * @todo 지금까지의 정보를 props로 넘겨주는 코드를 작성해야합니다(navigation에 params로 넣으면되지 않을까요?)
+   * 걸은 시간, 거리, 좌표는 이 스크린에서 관리할 예정이며, 작성 post는 전역으로 관리합니다.
+   */
   const navigateToResultScreen = () => {
     handleBottomSheetClose();
     navigation.navigate('MapResult');
   };
+
+  // 디바이스 전체에 listener설정
+  DeviceEventEmitter.addListener(
+    'navigateToResultScreen',
+    navigateToResultScreen,
+  );
+
   // 1초마다 하단 인디케이터의 시간을 업데이트해주는 useEffect 함수입니다.
   useEffect(() => {
     const {seconds, minutes, hours} = convertSecondsToTime(time);
     setIndicateTime(formatTime(hours, minutes, seconds));
   }, [time]);
+
+  // 디바이스 종료 시 리스너 제거를 위한 useEffect 입니다
+  useEffect(() => {
+    return () => {
+      DeviceEventEmitter.removeAllListeners('navigateToResultScreen');
+    };
+  }, []);
 
   return (
     <>
@@ -96,9 +118,7 @@ export default function MapWalkScreen() {
         enablePanDownToClose={true}>
         <SafeAreaProvider>
           <NavigationContainer independent={true}>
-            <MapBottomSheetNavigator
-              navigateToResultScreen={navigateToResultScreen}
-            />
+            <MapBottomSheetNavigator />
           </NavigationContainer>
           {/* <QuickMenuHomeScreen /> */}
         </SafeAreaProvider>
