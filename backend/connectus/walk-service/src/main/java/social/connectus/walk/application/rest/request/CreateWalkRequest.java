@@ -7,7 +7,6 @@ import social.connectus.walk.domain.model.VO.Route;
 import java.util.List;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -17,7 +16,7 @@ public class CreateWalkRequest {
     private Route route;
     private List<Long> completedAchievement;
     private int walkTime;
-    private int walkDistance;   // 산책 거
+    private int walkDistance;   // 산책 거리
     private Long participateEvent;
     private List<PostOnWalk> postList;
 }
