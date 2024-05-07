@@ -11,7 +11,13 @@ import social.connectus.walk.domain.ports.outbound.WalkPort;
 @UseCase
 @RequiredArgsConstructor
 public class WalkService implements WalkUseCase {
+
     private final WalkPort walkPort;
+
+    @Override
+    public String feignHealthCheck() {
+        return walkPort.feignHealthCheck();
+    }
     @Override
     public CreateWalkResponse createWalk(CreateWalkCommand command) {
         /*
