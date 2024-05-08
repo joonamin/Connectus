@@ -32,7 +32,6 @@ public class Walk extends BaseEntity{
 
     private int walkDistance;   // 산책 거리
 
-    @Column(nullable = false)
     @ElementCollection(fetch = FetchType.LAZY)
     private Set<Long> likeUsers;
 
@@ -41,7 +40,11 @@ public class Walk extends BaseEntity{
 
     private Long participateEvent;
 
-    @ColumnDefault("0")
-    private int trackingCount;
+    @ElementCollection(fetch = FetchType.LAZY)
+    private Set<Long> trackingUsers;
+
+    @ColumnDefault("false")
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean isPublic;
 
 }

@@ -27,6 +27,8 @@ public class QWalk extends EntityPathBase<Walk> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
+    public final BooleanPath isPublic = createBoolean("isPublic");
+
     public final SetPath<Long, NumberPath<Long>> likeUsers = this.<Long, NumberPath<Long>>createSet("likeUsers", Long.class, NumberPath.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> participateEvent = createNumber("participateEvent", Long.class);
@@ -34,6 +36,8 @@ public class QWalk extends EntityPathBase<Walk> {
     public final ListPath<social.connectus.walk.domain.model.VO.Position, social.connectus.walk.domain.model.VO.QPosition> route = this.<social.connectus.walk.domain.model.VO.Position, social.connectus.walk.domain.model.VO.QPosition>createList("route", social.connectus.walk.domain.model.VO.Position.class, social.connectus.walk.domain.model.VO.QPosition.class, PathInits.DIRECT2);
 
     public final StringPath title = createString("title");
+
+    public final SetPath<Long, NumberPath<Long>> trackingUsers = this.<Long, NumberPath<Long>>createSet("trackingUsers", Long.class, NumberPath.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;

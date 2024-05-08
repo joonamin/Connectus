@@ -6,6 +6,7 @@ import social.connectus.walk.common.customannotations.UseCase;
 import social.connectus.walk.common.exception.AlreadyExistsDataException;
 import social.connectus.walk.domain.command.CreateWalkCommand;
 import social.connectus.walk.domain.command.RouteLikeCommand;
+import social.connectus.walk.domain.command.RouteShareCommand;
 import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
@@ -44,11 +45,19 @@ public class WalkService implements WalkUseCase {
     }
 
     public void routeLike(RouteLikeCommand command){
-        // 이미 좋아요했는지 체크
         Walk walk = walkPort.getWalkById(command.getWalkId());
         if(walk.getLikeUsers().contains(command.getUserId()))
             throw new AlreadyExistsDataException("User already like this walk.");
 
         walkPort.routeLike(command);
+    }
+
+    @Override
+    public void routeShare(RouteShareCommand command) {
+        Walk walk = walkPort.getWalkById(command.getWalkId());
+        if(walk.getTrackingUsers().contains(command.getUserId()))
+            throw new AlreadyExistsDataException("User already share this walk.");
+
+        walkPort.routeShare(command);
     }
 }
