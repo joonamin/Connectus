@@ -31,13 +31,15 @@ export default function MapBottomSheetNavigator() {
         options={({route}) => ({
           tabBarStyle: (route => {
             const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-            if (
-              routeName === 'FeedCreate' ||
-              routeName === 'GatherCreate' ||
-              routeName === 'ChatList' ||
-              routeName === 'Feed' ||
-              routeName === 'FeedList'
-            ) {
+            const hiddenRoutes = [
+              'FeedCreate',
+              'GatherCreate',
+              'ChatList',
+              'Feed',
+              'FeedList',
+              'Gather',
+            ];
+            if (hiddenRoutes.includes(routeName)) {
               return {display: 'none'};
             }
             return {
