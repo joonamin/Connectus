@@ -24,6 +24,7 @@ public class GetWalkResponse {
     private Set<Long> likeUsers;
     private Set<Long> completedAchievement;
     private Long participateEvent;
+    private int trackingCount;
 
     public static GetWalkResponse from(Walk walk){
         return GetWalkResponse.builder()
@@ -36,6 +37,7 @@ public class GetWalkResponse {
                 .likeUsers(walk.getLikeUsers())
                 .completedAchievement(walk.getCompletedAchievement())
                 .participateEvent(walk.getParticipateEvent())
+                .trackingCount(walk.getTrackingCount())
                 .build();
     }
 }
