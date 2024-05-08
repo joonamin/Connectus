@@ -39,6 +39,7 @@ import MapBottomSheetNavigator, {
 import EventIndicator from '@/components/my/EventIndicator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
+import CustomMarker from '@/components/map/CustomMarker';
 
 const DUMMY_POSITION = [
   {
@@ -85,6 +86,10 @@ export default function MapWalkScreen() {
     latitudeDelta: 0.001,
     longitudeDelta: 0.001,
   });
+  const [mapPos, setMapPos] = useState<LatLng>({
+    latitude: 35.089557,
+    longitude: 128.852888,
+  });
   const mapRef = useRef<MapView | null>(null);
   const bottomSheetNav =
     useRef<NavigationContainerRef<MapBottomSheetTabParamList> | null>(null);
@@ -124,6 +129,10 @@ export default function MapWalkScreen() {
   };
 
   const handleChangeDelta = (region: Region) => {
+    setMapPos({
+      latitude: region.latitude,
+      longitude: region.longitude,
+    });
     setMapDelta({
       longitudeDelta: region.longitudeDelta,
       latitudeDelta: region.latitudeDelta,
@@ -142,6 +151,13 @@ export default function MapWalkScreen() {
     handleBottomSheetOpen();
     // 밑줄이 그여있지만 작동은 합니다...진짜입니다...
     bottomSheetNav.current && bottomSheetNav.current.navigate('FeedList');
+  };
+
+  const handleGatherPress = () => {
+    setTrackingMode(false);
+    handleBottomSheetOpen();
+    // 밑줄이 그여있지만 작동은 합니다...진짜입니다...
+    bottomSheetNav.current && bottomSheetNav.current.navigate('Gather');
   };
 
   const handleTrackingMode = () => {
@@ -176,8 +192,12 @@ export default function MapWalkScreen() {
         showsUserLocation
         showsMyLocationButton={false}
         zoomEnabled={true}
-        initialRegion={{...userLocation, ...mapDelta}}
-        region={trackingMode ? {...userLocation, ...mapDelta} : undefined}
+        initialRegion={{...mapPos, ...mapDelta}}
+        region={
+          trackingMode
+            ? {...userLocation, ...mapDelta}
+            : {...mapPos, ...mapDelta}
+        }
         onRegionChangeComplete={handleChangeDelta}
         onRegionChange={handleCheckDragged}>
         <Polyline
@@ -188,23 +208,21 @@ export default function MapWalkScreen() {
         {/* 게시글을 확인해줄 마커들 */}
         {DUMMY_POSITION.map((data, index) => {
           return (
-            <Marker
+            <CustomMarker
               key={index}
               coordinate={data}
               onPress={handleMarkerClick}
-              style={{width: 100, height: 100}}
-              image={require('@/assets/scroll2.png')}
+              type={2}
             />
           );
         })}
         {DUMMY_GATHER.map((data, index) => {
           return (
-            <Marker
+            <CustomMarker
               key={index}
               coordinate={data}
-              onPress={handleMarkerClick}
-              style={{width: 100, height: 100}}
-              image={require('@/assets/star.png')}
+              onPress={handleGatherPress}
+              type={3}
             />
           );
         })}
@@ -248,7 +266,6 @@ export default function MapWalkScreen() {
           <NavigationContainer independent={true} ref={bottomSheetNav}>
             <MapBottomSheetNavigator />
           </NavigationContainer>
-          {/* <QuickMenuHomeScreen /> */}
         </SafeAreaProvider>
       </BottomSheet>
     </>
