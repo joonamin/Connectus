@@ -10,13 +10,8 @@ spring:
         client:
           host: milvus.connectus.social
           port: 19530
-          username: root
-          password: ssafyE106!
         databaseName: default
-        collectionName: vector_store_1
-        embeddingDimension: 1536
-        indexType: IVF_FLAT
-        metricType: COSINE
+        collectionName: spot
 
   application:
     name: spot-service
