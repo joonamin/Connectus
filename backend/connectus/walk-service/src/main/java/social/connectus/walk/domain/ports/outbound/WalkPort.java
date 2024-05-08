@@ -4,10 +4,14 @@ import social.connectus.walk.domain.command.CreateWalkCommand;
 import social.connectus.walk.domain.command.RouteLikeCommand;
 import social.connectus.walk.domain.model.entity.Walk;
 
+import java.util.List;
+
 public interface WalkPort {
     String feignHealthCheck();
     Walk createWalk(CreateWalkCommand command);
     void routeLike(RouteLikeCommand command);
 
     Walk getWalkById(long walkId);
+
+    List<Walk> getWalkByUser(long userId);
 }
