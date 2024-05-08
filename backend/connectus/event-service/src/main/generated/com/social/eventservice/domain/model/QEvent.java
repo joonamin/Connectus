@@ -35,6 +35,8 @@ public class QEvent extends EntityPathBase<Event> {
 
     public final BooleanPath isFinished = createBoolean("isFinished");
 
+    public final ListPath<Long, NumberPath<Long>> onClearUserIdList = this.<Long, NumberPath<Long>>createList("onClearUserIdList", Long.class, NumberPath.class, PathInits.DIRECT2);
+
     public final NumberPath<Integer> reward = createNumber("reward", Integer.class);
 
     public final ListPath<Long, NumberPath<Long>> spotIdList = this.<Long, NumberPath<Long>>createList("spotIdList", Long.class, NumberPath.class, PathInits.DIRECT2);

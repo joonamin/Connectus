@@ -25,5 +25,4 @@ public class MakeEventCommand {
 	private LocalDateTime startDate;
 	private LocalDateTime endDate;
 	private int reward;
-
 }

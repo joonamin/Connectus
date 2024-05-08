@@ -1,5 +1,6 @@
 package com.social.eventservice.infrastructure.mariadb.repository;
 
+
 import static com.social.eventservice.domain.model.QEventAchievement.*;
 
 import java.util.List;
