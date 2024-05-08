@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import social.connectus.userservice.domain.application.request.MyWalkRequest;
 import social.connectus.userservice.domain.application.request.RefreshAchievementRequest;
 import social.connectus.userservice.domain.application.request.UserAchievementsIndexRequest;
 import social.connectus.userservice.domain.application.request.UserLoginRequest;
@@ -17,10 +18,12 @@ import social.connectus.userservice.domain.application.request.UserRegisterReque
 import social.connectus.userservice.domain.application.response.CompletedAchievementListResponse;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
 import social.connectus.userservice.domain.application.response.LogoutUserResponse;
+import social.connectus.userservice.domain.application.response.MyWalkResponse;
 import social.connectus.userservice.domain.application.response.RefreshAchievementResponse;
 import social.connectus.userservice.domain.application.response.UserAchievmentsIndexResponse;
 import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
 import social.connectus.userservice.domain.port.inbound.UserUseCase;
+import social.connectus.userservice.domain.port.inbound.WalkUseCase;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
@@ -32,6 +35,7 @@ public class UserController {
 
 	private final UserUseCase userUseCase;
 	private final AchievementUseCase achievementUseCase;
+	private final WalkUseCase walkUseCase;
 
 	@PostMapping("/register")
 	public ResponseEntity<Void> registerUser(UserRegisterRequest userRegisterRequest) {
@@ -51,11 +55,6 @@ public class UserController {
 		return ResponseEntity.ok(response);
 	}
 
-	// get 업적 관련 지표
-	@GetMapping("/achievements/index")
-	public ResponseEntity<UserAchievmentsIndexResponse> getUserAchievementsIndex(UserAchievementsIndexRequest request) {
-		return null;
-	}
 
 	@GetMapping("/completed-achievement/{userId}")
 	public ResponseEntity<CompletedAchievementListResponse> getUserCompletedAchievement(@PathVariable Long userId) {
@@ -67,5 +66,11 @@ public class UserController {
 	public ResponseEntity<RefreshAchievementResponse> refreshAchievement(Long userId,
 		@RequestBody RefreshAchievementRequest statistics) {
 		return ResponseEntity.ok(achievementUseCase.refreshAchievement(userId, statistics));
+	}
+
+	// 내 산책 기록
+	@GetMapping("/me/walk")
+	public ResponseEntity<MyWalkResponse> getMyWalk(MyWalkRequest request) {
+
 	}
 }
