@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import social.connectus.walk.application.rest.request.CreateWalkRequest;
+import social.connectus.walk.application.rest.request.RouteLikeRequest;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.domain.command.CreateWalkCommand;
+import social.connectus.walk.domain.command.RouteLikeCommand;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
 
 @RestController
@@ -26,11 +28,6 @@ public class WalkController {
     @PostMapping
     public ResponseEntity<CreateWalkResponse> createWalk(@RequestBody CreateWalkRequest request){
         // TODO: request 검증
-//        List<Long> positionIdList = new ArrayList<>();
-//        positionIdList.add(1L);
-//        positionIdList.add(2L);
-//        positionIdList.add(3L);
-//        Route route = new Route(positionIdList);
 
         CreateWalkCommand command = CreateWalkCommand.builder()
                 .userId(request.getUserId())
@@ -43,6 +40,13 @@ public class WalkController {
                 .build();
         CreateWalkResponse response = walkUseCase.createWalk(command);
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("route-like")
+    public ResponseEntity<String> routeLike(@RequestBody RouteLikeRequest request){
+//        ResponseStatus routeLike(Long walkId, Long userId);
+        walkUseCase.routeLike(RouteLikeCommand.from(request));
+        return ResponseEntity.ok("Like is successfully registered.");
     }
 
 }

@@ -1,17 +1,14 @@
 package social.connectus.walk.domain.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
 import social.connectus.walk.domain.model.VO.Position;
 
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -35,11 +32,12 @@ public class Walk extends BaseEntity{
     private int walkDistance;   // 산책 거리
 
     @Column(nullable = false)
-    @ColumnDefault("0")
-    private int likeCount;
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<Long> likeUsers;
 
     @ElementCollection(fetch = FetchType.LAZY)
     private List<Long> completedAchievement;
 
     private Long participateEvent;
+
 }

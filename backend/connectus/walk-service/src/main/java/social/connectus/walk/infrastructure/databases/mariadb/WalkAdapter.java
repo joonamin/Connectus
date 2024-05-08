@@ -1,9 +1,13 @@
 package social.connectus.walk.infrastructure.databases.mariadb;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+import social.connectus.walk.common.constants.WalkConstants;
+import social.connectus.walk.common.exception.ResourceNotFoundException;
 import social.connectus.walk.domain.command.CreateWalkCommand;
+import social.connectus.walk.domain.command.RouteLikeCommand;
 import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
 import social.connectus.walk.infrastructure.external.FeignClient;
@@ -21,6 +25,7 @@ public class WalkAdapter implements WalkPort {
     }
 
     @Override
+    @Transactional
     public Walk createWalk(CreateWalkCommand command) {
         Walk walk = Walk.builder()
                 .userId(command.getUserId())
@@ -33,5 +38,16 @@ public class WalkAdapter implements WalkPort {
                 .build();
 
         return walkRepository.save(walk);
+    }
+
+    @Override
+    @Transactional
+    public void routeLike(RouteLikeCommand command) {
+        long walkId = command.getWalkId();
+        long userId = command.getUserId();
+        Walk walk = walkRepository.findById(walkId)
+                .orElseThrow(()-> new ResourceNotFoundException(WalkConstants.WALK_NOT_FOUND + walkId));
+
+        walk.getLikeUsers().add(userId);
     }
 }
