@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.domain.application.request.UserLoginRequest;
 import social.connectus.userservice.domain.application.request.UserRegisterRequest;
+import social.connectus.userservice.domain.application.response.CompletedAchievementListResponse;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
+import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
 import social.connectus.userservice.domain.port.inbound.UserUseCase;
@@ -20,6 +22,7 @@ import social.connectus.userservice.domain.port.inbound.UserUseCase;
 public class UserController {
 
 	private final UserUseCase userUseCase;
+	private final AchievementUseCase achievementUseCase;
 
 	@PostMapping("/register")
 	public ResponseEntity<Void> registerUser(UserRegisterRequest userRegisterRequest) {
@@ -38,4 +41,8 @@ public class UserController {
 		return ResponseEntity.ok(body);
 	}
 
+	@GetMapping("/completed-achievement")
+	public ResponseEntity<CompletedAchievementListResponse> getUserCompletedAchievement(Long userId) {
+		return ResponseEntity.ok().body(achievementUseCase.checkAchievement(userId));
+	}
 }
