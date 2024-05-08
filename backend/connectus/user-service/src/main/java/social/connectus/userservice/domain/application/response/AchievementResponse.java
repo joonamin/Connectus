@@ -11,11 +11,13 @@ import social.connectus.userservice.common.type.Achievement;
 public class AchievementResponse {
 	String title;
 	String content;
+	int reward;
 
 	public static AchievementResponse from(Achievement achievement) {
 		return AchievementResponse.builder()
 			.title(achievement.getTitle())
 			.content(achievement.getContent())
+			.reward(achievement.getReward())
 			.build();
 	}
 }
