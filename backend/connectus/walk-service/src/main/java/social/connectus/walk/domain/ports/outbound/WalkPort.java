@@ -8,4 +8,6 @@ public interface WalkPort {
     String feignHealthCheck();
     Walk createWalk(CreateWalkCommand command);
     void routeLike(RouteLikeCommand command);
+
+    Walk getWalkById(long walkId);
 }

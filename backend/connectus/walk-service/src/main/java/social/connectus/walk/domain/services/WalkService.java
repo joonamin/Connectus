@@ -2,6 +2,7 @@ package social.connectus.walk.domain.services;
 
 import lombok.RequiredArgsConstructor;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
+import social.connectus.walk.application.rest.response.GetWalkResponse;
 import social.connectus.walk.common.customannotations.UseCase;
 import social.connectus.walk.domain.command.CreateWalkCommand;
 import social.connectus.walk.domain.command.RouteLikeCommand;
@@ -19,6 +20,12 @@ public class WalkService implements WalkUseCase {
     public String feignHealthCheck() {
         return walkPort.feignHealthCheck();
     }
+
+    @Override
+    public Walk getWalkById(long walkId){
+        return walkPort.getWalkById(walkId);
+    }
+
     @Override
     public CreateWalkResponse createWalk(CreateWalkCommand command) {
         /*

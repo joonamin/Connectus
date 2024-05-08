@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class Walk extends BaseEntity{
-    // 산책 기록 entity라는 것을 명심하기
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long walkId;
