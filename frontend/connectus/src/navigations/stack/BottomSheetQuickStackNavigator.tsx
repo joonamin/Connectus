@@ -5,12 +5,18 @@ import CreateFeedScreen from '@/screens/map/BottomSheet/CreateFeedScreen';
 import CreateGatherScreen from '@/screens/map/BottomSheet/CreateGatherScreen';
 import {fonts} from '@/constants';
 import ChatListScreen from '@/screens/map/BottomSheet/ChatListScreen';
+import FeedListScreen from '@/screens/map/BottomSheet/FeedListScreen';
+import FeedDetailScreen from '@/screens/map/BottomSheet/FeedDetailScreen';
+import MarkerSelectScreen from '@/screens/map/BottomSheet/MarkerSelectScreen';
 
 export type BottomSheetStackParamList = {
   Home: undefined;
   FeedCreate: undefined;
   GatherCreate: undefined;
   ChatList: undefined;
+  MarkerList: undefined;
+  FeedList: undefined;
+  Feed: undefined;
 };
 
 const Stack = createStackNavigator<BottomSheetStackParamList>();
@@ -54,6 +60,15 @@ export default function BottomSheetQuickStackNavigator() {
         component={ChatListScreen}
         options={{
           headerTitle: '채팅',
+        }}
+      />
+      <Stack.Screen name={'MarkerList'} component={MarkerSelectScreen} />
+      <Stack.Screen name={'FeedList'} component={FeedListScreen} />
+      <Stack.Screen
+        name={'Feed'}
+        component={FeedDetailScreen}
+        options={{
+          headerTitle: '',
         }}
       />
     </Stack.Navigator>
