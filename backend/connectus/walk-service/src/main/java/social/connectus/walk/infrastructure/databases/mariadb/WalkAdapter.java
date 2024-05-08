@@ -15,13 +15,19 @@ import social.connectus.walk.infrastructure.external.FeignClient;
 @Component
 @RequiredArgsConstructor
 public class WalkAdapter implements WalkPort {
-
     private final FeignClient feignClient;
+
     private final ModelMapper modelMapper;
     private final WalkRepository walkRepository;
 
     public String feignHealthCheck(){
         return feignClient.healthCheck();
+    }
+
+    @Override
+    public Walk getWalkById(long walkId) {
+        return walkRepository.findById(walkId)
+                .orElseThrow(()-> new ResourceNotFoundException(WalkConstants.WALK_NOT_FOUND + walkId));
     }
 
     @Override
@@ -45,8 +51,7 @@ public class WalkAdapter implements WalkPort {
     public void routeLike(RouteLikeCommand command) {
         long walkId = command.getWalkId();
         long userId = command.getUserId();
-        Walk walk = walkRepository.findById(walkId)
-                .orElseThrow(()-> new ResourceNotFoundException(WalkConstants.WALK_NOT_FOUND + walkId));
+        Walk walk = getWalkById(walkId);
 
         walk.getLikeUsers().add(userId);
     }
