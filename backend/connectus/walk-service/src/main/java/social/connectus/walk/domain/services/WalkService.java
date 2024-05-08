@@ -2,8 +2,8 @@ package social.connectus.walk.domain.services;
 
 import lombok.RequiredArgsConstructor;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
-import social.connectus.walk.application.rest.response.GetWalkResponse;
 import social.connectus.walk.common.customannotations.UseCase;
+import social.connectus.walk.common.exception.AlreadyExistsDataException;
 import social.connectus.walk.domain.command.CreateWalkCommand;
 import social.connectus.walk.domain.command.RouteLikeCommand;
 import social.connectus.walk.domain.model.entity.Walk;
@@ -37,6 +37,11 @@ public class WalkService implements WalkUseCase {
     }
 
     public void routeLike(RouteLikeCommand command){
+        // 이미 좋아요했는지 체크
+        Walk walk = walkPort.getWalkById(command.getWalkId());
+        if(walk.getLikeUsers().contains(command.getUserId()))
+            throw new AlreadyExistsDataException("User already like this walk.");
+
         walkPort.routeLike(command);
     }
 }

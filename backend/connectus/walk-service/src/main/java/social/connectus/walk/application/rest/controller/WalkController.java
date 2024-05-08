@@ -29,7 +29,6 @@ public class WalkController {
         return walkUseCase.feignHealthCheck();
     }
     
-    // TODO: getWalk 작성
     @GetMapping("/{walkId}")
     public ResponseEntity<GetWalkResponse> getWalk(@PathVariable long walkId){
         GetWalkResponse response = GetWalkResponse.from(walkUseCase.getWalkById(walkId));

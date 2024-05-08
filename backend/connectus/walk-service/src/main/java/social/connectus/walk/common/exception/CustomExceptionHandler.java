@@ -13,6 +13,13 @@ import java.util.Date;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
+    @ExceptionHandler(AlreadyExistsDataException.class)
+    public ResponseEntity<ErrorDetails> alreadyExistsDataException(AlreadyExistsDataException ex, WebRequest request){
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(errorDetails, HttpStatus.ALREADY_REPORTED);
+    }
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorDetails> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request){
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));

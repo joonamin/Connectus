@@ -5,6 +5,7 @@ import social.connectus.walk.application.rest.request.CreateWalkRequest;
 import social.connectus.walk.domain.model.VO.Position;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -14,7 +15,7 @@ public class CreateWalkCommand {
     private Long userId;
     private String title;
     private List<Position> route;
-    private List<Long> completedAchievement;
+    private Set<Long> completedAchievement;
     private int walkTime;
     private int walkDistance;   // 산책 거리
     private Long participateEvent;

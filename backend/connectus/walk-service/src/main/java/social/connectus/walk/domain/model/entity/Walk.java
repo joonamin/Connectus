@@ -5,6 +5,7 @@ import lombok.*;
 import social.connectus.walk.domain.model.VO.Position;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -32,10 +33,10 @@ public class Walk extends BaseEntity{
 
     @Column(nullable = false)
     @ElementCollection(fetch = FetchType.LAZY)
-    private List<Long> likeUsers;
+    private Set<Long> likeUsers;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    private List<Long> completedAchievement;
+    private Set<Long> completedAchievement;
 
     private Long participateEvent;
 

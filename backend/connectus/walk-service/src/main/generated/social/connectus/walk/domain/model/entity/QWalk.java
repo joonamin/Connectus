@@ -22,12 +22,12 @@ public class QWalk extends EntityPathBase<Walk> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
-    public final ListPath<Long, NumberPath<Long>> completedAchievement = this.<Long, NumberPath<Long>>createList("completedAchievement", Long.class, NumberPath.class, PathInits.DIRECT2);
+    public final SetPath<Long, NumberPath<Long>> completedAchievement = this.<Long, NumberPath<Long>>createSet("completedAchievement", Long.class, NumberPath.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final ListPath<Long, NumberPath<Long>> likeUsers = this.<Long, NumberPath<Long>>createList("likeUsers", Long.class, NumberPath.class, PathInits.DIRECT2);
+    public final SetPath<Long, NumberPath<Long>> likeUsers = this.<Long, NumberPath<Long>>createSet("likeUsers", Long.class, NumberPath.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> participateEvent = createNumber("participateEvent", Long.class);
 
