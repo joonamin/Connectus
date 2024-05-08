@@ -980,11 +980,11 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-google-maps (1.14.0):
+  - react-native-google-maps (1.15.1):
     - Google-Maps-iOS-Utils (= 4.2.2)
     - GoogleMaps (= 7.4.0)
     - React-Core
-  - react-native-maps (1.14.0):
+  - react-native-maps (1.15.1):
     - React-Core
   - react-native-pager-view (6.3.1):
     - DoubleConversion
@@ -1333,27 +1333,8 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNVectorIcons (10.0.3):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
+  - RNSVG (15.2.0):
     - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - SocketRocket (0.7.0)
   - TOCropViewController (2.7.3)
   - Yoga (0.0.0)
@@ -1425,7 +1406,7 @@ DEPENDENCIES:
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
-  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - RNSVG (from `../node_modules/react-native-svg`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1565,8 +1546,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
-  RNVectorIcons:
-    :path: "../node_modules/react-native-vector-icons"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -1604,8 +1585,8 @@ SPEC CHECKSUMS:
   React-logger: 03f2f7b955cfe24593a2b8c9705c23e142d1ad24
   React-Mapbuffer: 5e05d78fe6505f4a054b86f415733d4ad02dd314
   react-native-geolocation: fe0562c94eb0b6334f266aea717448dfd9b08cd0
-  react-native-google-maps: 94df984b1647973baffe17c0b7b52828d6b69d94
-  react-native-maps: cbf2f03bfeebfd7ec45966b066db13a075fd2af3
+  react-native-google-maps: 7aae26cd61058ca41f54ed4abb127dbe20ad9184
+  react-native-maps: 4c07b21deac3ac3579558956b63e288efb8725bb
   react-native-pager-view: e2b7c31147cdc1750cb3867d37a145e487653c34
   react-native-safe-area-context: dcab599c527c2d7de2d76507a523d20a0b83823d
   react-native-slider: ce295d2bf830a7990af05b0bd70ab28c133e230c
@@ -1637,10 +1618,10 @@ SPEC CHECKSUMS:
   RNPermissions: b792220f140e16653edaa8d8f01f81e98f39ef47
   RNReanimated: 5fe9e4e22610ec906856da8dde7ea6815dd0cee2
   RNScreens: b32a9ff15bea7fcdbe5dff6477bc503f792b1208
-  RNVectorIcons: 50ea777efffdd991a22e968aa312d75da7ff46c3
+  RNSVG: 43b64ed39c14ce830d840903774154ca0c1f27ec
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   TOCropViewController: b9b2905938c0424f289ea2d9964993044913fac6
-  Yoga: ff1d575b119f510a5de23c22a794872562078ccf
+  Yoga: 56f906bf6c11c931588191dde1229fd3e4e3d557
 
 PODFILE CHECKSUM: 5c06841213925c89f3d4b282bd539f63f41fff52
 
