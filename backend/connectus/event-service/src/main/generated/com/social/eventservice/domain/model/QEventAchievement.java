@@ -23,6 +23,8 @@ public class QEventAchievement extends EntityPathBase<EventAchievement> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final NumberPath<Long> pingId = createNumber("pingId", Long.class);
+
     public final NumberPath<Long> userId = createNumber("userId", Long.class);
 
     public QEventAchievement(String variable) {

@@ -1,8 +1,11 @@
 package social.connectus.userservice.domain.port.inbound;
 
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
+import social.connectus.userservice.domain.application.request.UserLogoutRequest;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
+import social.connectus.userservice.domain.application.response.LogoutUserResponse;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
+import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
 
 public interface UserUseCase {
@@ -16,4 +19,5 @@ public interface UserUseCase {
 	// 2. 로그인
 	LoginUserResponse login(UserLoginCommand command) throws RuntimeException;
 
+	LogoutUserResponse logout(UserLogoutCommand command) throws RuntimeException;
 }

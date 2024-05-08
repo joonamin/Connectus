@@ -7,10 +7,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import social.connectus.userservice.domain.application.request.UserAchievementsIndexRequest;
+import social.connectus.userservice.domain.application.request.UserAchievmentsIndexRequest;
 import social.connectus.userservice.domain.application.request.UserLoginRequest;
+import social.connectus.userservice.domain.application.request.UserLogoutRequest;
 import social.connectus.userservice.domain.application.request.UserRegisterRequest;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
+import social.connectus.userservice.domain.application.response.LogoutUserResponse;
+import social.connectus.userservice.domain.application.response.UserAchievmentsIndexResponse;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
+import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
 import social.connectus.userservice.domain.port.inbound.UserUseCase;
 
@@ -23,19 +29,26 @@ public class UserController {
 
 	@PostMapping("/register")
 	public ResponseEntity<Void> registerUser(UserRegisterRequest userRegisterRequest) {
-		// service 단에서 처리하는 Data Unit의 단위 --> command
-		// ModelMapper --> command 객체 만들기위한 메타데이터
-		// request -> command
-		// request 에서 받은 데이터를 가공하여 command로 만든다.
 		userUseCase.register(UserRegisterCommand.from(userRegisterRequest));
 		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/login")
 	public ResponseEntity<LoginUserResponse> loginUser(UserLoginRequest userLoginRequest) {
-		// request -> command
 		LoginUserResponse body = userUseCase.login(UserLoginCommand.from(userLoginRequest));
 		return ResponseEntity.ok(body);
+	}
+
+	@PostMapping("/logout")
+	public ResponseEntity<LogoutUserResponse> logoutUser(UserLogoutRequest userLogoutRequest) {
+		LogoutUserResponse response = userUseCase.logout(UserLogoutCommand.from(userLogoutRequest));
+		return ResponseEntity.ok(response);
+	}
+
+	// get 업적 관련 지표
+	@GetMapping("/achievements/index")
+	public ResponseEntity<UserAchievmentsIndexResponse> getUserAchievementsIndex(UserAchievementsIndexRequest request) {
+		return null;
 	}
 
 }

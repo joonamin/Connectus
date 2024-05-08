@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.social.eventservice.application.rest.request.MakeEventRequest;
 import com.social.eventservice.application.rest.response.EventDetailsResponse;
+import com.social.eventservice.application.rest.response.PingsDetailsResponse;
 import com.social.eventservice.common.annotation.UseCase;
-import com.social.eventservice.common.type.Ping;
 import com.social.eventservice.common.type.Spot;
 import com.social.eventservice.common.utils.converter.MapperUtil;
 import com.social.eventservice.common.utils.converter.command.meta.MakeEventCommandMetadata;
@@ -42,7 +42,7 @@ public class EventService implements EventUseCase {
 	}
 
 	@Override
-	public List<Ping> spreadPings(Long userId, Long eventId) {
+	public List<PingsDetailsResponse> spreadPings(Long userId, Long eventId) {
 		// 유저가 달성하지 않은 ping에 대해서만 ping을 뿌려준다.
 		return eventPort.spreadPings(userId, eventId);
 	}

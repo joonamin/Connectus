@@ -39,4 +39,7 @@ public class Event extends BaseEntity {
 	@ElementCollection(fetch = FetchType.LAZY)
 	private List<Long> spotIdList;
 
+	@ElementCollection(fetch = FetchType.LAZY)
+	private List<Long> onClearUserIdList;
+
 }

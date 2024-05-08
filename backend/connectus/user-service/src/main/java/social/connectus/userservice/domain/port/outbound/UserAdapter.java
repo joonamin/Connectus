@@ -1,14 +1,17 @@
 package social.connectus.userservice.domain.port.outbound;
 
 import java.util.Collections;
-import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
+import social.connectus.userservice.common.exception.LoginFailedException;
 import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
+import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
 import social.connectus.userservice.domain.port.outbound.repository.UserRepository;
 
@@ -17,11 +20,13 @@ import social.connectus.userservice.domain.port.outbound.repository.UserReposito
 public class UserAdapter implements UserPort {
 
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	@Transactional
 	public void registerUser(UserRegisterCommand command) {
 		// command -> User entity
+		String encryptedPassword = passwordEncoder.encode(command.getPassword());
 		User user = User.builder()
 			.name(command.getName())
 			.email(command.getEmail())
@@ -31,16 +36,22 @@ public class UserAdapter implements UserPort {
 			.postHistory(Collections.EMPTY_LIST)
 			.profileImageUrl("default")
 			.birthday(command.getBirthday())
-			.password(command.getPassword())
+			.password(encryptedPassword)
 			.nickname(command.getNickname())
 			.phoneNumber(command.getPhoneNumber())
 			.build();
-
 		userRepository.save(user);
 	}
 
 	@Override
-	public Optional<User> loginUser(UserLoginCommand command) {
-		return Optional.empty();
+	public User loginUser(UserLoginCommand command) throws LoginFailedException {
+		return userRepository.findByEmailAndRawPassword(command.getEmail(), command.getPassword())
+			.orElseThrow(
+				() -> new LoginFailedException("wrong password or wrong email, check your account information"));
+	}
+
+	@Override
+	@YetNotImplemented
+	public void logoutUser(UserLogoutCommand command) {
 	}
 }
