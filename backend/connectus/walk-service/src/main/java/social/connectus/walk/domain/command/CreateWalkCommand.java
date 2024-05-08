@@ -19,6 +19,7 @@ public class CreateWalkCommand {
     private int walkTime;
     private int walkDistance;   // 산책 거리
     private Long participateEvent;
+    private boolean isPublic;
 
     public static CreateWalkCommand from(CreateWalkRequest request){
         return CreateWalkCommand.builder()
@@ -29,6 +30,7 @@ public class CreateWalkCommand {
                 .walkTime(request.getWalkTime())
                 .walkDistance(request.getWalkDistance())
                 .participateEvent(request.getParticipateEvent())
+                .isPublic(request.isPublic())
                 .build();
     }
 

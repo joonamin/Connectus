@@ -8,6 +8,7 @@ import social.connectus.walk.common.constants.WalkConstants;
 import social.connectus.walk.common.exception.ResourceNotFoundException;
 import social.connectus.walk.domain.command.CreateWalkCommand;
 import social.connectus.walk.domain.command.RouteLikeCommand;
+import social.connectus.walk.domain.command.RouteShareCommand;
 import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
 import social.connectus.walk.infrastructure.databases.mariadb.repository.WalkRepository;
@@ -35,8 +36,16 @@ public class WalkAdapter implements WalkPort {
 
     @Override
     public List<Walk> getWalkByUser(long userId) {
-        // TODO
         return walkRepository.findByUser(userId);
+    }
+
+    @Transactional
+    @Override
+    public void routeShare(RouteShareCommand command) {
+        long walkId = command.getWalkId();
+        long userId = command.getUserId();
+        Walk walk = getWalkById(walkId);
+        walk.setPublic(true);
     }
 
     @Override
@@ -50,6 +59,7 @@ public class WalkAdapter implements WalkPort {
                 .walkTime(command.getWalkTime())
                 .walkDistance(command.getWalkDistance())
                 .participateEvent(command.getParticipateEvent())
+                .isPublic(command.isPublic())
                 .build();
 
         return walkRepository.save(walk);

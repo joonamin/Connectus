@@ -16,4 +16,5 @@ public class CreateWalkRequest {
     private int walkTime;
     private int walkDistance;   // 산책 거리
     private Long participateEvent;
+    private boolean isPublic;
 }

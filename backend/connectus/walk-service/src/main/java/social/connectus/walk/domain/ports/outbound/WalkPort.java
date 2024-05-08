@@ -2,6 +2,7 @@ package social.connectus.walk.domain.ports.outbound;
 
 import social.connectus.walk.domain.command.CreateWalkCommand;
 import social.connectus.walk.domain.command.RouteLikeCommand;
+import social.connectus.walk.domain.command.RouteShareCommand;
 import social.connectus.walk.domain.model.entity.Walk;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface WalkPort {
     Walk getWalkById(long walkId);
 
     List<Walk> getWalkByUser(long userId);
+
+    void routeShare(RouteShareCommand command);
 }
