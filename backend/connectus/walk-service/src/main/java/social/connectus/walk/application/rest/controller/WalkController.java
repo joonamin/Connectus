@@ -24,27 +24,17 @@ public class WalkController {
 
     @GetMapping("/feign-health-check")
     public String feignHealthCheck() { return walkUseCase.feignHealthCheck();}
+    
+    // TODO: getWalk 작성
 
     @PostMapping
     public ResponseEntity<CreateWalkResponse> createWalk(@RequestBody CreateWalkRequest request){
         // TODO: request 검증
-
-        CreateWalkCommand command = CreateWalkCommand.builder()
-                .userId(request.getUserId())
-                .title(request.getTitle())
-                .completedAchievement(request.getCompletedAchievement())
-                .route(request.getRoute())
-                .walkTime(request.getWalkTime())
-                .walkDistance(request.getWalkDistance())
-                .participateEvent(request.getParticipateEvent())
-                .build();
-        CreateWalkResponse response = walkUseCase.createWalk(command);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(walkUseCase.createWalk(CreateWalkCommand.from(request)));
     }
 
     @PatchMapping("route-like")
     public ResponseEntity<String> routeLike(@RequestBody RouteLikeRequest request){
-//        ResponseStatus routeLike(Long walkId, Long userId);
         walkUseCase.routeLike(RouteLikeCommand.from(request));
         return ResponseEntity.ok("Like is successfully registered.");
     }
