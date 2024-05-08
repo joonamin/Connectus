@@ -89,10 +89,10 @@ export default function FeedHomeScreen() {
               <Pressable
                 style={styles.confirimButton}
                 onPress={() => console.log('helo')}>
-                <Text style={styles.buttonText}>네</Text>
+                <Text style={styles.buttonText}>보러가기</Text>
               </Pressable>
               <Pressable style={styles.confirimButton} onPress={moveModalHide}>
-                <Text style={styles.buttonText}>아니오</Text>
+                <Text style={styles.buttonText}>취소</Text>
               </Pressable>
             </View>
           </View>

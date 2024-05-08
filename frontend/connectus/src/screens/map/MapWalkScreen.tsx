@@ -6,8 +6,13 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import MapView, {
+import {
+  NavigationContainer,
+  NavigationContainerRef,
+  useNavigation,
+} from '@react-navigation/native';
+import MapView from 'react-native-map-clustering';
+import {
   LatLng,
   Marker,
   PROVIDER_GOOGLE,
@@ -16,6 +21,7 @@ import MapView, {
 } from 'react-native-maps';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import BottomSheet from '@gorhom/bottom-sheet';
 
 import useUserLocation from '@/hooks/useUserLocation';
@@ -27,7 +33,9 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import MapBottomSheetNavigator from '@/navigations/Tabs/MapBottomSheetNavigator';
+import MapBottomSheetNavigator, {
+  MapBottomSheetTabParamList,
+} from '@/navigations/Tabs/MapBottomSheetNavigator';
 import EventIndicator from '@/components/my/EventIndicator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
@@ -47,6 +55,21 @@ const DUMMY_POSITION = [
   },
 ];
 
+const DUMMY_GATHER = [
+  {
+    latitude: 35.09064834938094,
+    longitude: 128.85494849796893,
+  },
+  {
+    latitude: 35.09063223602116,
+    longitude: 128.85511808214923,
+  },
+  {
+    latitude: 35.09060123205063,
+    longitude: 128.85478844604273,
+  },
+];
+
 type Navigation = StackNavigationProp<MapStackParamList>;
 
 type deltaType = {
@@ -56,13 +79,15 @@ type deltaType = {
 
 export default function MapWalkScreen() {
   const navigation = useNavigation<Navigation>();
-  const [trackingMode, setTrackingMode] = useState<boolean>(true);
+  const [trackingMode, setTrackingMode] = useState<boolean>(false);
   const {userLocation} = useUserLocation();
   const [mapDelta, setMapDelta] = useState<deltaType>({
     latitudeDelta: 0.001,
     longitudeDelta: 0.001,
   });
   const mapRef = useRef<MapView | null>(null);
+  const bottomSheetNav =
+    useRef<NavigationContainerRef<MapBottomSheetTabParamList> | null>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [time, setTime] = useState<number>(0);
   const [indicagteTime, setIndicateTime] = useState<string | null>(null);
@@ -92,9 +117,35 @@ export default function MapWalkScreen() {
     navigation.navigate('MapResult');
   };
 
+  const handleCheckDragged = (region: Region, details) => {
+    if (details.isGesture) {
+      setTrackingMode(false);
+    }
+  };
+
   const handleChangeDelta = (region: Region) => {
-    const {latitudeDelta, longitudeDelta} = region;
-    setMapDelta({latitudeDelta, longitudeDelta});
+    setMapDelta({
+      longitudeDelta: region.longitudeDelta,
+      latitudeDelta: region.latitudeDelta,
+    });
+  };
+
+  const handleMarkerClick = () => {
+    setTrackingMode(false);
+    handleBottomSheetOpen();
+    // 밑줄이 그여있지만 작동은 합니다...진짜입니다...
+    bottomSheetNav.current && bottomSheetNav.current.navigate('Feed');
+  };
+
+  const handleClusterClick = () => {
+    setTrackingMode(false);
+    handleBottomSheetOpen();
+    // 밑줄이 그여있지만 작동은 합니다...진짜입니다...
+    bottomSheetNav.current && bottomSheetNav.current.navigate('FeedList');
+  };
+
+  const handleTrackingMode = () => {
+    setTrackingMode(!trackingMode);
   };
 
   // 디바이스 전체에 listener설정
@@ -117,37 +168,61 @@ export default function MapWalkScreen() {
   }, []);
   return (
     <>
-      <MapView.Animated
+      <MapView
         ref={mapRef}
+        onClusterPress={handleClusterClick}
         style={styles.container}
         provider={PROVIDER_GOOGLE}
         showsUserLocation
-        followsUserLocation
-        showsMyLocationButton={true}
+        showsMyLocationButton={false}
         zoomEnabled={true}
-        region={
-          trackingMode
-            ? {
-                ...userLocation,
-                ...mapDelta,
-              }
-            : {
-                ...trace[trace.length - 1],
-                ...mapDelta,
-              }
-        }
-        onRegionChangeComplete={handleChangeDelta}>
+        initialRegion={{...userLocation, ...mapDelta}}
+        region={trackingMode ? {...userLocation, ...mapDelta} : undefined}
+        onRegionChangeComplete={handleChangeDelta}
+        onRegionChange={handleCheckDragged}>
         <Polyline
           coordinates={trace}
           strokeWidth={8}
           strokeColor={colors.primaryColorBlue}
         />
-        {DUMMY_POSITION.map(data => {
-          return <Marker coordinate={data} />;
+        {/* 게시글을 확인해줄 마커들 */}
+        {DUMMY_POSITION.map((data, index) => {
+          return (
+            <Marker
+              key={index}
+              coordinate={data}
+              onPress={handleMarkerClick}
+              style={{width: 100, height: 100}}
+              image={require('@/assets/scroll2.png')}
+            />
+          );
         })}
-      </MapView.Animated>
+        {DUMMY_GATHER.map((data, index) => {
+          return (
+            <Marker
+              key={index}
+              coordinate={data}
+              onPress={handleMarkerClick}
+              style={{width: 100, height: 100}}
+              image={require('@/assets/star.png')}
+            />
+          );
+        })}
+      </MapView>
       <View style={[styles.eventIndicator, {top: inset.top || 20}]}>
         <EventIndicator />
+      </View>
+      {/* 화면이 유저의 위치를 따라가는지 설정 가능한 버튼 */}
+      <View style={styles.trackingButtonContainer}>
+        <Pressable style={styles.trackingButton} onPress={handleTrackingMode}>
+          <MaterialIcons
+            color={
+              trackingMode ? colors.primaryColorBlue : colors.buttonBackground
+            }
+            name="my-location"
+            size={42}
+          />
+        </Pressable>
       </View>
       <View style={styles.bottomIndicator}>
         <View style={styles.indicatorContainer}>
@@ -170,7 +245,7 @@ export default function MapWalkScreen() {
         snapPoints={snapPoints}
         enablePanDownToClose={true}>
         <SafeAreaProvider>
-          <NavigationContainer independent={true}>
+          <NavigationContainer independent={true} ref={bottomSheetNav}>
             <MapBottomSheetNavigator />
           </NavigationContainer>
           {/* <QuickMenuHomeScreen /> */}
@@ -228,5 +303,31 @@ const styles = StyleSheet.create({
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  trackingButtonContainer: {
+    width: 70,
+    height: 70,
+    position: 'absolute',
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    justifyContent: 'center',
+    right: 15,
+    bottom: 80,
+    borderRadius: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 4,
+  },
+  trackingButton: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

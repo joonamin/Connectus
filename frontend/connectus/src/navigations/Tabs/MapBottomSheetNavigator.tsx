@@ -34,7 +34,9 @@ export default function MapBottomSheetNavigator() {
             if (
               routeName === 'FeedCreate' ||
               routeName === 'GatherCreate' ||
-              routeName === 'ChatList'
+              routeName === 'ChatList' ||
+              routeName === 'Feed' ||
+              routeName === 'FeedList'
             ) {
               return {display: 'none'};
             }
