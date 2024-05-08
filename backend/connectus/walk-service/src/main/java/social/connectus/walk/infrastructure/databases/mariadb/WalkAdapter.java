@@ -10,7 +10,10 @@ import social.connectus.walk.domain.command.CreateWalkCommand;
 import social.connectus.walk.domain.command.RouteLikeCommand;
 import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
+import social.connectus.walk.infrastructure.databases.mariadb.repository.WalkRepository;
 import social.connectus.walk.infrastructure.external.FeignClient;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -28,6 +31,12 @@ public class WalkAdapter implements WalkPort {
     public Walk getWalkById(long walkId) {
         return walkRepository.findById(walkId)
                 .orElseThrow(()-> new ResourceNotFoundException(WalkConstants.WALK_NOT_FOUND + walkId));
+    }
+
+    @Override
+    public List<Walk> getWalkByUser(long userId) {
+        // TODO
+        return walkRepository.findByUser(userId);
     }
 
     @Override

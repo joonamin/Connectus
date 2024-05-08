@@ -7,6 +7,7 @@ import social.connectus.walk.application.rest.request.CreateWalkRequest;
 import social.connectus.walk.application.rest.request.RouteLikeRequest;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.application.rest.response.GetWalkResponse;
+import social.connectus.walk.application.rest.response.GetWalksByUserResponse;
 import social.connectus.walk.domain.command.CreateWalkCommand;
 import social.connectus.walk.domain.command.RouteLikeCommand;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
@@ -28,10 +29,16 @@ public class WalkController {
         // TODO: 다른 모든 서비스의 healthCheck를 받아 json 객체로 반환
         return walkUseCase.feignHealthCheck();
     }
-    
+
     @GetMapping("/{walkId}")
     public ResponseEntity<GetWalkResponse> getWalk(@PathVariable long walkId){
         GetWalkResponse response = GetWalkResponse.from(walkUseCase.getWalkById(walkId));
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<GetWalksByUserResponse> getWalkByUser(@PathVariable long userId){
+        GetWalksByUserResponse response = GetWalksByUserResponse.from(walkUseCase.getWalkByUser(userId));
         return ResponseEntity.ok(response);
     }
 

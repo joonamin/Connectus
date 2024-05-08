@@ -10,6 +10,8 @@ import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
 
+import java.util.List;
+
 @UseCase
 @RequiredArgsConstructor
 public class WalkService implements WalkUseCase {
@@ -24,6 +26,11 @@ public class WalkService implements WalkUseCase {
     @Override
     public Walk getWalkById(long walkId){
         return walkPort.getWalkById(walkId);
+    }
+
+    @Override
+    public List<Walk> getWalkByUser(long userId) {
+        return walkPort.getWalkByUser(userId);
     }
 
     @Override
