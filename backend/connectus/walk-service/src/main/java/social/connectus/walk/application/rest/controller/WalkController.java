@@ -6,12 +6,14 @@ import org.springframework.web.bind.annotation.*;
 import social.connectus.walk.application.rest.request.CreateWalkRequest;
 import social.connectus.walk.application.rest.request.RouteLikeRequest;
 import social.connectus.walk.application.rest.request.RouteShareRequest;
+import social.connectus.walk.application.rest.request.RouteTrackRequest;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.application.rest.response.GetWalkResponse;
 import social.connectus.walk.application.rest.response.GetWalksByUserResponse;
 import social.connectus.walk.domain.command.CreateWalkCommand;
 import social.connectus.walk.domain.command.RouteLikeCommand;
 import social.connectus.walk.domain.command.RouteShareCommand;
+import social.connectus.walk.domain.command.RouteTrackCommand;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
 
 @RestController
@@ -50,7 +52,7 @@ public class WalkController {
         return ResponseEntity.ok(walkUseCase.createWalk(CreateWalkCommand.from(request)));
     }
 
-    @PatchMapping("route-like")
+    @PutMapping("route-like")
     public ResponseEntity<String> routeLike(@RequestBody RouteLikeRequest request){
         walkUseCase.routeLike(RouteLikeCommand.from(request));
         return ResponseEntity.ok("Like is successfully registered.");
@@ -60,6 +62,14 @@ public class WalkController {
     public ResponseEntity<String> routeShare(@RequestBody RouteShareRequest request){
         walkUseCase.routeShare(RouteShareCommand.from(request));
         return ResponseEntity.ok("Successfully shared.");
+    }
+
+    // TODO: route-protect
+
+    @PatchMapping("route-track")
+    public ResponseEntity<String> routeTrack(@RequestBody RouteTrackRequest request){
+        walkUseCase.routeTrack(RouteTrackCommand.from(request));
+        return ResponseEntity.ok("Successfully tracked.");
     }
 
 }

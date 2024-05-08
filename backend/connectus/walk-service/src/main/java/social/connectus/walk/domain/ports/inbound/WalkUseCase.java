@@ -4,6 +4,7 @@ import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.domain.command.CreateWalkCommand;
 import social.connectus.walk.domain.command.RouteLikeCommand;
 import social.connectus.walk.domain.command.RouteShareCommand;
+import social.connectus.walk.domain.command.RouteTrackCommand;
 import social.connectus.walk.domain.model.entity.Walk;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface WalkUseCase {
     List<Walk> getWalkByUser(long userId);
 
     void routeShare(RouteShareCommand command);
+
+    void routeTrack(RouteTrackCommand command);
 }
