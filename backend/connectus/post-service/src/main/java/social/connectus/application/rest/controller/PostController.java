@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import social.connectus.application.rest.request.CoordinateRequestDto;
 import social.connectus.application.rest.request.CreateCommentRequestDto;
