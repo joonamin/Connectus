@@ -3,17 +3,11 @@ package social.connectus.walk.application.rest.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import social.connectus.walk.application.rest.request.CreateWalkRequest;
-import social.connectus.walk.application.rest.request.RouteLikeRequest;
-import social.connectus.walk.application.rest.request.RouteShareRequest;
-import social.connectus.walk.application.rest.request.RouteTrackRequest;
+import social.connectus.walk.application.rest.request.*;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.application.rest.response.GetWalkResponse;
 import social.connectus.walk.application.rest.response.GetWalksByUserResponse;
-import social.connectus.walk.domain.command.CreateWalkCommand;
-import social.connectus.walk.domain.command.RouteLikeCommand;
-import social.connectus.walk.domain.command.RouteShareCommand;
-import social.connectus.walk.domain.command.RouteTrackCommand;
+import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
 
 @RestController
@@ -65,6 +59,12 @@ public class WalkController {
     }
 
     // TODO: route-protect
+    @PatchMapping("route-protect")
+    public ResponseEntity<String> routeShare(@RequestBody RouteProtectRequest request){
+        walkUseCase.routeProtect(RouteProtectCommand.from(request));
+        return ResponseEntity.ok("Successfully protected.");
+    }
+
 
     @PatchMapping("route-track")
     public ResponseEntity<String> routeTrack(@RequestBody RouteTrackRequest request){

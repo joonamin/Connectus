@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.common.customannotations.UseCase;
 import social.connectus.walk.common.exception.AlreadyExistsDataException;
-import social.connectus.walk.domain.command.CreateWalkCommand;
-import social.connectus.walk.domain.command.RouteLikeCommand;
-import social.connectus.walk.domain.command.RouteShareCommand;
-import social.connectus.walk.domain.command.RouteTrackCommand;
+import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
@@ -70,5 +67,13 @@ public class WalkService implements WalkUseCase {
 
 
         walkPort.routeTrack(command);
+    }
+
+    @Override
+    public void routeProtect(RouteProtectCommand command) {
+        Walk walk = walkPort.getWalkById(command.getWalkId());
+        if(walk.isPublic())
+            throw new AlreadyExistsDataException("User already share this walk.");
+
     }
 }
