@@ -2,6 +2,7 @@ package social.connectus.walk.domain.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import social.connectus.walk.domain.model.VO.Position;
 
 import java.util.List;
@@ -39,5 +40,8 @@ public class Walk extends BaseEntity{
     private Set<Long> completedAchievement;
 
     private Long participateEvent;
+
+    @ColumnDefault("0")
+    private int trackingCount;
 
 }
