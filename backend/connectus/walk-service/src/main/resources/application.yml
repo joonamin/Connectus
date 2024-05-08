@@ -6,16 +6,13 @@ spring:
     name: walk-service
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://walk.mariadb.connectus.social:3306/walk?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mariadb://mariadb.connectus.social:3306/walk?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: ssafyE106!
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: create-drop
-#    properties:
-#      hibernate:
-#        show_sql: true
-#        format_sql: true
 
 
 eureka:

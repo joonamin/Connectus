@@ -1,6 +1,5 @@
 package social.connectus.walk.application.rest.response;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,6 +8,7 @@ import social.connectus.walk.domain.model.VO.Position;
 import social.connectus.walk.domain.model.entity.Walk;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -21,8 +21,8 @@ public class GetWalkResponse {
     private List<Position> route;
     private int walkTime;
     private int walkDistance;
-    private List<Long> likeUsers;
-    private List<Long> completedAchievement;
+    private Set<Long> likeUsers;
+    private Set<Long> completedAchievement;
     private Long participateEvent;
 
     public static GetWalkResponse from(Walk walk){
