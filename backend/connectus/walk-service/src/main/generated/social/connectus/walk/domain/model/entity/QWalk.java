@@ -27,7 +27,7 @@ public class QWalk extends EntityPathBase<Walk> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
+    public final ListPath<Long, NumberPath<Long>> likeUsers = this.<Long, NumberPath<Long>>createList("likeUsers", Long.class, NumberPath.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> participateEvent = createNumber("participateEvent", Long.class);
 

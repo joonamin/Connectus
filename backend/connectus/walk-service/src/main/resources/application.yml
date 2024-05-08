@@ -18,11 +18,9 @@ spring:
 #        format_sql: true
 
 
-eureka:
-  #  instance:
-  #    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka
