@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import social.connectus.userservice.common.type.Achievement;
 
 @Entity
 @Getter
@@ -47,7 +48,7 @@ public class User {
 	private List<Long> chatRoomIds; // 참여하고 있는 채팅방 아이디
 
 	@ElementCollection
-	private List<Long> accomplishedAchievements; // 성취한 업적 리스트 아이디
+	private List<Achievement> accomplishedAchievements; // 성취한 업적 리스트 아이디
 
-
+	private Statistics statistics;
 }
