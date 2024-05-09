@@ -6,6 +6,7 @@ import MapView, {
   MapViewProps,
   PROVIDER_GOOGLE,
   Polyline,
+  SnapshotOptions,
 } from 'react-native-maps';
 import StartMarker from '@/components/map/StartMarker';
 import FinishMarker from '@/components/map/FinishMarker';
@@ -98,6 +99,29 @@ export default class RouteMap extends React.Component {
         },
       });
     }
+  }
+
+  /**
+   * 지도의 snapshot을 이미지로 저장합니다
+   *
+   * @param options snapshot 설정
+   * @returns 파일 uri 또는 base64 인코딩된 데이터의 Promise
+   */
+  takeSnapshot(options: SnapshotOptions): ReturnType<MapView['takeSnapshot']> {
+    // 기본 설정 지정
+    if (!('width' in options)) {
+      options.width = 512;
+    }
+    if (!('height' in options)) {
+      options.height = 512;
+    }
+
+    // MapView가 준비되어있을 때만 진행
+    if (this.map.current === null) {
+      return Promise.reject('MapView is not initialized');
+    }
+
+    return this.map.current.takeSnapshot(options);
   }
 
   /**
