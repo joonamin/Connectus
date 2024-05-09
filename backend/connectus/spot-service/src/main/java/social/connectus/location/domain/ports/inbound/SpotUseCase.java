@@ -8,6 +8,5 @@ import social.connectus.location.domain.command.FindNearbyElementCommand;
 @UseCase
 @Component
 public interface SpotUseCase {
-    void test();
     FindNearbyElementResponse findNearbyElement(FindNearbyElementCommand command);
 }
