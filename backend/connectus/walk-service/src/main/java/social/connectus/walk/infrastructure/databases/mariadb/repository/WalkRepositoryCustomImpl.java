@@ -12,10 +12,12 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import social.connectus.walk.domain.model.VO.Position;
 import social.connectus.walk.domain.model.entity.QWalk;
+import social.connectus.walk.domain.model.entity.Route;
 import social.connectus.walk.domain.model.entity.Walk;
 import java.util.List;
 
 import static social.connectus.walk.domain.model.entity.QWalk.walk;
+import static social.connectus.walk.domain.model.entity.QRoute.route;
 
 @RequiredArgsConstructor
 public class WalkRepositoryCustomImpl implements WalkRepositoryCustom {
@@ -37,13 +39,21 @@ public class WalkRepositoryCustomImpl implements WalkRepositoryCustom {
         int pageSize = pageable.getPageSize();
         BooleanBuilder condition = new BooleanBuilder();
 
-        condition.and(walk.route.get(0).latitude.subtract(position.getLatitude()).abs().loe(distance))
-                .and(walk.route.get(0).longitude.subtract(position.getLongitude()).abs().loe(distance));
+//        condition.and(route.get(0).latitude.subtract(position.getLatitude()).abs().loe(distance))
+//                .and(route.get(0).longitude.subtract(position.getLongitude()).abs().loe(distance));
+        double userLatitude = position.getLatitude();
+        double userLongitude = position.getLongitude();
 
-        List<Long> walkIdList = jpaQueryFactory
-                .select(walk.id)
-                .from(walk)
+        List<Route> routeList = jpaQueryFactory
+                .select(route)
+                .from(route)
+                .groupBy(route.walk)
+                .having(route.latitude.subtract(userLatitude).abs().loe(distance)
+                        .and(route.longitude.subtract(userLongitude).abs().loe(distance)))
                 .fetch();
+        List<Long> walkIdList = routeList.stream()
+                .map(routeItem -> routeItem.getWalk().getId())
+                .toList();
 
         boolean hasNext = false;
         if(walkIdList.size() > pageSize){
