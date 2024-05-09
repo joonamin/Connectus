@@ -33,8 +33,9 @@ public class LikesController {
 	}
 
 	@GetMapping("/{domainId}/like-count")
-	public ResponseEntity<Integer> getLikeCount(@PathVariable Long domainId, @RequestParam Type type) throws
+	public ResponseEntity<Integer> getLikeCount(@PathVariable Long domainId, @RequestParam String typeString) throws
 		GlobalException {
+		Type type = Type.valueOf(typeString);
 		return ResponseEntity.ok(likeUseCase.getLikeCount(domainId, type));
 	}
 
