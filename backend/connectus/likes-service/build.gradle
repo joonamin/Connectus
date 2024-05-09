@@ -34,7 +34,6 @@ allprojects {
         implementation 'org.springframework.kafka:spring-kafka'
         implementation 'org.springframework.boot:spring-boot-starter-data-redis'
         implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.1'
-        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server:4.1.1'
         //	implementation 'org.springframework.ai:spring-ai-milvus-store-spring-boot-starter'
         //	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
         //	implementation 'org.springframework.cloud:spring-cloud-starter-config'

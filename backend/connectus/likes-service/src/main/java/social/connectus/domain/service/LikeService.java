@@ -2,7 +2,7 @@ package social.connectus.domain.service;
 
 import org.hibernate.procedure.ParameterMisuseException;
 
-import javassist.NotFoundException;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import social.connectus.common.annotation.UseCase;
 import social.connectus.common.exception.GlobalException;
