@@ -32,9 +32,14 @@ public class LikesController {
 			likeUseCase.insertLike(likeRequest.getDomainId(), likeRequest.getUserId(), likeRequest.getType()));
 	}
 
-	@GetMapping("/{domainId}/likeCount")
+	@GetMapping("/{domainId}/like-count")
 	public ResponseEntity<Integer> getLikeCount(@PathVariable Long domainId, @RequestParam Type type) throws
 		GlobalException {
 		return ResponseEntity.ok(likeUseCase.getLikeCount(domainId, type));
+	}
+
+	@GetMapping("/{domainId}/is-like")
+	public ResponseEntity<Boolean> isLike(@PathVariable Long domainId){
+		return ResponseEntity.ok(likeUseCase.isLike(domainId));
 	}
 }

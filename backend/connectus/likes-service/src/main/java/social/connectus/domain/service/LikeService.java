@@ -48,4 +48,9 @@ public class LikeService implements LikeUseCase {
 		}
 		return likePort.getLikeCount(domainId, type);
 	}
+
+	@Override
+	public boolean isLike(Long domainId) {
+		return likePort.isLike(domainId);
+	}
 }
