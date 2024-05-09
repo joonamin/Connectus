@@ -7,4 +7,5 @@ import social.connectus.domain.model.Likes;
 
 @Repository
 public interface LikeRepository extends JpaRepository<Likes, Long>, LikeRepositoryCustom {
+	boolean existsByDomainId(Long domainId);
 }

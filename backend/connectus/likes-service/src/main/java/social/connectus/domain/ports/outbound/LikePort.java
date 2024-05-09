@@ -6,4 +6,6 @@ public interface LikePort {
 	String insertLike(Long domainId, Long userId, Type type);
 
 	int getLikeCount(Long domainId, Type type);
+
+	boolean isLike(Long domainId);
 }

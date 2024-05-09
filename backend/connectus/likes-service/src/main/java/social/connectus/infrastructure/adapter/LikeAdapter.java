@@ -22,4 +22,9 @@ public class LikeAdapter implements LikePort {
 	public int getLikeCount(Long domainId, Type type) {
 		return likeRepository.countByDomainIdAndType(domainId, type).intValue();
 	}
+
+	@Override
+	public boolean isLike(Long domainId) {
+		return likeRepository.existsByDomainId(domainId);
+	}
 }

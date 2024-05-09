@@ -8,4 +8,6 @@ public interface LikeUseCase {
 	String insertLike(Long domainId, Long userId, Type type) throws GlobalException;
 
 	int getLikeCount(Long domainId, Type type) throws GlobalException;
+
+	boolean isLike(Long domainId);
 }
