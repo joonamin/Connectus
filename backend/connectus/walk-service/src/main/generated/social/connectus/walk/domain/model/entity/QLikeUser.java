@@ -24,6 +24,8 @@ public class QLikeUser extends EntityPathBase<LikeUser> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final NumberPath<Long> userId = createNumber("userId", Long.class);
+
     public final QWalk walk;
 
     public QLikeUser(String variable) {

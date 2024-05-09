@@ -9,13 +9,18 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TrackingUser {
+public class CompletedAchievement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private long userId;
+
+    private long achievementId;
 
     @ManyToOne
     @JoinColumn(name = "walk_id")
     private Walk walk;
+
+    public CompletedAchievement(long achievementId){
+        this.achievementId = achievementId;
+    }
 }

@@ -3,7 +3,6 @@ package social.connectus.walk.domain.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import social.connectus.walk.domain.model.VO.Position;
 
 import java.util.List;
 import java.util.Set;
@@ -17,7 +16,8 @@ import java.util.Set;
 public class Walk extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long walkId;
+    @Column(name="walk_id")
+    private Long id;
 
     @Column(nullable = false)
     private Long userId;
@@ -35,7 +35,7 @@ public class Walk extends BaseEntity{
     private Set<LikeUser> likeUsers;
 
     @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
-    private Set<Achievement> completedAchievement;
+    private Set<CompletedAchievement> completedAchievement;
 
     private Long participateEvent;
 
