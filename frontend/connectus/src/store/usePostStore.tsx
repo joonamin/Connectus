@@ -18,20 +18,12 @@ interface PostStore {
  * 전역적으로 관리할 현재 작성된 방명록들을 저장할 store를 정의합니다.
  */
 const usePostStore = create<PostStore>(set => ({
-  posts: [
-    {
-      content: '오늘은 진주님이 카페라떼를 남기셨어요',
-      image: require('@/assets/jinjoo-namgim.jpeg'),
-      postLocation: {latitude: 14, longitude: 42},
-    },
-    {
-      content: '오늘은 진주님이 카페라떼를 두번 남기셨어요',
-      image: require('@/assets/jinjoo-namgim.jpeg'),
-      postLocation: {latitude: 14, longitude: 42},
-    },
-  ],
+  posts: [],
   setAddPost: (post: PostType) => {
-    set(state => ({...state, post: post}));
+    set(state => {
+      console.log('feed create test', post);
+      return {...state, posts: [...state.posts, post]};
+    });
   },
   setDeletePost: (index: number) => {
     set(state => {
