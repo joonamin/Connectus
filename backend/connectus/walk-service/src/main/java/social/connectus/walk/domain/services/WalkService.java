@@ -65,7 +65,6 @@ public class WalkService implements WalkUseCase {
         if(walk.getTrackingUsers().contains(command.getUserId()))
             throw new AlreadyExistsDataException("User already track this walk.");
 
-
         walkPort.routeTrack(command);
     }
 
@@ -73,7 +72,8 @@ public class WalkService implements WalkUseCase {
     public void routeProtect(RouteProtectCommand command) {
         Walk walk = walkPort.getWalkById(command.getWalkId());
         if(walk.isPublic())
-            throw new AlreadyExistsDataException("User already share this walk.");
+            throw new AlreadyExistsDataException("User already protect this walk.");
 
+        walkPort.routeProtect(command);
     }
 }
