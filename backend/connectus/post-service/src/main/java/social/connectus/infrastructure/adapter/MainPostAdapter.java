@@ -25,7 +25,7 @@ public class MainPostAdapter implements MainPostPort {
 		List<Post> postList = postRepository.findByIdList(postId);
 		List<MainPostResponse> response = new ArrayList<>();
 		for(Post post : postList) {
-			int likeCount = likesServiceClient.getLikeCount(post.getId());
+			int likeCount = likesServiceClient.getLikeCount(post.getId(),"POST");
 			response.add(MainPostResponse.from(post,likeCount));
 		}
 		return response;
