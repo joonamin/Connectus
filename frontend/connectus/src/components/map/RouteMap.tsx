@@ -118,6 +118,12 @@ export default class RouteMap extends React.Component<RouteMapProps> {
     if (!('height' in options)) {
       options.height = 512;
     }
+    if (!('format' in options)) {
+      options.format = 'jpg';
+    }
+    if (!('result' in options)) {
+      options.result = 'base64';
+    }
 
     // MapView가 준비되어있을 때만 진행
     if (this.map.current === null) {
