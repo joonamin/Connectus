@@ -101,7 +101,7 @@ export default function MapWalkScreen() {
     useRef<NavigationContainerRef<MapBottomSheetTabParamList> | null>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [time, setTime] = useState<number>(0);
-  const [indicagteTime, setIndicateTime] = useState<string | null>(null);
+  const [indicateTime, setIndicateTime] = useState<string | null>(null);
   const [trace, setTrace] = useState<LatLng[]>([]);
   const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
 
@@ -131,7 +131,7 @@ export default function MapWalkScreen() {
    */
   const navigateToResultScreen = () => {
     handleBottomSheetClose();
-    navigation.navigate('MapResult', {time: indicagteTime, distance: distance});
+    navigation.navigate('MapResult', {time: time, distance: distance});
   };
 
   // map screen에서 드래그 시, 화면고정을 해제합니다
@@ -272,7 +272,7 @@ export default function MapWalkScreen() {
         <View style={styles.indicatorContainer}>
           <View style={styles.timeTextContainer}>
             <Ionicons name="timer-outline" size={32} />
-            <MainText style={styles.timeText}>{indicagteTime}</MainText>
+            <MainText style={styles.timeText}>{indicateTime}</MainText>
           </View>
           <View style={styles.distanceTextContainer}>
             <FontAwesome5 name={'walking'} size={28} />

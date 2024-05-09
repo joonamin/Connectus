@@ -17,6 +17,7 @@ import {fonts} from '@/constants';
 import RecordedPost from '@/components/map/RecordedPost';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
+import {convertSecondsToTime, formatTime} from '@/utils';
 
 const DUMMY_ACHIEVE = [
   {
@@ -32,15 +33,14 @@ const DUMMY_ACHIEVE = [
  */
 export default function MapResultScreen({route}) {
   const [walkTitle, setWalkTitle] = useState<string>('');
+  const {seconds, minutes, hours} = convertSecondsToTime(route.params?.time);
+  const indicateTime = formatTime(hours, minutes, seconds);
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView>
         <View style={styles.mainContainer}>
           <MainText>산책 종료</MainText>
-          <WalkResult
-            time={route.params?.time}
-            distance={route.params?.distance}
-          />
+          <WalkResult time={indicateTime} distance={route.params?.distance} />
           <Achievement achievs={DUMMY_ACHIEVE} />
           <EventResult />
           <RecordedPost />

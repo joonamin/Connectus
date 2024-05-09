@@ -12,7 +12,7 @@ import {LatLng} from 'react-native-maps';
 export type MapStackParamList = {
   MapHome: undefined;
   MapWalk: undefined;
-  MapResult: {time: string; distance: number; walkRoute: LatLng[]};
+  MapResult: {time: number; distance: number; walkRoute: LatLng[]};
   BottomSheet: undefined;
 };
 
