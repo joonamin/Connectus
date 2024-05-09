@@ -27,7 +27,7 @@ export interface RouteMapProps extends ViewProps {
  *
  * @returns RouteMap
  */
-export default class RouteMap extends React.Component {
+export default class RouteMap extends React.Component<RouteMapProps> {
   /**
    * 지도 객체
    */
