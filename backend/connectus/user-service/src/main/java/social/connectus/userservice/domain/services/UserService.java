@@ -7,6 +7,7 @@ import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
 import social.connectus.userservice.domain.application.response.LogoutUserResponse;
+import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
@@ -33,6 +34,11 @@ public class UserService implements UserUseCase {
 	@YetNotImplemented
 	public LogoutUserResponse logout(UserLogoutCommand command) throws RuntimeException {
 		return null;
+	}
+
+	@Override
+	public OpenedPostResponse getOpenedPost(Long userId) {
+		return userPort.getOpenedPost(userId);
 	}
 
 }

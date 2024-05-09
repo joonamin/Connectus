@@ -21,13 +21,32 @@ public class DetailPostAdapter implements DetailPostPort {
 	private final UserServiceClient userServiceClient;
 	private final PositionServiceClient positionServiceClient;
 	private final LikesServiceClient likesServiceClient;
+
+	@Override
+	public DetailPostResponse samplePost(Long postId) throws BusinessException {
+		Post post = postRepository.findById(postId).orElseThrow(()->new BusinessException("Post doesn't exists"));
+		int likeCount = likesServiceClient.getLikeCount(postId);
+		boolean isLike = likesServiceClient.isLike(postId);
+		DetailPostResponse response = DetailPostResponse.samplePostFrom(post);
+		response.setLikeCount(likeCount);
+		response.setLike(isLike);
+		return response;
+	}
+
 	@Override
 	public DetailPostResponse detailPost(Long postId) throws BusinessException {
-		Post post = postRepository.findById(postId).orElseThrow(()->new BusinessException("Post doesn't exist"));
+		Post post = postRepository.findById(postId).orElseThrow(()->new BusinessException("Post doesn't exists"));
 		int likeCount = likesServiceClient.getLikeCount(postId);
-		DetailPostResponse response = DetailPostResponse.from(post);
+		boolean isLike = likesServiceClient.isLike(postId);
+		DetailPostResponse response = DetailPostResponse.detailPostFrom(post);
+		response.setLike(isLike);
 		response.setLikeCount(likeCount);
 		return response;
+	}
+
+	@Override
+	public void updateOpenedPost(Long userId, Long postId) {
+		userServiceClient.updateOpenedPost(userId, postId);
 	}
 
 	@Override

@@ -57,26 +57,27 @@ public class DetailPostService implements DetailPostUseCase {
 	}
 
 	@Override
-	public DetailPostResponse detailByPostId(Long postId, Long userId, CoordinateRequestDto userPosition) throws
+	public DetailPostResponse detailByPostId(Long postId, Long userId, Double distance) throws
 		GlobalException, BusinessException {
 		List<Long> openedPostListByUserId = detailPostPort.openedPostByUserId(userId).getOpenedPostList();
-		CoordinateRequestDto postPosition = detailPostPort.postPositionByPostId(postId);
 		try{
 			if(openedPostListByUserId == null ){
 				throw new BusinessException("can't contact userService");
 			}
-			if(postPosition == null) {
-				throw new BusinessException("can't contact positionService");
-			}
-			if(!openedPostListByUserId.contains(postId)) {
-				if(getDistance(userPosition, postPosition) > R) {
-					throw new BusinessException("post is too far");
+			if(openedPostListByUserId.contains(postId)) {
+				return detailPostPort.detailPost(postId);
+			} else {
+				if(distance < 30) {
+					detailPostPort.updateOpenedPost(userId, postId);
+					return detailPostPort.detailPost(postId);
 				}
+				else {
+					return detailPostPort.samplePost(postId);
+			}
 			}
 		}catch (Exception e) {
 			throw new GlobalException("DetailPostService : " + e.getMessage());
 		}
-		return detailPostPort.detailPost(postId);
 	}
 
 	private double getDistance(CoordinateRequestDto userLocation, CoordinateRequestDto postLocation) {

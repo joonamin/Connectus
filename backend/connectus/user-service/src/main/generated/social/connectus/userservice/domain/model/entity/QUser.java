@@ -20,7 +20,7 @@ public class QUser extends EntityPathBase<User> {
 
     public static final QUser user = new QUser("user");
 
-    public final ListPath<Long, NumberPath<Long>> accomplishedAchievements = this.<Long, NumberPath<Long>>createList("accomplishedAchievements", Long.class, NumberPath.class, PathInits.DIRECT2);
+    public final ListPath<social.connectus.userservice.common.type.Achievement, EnumPath<social.connectus.userservice.common.type.Achievement>> accomplishedAchievements = this.<social.connectus.userservice.common.type.Achievement, EnumPath<social.connectus.userservice.common.type.Achievement>>createList("accomplishedAchievements", social.connectus.userservice.common.type.Achievement.class, EnumPath.class, PathInits.DIRECT2);
 
     public final DatePath<java.time.LocalDate> birthday = createDate("birthday", java.time.LocalDate.class);
 
@@ -38,11 +38,15 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Integer> point = createNumber("point", Integer.class);
 
+    public final NumberPath<Integer> postCount = createNumber("postCount", Integer.class);
+
     public final ListPath<Long, NumberPath<Long>> postHistory = this.<Long, NumberPath<Long>>createList("postHistory", Long.class, NumberPath.class, PathInits.DIRECT2);
 
     public final StringPath profileImageUrl = createString("profileImageUrl");
 
     public final NumberPath<Long> userId = createNumber("userId", Long.class);
+
+    public final NumberPath<Integer> walkCount = createNumber("walkCount", Integer.class);
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));

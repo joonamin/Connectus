@@ -4,6 +4,7 @@ import social.connectus.userservice.common.exception.FailedToRegisterUserExcepti
 import social.connectus.userservice.domain.application.request.UserLogoutRequest;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
 import social.connectus.userservice.domain.application.response.LogoutUserResponse;
+import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
@@ -20,4 +21,6 @@ public interface UserUseCase {
 	LoginUserResponse login(UserLoginCommand command) throws RuntimeException;
 
 	LogoutUserResponse logout(UserLogoutCommand command) throws RuntimeException;
+
+	OpenedPostResponse getOpenedPost(Long userId);
 }

@@ -10,7 +10,7 @@ import social.connectus.common.exception.GlobalException;
 public interface DetailPostUseCase {
 	DetailPostResponse detailByUserExperience(Long postId, Long userId) throws GlobalException, BusinessException;
 	DetailPostResponse detailByLocation(Long postId, CoordinateRequestDto coordinate) throws GlobalException, BusinessException;
-	DetailPostResponse detailByPostId(Long postId,Long userId, CoordinateRequestDto coordinate) throws
+	DetailPostResponse detailByPostId(Long postId,Long userId, Double distance) throws
 		GlobalException,
 		BusinessException;
 }

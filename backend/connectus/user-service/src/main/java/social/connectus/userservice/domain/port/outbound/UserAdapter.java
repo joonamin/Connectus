@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
 import social.connectus.userservice.common.exception.LoginFailedException;
+import social.connectus.userservice.common.exception.NotFoundException;
+import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
@@ -53,5 +55,10 @@ public class UserAdapter implements UserPort {
 	@Override
 	@YetNotImplemented
 	public void logoutUser(UserLogoutCommand command) {
+	}
+
+	@Override
+	public OpenedPostResponse getOpenedPost(Long userId) {
+		return new OpenedPostResponse(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")).getPostHistory());
 	}
 }

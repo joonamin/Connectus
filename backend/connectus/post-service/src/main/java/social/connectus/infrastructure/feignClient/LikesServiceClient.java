@@ -8,4 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface LikesServiceClient {
 	@GetMapping("/likes-service/{postId}/likeCount")
 	int getLikeCount(@PathVariable Long postId);
+
+	@GetMapping("/likes-service/{postId}/isLike")
+	boolean isLike(@PathVariable Long postId);
 }

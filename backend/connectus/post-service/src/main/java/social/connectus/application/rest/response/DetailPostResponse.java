@@ -24,8 +24,10 @@ public class DetailPostResponse {
 	private int likeCount;
 	private List<Comment> commentList;
 	private LocalDateTime updatedAt;
+	private boolean isLike;
+	private boolean inRange;
 
-	public static DetailPostResponse from(Post post) {
+	public static DetailPostResponse detailPostFrom(Post post) {
 		return DetailPostResponse.builder()
 			.postId(post.getId())
 			.authorId(post.getAuthorId())
@@ -33,6 +35,18 @@ public class DetailPostResponse {
 			.content(post.getContent())
 			.commentList(post.getCommentList())
 			.updatedAt(post.getUpdatedAt())
+			.inRange(true)
+			.build();
+	}
+
+	public static DetailPostResponse samplePostFrom(Post post) {
+		return DetailPostResponse.builder()
+			.postId(post.getId())
+			.authorId(post.getAuthorId())
+			.imageUrl(post.getImageUrl())
+			.commentList(post.getCommentList())
+			.updatedAt(post.getUpdatedAt())
+			.inRange(false)
 			.build();
 	}
 }
