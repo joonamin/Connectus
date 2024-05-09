@@ -1,6 +1,7 @@
 package social.connectus.walk.application.rest.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import social.connectus.walk.application.rest.request.*;
@@ -46,28 +47,35 @@ public class WalkController {
         return ResponseEntity.ok(walkUseCase.createWalk(CreateWalkCommand.from(request)));
     }
 
-    @PutMapping("route-like")
+    @PutMapping("/route-like")
     public ResponseEntity<String> routeLike(@RequestBody RouteLikeRequest request){
         walkUseCase.routeLike(RouteLikeCommand.from(request));
         return ResponseEntity.ok("Like is successfully registered.");
     }
 
-    @PatchMapping("route-share")
+    @PatchMapping("/route-share")
     public ResponseEntity<String> routeShare(@RequestBody RouteShareRequest request){
         walkUseCase.routeShare(RouteShareCommand.from(request));
         return ResponseEntity.ok("Successfully shared.");
     }
 
-    @PatchMapping("route-protect")
+    @PatchMapping("/route-protect")
     public ResponseEntity<String> routeShare(@RequestBody RouteProtectRequest request){
         walkUseCase.routeProtect(RouteProtectCommand.from(request));
         return ResponseEntity.ok("Successfully protected.");
     }
 
-    @PatchMapping("route-track")
+    @PatchMapping("/route-track")
     public ResponseEntity<String> routeTrack(@RequestBody RouteTrackRequest request){
         walkUseCase.routeTrack(RouteTrackCommand.from(request));
         return ResponseEntity.ok("Successfully tracked.");
+    }
+
+    // TODO: 특정 범위 내의 산책 기록(walkId)를 최신 순으로 반환하기
+    @GetMapping("/position")
+    public ResponseEntity<Slice<Long>> getWalksByPosition(@RequestBody GetWalksByPositionRequest request){
+        Slice<Long> walkIdSlice = walkUseCase.getWalksByPosition(GetWalksByPositionCommand.from(request));
+        return ResponseEntity.ok(walkIdSlice);
     }
 
 }

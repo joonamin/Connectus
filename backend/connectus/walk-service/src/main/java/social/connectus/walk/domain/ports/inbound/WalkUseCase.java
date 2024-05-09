@@ -1,5 +1,6 @@
 package social.connectus.walk.domain.ports.inbound;
 
+import org.springframework.data.domain.Slice;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.entity.Walk;
@@ -23,4 +24,6 @@ public interface WalkUseCase {
     void routeTrack(RouteTrackCommand command);
 
     void routeProtect(RouteProtectCommand command);
+
+    Slice<Long> getWalksByPosition(GetWalksByPositionCommand command);
 }

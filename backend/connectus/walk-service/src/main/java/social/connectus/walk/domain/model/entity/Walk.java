@@ -24,24 +24,23 @@ public class Walk extends BaseEntity{
 
     private String title;
 
-    @Embedded
-    @ElementCollection(fetch = FetchType.LAZY)
-    private List<Position> route;
+    @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
+    private List<Route> route;
 
     private int walkTime;
 
-    private int walkDistance;   // 산책 거리
+    private double walkDistance;   // 산책 거리
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    private Set<Long> likeUsers;
+    @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
+    private Set<LikeUser> likeUsers;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    private Set<Long> completedAchievement;
+    @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
+    private Set<Achievement> completedAchievement;
 
     private Long participateEvent;
 
-    @ElementCollection(fetch = FetchType.LAZY)
-    private Set<Long> trackingUsers;
+    @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
+    private Set<TrackingUser> trackingUsers;
 
     @ColumnDefault("false")
     @Column(nullable = false, columnDefinition = "TINYINT(1)")

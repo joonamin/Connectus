@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import social.connectus.walk.domain.model.VO.Position;
-import social.connectus.walk.domain.model.entity.Walk;
+import social.connectus.walk.domain.model.entity.*;
 
 import java.util.List;
 import java.util.Set;
@@ -18,13 +18,13 @@ public class GetWalkResponse {
     private Long walkId;
     private Long userId;
     private String title;
-    private List<Position> route;
+    private List<Route> route;
     private int walkTime;
-    private int walkDistance;
-    private Set<Long> likeUsers;
-    private Set<Long> completedAchievement;
+    private double walkDistance;
+    private Set<LikeUser> likeUsers;
+    private Set<Achievement> completedAchievement;
     private Long participateEvent;
-    private Set<Long> trackingUsers;
+    private Set<TrackingUser> trackingUsers;
     private boolean isPublic;
 
     public static GetWalkResponse from(Walk walk){
