@@ -37,6 +37,8 @@ public class PostController {
 	private final CreateCommentUseCase createCommentUseCase;
 	private final MainPostUseCase mainPostUseCase;
 	private final FeedUseCase feedUseCase;
+
+	// insert의 경우, endWalk에서 이뤄지는 한 walk에 대한 postList를 받아옮
 	@PostMapping("/insert")
 	public ResponseEntity<String> createPost(@RequestBody CreateFeedRequestDto requestFeed) throws
 		GlobalException {
@@ -74,10 +76,10 @@ public class PostController {
 	}
 
 	@GetMapping("/{postId}")
-	public ResponseEntity<DetailPostResponse> detailPostById(@PathVariable Long postId, Long userId, CoordinateRequestDto coordinate) throws
+	public ResponseEntity<DetailPostResponse> detailPostById(@PathVariable Long postId, Long userId, Double distance) throws
 		BusinessException,
 		GlobalException {
-		return ResponseEntity.ok().body(detailPostUseCase.detailByPostId(postId, userId, coordinate));
+		return ResponseEntity.ok().body(detailPostUseCase.detailByPostId(postId, userId, distance));
 	}
 
 	@PostMapping("/{postId}/comment")

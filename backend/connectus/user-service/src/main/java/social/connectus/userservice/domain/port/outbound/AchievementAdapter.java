@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import social.connectus.userservice.common.exception.NotFoundException;
 import social.connectus.userservice.common.type.Achievement;
 import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.outbound.command.RefreshAchievementToUserCommand;

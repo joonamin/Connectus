@@ -17,6 +17,7 @@ import social.connectus.userservice.domain.application.request.UserRegisterReque
 import social.connectus.userservice.domain.application.response.CompletedAchievementListResponse;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
 import social.connectus.userservice.domain.application.response.LogoutUserResponse;
+import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.application.response.RefreshAchievementResponse;
 import social.connectus.userservice.domain.application.response.UserAchievmentsIndexResponse;
 import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
@@ -67,5 +68,10 @@ public class UserController {
 	public ResponseEntity<RefreshAchievementResponse> refreshAchievement(Long userId,
 		@RequestBody RefreshAchievementRequest statistics) {
 		return ResponseEntity.ok(achievementUseCase.refreshAchievement(userId, statistics));
+	}
+
+	@GetMapping("/{userId}/openedPosts")
+	public ResponseEntity<OpenedPostResponse> getOpenedPost(@PathVariable Long userId) {
+		return ResponseEntity.ok(userUseCase.getOpenedPost(userId));
 	}
 }

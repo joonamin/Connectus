@@ -1,6 +1,7 @@
 package social.connectus.userservice.domain.port.outbound;
 
 import social.connectus.userservice.common.exception.LoginFailedException;
+import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
@@ -13,4 +14,6 @@ public interface UserPort {
 	User loginUser(UserLoginCommand command) throws LoginFailedException;
 
 	void logoutUser(UserLogoutCommand command);
+
+	OpenedPostResponse getOpenedPost(Long userId);
 }
