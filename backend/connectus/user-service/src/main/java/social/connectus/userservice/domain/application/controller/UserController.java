@@ -8,7 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import social.connectus.userservice.domain.application.request.RefreshAchievementRequest;
 import social.connectus.userservice.domain.application.request.UserAchievementsIndexRequest;
 import social.connectus.userservice.domain.application.request.UserLoginRequest;
@@ -26,6 +30,7 @@ import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
 
+@Slf4j
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -71,7 +76,14 @@ public class UserController {
 	}
 
 	@GetMapping("/{userId}/openedPosts")
-	public ResponseEntity<OpenedPostResponse> getOpenedPost(@PathVariable Long userId) {
+	public ResponseEntity<OpenedPostResponse> getOpenedPost(@PathVariable Long userId) throws JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		log.info(objectMapper.writeValueAsString(userUseCase.getOpenedPost(userId)));
 		return ResponseEntity.ok(userUseCase.getOpenedPost(userId));
+	}
+
+	@GetMapping("/health-check")
+	public ResponseEntity<String> healthCheck() {
+		return ResponseEntity.ok("good");
 	}
 }

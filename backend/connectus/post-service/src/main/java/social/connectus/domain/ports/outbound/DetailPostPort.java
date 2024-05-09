@@ -11,4 +11,6 @@ public interface DetailPostPort {
 	void updateOpenedPost(Long userId, Long postId);
 	OpenedPostResponse openedPostByUserId(Long userId);
 	CoordinateRequestDto postPositionByPostId(Long postId);
+
+	String healthCheck();
 }

@@ -15,4 +15,7 @@ public interface UserServiceClient {
 
 	@PostMapping("/user/{userId}/openedPosts")
 	void updateOpenedPost(@PathVariable Long userId, @RequestBody Long postId);
+
+	@GetMapping("/user/health-check")
+	String healthCheck();
 }
