@@ -18,6 +18,7 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DetailPostResponse {
 	private Long postId;
+	private Long walkId;
 	private String imageUrl;
 	private String content;
 	private Long authorId;
@@ -49,4 +50,5 @@ public class DetailPostResponse {
 			.inRange(false)
 			.build();
 	}
+
 }

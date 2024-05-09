@@ -67,7 +67,7 @@ public class DetailPostService implements DetailPostUseCase {
 			if(openedPostListByUserId.contains(postId)) {
 				return detailPostPort.detailPost(postId);
 			} else {
-				if(distance < 30) {
+				if(distance < 100) {
 					detailPostPort.updateOpenedPost(userId, postId);
 					return detailPostPort.detailPost(postId);
 				}
