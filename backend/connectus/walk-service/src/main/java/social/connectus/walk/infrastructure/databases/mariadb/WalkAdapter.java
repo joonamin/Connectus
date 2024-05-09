@@ -3,10 +3,17 @@ package social.connectus.walk.infrastructure.databases.mariadb;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import social.connectus.walk.common.constants.WalkConstants;
 import social.connectus.walk.common.exception.ResourceNotFoundException;
 import social.connectus.walk.domain.command.*;
+import social.connectus.walk.domain.model.VO.Position;
+import social.connectus.walk.domain.model.entity.LikeUser;
+import social.connectus.walk.domain.model.entity.TrackingUser;
 import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
 import social.connectus.walk.infrastructure.databases.mariadb.repository.WalkRepository;
@@ -53,11 +60,21 @@ public class WalkAdapter implements WalkPort {
         walk.setPublic(false);
     }
 
+    @Override
+    public Slice<Long> getWalksByPosition(GetWalksByPositionCommand command) {
+//        findSliceByPosition(Position position, double distance, long userId, Pageable pageable)
+//        double distance = command.getDistance();
+//        long userId = command.getUserId();
+//        PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize(), Sort.by("createdAt").descending());
+//        return walkRepository.findSliceByPosition(userPosition, distance, userId, pageRequest);
+        return null;
+    }
+
     @Transactional
     @Override
     public void routeTrack(RouteTrackCommand command) {
         Walk walk = getWalkById(command.getWalkId());
-        walk.getTrackingUsers().add(command.getUserId());
+        walk.getTrackingUsers().add(new TrackingUser(command.getUserId(), walk));
     }
 
     @Override
@@ -84,6 +101,6 @@ public class WalkAdapter implements WalkPort {
         long userId = command.getUserId();
         Walk walk = getWalkById(walkId);
 
-        walk.getLikeUsers().add(userId);
+        walk.getLikeUsers().add(new LikeUser(userId, walk));
     }
 }

@@ -1,6 +1,7 @@
 package social.connectus.walk.domain.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.common.customannotations.UseCase;
 import social.connectus.walk.common.exception.AlreadyExistsDataException;
@@ -75,5 +76,10 @@ public class WalkService implements WalkUseCase {
             throw new AlreadyExistsDataException("User already protect this walk.");
 
         walkPort.routeProtect(command);
+    }
+
+    @Override
+    public Slice<Long> getWalksByPosition(GetWalksByPositionCommand command) {
+        return walkPort.getWalksByPosition(command);
     }
 }

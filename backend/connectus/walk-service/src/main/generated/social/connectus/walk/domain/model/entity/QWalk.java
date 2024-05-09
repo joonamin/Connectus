@@ -22,29 +22,29 @@ public class QWalk extends EntityPathBase<Walk> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
-    public final SetPath<Long, NumberPath<Long>> completedAchievement = this.<Long, NumberPath<Long>>createSet("completedAchievement", Long.class, NumberPath.class, PathInits.DIRECT2);
+    public final SetPath<Achievement, QAchievement> completedAchievement = this.<Achievement, QAchievement>createSet("completedAchievement", Achievement.class, QAchievement.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final BooleanPath isPublic = createBoolean("isPublic");
 
-    public final SetPath<Long, NumberPath<Long>> likeUsers = this.<Long, NumberPath<Long>>createSet("likeUsers", Long.class, NumberPath.class, PathInits.DIRECT2);
+    public final SetPath<LikeUser, QLikeUser> likeUsers = this.<LikeUser, QLikeUser>createSet("likeUsers", LikeUser.class, QLikeUser.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> participateEvent = createNumber("participateEvent", Long.class);
 
-    public final ListPath<social.connectus.walk.domain.model.VO.Position, social.connectus.walk.domain.model.VO.QPosition> route = this.<social.connectus.walk.domain.model.VO.Position, social.connectus.walk.domain.model.VO.QPosition>createList("route", social.connectus.walk.domain.model.VO.Position.class, social.connectus.walk.domain.model.VO.QPosition.class, PathInits.DIRECT2);
+    public final ListPath<Route, QRoute> route = this.<Route, QRoute>createList("route", Route.class, QRoute.class, PathInits.DIRECT2);
 
     public final StringPath title = createString("title");
 
-    public final SetPath<Long, NumberPath<Long>> trackingUsers = this.<Long, NumberPath<Long>>createSet("trackingUsers", Long.class, NumberPath.class, PathInits.DIRECT2);
+    public final SetPath<TrackingUser, QTrackingUser> trackingUsers = this.<TrackingUser, QTrackingUser>createSet("trackingUsers", TrackingUser.class, QTrackingUser.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public final NumberPath<Long> userId = createNumber("userId", Long.class);
 
-    public final NumberPath<Integer> walkDistance = createNumber("walkDistance", Integer.class);
+    public final NumberPath<Double> walkDistance = createNumber("walkDistance", Double.class);
 
     public final NumberPath<Long> walkId = createNumber("walkId", Long.class);
 
