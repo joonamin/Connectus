@@ -19,4 +19,8 @@ public class Achievement {
     @ManyToOne
     private Walk walk;
 
+    public Achievement(long id){
+        this.id = id;
+    }
+
 }
