@@ -130,7 +130,23 @@ export default class RouteMap extends React.Component<RouteMapProps> {
       return Promise.reject('MapView is not initialized');
     }
 
-    return this.map.current.takeSnapshot(options);
+    if (options.result === 'file') {
+      return this.map.current.takeSnapshot(options);
+    } else {
+      // base64 인코딩 시 아래의 형태로 문자열 수정
+      // data:<data_type>/<file_extension>;base64,<base64_data>
+      const mimeType = options.format === 'jpg' ? 'image/jpeg' : 'image/png';
+      return new Promise((resolve, reject) => {
+        this.map.current
+          ?.takeSnapshot(options)
+          .then(result => {
+            resolve('data:' + mimeType + ';base64,' + result);
+          })
+          .catch(error => {
+            reject(error);
+          });
+      });
+    }
   }
 
   /**
