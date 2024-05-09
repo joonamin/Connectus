@@ -10,13 +10,20 @@ import React, {useState} from 'react';
 import colors from '@/constants/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MainText from '../text/MainText';
-import useModal from '@/hooks/useModal';
 
-export default function SharePost() {
+type Props = {
+  modalOpen: () => void;
+};
+
+/**
+ * share 스크린에서 무한스크롤을 통해 렌더링할 컴포넌트입니다.
+ * @todo 추후 기록이 어떻게 전달되는지에 따라서 안쪽의 state를 수정해야합니다
+ */
+export default function SharePost({modalOpen}: Props) {
   const [viewIsLiked, setViewIsLiked] = useState(false);
   const commentNumber = 2;
   const likeNumber = 2;
-  const {isVisible, show, hide} = useModal();
+
   const handlePressLikeButton = () => {
     setViewIsLiked(!viewIsLiked);
   };
@@ -38,10 +45,8 @@ export default function SharePost() {
             <MainText>{'userName'}</MainText>
             <Text style={styles.postDate}>{'2024-04-29'}</Text>
           </View>
-          <Pressable style={styles.moveButton}>
-            <Text style={styles.moveButtonText} onPress={show}>
-              따라걷기
-            </Text>
+          <Pressable style={styles.moveButton} onPress={modalOpen}>
+            <Text style={styles.moveButtonText}>따라걷기</Text>
           </Pressable>
         </View>
         <View style={styles.shareImageContainer}>
@@ -71,7 +76,7 @@ export default function SharePost() {
 }
 
 const styles = StyleSheet.create({
-  shareContainer: {gap: 5},
+  shareContainer: {gap: 15, marginBottom: 25},
   profileContainer: {
     flexDirection: 'row',
     height: 44,
