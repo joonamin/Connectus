@@ -30,12 +30,17 @@ export default class RouteMap extends React.Component {
   /**
    * 지도 객체
    */
-  private map: MapView;
+  private map: React.RefObject<MapView>;
 
   /**
    * 지도에 표시할 경로 목록
    */
   protected routes: LatLng[];
+
+  /**
+   * MapView에 적용할 props
+   */
+  protected mapProps: MapViewProps;
 
   /**
    * View에 적용할 props
@@ -50,10 +55,12 @@ export default class RouteMap extends React.Component {
   constructor(props: RouteMapProps) {
     super(props);
 
+    this.map = React.createRef<MapView>();
+
     this.viewProps = props;
     this.routes = props.routes;
 
-    const mapProps: MapViewProps = {
+    this.mapProps = {
       style: styles.map,
       scrollEnabled: false,
       zoomEnabled: false,
@@ -71,8 +78,6 @@ export default class RouteMap extends React.Component {
         </>
       ),
     };
-
-    this.map = new MapView(mapProps);
   }
 
   /**
@@ -81,9 +86,9 @@ export default class RouteMap extends React.Component {
   protected onMapReady() {
     // 지도를 적절한 위치에 위치
     if (Platform.OS === 'ios') {
-      this.map.fitToElements();
+      this.map.current?.fitToElements();
     } else {
-      this.map.fitToCoordinates(this.routes, {
+      this.map.current?.fitToCoordinates(this.routes, {
         animated: false,
         edgePadding: {
           top: 50,
@@ -102,11 +107,10 @@ export default class RouteMap extends React.Component {
    */
   render() {
     const {style: viewStyle, ...containerProps} = this.viewProps;
-    console.debug(this.map.props);
 
     return (
       <View style={[styles.mapContainer, viewStyle]} {...containerProps}>
-        {this.map.render()}
+        <MapView {...this.mapProps} ref={this.map} />
       </View>
     );
   }
