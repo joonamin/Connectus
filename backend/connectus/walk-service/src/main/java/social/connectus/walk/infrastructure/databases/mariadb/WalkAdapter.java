@@ -3,11 +3,14 @@ package social.connectus.walk.infrastructure.databases.mariadb;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import social.connectus.walk.common.constants.WalkConstants;
 import social.connectus.walk.common.exception.ResourceNotFoundException;
 import social.connectus.walk.domain.command.*;
+import social.connectus.walk.domain.model.VO.Position;
 import social.connectus.walk.domain.model.entity.*;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
 import social.connectus.walk.infrastructure.databases.mariadb.repository.WalkRepository;
@@ -58,11 +61,15 @@ public class WalkAdapter implements WalkPort {
     @Override
     public Slice<Long> getWalksByPosition(GetWalksByPositionCommand command) {
 //        findSliceByPosition(Position position, double distance, long userId, Pageable pageable)
-//        double distance = command.getDistance();
-//        long userId = command.getUserId();
-//        PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize(), Sort.by("createdAt").descending());
-//        return walkRepository.findSliceByPosition(userPosition, distance, userId, pageRequest);
-        return null;
+        Position userPosition = Position.builder()
+                .latitude(command.getLatitude())
+                .longitude(command.getLongitude())
+                .build();
+        double distance = command.getDistance();
+        long userId = command.getUserId();
+        PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize(), Sort.by("createdAt").descending());
+        return walkRepository.findSliceByPosition(userPosition, distance, userId, pageRequest);
+//        return null;
     }
 
     @Transactional
@@ -92,18 +99,14 @@ public class WalkAdapter implements WalkPort {
         return walk;
     }
 
-//    @Transactional
     @Override
     public void createRoute(List<Route> routes, Walk walk){
         routes.forEach(route -> route.setWalk(walk));
-//        walkRepository.save(routes);
     }
 
-//    @Transactional
     @Override
     public void createAchievement(Set<CompletedAchievement> completedAchievements, Walk walk){
         completedAchievements.forEach(achievement -> achievement.setWalk(walk));
-//        walkRepository.save(completedAchievements);
     }
 
     @Override
