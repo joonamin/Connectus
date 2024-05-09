@@ -27,27 +27,21 @@ public class MilvusConfig {
     @Bean
     public MilvusClientV2 createMilvusClient(){
         if (clientInstance == null) {
-            // 동기화를 통한 하나의 접근 허용
-            synchronized (MilvusConfig.class) {
-                // Double-checked locking 방식을 통한 스레드 동시성 회피
-                if (clientInstance == null) {
-                    String url = "https://" + this.host + ":" + this.port;
+            String url = "https://" + this.host + ":" + this.port;
 
-                    // Milvus 연결 설정
-                    ConnectConfig connectConfig = ConnectConfig.builder()
-                            .uri(url)
-                            .build();
-                    MilvusClientV2 client = new MilvusClientV2(connectConfig);
+            // Milvus 연결 설정
+            ConnectConfig connectConfig = ConnectConfig.builder()
+                    .uri(url)
+                    .build();
+            MilvusClientV2 client = new MilvusClientV2(connectConfig);
 
-                    // Collection 로드
-                    LoadCollectionReq loadReq = LoadCollectionReq.builder()
-                            .collectionName(this.collectionName)
-                            .build();
+            // Collection 로드
+            LoadCollectionReq loadReq = LoadCollectionReq.builder()
+                    .collectionName(this.collectionName)
+                    .build();
 
-                    client.loadCollection(loadReq);
-                    clientInstance = client;
-                }
-            }
+            client.loadCollection(loadReq);
+            clientInstance = client;
         }
         return clientInstance;
     }
