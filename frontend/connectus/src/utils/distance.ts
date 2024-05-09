@@ -4,6 +4,13 @@ function toRadians(degrees: number) {
   return degrees * (Math.PI / 180);
 }
 
+/**
+ * 두 지점의 위도경도 좌표를 통해 거리를 계산하는 함수입니다.
+ * @param pos1 type : LatLng
+ * @param pos2 type : LatLng
+ * @returns distance(number)
+ */
+
 function getDistance(pos1: LatLng, pos2: LatLng) {
   const R = 6371; // 지구의 반지름 (km)
   const dLat = toRadians(pos2.latitude - pos1.latitude);

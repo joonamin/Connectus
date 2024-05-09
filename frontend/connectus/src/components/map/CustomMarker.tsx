@@ -22,6 +22,7 @@ export default function CustomMarker({
 }: CustomMarkerProps) {
   const markerView = (
     <View style={styles.container}>
+      {/* 타입별로 이미지를 다르게합니다 */}
       {type === 1 && (
         <Image style={styles.image} source={require('@/assets/star.png')} />
       )}
