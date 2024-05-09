@@ -22,5 +22,6 @@ public class Route {
     private double longitude;
 
     @ManyToOne
+    @JoinColumn(name = "walk_id")
     private Walk walk;
 }

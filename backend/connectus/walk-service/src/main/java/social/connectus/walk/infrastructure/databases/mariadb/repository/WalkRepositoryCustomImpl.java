@@ -41,7 +41,7 @@ public class WalkRepositoryCustomImpl implements WalkRepositoryCustom {
                 .and(walk.route.get(0).longitude.subtract(position.getLongitude()).abs().loe(distance));
 
         List<Long> walkIdList = jpaQueryFactory
-                .select(walk.walkId)
+                .select(walk.id)
                 .from(walk)
                 .fetch();
 

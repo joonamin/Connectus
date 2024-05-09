@@ -3,23 +3,18 @@ package social.connectus.walk.infrastructure.databases.mariadb;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import social.connectus.walk.common.constants.WalkConstants;
 import social.connectus.walk.common.exception.ResourceNotFoundException;
 import social.connectus.walk.domain.command.*;
-import social.connectus.walk.domain.model.VO.Position;
-import social.connectus.walk.domain.model.entity.LikeUser;
-import social.connectus.walk.domain.model.entity.TrackingUser;
-import social.connectus.walk.domain.model.entity.Walk;
+import social.connectus.walk.domain.model.entity.*;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
 import social.connectus.walk.infrastructure.databases.mariadb.repository.WalkRepository;
 import social.connectus.walk.infrastructure.external.FeignClient;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -74,7 +69,7 @@ public class WalkAdapter implements WalkPort {
     @Override
     public void routeTrack(RouteTrackCommand command) {
         Walk walk = getWalkById(command.getWalkId());
-        walk.getTrackingUsers().add(new TrackingUser(command.getUserId(), walk));
+        walk.getTrackingUsers().add(TrackingUser.builder().userId(command.getUserId()).walk(walk).build());
     }
 
     @Override
@@ -84,14 +79,31 @@ public class WalkAdapter implements WalkPort {
                 .userId(command.getUserId())
                 .title(command.getTitle())
                 .route(command.getRoute())
-                .completedAchievement(command.getCompletedAchievement())
-                .walkTime(command.getWalkTime())
                 .walkDistance(command.getWalkDistance())
+                .walkTime(command.getWalkTime())
+                .completedAchievement(command.getCompletedAchievement())
                 .participateEvent(command.getParticipateEvent())
                 .isPublic(command.isPublic())
                 .build();
 
-        return walkRepository.save(walk);
+        createRoute(walk.getRoute(), walk);
+        createAchievement(walk.getCompletedAchievement(), walk);
+        walkRepository.save(walk);
+        return walk;
+    }
+
+//    @Transactional
+    @Override
+    public void createRoute(List<Route> routes, Walk walk){
+        routes.forEach(route -> route.setWalk(walk));
+//        walkRepository.save(routes);
+    }
+
+//    @Transactional
+    @Override
+    public void createAchievement(Set<CompletedAchievement> completedAchievements, Walk walk){
+        completedAchievements.forEach(achievement -> achievement.setWalk(walk));
+//        walkRepository.save(completedAchievements);
     }
 
     @Override
@@ -101,6 +113,6 @@ public class WalkAdapter implements WalkPort {
         long userId = command.getUserId();
         Walk walk = getWalkById(walkId);
 
-        walk.getLikeUsers().add(new LikeUser(userId, walk));
+        walk.getLikeUsers().add(LikeUser.builder().userId(userId).walk(walk).build());
     }
 }

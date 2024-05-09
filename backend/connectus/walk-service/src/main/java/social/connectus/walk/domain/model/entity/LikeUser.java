@@ -1,9 +1,6 @@
 package social.connectus.walk.domain.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -14,8 +11,10 @@ import lombok.*;
 @Builder
 public class LikeUser {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
+    private long userId;
     @ManyToOne
+    @JoinColumn(name = "walk_id")
     private Walk walk;
 }

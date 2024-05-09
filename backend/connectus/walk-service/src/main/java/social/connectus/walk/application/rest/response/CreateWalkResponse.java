@@ -14,7 +14,7 @@ public class CreateWalkResponse {
     private long walkId;
     public static CreateWalkResponse from(Walk walk){
         return CreateWalkResponse.builder()
-                .walkId(walk.getWalkId())
+                .walkId(walk.getId())
                 .build();
     }
 }
