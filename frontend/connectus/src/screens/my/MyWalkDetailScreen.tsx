@@ -11,11 +11,15 @@ import {MyStackParamList} from '@/navigations/stack/MyStackNavigator';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useRef} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import RouteMap from '@/components/map/RouteMap';
 import routes from '@/assets/sample-route.json';
+import CustomButton from '@/components/buttons/CustomButton';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import LightText from '@/components/text/LightText';
+import Share from 'react-native-share';
 
 export type Navigation = CompositeNavigationProp<
   StackNavigationProp<MyStackParamList>,
@@ -70,6 +74,28 @@ export default function MyWalkDetailScreen({route}: MyWalkDetailProps) {
     ':' +
     (seconds < 10 ? '0' + seconds : seconds);
 
+  // 지도 이미지 공유
+  const map = useRef<RouteMap | null>(null);
+  const onMapShare = async () => {
+    try {
+      const base64 = await map.current?.takeSnapshot({
+        format: 'jpg',
+        result: 'base64',
+      });
+      console.debug(
+        await Share.open({
+          title: '지도 공유',
+          url: base64,
+          type: 'image/jpeg',
+          filename: 'map.jpg',
+          failOnCancel: false,
+        }),
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <ScrollView>
       <MainContainer style={styles.page}>
@@ -79,7 +105,19 @@ export default function MyWalkDetailScreen({route}: MyWalkDetailProps) {
           style={styles.title}>
           {data.title}
         </HeadingText>
-        <RouteMap routes={routes} />
+
+        <View style={styles.mapContainer}>
+          <RouteMap routes={routes} ref={map} />
+          <CustomButton
+            backgroundColor="transparent"
+            containerStyle={styles.shareButtonContainer}
+            style={styles.shareButton}
+            onPress={onMapShare}>
+            <MaterialIcons name="share" size={16} color={colors.white} />
+            <LightText>지도 공유</LightText>
+          </CustomButton>
+        </View>
+
         <WalkResult time={elapsed} distance={data.distance} />
         <Achievement achievs={data.achievements} />
         <EventResult />
@@ -104,5 +142,16 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
+  },
+  mapContainer: {
+    gap: 10,
+  },
+  shareButtonContainer: {
+    alignSelf: 'flex-end',
+  },
+  shareButton: {
+    flexDirection: 'row',
+    padding: 10,
+    gap: 5,
   },
 });
