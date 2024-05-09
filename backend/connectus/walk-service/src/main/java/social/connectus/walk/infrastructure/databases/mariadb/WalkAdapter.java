@@ -6,10 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import social.connectus.walk.common.constants.WalkConstants;
 import social.connectus.walk.common.exception.ResourceNotFoundException;
-import social.connectus.walk.domain.command.CreateWalkCommand;
-import social.connectus.walk.domain.command.RouteLikeCommand;
-import social.connectus.walk.domain.command.RouteShareCommand;
-import social.connectus.walk.domain.command.RouteTrackCommand;
+import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
 import social.connectus.walk.infrastructure.databases.mariadb.repository.WalkRepository;
@@ -44,9 +41,16 @@ public class WalkAdapter implements WalkPort {
     @Override
     public void routeShare(RouteShareCommand command) {
         long walkId = command.getWalkId();
-        long userId = command.getUserId();
         Walk walk = getWalkById(walkId);
         walk.setPublic(true);
+    }
+
+    @Transactional
+    @Override
+    public void routeProtect(RouteProtectCommand command) {
+        long walkId = command.getWalkId();
+        Walk walk = getWalkById(walkId);
+        walk.setPublic(false);
     }
 
     @Transactional

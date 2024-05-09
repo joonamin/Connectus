@@ -58,13 +58,11 @@ public class WalkController {
         return ResponseEntity.ok("Successfully shared.");
     }
 
-    // TODO: route-protect
     @PatchMapping("route-protect")
     public ResponseEntity<String> routeShare(@RequestBody RouteProtectRequest request){
         walkUseCase.routeProtect(RouteProtectCommand.from(request));
         return ResponseEntity.ok("Successfully protected.");
     }
-
 
     @PatchMapping("route-track")
     public ResponseEntity<String> routeTrack(@RequestBody RouteTrackRequest request){
