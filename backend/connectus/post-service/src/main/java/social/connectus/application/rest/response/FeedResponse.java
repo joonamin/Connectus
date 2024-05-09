@@ -27,7 +27,7 @@ public class FeedResponse {
 		Post postHead = postList.get(0);
 		List<DetailPostResponse> detailPostResponseList = new ArrayList<>();
 		for(Post post : postList) {
-			detailPostResponseList.add(DetailPostResponse.detailPostFrom(post));
+			detailPostResponseList.add(DetailPostResponse.samplePostFrom(post));
 		}
 		return FeedResponse.builder()
 			.walkId(postHead.getWalkId())

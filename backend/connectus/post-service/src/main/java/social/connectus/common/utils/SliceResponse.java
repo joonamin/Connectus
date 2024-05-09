@@ -18,5 +18,9 @@ public class SliceResponse<T> {
 		List<D> list = entitySlice.getContent().stream().map(dtoMapper).toList();
 		return new SliceResponse<>(list, entitySlice.hasNext(), entitySlice.getNumber());
 	}
+
+	public SliceResponse<T> from(Slice<T> slice) {
+		return new SliceResponse<>(slice.getContent(),slice.hasNext(), slice.getNumber());
+	}
 }
 

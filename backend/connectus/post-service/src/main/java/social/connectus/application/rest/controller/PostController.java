@@ -2,9 +2,11 @@ package social.connectus.application.rest.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +24,7 @@ import social.connectus.application.rest.response.MainPostResponse;
 import social.connectus.common.exception.BusinessException;
 import social.connectus.common.exception.GlobalException;
 import social.connectus.common.exception.NotFoundException;
+import social.connectus.common.utils.SliceResponse;
 import social.connectus.domain.ports.inbound.CreateCommentUseCase;
 import social.connectus.domain.ports.inbound.CreatePostUseCase;
 import social.connectus.domain.ports.inbound.DetailPostUseCase;
@@ -29,7 +32,7 @@ import social.connectus.domain.ports.inbound.FeedUseCase;
 import social.connectus.domain.ports.inbound.MainPostUseCase;
 
 @RestController
-@RequestMapping("/post-service")
+@RequestMapping("/post")
 @RequiredArgsConstructor
 public class PostController {
 	private final CreatePostUseCase createPostUseCase;
@@ -83,19 +86,18 @@ public class PostController {
 	}
 
 	@PostMapping("/{postId}/comment")
-	public ResponseEntity<String> createComment(@PathVariable Long postId, CreateCommentRequestDto dto) throws
+	public ResponseEntity<String> createComment(@PathVariable Long postId,@RequestBody CreateCommentRequestDto dto) throws
 		GlobalException, NotFoundException {
 		String result = createCommentUseCase.createComment(postId, dto);
 		return ResponseEntity.ok().body(result);
 	}
 
-	/* TODO : 생각해보니까 얘는 slice로 리턴해야되는데 좀 더 생각해보고 짭시다
-		근데 피드로 슬라이스를 자르려면 feed entity가 따로 필요한데 정신 나가겠네
-		슬라이스 처리는 위치 서비스에서 진행하고 post에서는 받은 idlist들을 뿌려주는 역할만?
-	 */
 	@GetMapping("/feed/main")
-	public ResponseEntity<List<FeedResponse>> feedMain(@RequestParam List<Long> walkId) throws GlobalException {
-		return ResponseEntity.ok().body(feedUseCase.feedMain(walkId));
+	public ResponseEntity<SliceResponse<FeedResponse>> feedMain(
+		@ModelAttribute CoordinateRequestDto userPosition,
+		@RequestParam int pageNum,
+		Long userId) throws GlobalException {
+		return ResponseEntity.ok().body(feedUseCase.feedMain(userPosition,pageNum,userId));
 	}
 
 	@GetMapping("/feed/{walkId}")
