@@ -14,8 +14,7 @@ import social.connectus.location.domain.ports.inbound.SpotUseCase;
 @AllArgsConstructor
 public class SpotController {
 
-    @Autowired
-    private final SpotUseCase gatherUseCase;
+    private final SpotUseCase spotUseCase;
 
     @GetMapping("/health_check")
     public String health_check(){
@@ -25,7 +24,8 @@ public class SpotController {
 
     @PostMapping("/findNearby")
     public String findNearbyElement(FindNearbyElementRequest request) {
-        FindNearbyElementCommand command;
+        FindNearbyElementCommand command = new FindNearbyElementCommand(request.getLongitude(), request.getLongitude());
+        spotUseCase.findNearbyElement(command);
         return "It's working on spot-service!";
     }
 

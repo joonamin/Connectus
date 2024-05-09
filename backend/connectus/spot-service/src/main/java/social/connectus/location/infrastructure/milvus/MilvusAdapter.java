@@ -1,25 +1,22 @@
 package social.connectus.location.infrastructure.milvus;
 
 import com.alibaba.fastjson.JSONObject;
-import io.milvus.client.MilvusServiceClient;
-import io.milvus.param.ConnectParam;
-import io.milvus.param.dml.InsertParam;
 import io.milvus.v2.client.MilvusClientV2;
-import io.milvus.v2.common.DataType;
 import io.milvus.v2.service.vector.request.InsertReq;
 import io.milvus.v2.service.vector.request.QueryReq;
 import io.milvus.v2.service.vector.response.InsertResp;
 import io.milvus.v2.service.vector.response.QueryResp;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import social.connectus.location.common.config.MilvusConfig;
-import social.connectus.location.domain.command.FindNearbyElementCommand;
-import social.connectus.location.domain.ports.outbound.MlivusPort;
+import social.connectus.location.domain.ports.outbound.MilvusPort;
 
-import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RequiredArgsConstructor
-public class MilvusAdapter implements MlivusPort {
+@Component
+public class MilvusAdapter implements MilvusPort {
 
     private final MilvusConfig milvusConfig;
 
@@ -35,10 +32,11 @@ public class MilvusAdapter implements MlivusPort {
         vectorList.add((float) longitude);
         vectorList.add((float) latitude);
 
-        pingInfo.put("spot_id", spotId);
         pingInfo.put("spot", vectorList);
         pingInfo.put("type", type);
         pingInfo.put("domain_id", domainId);
+        pingInfo.put("created_at", LocalDateTime.now().toString());
+        pingInfo.put("updated_at", LocalDateTime.now().toString());
 
 //        System.out.println("생성 데이터");
 //        System.out.println(pingInfo.toString());
@@ -64,17 +62,10 @@ public class MilvusAdapter implements MlivusPort {
         QueryReq queryReq = QueryReq.builder()
                 .collectionName(milvusConfig.getCollectionName())
                 .filter(filter)
-//                .outputFields(Arrays.asList("spot_id", "spot", "type", "domain_id")) // 조회할 필드 목록
-                .limit(10) // 원하는 결과의 최대 개수
+                .outputFields(Arrays.asList("spot_id", "spot", "type", "domain_id", "created_at", "updated_at"))
+                .limit(10)
                 .build();
-        // 쿼리 수행
-        QueryResp results = client.query(queryReq);
 
-        for (int i = 0; i < results.getQueryResults().size(); i++) {
-            QueryResp.QueryResult queryResult = results.getQueryResults().get(i);
-            Map<String, Object> row = queryResult.getEntity();
-            System.out.println("Row " + i + ": " + row);
-        }
-        return null;
+        return client.query(queryReq);
     }
 }
