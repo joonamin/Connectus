@@ -25,7 +25,7 @@ public class DetailPostAdapter implements DetailPostPort {
 	@Override
 	public DetailPostResponse samplePost(Long postId) throws BusinessException {
 		Post post = postRepository.findById(postId).orElseThrow(()->new BusinessException("Post doesn't exists"));
-		int likeCount = likesServiceClient.getLikeCount(postId);
+		int likeCount = likesServiceClient.getLikeCount(postId,"POST");
 		boolean isLike = likesServiceClient.isLike(postId);
 		DetailPostResponse response = DetailPostResponse.samplePostFrom(post);
 		response.setLikeCount(likeCount);
@@ -36,7 +36,7 @@ public class DetailPostAdapter implements DetailPostPort {
 	@Override
 	public DetailPostResponse detailPost(Long postId) throws BusinessException {
 		Post post = postRepository.findById(postId).orElseThrow(()->new BusinessException("Post doesn't exists"));
-		int likeCount = likesServiceClient.getLikeCount(postId);
+		int likeCount = likesServiceClient.getLikeCount(postId,"POST");
 		boolean isLike = likesServiceClient.isLike(postId);
 		DetailPostResponse response = DetailPostResponse.detailPostFrom(post);
 		response.setLike(isLike);
