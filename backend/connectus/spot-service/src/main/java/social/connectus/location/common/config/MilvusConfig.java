@@ -17,10 +17,10 @@ public class MilvusConfig {
     @Value("${spring.ai.vectorstore.milvus.client.port}")
     private String port;
 
-    @Value("${spring.ai.vectorstore.milvus.client.databaseName}")
+    @Value("${spring.ai.vectorstore.milvus.databaseName}")
     private String databaseName;
 
-    @Value("${spring.ai.vectorstore.milvus.client.collectionName}")
+    @Value("${spring.ai.vectorstore.milvus.collectionName}")
     private String collectionName;
 
     private static MilvusClientV2 clientInstance;
