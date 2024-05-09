@@ -107,8 +107,11 @@ export default class RouteMap extends React.Component<RouteMapProps> {
    * @param options snapshot 설정
    * @returns 파일 uri 또는 base64 인코딩된 데이터의 Promise
    */
-  takeSnapshot(options: SnapshotOptions): ReturnType<MapView['takeSnapshot']> {
+  takeSnapshot(options?: SnapshotOptions): ReturnType<MapView['takeSnapshot']> {
     // 기본 설정 지정
+    if (typeof options === 'undefined') {
+      options = {};
+    }
     if (!('width' in options)) {
       options.width = 512;
     }
