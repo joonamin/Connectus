@@ -28,7 +28,7 @@ import useUserLocation from '@/hooks/useUserLocation';
 import colors from '@/constants/colors';
 import MainText from '@/components/text/MainText';
 import useInterval from '@/hooks/useInterval';
-import {convertSecondsToTime, formatTime} from '@/utils';
+import {convertSecondsToTime, formatTime, getDistance} from '@/utils';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
@@ -40,6 +40,7 @@ import EventIndicator from '@/components/my/EventIndicator';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 import CustomMarker from '@/components/map/CustomMarker';
+import Geolocation from '@react-native-community/geolocation';
 
 const DUMMY_POSITION = [
   {
@@ -80,12 +81,17 @@ type deltaType = {
 
 export default function MapWalkScreen() {
   const navigation = useNavigation<Navigation>();
+  // 유저 추적을 위한 boolean 값입니다
   const [trackingMode, setTrackingMode] = useState<boolean>(false);
+  // 유저가 걸은 거리를 담을 state입니다.
+  const [distance, setDistance] = useState(0);
   const {userLocation} = useUserLocation();
+  // 초기 지도의 확대값 설정 및, drag이벤트로 관리할 delta값
   const [mapDelta, setMapDelta] = useState<deltaType>({
     latitudeDelta: 0.001,
     longitudeDelta: 0.001,
   });
+  // 초기 지도의 중앙 좌표값
   const [mapPos, setMapPos] = useState<LatLng>({
     latitude: 35.089557,
     longitude: 128.852888,
@@ -108,8 +114,14 @@ export default function MapWalkScreen() {
   const tick = () => {
     setTime(prev => prev + 1);
   };
+  // 3초마다 한번씩 실행하면서 배열에 유저의 정보를 저장합니다
   const traceTick = () => {
+    const dist = getDistance(userLocation, trace[trace.length - 1]);
     setTrace(prev => [...prev, userLocation]);
+    setDistance(prev => {
+      return prev + dist;
+    });
+    console.log(distance.toFixed(2));
   };
   useInterval(tick, 1000);
   useInterval(traceTick, 3000);
@@ -119,15 +131,17 @@ export default function MapWalkScreen() {
    */
   const navigateToResultScreen = () => {
     handleBottomSheetClose();
-    navigation.navigate('MapResult');
+    navigation.navigate('MapResult', {time: indicagteTime, distance: distance});
   };
 
+  // map screen에서 드래그 시, 화면고정을 해제합니다
   const handleCheckDragged = (region: Region, details) => {
     if (details.isGesture) {
       setTrackingMode(false);
     }
   };
 
+  // userFocus해제시 화면에 고정시킬 좌표를 저장하기위해 실행하는 함수입니다
   const handleChangeDelta = (region: Region) => {
     setMapPos({
       latitude: region.latitude,
@@ -139,25 +153,30 @@ export default function MapWalkScreen() {
     });
   };
 
-  const handleMarkerClick = () => {
-    setTrackingMode(false);
+  const handleMenuPress = () => {
+    bottomSheetNav.current &&
+      bottomSheetNav.current.reset({routes: [{name: 'Home'}]});
     handleBottomSheetOpen();
-    // 밑줄이 그여있지만 작동은 합니다...진짜입니다...
+  };
+
+  // feed를 press시 바텀시트를 열고 Feed페이지로 이동합니다
+  const handleMarkerPress = () => {
+    setTrackingMode(false);
     bottomSheetNav.current && bottomSheetNav.current.navigate('Feed');
-  };
-
-  const handleClusterClick = () => {
-    setTrackingMode(false);
     handleBottomSheetOpen();
-    // 밑줄이 그여있지만 작동은 합니다...진짜입니다...
-    bottomSheetNav.current && bottomSheetNav.current.navigate('FeedList');
   };
 
+  const handleClusterPress = () => {
+    setTrackingMode(false);
+    bottomSheetNav.current && bottomSheetNav.current.navigate('FeedList');
+    handleBottomSheetOpen();
+  };
+
+  // 모여라 press시 모여라 페이지로 이동합니다
   const handleGatherPress = () => {
     setTrackingMode(false);
-    handleBottomSheetOpen();
-    // 밑줄이 그여있지만 작동은 합니다...진짜입니다...
     bottomSheetNav.current && bottomSheetNav.current.navigate('Gather');
+    handleBottomSheetOpen();
   };
 
   const handleTrackingMode = () => {
@@ -169,6 +188,13 @@ export default function MapWalkScreen() {
     'navigateToResultScreen',
     navigateToResultScreen,
   );
+
+  useEffect(() => {
+    Geolocation.getCurrentPosition(info => {
+      const {latitude, longitude} = info.coords;
+      setTrace([{latitude, longitude}]);
+    });
+  }, []);
 
   // 1초마다 하단 인디케이터의 시간을 업데이트해주는 useEffect 함수입니다.
   useEffect(() => {
@@ -186,7 +212,7 @@ export default function MapWalkScreen() {
     <>
       <MapView
         ref={mapRef}
-        onClusterPress={handleClusterClick}
+        onClusterPress={handleClusterPress}
         style={styles.container}
         provider={PROVIDER_GOOGLE}
         showsUserLocation
@@ -211,7 +237,7 @@ export default function MapWalkScreen() {
             <CustomMarker
               key={index}
               coordinate={data}
-              onPress={handleMarkerClick}
+              onPress={handleMarkerPress}
               type={2}
             />
           );
@@ -250,10 +276,12 @@ export default function MapWalkScreen() {
           </View>
           <View style={styles.distanceTextContainer}>
             <FontAwesome5 name={'walking'} size={28} />
-            <MainText style={styles.distanceText}>{'00:42KM'}</MainText>
+            <MainText style={styles.distanceText}>{`${distance.toFixed(
+              2,
+            )}km`}</MainText>
           </View>
         </View>
-        <Pressable style={styles.menuButton} onPress={handleBottomSheetOpen}>
+        <Pressable style={styles.menuButton} onPress={handleMenuPress}>
           <Ionicons name="menu" size={42} />
         </Pressable>
       </View>
