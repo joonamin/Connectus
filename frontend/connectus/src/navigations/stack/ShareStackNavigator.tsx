@@ -3,10 +3,12 @@ import {createStackNavigator} from '@react-navigation/stack';
 import ShareHomeScreen from '@/screens/share/ShareHomeScreen';
 import colors from '@/constants/colors';
 import ShareDetailScreen from '@/screens/share/ShareDetailScreen';
+import ShareRecordScreen from '@/screens/share/ShareRecordScreen';
 
 export type ShareStackParamList = {
   ShareHome: undefined;
   ShareDetail: undefined;
+  ShareRecord: undefined;
 };
 
 const Stack = createStackNavigator<ShareStackParamList>();
@@ -32,6 +34,7 @@ export default function ShareStackNavigator() {
         component={ShareDetailScreen}
         options={{title: '', headerShown: false}}
       />
+      <Stack.Screen name="ShareRecord" component={ShareRecordScreen} />
     </Stack.Navigator>
   );
 }

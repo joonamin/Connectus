@@ -13,9 +13,13 @@ import {
 } from '@react-navigation/native';
 import MapView from 'react-native-map-clustering';
 import {
+  Circle,
   LatLng,
+  MapPressEvent,
   Marker,
+  MarkerPressEvent,
   PROVIDER_GOOGLE,
+  Point,
   Polyline,
   Region,
 } from 'react-native-maps';
@@ -142,15 +146,21 @@ export default function MapWalkScreen() {
   };
 
   // userFocus해제시 화면에 고정시킬 좌표를 저장하기위해 실행하는 함수입니다
-  const handleChangeDelta = (region: Region) => {
-    setMapPos({
-      latitude: region.latitude,
-      longitude: region.longitude,
-    });
-    setMapDelta({
-      longitudeDelta: region.longitudeDelta,
-      latitudeDelta: region.latitudeDelta,
-    });
+  const handleChangeDelta = async (region: Region, details) => {
+    if (trackingMode) {
+      setTrackingMode(false);
+    }
+    if (details.isGesture === true) {
+      setMapPos({
+        latitude: region.latitude,
+        longitude: region.longitude,
+      });
+      setMapDelta({
+        longitudeDelta: region.longitudeDelta,
+        latitudeDelta: region.latitudeDelta,
+      });
+      return;
+    }
   };
 
   const handleMenuPress = () => {
@@ -160,8 +170,12 @@ export default function MapWalkScreen() {
   };
 
   // feed를 press시 바텀시트를 열고 Feed페이지로 이동합니다
-  const handleMarkerPress = () => {
+  const handleMarkerPress = (coordinate: LatLng) => {
     setTrackingMode(false);
+    setMapPos({
+      latitude: coordinate.latitude,
+      longitude: coordinate.longitude,
+    });
     bottomSheetNav.current && bottomSheetNav.current.navigate('Feed');
     handleBottomSheetOpen();
   };
@@ -208,6 +222,7 @@ export default function MapWalkScreen() {
       DeviceEventEmitter.removeAllListeners('navigateToResultScreen');
     };
   }, []);
+
   return (
     <>
       <MapView
@@ -225,7 +240,9 @@ export default function MapWalkScreen() {
             : {...mapPos, ...mapDelta}
         }
         onRegionChangeComplete={handleChangeDelta}
-        onRegionChange={handleCheckDragged}>
+        onRegionChange={() => {
+          setTrackingMode(false);
+        }}>
         <Polyline
           coordinates={trace}
           strokeWidth={8}
@@ -237,7 +254,7 @@ export default function MapWalkScreen() {
             <CustomMarker
               key={index}
               coordinate={data}
-              onPress={handleMarkerPress}
+              onPress={event => handleMarkerPress(event.nativeEvent.coordinate)}
               type={2}
             />
           );
@@ -252,6 +269,12 @@ export default function MapWalkScreen() {
             />
           );
         })}
+        <Circle
+          center={{...userLocation}}
+          radius={100}
+          strokeWidth={0}
+          fillColor="rgba(193, 200, 210, 0.5)"
+        />
       </MapView>
       <View style={[styles.eventIndicator, {top: inset.top || 20}]}>
         <EventIndicator />
