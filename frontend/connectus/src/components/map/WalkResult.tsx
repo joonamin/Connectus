@@ -19,7 +19,7 @@ export default function WalkResult({time, distance}: Props) {
       <View style={styles.resultContainer}>
         <View style={styles.innerContainer}>
           <Text style={styles.innerText}>산책 거리</Text>
-          <Text style={styles.innerText}>{distance}KM</Text>
+          <Text style={styles.innerText}>{distance.toFixed(2)}km</Text>
         </View>
         <View style={styles.innerContainer}>
           <Text style={styles.innerText}>산책 시간</Text>

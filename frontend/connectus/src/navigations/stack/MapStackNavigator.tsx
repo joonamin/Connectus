@@ -7,11 +7,12 @@ import MapResultScreen from '@/screens/map/MapResultScreen';
 import BottomSheetQuickStackNavigator from './BottomSheetQuickStackNavigator';
 import MapBottomSheetNavigator from '../Tabs/MapBottomSheetNavigator';
 import CreateFeedScreen from '@/screens/map/BottomSheet/CreateFeedScreen';
+import {LatLng} from 'react-native-maps';
 
 export type MapStackParamList = {
   MapHome: undefined;
   MapWalk: undefined;
-  MapResult: undefined;
+  MapResult: {time: string; distance: number; walkRoute: LatLng[]};
   BottomSheet: undefined;
 };
 

@@ -15,6 +15,8 @@ import EventResult from '@/components/map/EventResult';
 import colors from '@/constants/colors';
 import {fonts} from '@/constants';
 import RecordedPost from '@/components/map/RecordedPost';
+import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
+import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 
 const DUMMY_ACHIEVE = [
   {
@@ -22,17 +24,23 @@ const DUMMY_ACHIEVE = [
     description: '영욱님이 인정한 폭탄 돌리기의 폭탄 역할',
   },
 ];
+
+// type test = BottomTabScreenProps<MapStackParamList>;
+
 /**
  *  산책 종료시 이동하게될 페이지입니다.
  */
-export default function MapResultScreen() {
+export default function MapResultScreen({route}) {
   const [walkTitle, setWalkTitle] = useState<string>('');
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView>
         <View style={styles.mainContainer}>
           <MainText>산책 종료</MainText>
-          <WalkResult time="03:35:42" distance={13.42} />
+          <WalkResult
+            time={route.params?.time}
+            distance={route.params?.distance}
+          />
           <Achievement achievs={DUMMY_ACHIEVE} />
           <EventResult />
           <RecordedPost />
