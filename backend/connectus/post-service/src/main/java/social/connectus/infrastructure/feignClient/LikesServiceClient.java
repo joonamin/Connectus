@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "likes-service")
 public interface LikesServiceClient {
-	@GetMapping("/likes-service/{postId}/likeCount")
+	@GetMapping("/likes/{postId}/likeCount")
 	int getLikeCount(@PathVariable Long postId);
 
-	@GetMapping("/likes-service/{postId}/isLike")
+	@GetMapping("/likes/{postId}/isLike")
 	boolean isLike(@PathVariable Long postId);
 }

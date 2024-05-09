@@ -79,7 +79,7 @@ public class PostController {
 	}
 
 	@GetMapping("/{postId}")
-	public ResponseEntity<DetailPostResponse> detailPostById(@PathVariable Long postId, Long userId, Double distance) throws
+	public ResponseEntity<DetailPostResponse> detailPostById(@PathVariable Long postId, @RequestParam Long userId, @RequestParam Double distance) throws
 		BusinessException,
 		GlobalException {
 		return ResponseEntity.ok().body(detailPostUseCase.detailByPostId(postId, userId, distance));
@@ -103,5 +103,10 @@ public class PostController {
 	@GetMapping("/feed/{walkId}")
 	public ResponseEntity<FeedResponse> feedDetail(@PathVariable Long walkId) throws GlobalException {
 		return ResponseEntity.ok().body(feedUseCase.feedDetail(walkId));
+	}
+
+	@GetMapping("/post-to-user")
+	public ResponseEntity<String> postToUser() {
+		return ResponseEntity.ok(detailPostUseCase.healthCheck());
 	}
 }

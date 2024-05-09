@@ -80,6 +80,11 @@ public class DetailPostService implements DetailPostUseCase {
 		}
 	}
 
+	@Override
+	public String healthCheck() {
+		return detailPostPort.healthCheck();
+	}
+
 	private double getDistance(CoordinateRequestDto userLocation, CoordinateRequestDto postLocation) {
 		double dx, dy;
 		dx = Math.pow(userLocation.getLatitude() - postLocation.getLatitude(), 2.0);
@@ -87,4 +92,6 @@ public class DetailPostService implements DetailPostUseCase {
 
 		return Math.sqrt(dy + dx);
 	}
+
+
 }

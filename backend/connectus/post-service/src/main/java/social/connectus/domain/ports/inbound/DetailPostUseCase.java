@@ -13,4 +13,6 @@ public interface DetailPostUseCase {
 	DetailPostResponse detailByPostId(Long postId,Long userId, Double distance) throws
 		GlobalException,
 		BusinessException;
+
+	String healthCheck();
 }

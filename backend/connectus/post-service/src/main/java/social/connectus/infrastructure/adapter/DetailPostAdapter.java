@@ -58,4 +58,9 @@ public class DetailPostAdapter implements DetailPostPort {
 	public CoordinateRequestDto postPositionByPostId(Long postId) {
 		return positionServiceClient.getPostPosition(postId);
 	}
+
+	@Override
+	public String healthCheck() {
+		return userServiceClient.healthCheck();
+	}
 }
