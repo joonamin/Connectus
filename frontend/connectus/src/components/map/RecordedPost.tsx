@@ -37,7 +37,10 @@ export default function RecordedPost() {
               <View style={styles.postImageContainer}>
                 {post.image === null && <MainText>이미지가 없습니다</MainText>}
                 {post.image !== null && (
-                  <Image style={styles.postImage} source={post.image} />
+                  <Image
+                    style={styles.postImage}
+                    source={{uri: post.image.path}}
+                  />
                 )}
               </View>
               <MainText>{post.content}</MainText>
