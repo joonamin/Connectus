@@ -1,8 +1,5 @@
 import {
-  Platform,
   StyleSheet,
-  TouchableHighlight,
-  TouchableNativeFeedback,
   TouchableWithoutFeedbackProps,
   View,
   ViewProps,
@@ -10,23 +7,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import colors from '@/constants/colors';
-
-function Touchable({...buttonProps}: TouchableWithoutFeedbackProps) {
-  // Android일 시 feedback이 존재하는 Touchable 요소를 사용합니다
-  if (Platform.OS === 'android') {
-    return (
-      <TouchableNativeFeedback {...buttonProps}>
-        {buttonProps.children}
-      </TouchableNativeFeedback>
-    );
-  } else {
-    return (
-      <TouchableHighlight {...buttonProps}>
-        {buttonProps.children}
-      </TouchableHighlight>
-    );
-  }
-}
+import CustomTouchable from '@/components/buttons/CustomTouchable';
 
 /**
  * CustomButton 생성 시 전달 인자 타입을 지정합니다
@@ -71,9 +52,9 @@ export default function CustomButton({
 
   return (
     <View style={[styles.container, containerStyle]}>
-      <Touchable {...props}>
+      <CustomTouchable {...props}>
         <View style={[styles.button, style]}>{children}</View>
-      </Touchable>
+      </CustomTouchable>
     </View>
   );
 }
