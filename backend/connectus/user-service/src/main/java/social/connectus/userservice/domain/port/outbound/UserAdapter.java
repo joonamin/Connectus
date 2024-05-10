@@ -1,6 +1,7 @@
 package social.connectus.userservice.domain.port.outbound;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
 import social.connectus.userservice.common.exception.LoginFailedException;
+import social.connectus.userservice.common.exception.NotFoundException;
+import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
@@ -53,5 +56,19 @@ public class UserAdapter implements UserPort {
 	@Override
 	@YetNotImplemented
 	public void logoutUser(UserLogoutCommand command) {
+	}
+
+	@Override
+	public void updateOpenedPosts(Long userId, Long postId) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists"));
+		List<Long> openedPosts = user.getPostHistory();
+		openedPosts.add(postId);
+		user.updateOpenedPosts(openedPosts);
+		userRepository.save(user);
+	}
+
+	@Override
+	public OpenedPostResponse getOpenedPost(Long userId) {
+		return new OpenedPostResponse(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")).getPostHistory());
 	}
 }
