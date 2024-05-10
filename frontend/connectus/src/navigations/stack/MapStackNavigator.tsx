@@ -8,12 +8,14 @@ import BottomSheetQuickStackNavigator from './BottomSheetQuickStackNavigator';
 import MapBottomSheetNavigator from '../Tabs/MapBottomSheetNavigator';
 import CreateFeedScreen from '@/screens/map/BottomSheet/CreateFeedScreen';
 import {LatLng} from 'react-native-maps';
+import TestMapWalkScreen from '@/screens/map/TestMapWalkScreen';
 
 export type MapStackParamList = {
   MapHome: undefined;
   MapWalk: undefined;
   MapResult: {time: number; distance: number; walkRoute: LatLng[]};
   BottomSheet: undefined;
+  WalkTest: undefined;
 };
 
 const Stack = createStackNavigator<MapStackParamList>();
@@ -49,6 +51,7 @@ export default function MapStackNavigator() {
         name="BottomSheet"
         component={BottomSheetQuickStackNavigator}
       />
+      <Stack.Screen name="WalkTest" component={TestMapWalkScreen} />
     </Stack.Navigator>
   );
 }

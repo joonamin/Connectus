@@ -29,7 +29,8 @@ export default function MapHomeScreen() {
   const {userLocation} = useUserLocation();
 
   const handlePressStart = () => {
-    navigation.navigate('MapWalk');
+    // navigation.navigate('MapWalk');
+    navigation.navigate('WalkTest');
   };
 
   return (

@@ -81,14 +81,12 @@ type deltaType = {
   longitudeDelta: number;
 };
 
-export default function MapWalkScreen() {
+export default function TestMapWalkScreen() {
   const navigation = useNavigation<Navigation>();
   // 유저 추적을 위한 boolean 값입니다
   const [trackingMode, setTrackingMode] = useState<boolean>(true);
   // 유저가 걸은 거리를 담을 state입니다.
   const [distance, setDistance] = useState(0);
-  // 유저의 위치좌표가 담겨있습니다
-  const {userLocation} = useUserLocation();
   // 경로 공유 페이지에서 선택한 route의 존재여부 확인
   const {route} = useRouteStore();
   // 초기 지도의 확대값 설정 및, drag이벤트로 관리할 delta값
@@ -139,23 +137,21 @@ export default function MapWalkScreen() {
     navigation.navigate('MapResult', {time: time, distance: distance});
   };
 
-  // map screen에서 드래그 시, 화면고정을 해제합니다
+  const onMapReady = () => {
+    Geolocation.getCurrentPosition(info => {
+      const {latitude, longitude} = info.coords;
+      setMapPos({latitude, longitude});
+      setTrace([{latitude, longitude}]);
+    });
+  };
+
   const onRegionChange = async (region: Region, details: Details) => {
     if (details.isGesture) {
       console.log('gestured');
       setTrackingMode(false);
-      // setMapPos({
-      //   latitude: region.latitude,
-      //   longitude: region.longitude,
-      // });
-      // setMapDelta({
-      //   longitudeDelta: region.longitudeDelta,
-      //   latitudeDelta: region.latitudeDelta,
-      // });
     }
   };
 
-  // userFocus해제시 화면에 고정시킬 좌표를 저장하기위해 실행하는 함수입니다
   const onRegionChangeComplete = async (region: Region, details: Details) => {
     if (details.isGesture === true) {
       setMapPos({
@@ -201,7 +197,6 @@ export default function MapWalkScreen() {
   };
 
   const handleTrackingMode = () => {
-    setMapPos({...userLocation});
     setTrackingMode(!trackingMode);
   };
 
@@ -244,21 +239,7 @@ export default function MapWalkScreen() {
         showsUserLocation
         showsMyLocationButton={false}
         zoomEnabled={true}
-        // initialRegion={{...mapPos, ...mapDelta}}
-        onMapReady={() => {
-          Geolocation.getCurrentPosition(info => {
-            const {latitude, longitude} = info.coords;
-            setTrace([{latitude, longitude}]);
-          });
-        }}
-        region={{...userLocation, ...mapDelta}}
-        // region={
-        //   trackingMode
-        //     ? {...userLocation, ...mapDelta}
-        //     : {...mapPos, ...mapDelta}
-        // }
-        onRegionChangeComplete={onRegionChangeComplete}
-        onRegionChange={onRegionChange}>
+        onMapReady={onMapReady}>
         <Polyline
           coordinates={trace}
           strokeWidth={8}
@@ -292,12 +273,12 @@ export default function MapWalkScreen() {
             />
           );
         })}
-        <Circle
-          center={{...userLocation}}
+        {/* <Circle
+          center={{...}}
           radius={100}
           strokeWidth={0}
           fillColor="rgba(193, 200, 210, 0.5)"
-        />
+        /> */}
       </MapView>
       <View style={[styles.eventIndicator, {top: inset.top || 20}]}>
         <EventIndicator />
