@@ -72,8 +72,8 @@ public class WalkAdapter implements WalkPort {
         long userId = command.getUserId();
         PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize());
 //        return walkRepository.findSliceByPosition(userPosition, kmRadius, userId, pageRequest);
-//        Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
-        Slice<Route> routeList = routeRepository.findSliceByPosition(pageRequest);
+        Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
+//        Slice<Route> routeList = routeRepository.findSliceByPosition(1, userPosition.getLatitude(), pageRequest);
         Slice<Long> routeIdList = new SliceImpl<>(routeList.getContent().stream().map(route -> route.getWalk().getId()).toList(), pageRequest, routeList.hasNext());
 
 //        return routeList;
