@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class PostRequestDto {
 	private String content;
-	private Long locationId;
 	private Long walkId;
 	private Long authorId;
 	private String imageUrl;

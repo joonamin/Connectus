@@ -39,6 +39,7 @@ public class Post extends BaseEntity {
 			.authorId(dto.getAuthorId())
 			.imageUrl(dto.getImageUrl())
 			.content(dto.getContent())
+			.walkId(dto.getWalkId())
 			.build();
 	}
 }
