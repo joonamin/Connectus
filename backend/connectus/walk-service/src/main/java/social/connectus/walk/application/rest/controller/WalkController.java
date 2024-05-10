@@ -20,7 +20,7 @@ public class WalkController {
 
     @GetMapping("/health-check")
     public String healthCheck(){
-        return "It's walking on Walk-Service!";
+        return "It's working on Walk-Service!";
     }
 
     @GetMapping("/feign-health-check")
@@ -71,7 +71,6 @@ public class WalkController {
         return ResponseEntity.ok("Successfully tracked.");
     }
 
-    // TODO: 특정 범위 내의 산책 기록(walkId)를 최신 순으로 반환하기
     @GetMapping("/position")
     public ResponseEntity<Slice<Long>> getWalksByPosition(@RequestBody GetWalksByPositionRequest request){
         Slice<Long> walkIdSlice = walkUseCase.getWalksByPosition(GetWalksByPositionCommand.from(request));

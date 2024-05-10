@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface WalkRepositoryCustom {
     List<Walk> findByUser(long userId);
-    Slice<Long> findSliceByPosition(Position position, double distance, long userId, Pageable pageable);
+//    Slice<Long> findSliceByPosition(Position position, double distance, long userId, Pageable pageable);
 }
