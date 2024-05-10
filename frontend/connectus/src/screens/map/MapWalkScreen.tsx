@@ -14,12 +14,9 @@ import {
 import MapView from 'react-native-map-clustering';
 import {
   Circle,
+  Details,
   LatLng,
-  MapPressEvent,
-  Marker,
-  MarkerPressEvent,
   PROVIDER_GOOGLE,
-  Point,
   Polyline,
   Region,
 } from 'react-native-maps';
@@ -45,6 +42,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 import CustomMarker from '@/components/map/CustomMarker';
 import Geolocation from '@react-native-community/geolocation';
+import useRouteStore from '@/store/useRouteStore';
 
 const DUMMY_POSITION = [
   {
@@ -86,10 +84,13 @@ type deltaType = {
 export default function MapWalkScreen() {
   const navigation = useNavigation<Navigation>();
   // 유저 추적을 위한 boolean 값입니다
-  const [trackingMode, setTrackingMode] = useState<boolean>(false);
+  const [trackingMode, setTrackingMode] = useState<boolean>(true);
   // 유저가 걸은 거리를 담을 state입니다.
   const [distance, setDistance] = useState(0);
+  // 유저의 위치좌표가 담겨있습니다
   const {userLocation} = useUserLocation();
+  // 경로 공유 페이지에서 선택한 route의 존재여부 확인
+  const {route} = useRouteStore();
   // 초기 지도의 확대값 설정 및, drag이벤트로 관리할 delta값
   const [mapDelta, setMapDelta] = useState<deltaType>({
     latitudeDelta: 0.001,
@@ -100,6 +101,7 @@ export default function MapWalkScreen() {
     latitude: 35.089557,
     longitude: 128.852888,
   });
+
   const mapRef = useRef<MapView | null>(null);
   const bottomSheetNav =
     useRef<NavigationContainerRef<MapBottomSheetTabParamList> | null>(null);
@@ -135,21 +137,29 @@ export default function MapWalkScreen() {
    */
   const navigateToResultScreen = () => {
     handleBottomSheetClose();
+    // 이전 스크린에서의 작동(setInterval 등)을 없애기 위한 pop
+    navigation.pop();
     navigation.navigate('MapResult', {time: time, distance: distance});
   };
 
   // map screen에서 드래그 시, 화면고정을 해제합니다
-  const handleCheckDragged = (region: Region, details) => {
+  const onRegionChange = async (region: Region, details: Details) => {
     if (details.isGesture) {
+      console.log('gestured');
       setTrackingMode(false);
+      // setMapPos({
+      //   latitude: region.latitude,
+      //   longitude: region.longitude,
+      // });
+      // setMapDelta({
+      //   longitudeDelta: region.longitudeDelta,
+      //   latitudeDelta: region.latitudeDelta,
+      // });
     }
   };
 
   // userFocus해제시 화면에 고정시킬 좌표를 저장하기위해 실행하는 함수입니다
-  const handleChangeDelta = async (region: Region, details) => {
-    if (trackingMode) {
-      setTrackingMode(false);
-    }
+  const onRegionChangeComplete = async (region: Region, details: Details) => {
     if (details.isGesture === true) {
       setMapPos({
         latitude: region.latitude,
@@ -194,6 +204,7 @@ export default function MapWalkScreen() {
   };
 
   const handleTrackingMode = () => {
+    setMapPos({...userLocation});
     setTrackingMode(!trackingMode);
   };
 
@@ -233,21 +244,32 @@ export default function MapWalkScreen() {
         showsUserLocation
         showsMyLocationButton={false}
         zoomEnabled={true}
-        initialRegion={{...mapPos, ...mapDelta}}
+        // initialRegion={{...mapPos, ...mapDelta}}
+        onMapReady={() => {
+          Geolocation.getCurrentPosition(info => {
+            const {latitude, longitude} = info.coords;
+            setTrace([{latitude, longitude}]);
+          });
+        }}
         region={
           trackingMode
             ? {...userLocation, ...mapDelta}
             : {...mapPos, ...mapDelta}
         }
-        onRegionChangeComplete={handleChangeDelta}
-        onRegionChange={() => {
-          setTrackingMode(false);
-        }}>
+        onRegionChangeComplete={onRegionChangeComplete}
+        onRegionChange={onRegionChange}>
         <Polyline
           coordinates={trace}
           strokeWidth={8}
           strokeColor={colors.primaryColorBlue}
         />
+        {route && (
+          <Polyline
+            coordinates={route}
+            strokeColor={colors.primaryColorPink}
+            strokeWidth={10}
+          />
+        )}
         {/* 게시글을 확인해줄 마커들 */}
         {DUMMY_POSITION.map((data, index) => {
           return (

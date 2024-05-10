@@ -7,11 +7,7 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {
-  CompositeNavigationProp,
-  NavigationProp,
-  useNavigation,
-} from '@react-navigation/native';
+import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {LatLng} from 'react-native-maps';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SharePost from '@/components/share/SharePost';
@@ -20,8 +16,6 @@ import {ShareStackParamList} from '@/navigations/stack/ShareStackNavigator';
 import useRouteStore from '@/store/useRouteStore';
 import MainText from '@/components/text/MainText';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
-import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 
 type Navigation = CompositeNavigationProp<
@@ -40,8 +34,13 @@ export default function ShareHomeScreen() {
   //   setRoute(route);
   // };
 
-  const handleModalOpen = () => {
+  /**
+   * 하위 스크린에 모달을 여는 함수를 전달함과 동시에 모달을 열 때
+   * 해당 스크린이 가진 route(산책 루트 경로)를 전역으로 설정합니다.
+   */
+  const handleModalOpen = (route: LatLng[]) => {
     setIsVisible(true);
+    setRoute(route);
   };
 
   // 모달을 닫기위한 코드
