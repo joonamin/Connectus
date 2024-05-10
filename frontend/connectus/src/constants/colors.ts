@@ -376,7 +376,4 @@ const colors = {
   white: '#ffffff',
 } as const;
 
-export type ColorTypes = keyof typeof colors;
-export type ColorCodes = (typeof colors)[ColorTypes];
-
 export default colors;
