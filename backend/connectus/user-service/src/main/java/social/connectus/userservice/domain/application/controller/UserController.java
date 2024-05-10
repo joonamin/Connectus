@@ -9,21 +9,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import social.connectus.userservice.common.exception.FailedToLoginException;
+import social.connectus.userservice.domain.application.request.MyPreferencePostRequest;
+import social.connectus.userservice.domain.application.request.MyPreferenceRouteRequest;
 import social.connectus.userservice.domain.application.request.MyWalkRequest;
 import social.connectus.userservice.domain.application.request.RefreshAchievementRequest;
-import social.connectus.userservice.domain.application.request.UserAchievementsIndexRequest;
 import social.connectus.userservice.domain.application.request.UserLoginRequest;
 import social.connectus.userservice.domain.application.request.UserLogoutRequest;
 import social.connectus.userservice.domain.application.request.UserRegisterRequest;
 import social.connectus.userservice.domain.application.response.CompletedAchievementListResponse;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
 import social.connectus.userservice.domain.application.response.LogoutUserResponse;
+import social.connectus.userservice.domain.application.response.MyPreferencePostResponse;
+import social.connectus.userservice.domain.application.response.MyPreferenceRouteResponse;
 import social.connectus.userservice.domain.application.response.MyWalkResponse;
 import social.connectus.userservice.domain.application.response.RefreshAchievementResponse;
-import social.connectus.userservice.domain.application.response.UserAchievmentsIndexResponse;
 import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
+import social.connectus.userservice.domain.port.inbound.PostUseCase;
 import social.connectus.userservice.domain.port.inbound.UserUseCase;
 import social.connectus.userservice.domain.port.inbound.WalkUseCase;
+import social.connectus.userservice.domain.port.inbound.command.MyPreferencePostCommand;
+import social.connectus.userservice.domain.port.inbound.command.MyPreferenceRouteCommand;
+import social.connectus.userservice.domain.port.inbound.command.MyWalkCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
@@ -36,6 +43,7 @@ public class UserController {
 	private final UserUseCase userUseCase;
 	private final AchievementUseCase achievementUseCase;
 	private final WalkUseCase walkUseCase;
+	private final PostUseCase postUseCase;
 
 	@PostMapping("/register")
 	public ResponseEntity<Void> registerUser(UserRegisterRequest userRegisterRequest) {
@@ -45,14 +53,12 @@ public class UserController {
 
 	@PostMapping("/login")
 	public ResponseEntity<LoginUserResponse> loginUser(UserLoginRequest userLoginRequest) {
-		LoginUserResponse body = userUseCase.login(UserLoginCommand.from(userLoginRequest));
-		return ResponseEntity.ok(body);
+		return ResponseEntity.ok(userUseCase.login(UserLoginCommand.from(userLoginRequest)));
 	}
 
 	@PostMapping("/logout")
 	public ResponseEntity<LogoutUserResponse> logoutUser(UserLogoutRequest userLogoutRequest) {
-		LogoutUserResponse response = userUseCase.logout(UserLogoutCommand.from(userLogoutRequest));
-		return ResponseEntity.ok(response);
+		return ResponseEntity.ok(userUseCase.logout(UserLogoutCommand.from(userLogoutRequest)));
 	}
 
 
@@ -71,6 +77,20 @@ public class UserController {
 	// 내 산책 기록
 	@GetMapping("/me/walk")
 	public ResponseEntity<MyWalkResponse> getMyWalk(MyWalkRequest request) {
+		return ResponseEntity.ok(walkUseCase.getMyWalk(MyWalkCommand.from(request)));
+	}
 
+	// 내가 좋아한 경로 조회
+	@GetMapping("/route/like")
+	public ResponseEntity<MyPreferenceRouteResponse> getMyPreferenceRoute(MyPreferenceRouteRequest request) {
+		MyPreferenceRouteCommand command = MyPreferenceRouteCommand.from(request);
+		return ResponseEntity.ok(walkUseCase.getMyPreferenceRoute(command));
+	}
+
+	// 좋아요 누른 방명록 확인
+	@GetMapping("/post/like")
+	public ResponseEntity<MyPreferencePostResponse> getMyPreferencePost(MyPreferencePostRequest request) {
+		MyPreferencePostCommand command = MyPreferencePostCommand.from(request);
+		return ResponseEntity.ok(postUseCase.getMyPreferencePost(command));
 	}
 }
