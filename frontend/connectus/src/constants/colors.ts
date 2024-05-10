@@ -366,6 +366,11 @@ export const colorThemes: Record<string, ColorTheme> = {
   },
 } as const;
 
+/**
+ * 기본 색상 테마를 지정합니다
+ */
+export const defaultColors = colorThemes.dark;
+
 const colors = {
   background: '#25242a',
   buttonBackground: '#38363e',
