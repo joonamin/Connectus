@@ -82,4 +82,16 @@ public class WalkService implements WalkUseCase {
     public Slice<Long> getWalksByPosition(GetWalksByPositionCommand command) {
         return walkPort.getWalksByPosition(command);
     }
+
+    @Override
+    public double getDistance(double latStart, double lonStart, double latEnd, double lonEnd) {
+        final int EARTH_RADIUS = 6371;
+        double dLat = Math.toRadians(latEnd - latStart);
+        double dLon = Math.toRadians(lonEnd - lonStart);
+
+        double a = Math.sin(dLat/2)* Math.sin(dLat/2)+ Math.cos(Math.toRadians(latStart))* Math.cos(Math.toRadians(latEnd))* Math.sin(dLon/2)* Math.sin(dLon/2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double d = EARTH_RADIUS* c * 1000;    // Distance in m
+        return d;
+    }
 }

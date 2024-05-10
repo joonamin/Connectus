@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import social.connectus.walk.common.constants.WalkConstants;
@@ -13,19 +14,22 @@ import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.VO.Position;
 import social.connectus.walk.domain.model.entity.*;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
+import social.connectus.walk.infrastructure.databases.mariadb.repository.RouteRepository;
 import social.connectus.walk.infrastructure.databases.mariadb.repository.WalkRepository;
 import social.connectus.walk.infrastructure.external.FeignClient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class WalkAdapter implements WalkPort {
     private final FeignClient feignClient;
-
     private final ModelMapper modelMapper;
     private final WalkRepository walkRepository;
+    private final RouteRepository routeRepository;
 
     public String feignHealthCheck(){
         return feignClient.healthCheck();
@@ -60,16 +64,21 @@ public class WalkAdapter implements WalkPort {
 
     @Override
     public Slice<Long> getWalksByPosition(GetWalksByPositionCommand command) {
-//        findSliceByPosition(Position position, double distance, long userId, Pageable pageable)
         Position userPosition = Position.builder()
                 .latitude(command.getLatitude())
                 .longitude(command.getLongitude())
                 .build();
-        double distance = command.getDistance();
+        double kmRadius = command.getKmRadius();
         long userId = command.getUserId();
-        PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize(), Sort.by("createdAt").descending());
-        return walkRepository.findSliceByPosition(userPosition, distance, userId, pageRequest);
+        PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize());
+//        return walkRepository.findSliceByPosition(userPosition, kmRadius, userId, pageRequest);
+//        Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
+        Slice<Route> routeList = routeRepository.findSliceByPosition(pageRequest);
+        Slice<Long> routeIdList = new SliceImpl<>(routeList.getContent().stream().map(route -> route.getWalk().getId()).toList(), pageRequest, routeList.hasNext());
+
+//        return routeList;
 //        return null;
+        return routeIdList;
     }
 
     @Transactional

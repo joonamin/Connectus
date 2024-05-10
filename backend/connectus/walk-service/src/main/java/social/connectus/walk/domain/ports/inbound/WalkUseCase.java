@@ -26,4 +26,6 @@ public interface WalkUseCase {
     void routeProtect(RouteProtectCommand command);
 
     Slice<Long> getWalksByPosition(GetWalksByPositionCommand command);
+
+    double getDistance(double latStart, double lonStart, double latEnd, double lonEnd);
 }

@@ -13,7 +13,7 @@ import social.connectus.walk.application.rest.request.GetWalksByPositionRequest;
 public class GetWalksByPositionCommand {
     private double latitude;
     private double longitude;
-    private double distance;
+    private double kmRadius;
     private long userId;
     private int pageNumber;
     private int pageSize;
@@ -22,7 +22,7 @@ public class GetWalksByPositionCommand {
         return GetWalksByPositionCommand.builder()
                 .latitude(request.getLatitude())
                 .longitude(request.getLongitude())
-                .distance(request.getDistance())
+                .kmRadius(request.getKmRadius())
                 .userId(request.getUserId())
                 .pageNumber(request.getPageNumber())
                 .pageSize(request.getPageSize())
