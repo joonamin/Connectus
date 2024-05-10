@@ -1,4 +1,4 @@
-package social.connectus.userservice.domain.port.outbound;
+package social.connectus.userservice.domain.port.external.port;
 
 import java.util.List;
 

@@ -28,3 +28,8 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
+
+jwt:
+  access-expiration: 99999
+  secret-key: 9741AD2588AF89A25CBC596EA24F7
+

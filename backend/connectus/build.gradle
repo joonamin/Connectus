@@ -37,7 +37,11 @@ dependencies {
 //	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
 //	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.1.1'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.1'
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-openfeign-core
+    implementation 'org.springframework.cloud:spring-cloud-openfeign-core:4.1.1'
+
+//	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 
 //	implementation 'org.springframework.cloud:spring-cloud-starter-task'
 //	implementation 'org.springframework.cloud:spring-cloud-stream'
