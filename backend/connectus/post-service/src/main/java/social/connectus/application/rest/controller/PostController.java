@@ -2,6 +2,7 @@ package social.connectus.application.rest.controller;
 
 import java.util.List;
 
+import org.apache.coyote.Response;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +21,7 @@ import social.connectus.application.rest.request.CreateCommentRequestDto;
 import social.connectus.application.rest.request.CreateFeedRequestDto;
 import social.connectus.application.rest.response.DetailPostResponse;
 import social.connectus.application.rest.response.FeedResponse;
+import social.connectus.application.rest.response.FollowPostResponse;
 import social.connectus.application.rest.response.MainPostResponse;
 import social.connectus.common.exception.BusinessException;
 import social.connectus.common.exception.GlobalException;
@@ -29,6 +31,7 @@ import social.connectus.domain.ports.inbound.CreateCommentUseCase;
 import social.connectus.domain.ports.inbound.CreatePostUseCase;
 import social.connectus.domain.ports.inbound.DetailPostUseCase;
 import social.connectus.domain.ports.inbound.FeedUseCase;
+import social.connectus.domain.ports.inbound.FollowPostUseCase;
 import social.connectus.domain.ports.inbound.MainPostUseCase;
 
 @RestController
@@ -40,6 +43,7 @@ public class PostController {
 	private final CreateCommentUseCase createCommentUseCase;
 	private final MainPostUseCase mainPostUseCase;
 	private final FeedUseCase feedUseCase;
+	private final FollowPostUseCase followPostUseCase;
 
 	// insert의 경우, endWalk에서 이뤄지는 한 walk에 대한 postList를 받아옮
 	@PostMapping("/insert")
@@ -108,5 +112,10 @@ public class PostController {
 	@GetMapping("/post-to-user")
 	public ResponseEntity<String> postToUser() {
 		return ResponseEntity.ok(detailPostUseCase.healthCheck());
+	}
+
+	@GetMapping("/follow/{postId}")
+	public ResponseEntity<FollowPostResponse> followPost(@PathVariable Long postId) throws GlobalException {
+		return ResponseEntity.ok(followPostUseCase.followPost(postId));
 	}
 }
