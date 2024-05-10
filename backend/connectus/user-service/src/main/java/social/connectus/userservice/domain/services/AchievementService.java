@@ -11,7 +11,7 @@ import social.connectus.userservice.domain.application.response.AchievementRespo
 import social.connectus.userservice.domain.application.response.CompletedAchievementListResponse;
 import social.connectus.userservice.domain.application.response.RefreshAchievementResponse;
 import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
-import social.connectus.userservice.domain.port.outbound.AchievementPort;
+import social.connectus.userservice.domain.port.external.port.AchievementPort;
 import social.connectus.userservice.domain.port.outbound.command.RefreshAchievementToUserCommand;
 import social.connectus.userservice.domain.port.outbound.command.UserToRefreshAchievementCommand;
 

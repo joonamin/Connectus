@@ -1,4 +1,4 @@
-package social.connectus.userservice.domain.port.outbound;
+package social.connectus.userservice.domain.port.external.adapter;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.common.exception.NotFoundException;
 import social.connectus.userservice.common.type.Achievement;
 import social.connectus.userservice.domain.model.entity.User;
+import social.connectus.userservice.domain.port.external.port.AchievementPort;
 import social.connectus.userservice.domain.port.outbound.command.RefreshAchievementToUserCommand;
 import social.connectus.userservice.domain.port.outbound.command.UserToRefreshAchievementCommand;
 import social.connectus.userservice.domain.port.outbound.repository.UserRepository;
