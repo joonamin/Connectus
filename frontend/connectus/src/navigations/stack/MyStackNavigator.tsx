@@ -5,6 +5,7 @@ import MyHomeScreen from '@/screens/my/MyHomeScreen';
 import MyAchievementsScreen from '@/screens/my/MyAchievementsScreen';
 import MyWalkHistoryScreen from '@/screens/my/MyWalkHistoryScreen';
 import MyWalkDetailScreen from '@/screens/my/MyWalkDetailScreen';
+import {fonts} from '@/constants';
 
 export type MyStackParamList = {
   MyHome: undefined;
@@ -24,6 +25,7 @@ function MyStackNavigator() {
           backgroundColor: colors.background,
           borderColor: colors.dividerColor,
         },
+        headerTitleStyle: {fontFamily: fonts.medium},
       }}>
       <Stack.Screen
         name="MyHome"

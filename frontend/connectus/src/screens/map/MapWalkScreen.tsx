@@ -96,11 +96,8 @@ export default function MapWalkScreen() {
     latitudeDelta: 0.001,
     longitudeDelta: 0.001,
   });
-  // 초기 지도의 중앙 좌표값
-  const [mapPos, setMapPos] = useState<LatLng>({
-    latitude: 35.089557,
-    longitude: 128.852888,
-  });
+  // 초기 지도의 중앙 좌표값 및
+  const [mapPos, setMapPos] = useState<LatLng>();
 
   const mapRef = useRef<MapView | null>(null);
   const bottomSheetNav =
@@ -217,7 +214,10 @@ export default function MapWalkScreen() {
   useEffect(() => {
     Geolocation.getCurrentPosition(info => {
       const {latitude, longitude} = info.coords;
+      // polyline 그리는데 필요한 LatLag
       setTrace([{latitude, longitude}]);
+      // 초기 좌표값 설정.
+      setMapPos({latitude, longitude});
     });
   }, []);
 
@@ -251,11 +251,12 @@ export default function MapWalkScreen() {
             setTrace([{latitude, longitude}]);
           });
         }}
-        region={
-          trackingMode
-            ? {...userLocation, ...mapDelta}
-            : {...mapPos, ...mapDelta}
-        }
+        region={{...userLocation, ...mapDelta}}
+        // region={
+        //   trackingMode
+        //     ? {...userLocation, ...mapDelta}
+        //     : {...mapPos, ...mapDelta}
+        // }
         onRegionChangeComplete={onRegionChangeComplete}
         onRegionChange={onRegionChange}>
         <Polyline

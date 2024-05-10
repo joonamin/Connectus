@@ -16,6 +16,7 @@ import MapStackNavigator, {MapStackParamList} from '../stack/MapStackNavigator';
 import {SafeAreaView} from 'react-native';
 import MyStackNavigator from '../stack/MyStackNavigator';
 import ShareStackNavigator from '../stack/ShareStackNavigator';
+import EventStackNavigator from '../stack/EventStackNavigator';
 
 export type BottomTabParamList = {
   Share: undefined;
@@ -109,7 +110,7 @@ export default function MapBottomTabsNavigator(
         />
         <Tab.Screen
           name="Event"
-          component={EventScreen}
+          component={EventStackNavigator}
           options={{
             title: '이벤트',
             headerTitle: '',
