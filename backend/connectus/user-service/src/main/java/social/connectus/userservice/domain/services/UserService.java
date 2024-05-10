@@ -37,6 +37,11 @@ public class UserService implements UserUseCase {
 	}
 
 	@Override
+	public void updateOpenedPosts(Long userId, Long postId) {
+		userPort.updateOpenedPosts(userId, postId);
+	}
+
+	@Override
 	public OpenedPostResponse getOpenedPost(Long userId) {
 		return userPort.getOpenedPost(userId);
 	}

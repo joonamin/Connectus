@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import social.connectus.userservice.domain.application.request.RefreshAchievementRequest;
@@ -77,11 +78,14 @@ public class UserController {
 
 	@GetMapping("/{userId}/openedPosts")
 	public ResponseEntity<OpenedPostResponse> getOpenedPost(@PathVariable Long userId) throws JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		log.info(objectMapper.writeValueAsString(userUseCase.getOpenedPost(userId)));
 		return ResponseEntity.ok(userUseCase.getOpenedPost(userId));
 	}
 
+	@PostMapping("/{userId}/openedPosts")
+	public ResponseEntity<Void> updateOpenedPosts(@PathVariable Long userId, @RequestBody Long postId) {
+		userUseCase.updateOpenedPosts(userId, postId);
+		return ResponseEntity.ok().build();
+	}
 	@GetMapping("/health-check")
 	public ResponseEntity<String> healthCheck() {
 		return ResponseEntity.ok("good");

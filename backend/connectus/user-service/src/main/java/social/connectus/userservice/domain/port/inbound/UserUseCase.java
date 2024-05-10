@@ -22,5 +22,6 @@ public interface UserUseCase {
 
 	LogoutUserResponse logout(UserLogoutCommand command) throws RuntimeException;
 
+	void updateOpenedPosts(Long userId, Long postId);
 	OpenedPostResponse getOpenedPost(Long userId);
 }

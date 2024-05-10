@@ -1,6 +1,7 @@
 package social.connectus.userservice.domain.port.outbound;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -55,6 +56,15 @@ public class UserAdapter implements UserPort {
 	@Override
 	@YetNotImplemented
 	public void logoutUser(UserLogoutCommand command) {
+	}
+
+	@Override
+	public void updateOpenedPosts(Long userId, Long postId) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists"));
+		List<Long> openedPosts = user.getPostHistory();
+		openedPosts.add(postId);
+		user.updateOpenedPosts(openedPosts);
+		userRepository.save(user);
 	}
 
 	@Override

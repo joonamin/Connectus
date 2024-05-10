@@ -15,5 +15,6 @@ public interface UserPort {
 
 	void logoutUser(UserLogoutCommand command);
 
+	void updateOpenedPosts(Long userId, Long postId);
 	OpenedPostResponse getOpenedPost(Long userId);
 }
