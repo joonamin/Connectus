@@ -14,8 +14,7 @@ interface RouteStore {
 const useRouteStore = create<RouteStore>(set => ({
   route: [],
   setRoute: (route: LatLng[]) => {
-    set(state => {
-      console.log('route walk text', route);
+    set(() => {
       return {route};
     });
   },
