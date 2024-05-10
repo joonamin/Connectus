@@ -161,7 +161,7 @@ export interface ColorTheme {
   /**
    * @deprecated Material Design no longer supports tint overlays
    */
-  surfaceTint: ColorValue;
+  surfaceTint?: ColorValue;
 
   // Outline
 
@@ -250,12 +250,12 @@ export interface ColorTheme {
    */
   surfaceBright: ColorValue;
 
-  surfaceVariant: ColorValue;
-  background: ColorValue;
-  onBackground: ColorValue;
+  surfaceVariant?: ColorValue;
+  background?: ColorValue;
+  onBackground?: ColorValue;
 
-  shadow: ColorValue;
-  scrim: ColorValue;
+  shadow?: ColorValue;
+  scrim?: ColorValue;
 }
 
 /**
