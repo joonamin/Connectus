@@ -34,7 +34,11 @@ export default function ShareStackNavigator() {
         component={ShareDetailScreen}
         options={{title: '', headerShown: false}}
       />
-      <Stack.Screen name="ShareRecord" component={ShareRecordScreen} />
+      <Stack.Screen
+        name="ShareRecord"
+        component={ShareRecordScreen}
+        options={{title: '내 산책기록 공유'}}
+      />
     </Stack.Navigator>
   );
 }
