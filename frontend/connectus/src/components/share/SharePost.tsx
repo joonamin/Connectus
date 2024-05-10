@@ -10,9 +10,10 @@ import React, {useState} from 'react';
 import colors from '@/constants/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MainText from '../text/MainText';
+import {LatLng} from 'react-native-maps';
 
 type Props = {
-  modalOpen: () => void;
+  modalOpen: (route: LatLng[]) => void;
 };
 
 /**
@@ -23,6 +24,14 @@ export default function SharePost({modalOpen}: Props) {
   const [viewIsLiked, setViewIsLiked] = useState(false);
   const commentNumber = 2;
   const likeNumber = 2;
+
+  // 해당 포스트가 가지고있는 route
+  const route = [
+    {latitude: 35.090907937349, longitude: 128.85270665510822},
+    {latitude: 35.09097724600205, longitude: 128.85406782269817},
+    {latitude: 35.08917478192473, longitude: 128.85407087211667},
+    {latitude: 35.08920490612796, longitude: 128.85269005548565},
+  ];
 
   const handlePressLikeButton = () => {
     setViewIsLiked(!viewIsLiked);
@@ -45,7 +54,11 @@ export default function SharePost({modalOpen}: Props) {
             <MainText>{'userName'}</MainText>
             <Text style={styles.postDate}>{'2024-04-29'}</Text>
           </View>
-          <Pressable style={styles.moveButton} onPress={modalOpen}>
+          <Pressable
+            style={styles.moveButton}
+            onPress={() => {
+              modalOpen(route);
+            }}>
             <Text style={styles.moveButtonText}>따라걷기</Text>
           </Pressable>
         </View>

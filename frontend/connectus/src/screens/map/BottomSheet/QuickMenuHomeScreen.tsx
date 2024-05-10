@@ -6,6 +6,7 @@ import colors from '@/constants/colors';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {BottomSheetStackParamList} from '@/navigations/stack/BottomSheetQuickStackNavigator';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
+import useRouteStore from '@/store/useRouteStore';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<BottomSheetStackParamList>,
@@ -14,6 +15,7 @@ type Navigation = CompositeNavigationProp<
 
 export default function QuickMenuHomeScreen() {
   const navigation = useNavigation<Navigation>();
+  const {setDeleteRoute} = useRouteStore();
   const handlePressCreateFeed = () => {
     navigation.navigate('FeedCreate');
   };
@@ -26,7 +28,9 @@ export default function QuickMenuHomeScreen() {
     navigation.navigate('ChatList');
   };
 
+  // 산책 종료시 저장되어 있던, 따라걷기 정보를 지웁니다.
   const handlePressQuit = () => {
+    setDeleteRoute();
     DeviceEventEmitter.emit('navigateToResultScreen');
   };
 
