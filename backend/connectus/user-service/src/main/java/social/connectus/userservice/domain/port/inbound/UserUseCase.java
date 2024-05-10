@@ -1,7 +1,8 @@
 package social.connectus.userservice.domain.port.inbound;
 
+import social.connectus.userservice.common.exception.FailedToLoginException;
+import social.connectus.userservice.common.exception.FailedToLogoutException;
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
-import social.connectus.userservice.domain.application.request.UserLogoutRequest;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
 import social.connectus.userservice.domain.application.response.LogoutUserResponse;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
@@ -17,7 +18,7 @@ public interface UserUseCase {
 	// 특히나 분산 트랜잭션,,, 롤백처리 골치아프거든요
 
 	// 2. 로그인
-	LoginUserResponse login(UserLoginCommand command) throws RuntimeException;
+	LoginUserResponse login(UserLoginCommand command) throws FailedToLoginException;
 
-	LogoutUserResponse logout(UserLogoutCommand command) throws RuntimeException;
+	LogoutUserResponse logout(UserLogoutCommand command) throws FailedToLogoutException;
 }
