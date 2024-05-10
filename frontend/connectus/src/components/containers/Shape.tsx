@@ -45,7 +45,7 @@ export default function Shape({
   switch (corner) {
     case 'full':
       shapeStyle = {
-        borderWidth: radii[rounding],
+        borderRadius: radii[rounding],
       };
       break;
 
