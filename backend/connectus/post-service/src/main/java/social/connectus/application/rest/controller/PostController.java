@@ -2,8 +2,6 @@ package social.connectus.application.rest.controller;
 
 import java.util.List;
 
-import org.apache.coyote.Response;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import social.connectus.application.rest.request.CoordinateRequestDto;
 import social.connectus.application.rest.request.CreateCommentRequestDto;
@@ -47,6 +48,16 @@ public class PostController {
 
 	// insert의 경우, endWalk에서 이뤄지는 한 walk에 대한 postList를 받아옮
 	@PostMapping("/insert")
+	@Operation(
+		summary = "방명록 생성하기",
+		description = "createWalk에서 생성 확정한 postList를 저장합니다."
+	)
+	@ApiResponses({
+		@ApiResponse(
+			responseCode = "200",
+			description = "post 저장 성공"
+		)
+	})
 	public ResponseEntity<String> createPost(@RequestBody CreateFeedRequestDto requestFeed) throws
 		GlobalException {
 		String result = createPostUseCase.createPost(requestFeed);
@@ -60,6 +71,16 @@ public class PostController {
 	}
 
 	@GetMapping("/mainPostList")
+	@Operation(
+		summary = "postList 불러오기",
+		description = "content의 일부를 가진 postList를 가져옵니다. (리스트를 부를 때 client에서 detail을 여러번 호출 할 지 리스트를 한번 호출 할 지 몰라서 사용 안 할 수도?)"
+	)
+	@ApiResponses({
+		@ApiResponse(
+			responseCode = "200",
+			description = "post list 불러오기 성공"
+		)
+	})
 	public ResponseEntity<List<MainPostResponse>> mainPostList(@RequestParam List<Long> id) throws
 		BusinessException,
 		GlobalException {
@@ -83,6 +104,16 @@ public class PostController {
 	}
 
 	@GetMapping("/{postId}")
+	@Operation(
+		summary = "post 불러오기",
+		description = "request로 받은 id에 해당하는 post detail 리턴 (postList를 띄울 때 여러번 호출)"
+	)
+	@ApiResponses({
+		@ApiResponse(
+			responseCode = "200",
+			description = "post 불러오기 성공"
+		)
+	})
 	public ResponseEntity<DetailPostResponse> detailPostById(@PathVariable Long postId, @RequestParam Long userId, @RequestParam Double distance) throws
 		BusinessException,
 		GlobalException {
@@ -90,6 +121,16 @@ public class PostController {
 	}
 
 	@PostMapping("/{postId}/comment")
+	@Operation(
+		summary = "댓글 생성",
+		description = "댓글을 저장합니다."
+	)
+	@ApiResponses({
+		@ApiResponse(
+			responseCode = "200",
+			description = "comment 저장 성공"
+		)
+	})
 	public ResponseEntity<String> createComment(@PathVariable Long postId,@RequestBody CreateCommentRequestDto dto) throws
 		GlobalException, NotFoundException {
 		String result = createCommentUseCase.createComment(postId, dto);
@@ -97,6 +138,16 @@ public class PostController {
 	}
 
 	@GetMapping("/feed/main")
+	@Operation(
+		summary = "피드 메인 불러오기",
+		description = "유저 위치에서 가까운 feed List를 불러옴."
+	)
+	@ApiResponses({
+		@ApiResponse(
+			responseCode = "200",
+			description = "feed list 불러오기 성공"
+		)
+	})
 	public ResponseEntity<SliceResponse<FeedResponse>> feedMain(
 		@ModelAttribute CoordinateRequestDto userPosition,
 		@RequestParam int pageNum,
@@ -104,6 +155,16 @@ public class PostController {
 		return ResponseEntity.ok().body(feedUseCase.feedMain(userPosition,pageNum,userId));
 	}
 
+	@Operation(
+		summary = "피드 상세 정보",
+		description = "피드의 상세 정보를 불러옴"
+	)
+	@ApiResponses({
+		@ApiResponse(
+			responseCode = "200",
+			description = "feed detail 불러오기 성공"
+		)
+	})
 	@GetMapping("/feed/{walkId}")
 	public ResponseEntity<FeedResponse> feedDetail(@PathVariable Long walkId) throws GlobalException {
 		return ResponseEntity.ok().body(feedUseCase.feedDetail(walkId));
@@ -114,6 +175,16 @@ public class PostController {
 		return ResponseEntity.ok(detailPostUseCase.healthCheck());
 	}
 
+	@Operation(
+		summary = "방명록 따라가기",
+		description = "post 위치 리턴"
+	)
+	@ApiResponses({
+		@ApiResponse(
+			responseCode = "200",
+			description = "post location 불러오기 성공"
+		)
+	})
 	@GetMapping("/follow/{postId}")
 	public ResponseEntity<FollowPostResponse> followPost(@PathVariable Long postId) throws GlobalException {
 		return ResponseEntity.ok(followPostUseCase.followPost(postId));
