@@ -1,4 +1,4 @@
-import {Pressable, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {Pressable, SafeAreaView, StyleSheet, Text} from 'react-native';
 import React, {useState} from 'react';
 import MainContainer from '@/components/containers/MainContainer';
 import MainText from '@/components/text/MainText';
@@ -8,12 +8,13 @@ import AuthInput from '@/components/text/AuthInput';
 import {useNavigation} from '@react-navigation/native';
 import {AuthStackParamList} from '@/navigations/stack/AuthStackNavigator';
 import {StackNavigationProp} from '@react-navigation/stack';
+import useAuthStore from '@/store/useAuthStore';
 
 type Navigate = StackNavigationProp<AuthStackParamList>;
 
 export default function AuthLoginScreen() {
   const navigation = useNavigation<Navigate>();
-
+  const {setLogin} = useAuthStore();
   const handlePressRegister = () => {
     navigation.pop();
     navigation.navigate('AuthRegister');
@@ -40,7 +41,7 @@ export default function AuthLoginScreen() {
           placeholder="비밀번호를 입력해주세요"
           secureTextEntry
         />
-        <Pressable style={styles.loginButton}>
+        <Pressable style={styles.loginButton} onPress={setLogin}>
           <MainText>로그인</MainText>
         </Pressable>
         <Pressable style={styles.registerButton} onPress={handlePressRegister}>

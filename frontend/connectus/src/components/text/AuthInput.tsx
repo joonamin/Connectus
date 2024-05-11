@@ -65,10 +65,12 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   inputStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
     color: colors.white,
     fontFamily: fonts.medium,
     fontSize: 24,
-    height: 40,
+    height: 50,
   },
   errorText: {
     paddingTop: 10,
