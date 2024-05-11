@@ -4,8 +4,25 @@ import {defaultColors} from '@/constants/colors';
 import MainContainer from '@/components/containers/MainContainer';
 import TitleMediumText from '@/components/text/title/TitleMediumText';
 import DisplayMediumText from '@/components/text/display/DisplayMediumText';
-import PrimaryButton, { PrimaryButtonText } from '@/components/buttons/PrimaryButton';
+import PrimaryButton, {
+  PrimaryButtonText,
+} from '@/components/buttons/PrimaryButton';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {AuthStackParamList} from '@/navigations/stack/AuthStackNavigator';
+
+type Navigate = NavigationProp<AuthStackParamList>;
+
 export default function AuthHomeScreen() {
+  const navigation = useNavigation<Navigate>();
+
+  const handleLogin = () => {
+    navigation.navigate('AuthLogin');
+  };
+
+  const handleRegister = () => {
+    navigation.navigate('AuthRegister');
+  };
+
   return (
     <MainContainer style={styles.page}>
       <View style={styles.titleContainer}>
@@ -15,10 +32,10 @@ export default function AuthHomeScreen() {
         </TitleMediumText>
       </View>
       <View style={styles.buttonContainer}>
-        <PrimaryButton>
+        <PrimaryButton onPress={handleLogin}>
           <PrimaryButtonText>로그인</PrimaryButtonText>
         </PrimaryButton>
-        <PrimaryButton>
+        <PrimaryButton onPress={handleRegister}>
           <PrimaryButtonText>회원가입</PrimaryButtonText>
         </PrimaryButton>
       </View>
