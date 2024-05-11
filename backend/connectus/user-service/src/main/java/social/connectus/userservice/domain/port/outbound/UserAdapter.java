@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
+import social.connectus.userservice.common.exception.FailedToRegisterUserException;
 import social.connectus.userservice.common.exception.LoginFailedException;
 import social.connectus.userservice.common.exception.NotFoundException;
 import social.connectus.userservice.domain.application.response.OpenedPostResponse;
@@ -20,6 +22,7 @@ import social.connectus.userservice.domain.port.outbound.repository.UserReposito
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class UserAdapter implements UserPort {
 
 	private final UserRepository userRepository;
@@ -29,6 +32,10 @@ public class UserAdapter implements UserPort {
 	@Transactional
 	public void registerUser(UserRegisterCommand command) {
 		// command -> User entity
+		if (userRepository.findByEmail(command.getEmail()).isPresent()) {
+			throw new FailedToRegisterUserException("이미 회원가입이 된 유저입니다");
+		}
+
 		String encryptedPassword = passwordEncoder.encode(command.getPassword());
 		User user = User.builder()
 			.name(command.getName())
@@ -48,9 +55,15 @@ public class UserAdapter implements UserPort {
 
 	@Override
 	public User loginUser(UserLoginCommand command) throws LoginFailedException {
-		return userRepository.findByEmailAndRawPassword(command.getEmail(), command.getPassword())
+		User user = userRepository.findByEmail(command.getEmail())
 			.orElseThrow(
-				() -> new LoginFailedException("wrong password or wrong email, check your account information"));
+				() -> new LoginFailedException("wrong email!!"));
+
+		if (!passwordEncoder.matches(command.getPassword(), user.getPassword())) {
+			throw new LoginFailedException("wrong password!!");
+		}
+
+		return user;
 	}
 
 	@Override
