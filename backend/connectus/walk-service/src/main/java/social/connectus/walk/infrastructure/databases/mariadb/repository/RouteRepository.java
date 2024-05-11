@@ -9,7 +9,7 @@ import social.connectus.walk.domain.model.entity.Route;
 
 @Repository
 public interface RouteRepository extends JpaRepository<Route, Long> {
-    @Query(value="SELECT ro from route ro group by walk_id HAVING sqrt(POW(abs(latitude - ?1 * ?4,2) + pow(abs(longitude - ?2) * ?5,2)) < ?3", nativeQuery = true)
+    @Query(value="SELECT * from route group by walk_id HAVING sqrt(POW(abs(latitude - ?1) * ?4,2) + pow(abs(longitude - ?2) * ?5,2)) < ?3", nativeQuery = true)
     Slice<Route> findSliceByPosition(double userLatitude, double userLongitude, double kmRadius, double KM_PER_LAT, double KM_PER_LON, Pageable pageable);
 
 //    @Query(value = "select ro from Route ro where latitude >= ?2 and ro.id=?1")
