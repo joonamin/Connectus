@@ -6,7 +6,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import social.connectus.walk.common.constants.WalkConstants;
 import social.connectus.walk.common.exception.ResourceNotFoundException;
@@ -17,11 +16,8 @@ import social.connectus.walk.domain.ports.outbound.WalkPort;
 import social.connectus.walk.infrastructure.databases.mariadb.repository.RouteRepository;
 import social.connectus.walk.infrastructure.databases.mariadb.repository.WalkRepository;
 import social.connectus.walk.infrastructure.external.FeignClient;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -71,14 +67,8 @@ public class WalkAdapter implements WalkPort {
         double kmRadius = command.getKmRadius();
         long userId = command.getUserId();
         PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize());
-//        return walkRepository.findSliceByPosition(userPosition, kmRadius, userId, pageRequest);
         Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
-//        Slice<Route> routeList = routeRepository.findSliceByPosition(1, userPosition.getLatitude(), pageRequest);
-        Slice<Long> routeIdList = new SliceImpl<>(routeList.getContent().stream().map(route -> route.getWalk().getId()).toList(), pageRequest, routeList.hasNext());
-
-//        return routeList;
-//        return null;
-        return routeIdList;
+        return new SliceImpl<>(routeList.getContent().stream().map(route -> route.getWalk().getId()).toList(), pageRequest, routeList.hasNext());
     }
 
     @Transactional
