@@ -8,6 +8,7 @@ import social.connectus.userservice.domain.application.response.MyPreferenceRout
 import social.connectus.userservice.domain.application.response.MyWalkResponse;
 import social.connectus.userservice.domain.application.response.MyWalkResponse.WalkRecord;
 import social.connectus.userservice.domain.port.client.WalkClient;
+import social.connectus.userservice.domain.port.client.response.MyWalkRecordResponse;
 import social.connectus.userservice.domain.port.external.port.WalkPort;
 import social.connectus.userservice.domain.port.inbound.WalkUseCase;
 import social.connectus.userservice.domain.port.inbound.command.MyPreferenceRouteCommand;
@@ -22,7 +23,17 @@ public class WalkService implements WalkUseCase {
 
 	@Override
 	public MyWalkResponse getMyWalk(MyWalkCommand myWalkCommand) {
-		List<WalkRecord> myWalkRecords = walkPort.getMyWalkRecords(myWalkCommand.getUserId());
+		List<MyWalkRecordResponse> myWalkRecordsResponse = walkPort.getMyWalkRecords(myWalkCommand.getUserId());
+		List<WalkRecord> myWalkRecords = myWalkRecordsResponse.stream().map(record -> {
+			return WalkRecord.builder()
+				.walkId((long)record.getWalkId())
+				.totalTime(record.getTotalTime())
+				.totalDistance(record.getTotalDistance())
+				.likeCount(record.getLikeCount())
+				.trackingCount(record.getTrackingCount())
+				.title(record.getTitle())
+				.build();
+		}).toList();
 		return MyWalkResponse.builder().walkRecords(myWalkRecords).build();
 	}
 
