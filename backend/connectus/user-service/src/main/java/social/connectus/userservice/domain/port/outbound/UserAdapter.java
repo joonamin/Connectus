@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
+import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
-import social.connectus.userservice.common.exception.LoginFailedException;
 import social.connectus.userservice.common.exception.NotFoundException;
 import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.model.entity.User;
@@ -54,13 +54,13 @@ public class UserAdapter implements UserPort {
 	}
 
 	@Override
-	public User loginUser(UserLoginCommand command) throws LoginFailedException {
+	public User loginUser(UserLoginCommand command) throws FailedToLoginException {
 		User user = userRepository.findByEmail(command.getEmail())
 			.orElseThrow(
-				() -> new LoginFailedException("wrong email!!"));
+				() -> new FailedToLoginException("wrong email!!"));
 
 		if (!passwordEncoder.matches(command.getPassword(), user.getPassword())) {
-			throw new LoginFailedException("wrong password!!");
+			throw new FailedToLoginException("wrong password!!");
 		}
 
 		return user;
