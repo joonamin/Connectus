@@ -1,23 +1,22 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   application:
-    name: gather-service
+    name: walk-service
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://mariadb.connectus.social:3302/gather?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mariadb://mariadb.connectus.social:3306/walk?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: ssafyE106!
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
+#      ddl-auto: update
 
 
 eureka:
-  #  instance:
-  #    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     register-with-eureka: true
     fetch-registry: true
