@@ -21,8 +21,9 @@ export default function EventSelectPosScreen({navigation}: ScreenProps) {
   const [currentPos, setCurrentPos] = useState<Region | undefined>(undefined);
   const {position, setAddPos, setDeletePos} = useEventPosStore();
 
-  const setUserLocation = () => {
-    Geolocation.getCurrentPosition(index => {
+  const setUserLocation = async () => {
+    await Geolocation.getCurrentPosition(index => {
+      console.log(index);
       setCurrentPos({
         latitude: index.coords.latitude,
         longitude: index.coords.longitude,
