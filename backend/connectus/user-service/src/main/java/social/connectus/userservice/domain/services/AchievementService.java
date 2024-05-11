@@ -10,8 +10,8 @@ import social.connectus.userservice.domain.application.request.RefreshAchievemen
 import social.connectus.userservice.domain.application.response.AchievementResponse;
 import social.connectus.userservice.domain.application.response.CompletedAchievementListResponse;
 import social.connectus.userservice.domain.application.response.RefreshAchievementResponse;
-import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
 import social.connectus.userservice.domain.port.external.port.AchievementPort;
+import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
 import social.connectus.userservice.domain.port.outbound.command.RefreshAchievementToUserCommand;
 import social.connectus.userservice.domain.port.outbound.command.UserToRefreshAchievementCommand;
 
@@ -51,6 +51,19 @@ public class AchievementService implements AchievementUseCase {
 		accomplishedAchievement.removeAll(userData.getAccomplishedAchievement());
 
 		return new RefreshAchievementResponse(accomplishedAchievement.stream().map(AchievementResponse::from).toList());
+	}
+
+	@Override
+	public List<AchievementResponse> getMyAchievements(Long userId) {
+		var myAchievements = achievementPort.getMyAchievements(
+			userId);
+		return myAchievements.stream().map(item -> {
+			return AchievementResponse.builder()
+				.title(item.getTitle())
+				.reward(item.getReward())
+				.content(item.getTitle())
+				.build();
+		}).toList();
 	}
 
 }
