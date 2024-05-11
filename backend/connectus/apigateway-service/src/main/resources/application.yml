@@ -23,8 +23,20 @@ spring:
             uri: http://localhost:8081/
             predicates:
               - Path=/walk/**
+          - id: post-service
+            uri: http://localhost:3001/
+            predicates:
+              - Path=/post/**
+          - id: user-service
+            uri: http://localhost:3007/
+            predicates:
+              - Path=/user/**
+          - id: likes-service
+            uri: http://localhost:3008/
+            predicates:
+              - Path=/likes/**
   datasource:
     url: jdbc:mysql://localhost:3306/demo?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ssafy
-    password: ssafy
+    username: root
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
