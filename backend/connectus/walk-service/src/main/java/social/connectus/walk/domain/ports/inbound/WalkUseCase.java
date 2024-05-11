@@ -28,4 +28,6 @@ public interface WalkUseCase {
     Slice<Long> getWalksByPosition(GetWalksByPositionCommand command);
 
     double getDistance(double latStart, double lonStart, double latEnd, double lonEnd);
+
+    List<Long> getAchievementsByWalk(GetAchievementsCommand command);
 }

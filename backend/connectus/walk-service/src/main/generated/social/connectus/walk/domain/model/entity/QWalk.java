@@ -35,6 +35,8 @@ public class QWalk extends EntityPathBase<Walk> {
 
     public final NumberPath<Long> participateEvent = createNumber("participateEvent", Long.class);
 
+    public final ListPath<Post, QPost> postList = this.<Post, QPost>createList("postList", Post.class, QPost.class, PathInits.DIRECT2);
+
     public final ListPath<Route, QRoute> route = this.<Route, QRoute>createList("route", Route.class, QRoute.class, PathInits.DIRECT2);
 
     public final StringPath title = createString("title");

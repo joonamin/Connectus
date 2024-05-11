@@ -6,10 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import social.connectus.walk.application.rest.request.*;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
+import social.connectus.walk.application.rest.response.GetAchievementsResponse;
 import social.connectus.walk.application.rest.response.GetWalkResponse;
 import social.connectus.walk.application.rest.response.GetWalksByUserResponse;
 import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/walk")
@@ -75,6 +78,12 @@ public class WalkController {
     public ResponseEntity<Slice<Long>> getWalksByPosition(@RequestBody GetWalksByPositionRequest request){
         Slice<Long> walkIdSlice = walkUseCase.getWalksByPosition(GetWalksByPositionCommand.from(request));
         return ResponseEntity.ok(walkIdSlice);
+    }
+
+    @GetMapping("/end-walk")
+    public ResponseEntity<GetAchievementsResponse> getAchievementsByWalk(@RequestBody GetAchievementsRequest request){
+        List<Long> achievementIds = walkUseCase.getAchievementsByWalk(GetAchievementsCommand.from((request)));
+        return ResponseEntity.ok(GetAchievementsResponse.builder().achievementIds(achievementIds).build());
     }
 
 }

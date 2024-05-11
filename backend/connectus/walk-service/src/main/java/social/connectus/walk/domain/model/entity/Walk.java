@@ -32,6 +32,9 @@ public class Walk extends BaseEntity{
     private double walkDistance;   // 산책 거리
 
     @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
+    List<Post> postList;
+
+    @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
     private Set<LikeUser> likeUsers;
 
     @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)

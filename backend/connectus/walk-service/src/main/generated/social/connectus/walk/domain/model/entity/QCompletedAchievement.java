@@ -26,6 +26,8 @@ public class QCompletedAchievement extends EntityPathBase<CompletedAchievement> 
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isSuccess = createBoolean("isSuccess");
+
     public final QWalk walk;
 
     public QCompletedAchievement(String variable) {

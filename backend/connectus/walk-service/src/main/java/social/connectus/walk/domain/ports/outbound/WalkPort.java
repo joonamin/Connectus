@@ -30,4 +30,6 @@ public interface WalkPort {
     void routeProtect(RouteProtectCommand command);
 
     Slice<Long> getWalksByPosition(GetWalksByPositionCommand command);
+
+    List<Long> getAchievementsByWalk(GetAchievementsCommand command);
 }

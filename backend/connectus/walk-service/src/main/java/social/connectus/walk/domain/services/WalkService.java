@@ -94,4 +94,9 @@ public class WalkService implements WalkUseCase {
         double d = EARTH_RADIUS* c * 1000;    // Distance in m
         return d;
     }
+
+    @Override
+    public List<Long> getAchievementsByWalk(GetAchievementsCommand command) {
+        return walkPort.getAchievementsByWalk(command);
+    }
 }
