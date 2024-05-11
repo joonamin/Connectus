@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.domain.application.request.MyPreferencePostRequest;
 import social.connectus.userservice.domain.application.request.MyPreferenceRouteRequest;
 import social.connectus.userservice.domain.application.request.MyWalkRequest;
@@ -25,7 +24,6 @@ import social.connectus.userservice.domain.application.response.LogoutUserRespon
 import social.connectus.userservice.domain.application.response.MyPreferencePostResponse;
 import social.connectus.userservice.domain.application.response.MyPreferenceRouteResponse;
 import social.connectus.userservice.domain.application.response.MyWalkResponse;
-import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.application.response.RefreshAchievementResponse;
 import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
 import social.connectus.userservice.domain.port.inbound.PostUseCase;
@@ -38,7 +36,6 @@ import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
 
-@Slf4j
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -49,60 +46,54 @@ public class UserController {
 	private final WalkUseCase walkUseCase;
 	private final PostUseCase postUseCase;
 
+	@Operation(summary = "회원가입")
 	@PostMapping("/register")
 	public ResponseEntity<Void> registerUser(UserRegisterRequest userRegisterRequest) {
 		userUseCase.register(UserRegisterCommand.from(userRegisterRequest));
 		return ResponseEntity.ok().build();
 	}
 
+	@Operation(summary = "로그인")
 	@PostMapping("/login")
 	public ResponseEntity<LoginUserResponse> loginUser(UserLoginRequest userLoginRequest) {
 		return ResponseEntity.ok(userUseCase.login(UserLoginCommand.from(userLoginRequest)));
 	}
 
+	@Operation(summary = "로그아웃", deprecated = true)
 	@PostMapping("/logout")
 	public ResponseEntity<LogoutUserResponse> logoutUser(UserLogoutRequest userLogoutRequest) {
 		return ResponseEntity.ok(userUseCase.logout(UserLogoutCommand.from(userLogoutRequest)));
 	}
 
-
+	@Operation(summary = "특정 유저가 달성한 업적 조회")
 	@GetMapping("/completed-achievement/{userId}")
 	public ResponseEntity<CompletedAchievementListResponse> getUserCompletedAchievement(@PathVariable Long userId) {
 		return ResponseEntity.ok().body(achievementUseCase.checkAchievement(userId));
 	}
 
 	// endWalk 때 statistics를 갱신하기 위한 controller 이번 refresh를 통해 새로 완료한 업적을 출력
+	@Operation(summary = "endWalk 때 statistics를 갱신하기 위한 controller 이번 refresh를 통해 새로 완료한 업적을 출력")
 	@PostMapping("/refresh-achievement")
 	public ResponseEntity<RefreshAchievementResponse> refreshAchievement(Long userId,
 		@RequestBody RefreshAchievementRequest statistics) {
 		return ResponseEntity.ok(achievementUseCase.refreshAchievement(userId, statistics));
 	}
 
-	@GetMapping("/{userId}/openedPosts")
-	public ResponseEntity<OpenedPostResponse> getOpenedPost(@PathVariable Long userId) throws JsonProcessingException {
-		return ResponseEntity.ok(userUseCase.getOpenedPost(userId));
-	}
-
-	@PostMapping("/{userId}/openedPosts")
-	public ResponseEntity<Void> updateOpenedPosts(@PathVariable Long userId, @RequestBody Long postId) {
-		userUseCase.updateOpenedPosts(userId, postId);
-		return ResponseEntity.ok().build();
-	}
-
-	// 내 산책 기록
+	@Operation(summary = "내 산책 기록 조회")
 	@GetMapping("/me/walk")
 	public ResponseEntity<MyWalkResponse> getMyWalk(MyWalkRequest request) {
 		return ResponseEntity.ok(walkUseCase.getMyWalk(MyWalkCommand.from(request)));
 	}
 
-	// 내가 좋아한 경로 조회
+
+	@Operation(summary = "내가 좋아한 경로 조회")
 	@GetMapping("/route/like")
 	public ResponseEntity<MyPreferenceRouteResponse> getMyPreferenceRoute(MyPreferenceRouteRequest request) {
 		MyPreferenceRouteCommand command = MyPreferenceRouteCommand.from(request);
 		return ResponseEntity.ok(walkUseCase.getMyPreferenceRoute(command));
 	}
 
-	// 좋아요 누른 방명록 확인
+	@Operation(summary = "좋아요 누른 방명록 확인")
 	@GetMapping("/post/like")
 	public ResponseEntity<MyPreferencePostResponse> getMyPreferencePost(MyPreferencePostRequest request) {
 		MyPreferencePostCommand command = MyPreferencePostCommand.from(request);
