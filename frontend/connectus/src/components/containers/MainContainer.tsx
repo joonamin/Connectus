@@ -11,7 +11,6 @@ export default function MainContainer({children, style, ...props}: ViewProps) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 15,
   },
 });
