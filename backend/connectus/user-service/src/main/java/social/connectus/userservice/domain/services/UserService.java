@@ -17,6 +17,7 @@ import social.connectus.userservice.common.type.JwtPropertiesProvider;
 import social.connectus.userservice.common.utils.JwtProvider;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
 import social.connectus.userservice.domain.application.response.LogoutUserResponse;
+import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.inbound.UserUseCase;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
@@ -52,9 +53,18 @@ public class UserService implements UserUseCase {
 	}
 
 	@Override
+	public void updateOpenedPosts(Long userId, Long postId) {
+		userPort.updateOpenedPosts(userId, postId);
+	}
+
+	@Override
+	public OpenedPostResponse getOpenedPost(Long userId) {
+		return userPort.getOpenedPost(userId);
+	}
+
+	@Override
 	@YetNotImplemented
 	public LogoutUserResponse logout(UserLogoutCommand command) throws FailedToLogoutException {
 		return null;
 	}
-
 }
