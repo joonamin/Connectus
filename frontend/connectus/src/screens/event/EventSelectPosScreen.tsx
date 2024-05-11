@@ -1,5 +1,5 @@
 import {Pressable, SafeAreaView, StyleSheet} from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import MapView, {
   MapPressEvent,
   Marker,
@@ -22,15 +22,27 @@ export default function EventSelectPosScreen({navigation}: ScreenProps) {
   const {position, setAddPos, setDeletePos} = useEventPosStore();
 
   const setUserLocation = async () => {
-    await Geolocation.getCurrentPosition(index => {
-      console.log(index);
-      setCurrentPos({
-        latitude: index.coords.latitude,
-        longitude: index.coords.longitude,
-        longitudeDelta: 0.001,
-        latitudeDelta: 0.001,
-      });
-    });
+    Geolocation.getCurrentPosition(
+      info => {
+        console.log(info);
+        setCurrentPos({
+          latitude: info.coords.latitude,
+          longitude: info.coords.longitude,
+          longitudeDelta: 0.001,
+          latitudeDelta: 0.001,
+        });
+      },
+      () => {
+        console.log('error');
+      },
+      {
+        // 상세 좌표를 요청하는 코드
+        enableHighAccuracy: true,
+        distanceFilter: 0,
+        interval: 3000,
+        fastestInterval: 2000,
+      },
+    );
   };
 
   /**
@@ -56,6 +68,10 @@ export default function EventSelectPosScreen({navigation}: ScreenProps) {
   const handleComplete = () => {
     navigation.goBack();
   };
+
+  useEffect(() => {
+    setUserLocation();
+  }, []);
 
   return (
     <SafeAreaView style={styles.flex}>
