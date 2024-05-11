@@ -48,14 +48,14 @@ public class UserController {
 
 	@Operation(summary = "회원가입")
 	@PostMapping("/register")
-	public ResponseEntity<Void> registerUser(UserRegisterRequest userRegisterRequest) {
+	public ResponseEntity<Void> registerUser(@RequestBody UserRegisterRequest userRegisterRequest) {
 		userUseCase.register(UserRegisterCommand.from(userRegisterRequest));
 		return ResponseEntity.ok().build();
 	}
 
 	@Operation(summary = "로그인")
 	@PostMapping("/login")
-	public ResponseEntity<LoginUserResponse> loginUser(UserLoginRequest userLoginRequest) {
+	public ResponseEntity<LoginUserResponse> loginUser(@RequestBody UserLoginRequest userLoginRequest) {
 		return ResponseEntity.ok(userUseCase.login(UserLoginCommand.from(userLoginRequest)));
 	}
 
