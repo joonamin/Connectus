@@ -5,6 +5,7 @@ import social.connectus.userservice.common.exception.FailedToLogoutException;
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
 import social.connectus.userservice.domain.application.response.LogoutUserResponse;
+import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
@@ -20,5 +21,7 @@ public interface UserUseCase {
 	// 2. 로그인
 	LoginUserResponse login(UserLoginCommand command) throws FailedToLoginException;
 
+	void updateOpenedPosts(Long userId, Long postId);
+	OpenedPostResponse getOpenedPost(Long userId);
 	LogoutUserResponse logout(UserLogoutCommand command) throws FailedToLogoutException;
 }
