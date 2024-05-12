@@ -37,9 +37,8 @@ export default function SharePost({modalOpen}: Props) {
     setViewIsLiked(!viewIsLiked);
   };
 
-  const handlePressPressFeedDetail = () => {
-    console.log('hello');
-  };
+  const handlePressPressFeedDetail = () => {};
+
   return (
     <>
       <View style={styles.shareContainer}>

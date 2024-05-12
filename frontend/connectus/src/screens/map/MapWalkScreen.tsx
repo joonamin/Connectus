@@ -124,7 +124,7 @@ export default function MapWalkScreen() {
     setDistance(prev => {
       return prev + dist;
     });
-    console.log(distance.toFixed(2));
+    // console.log(distance.toFixed(2));
   };
   useInterval(tick, 1000);
   useInterval(traceTick, 3000);
@@ -142,7 +142,6 @@ export default function MapWalkScreen() {
   // map screen에서 드래그 시, 화면고정을 해제합니다
   const onRegionChange = async (region: Region, details: Details) => {
     if (details.isGesture) {
-      console.log('gestured');
       setTrackingMode(false);
       // setMapPos({
       //   latitude: region.latitude,
