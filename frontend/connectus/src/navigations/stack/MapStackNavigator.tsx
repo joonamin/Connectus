@@ -1,12 +1,9 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React, {useLayoutEffect} from 'react';
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import MapHomeScreen from '@/screens/map/MapHomeScreen';
 import MapWalkScreen from '@/screens/map/MapWalkScreen';
 import MapResultScreen from '@/screens/map/MapResultScreen';
 import BottomSheetQuickStackNavigator from './BottomSheetQuickStackNavigator';
-import MapBottomSheetNavigator from '../Tabs/MapBottomSheetNavigator';
-import CreateFeedScreen from '@/screens/map/BottomSheet/CreateFeedScreen';
 import {LatLng} from 'react-native-maps';
 import TestMapWalkScreen from '@/screens/map/TestMapWalkScreen';
 
@@ -51,7 +48,14 @@ export default function MapStackNavigator() {
         name="BottomSheet"
         component={BottomSheetQuickStackNavigator}
       />
-      <Stack.Screen name="WalkTest" component={TestMapWalkScreen} />
+      <Stack.Screen
+        name="WalkTest"
+        component={TestMapWalkScreen}
+        options={{
+          headerTitle: '',
+          headerShown: false,
+        }}
+      />
     </Stack.Navigator>
   );
 }

@@ -28,10 +28,13 @@ export default function QuickMenuHomeScreen() {
     navigation.navigate('ChatList');
   };
 
-  // 산책 종료시 저장되어 있던, 따라걷기 정보를 지웁니다.
+  /**
+   * 산책 종료시 저장되어 있던, 따라걷기 정보를 지웁니다.
+   * 그 후, 산책 종료를 위한 Modal compoenent의 isVisible 속성을 true로 전환합니다.
+   */
   const handlePressQuit = () => {
     setDeleteRoute();
-    DeviceEventEmitter.emit('navigateToResultScreen');
+    DeviceEventEmitter.emit('openBottomSheetModal');
   };
 
   return (

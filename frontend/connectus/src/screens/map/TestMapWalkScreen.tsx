@@ -2,8 +2,11 @@ import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   DeviceEventEmitter,
   Dimensions,
+  Modal,
   Pressable,
+  SafeAreaView,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 import {
@@ -12,7 +15,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import MapView from 'react-native-map-clustering';
-import {
+import Map, {
   Circle,
   Details,
   LatLng,
@@ -43,6 +46,7 @@ import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 import CustomMarker from '@/components/map/CustomMarker';
 import Geolocation from '@react-native-community/geolocation';
 import useRouteStore from '@/store/useRouteStore';
+import useModal from '@/hooks/useModal';
 
 const DUMMY_POSITION = [
   {
@@ -76,10 +80,10 @@ const DUMMY_GATHER = [
 
 type Navigation = StackNavigationProp<MapStackParamList>;
 
-type deltaType = {
-  latitudeDelta: number;
-  longitudeDelta: number;
-};
+// type deltaType = {
+//   latitudeDelta: number;
+//   longitudeDelta: number;
+// };
 
 export default function TestMapWalkScreen() {
   const navigation = useNavigation<Navigation>();
@@ -92,14 +96,14 @@ export default function TestMapWalkScreen() {
   // 경로 공유 페이지에서 선택한 route의 존재여부 확인
   const {route} = useRouteStore();
   // 초기 지도의 확대값 설정 및, drag이벤트로 관리할 delta값
-  const [mapDelta, setMapDelta] = useState<deltaType>({
+  const [mapDelta, setMapDelta] = useState({
     latitudeDelta: 0.001,
     longitudeDelta: 0.001,
   });
   // 초기 지도의 중앙 좌표값 및
   const [mapPos, setMapPos] = useState<LatLng>();
 
-  const mapRef = useRef<MapView | null>(null);
+  const mapRef = useRef<Map | null>(null);
   const bottomSheetNav =
     useRef<NavigationContainerRef<MapBottomSheetTabParamList> | null>(null);
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -107,6 +111,9 @@ export default function TestMapWalkScreen() {
   const [indicateTime, setIndicateTime] = useState<string | null>(null);
   const [trace, setTrace] = useState<LatLng[]>([]);
   const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
+
+  // 산책 종료 확인을 위한 모달을 열고닫는 state
+  const {isVisible, show, hide} = useModal();
 
   //  바텀시트를 열고닫을 코드
   const handleBottomSheetOpen = () => bottomSheetRef.current?.expand();
@@ -128,13 +135,20 @@ export default function TestMapWalkScreen() {
   };
   useInterval(tick, 1000);
   useInterval(traceTick, 3000);
+
   /**
    * @todo 지금까지의 정보를 props로 넘겨주는 코드를 작성해야합니다(navigation에 params로 넣으면되지 않을까요?)
    * 걸은 시간, 거리, 좌표는 이 스크린에서 관리할 예정이며, 작성 post는 전역으로 관리합니다.
    */
-  const navigateToResultScreen = () => {
-    handleBottomSheetClose();
-    // 이전 스크린에서의 작동(setInterval 등)을 없애기 위한 pop
+  const openBottomSheetModal = () => {
+    show();
+  };
+
+  /**
+   * 모달 창을 닫고 결과페이지로 이동합니다.
+   */
+  const handleWalkDone = () => {
+    hide();
     navigation.pop();
     navigation.navigate('MapResult', {time: time, distance: distance});
   };
@@ -142,33 +156,24 @@ export default function TestMapWalkScreen() {
   // map screen에서 드래그 시, 화면고정을 해제합니다
   const onRegionChange = async (region: Region, details: Details) => {
     if (details.isGesture) {
-      console.log('gestured');
       setTrackingMode(false);
-      // setMapPos({
-      //   latitude: region.latitude,
-      //   longitude: region.longitude,
-      // });
-      // setMapDelta({
-      //   longitudeDelta: region.longitudeDelta,
-      //   latitudeDelta: region.latitudeDelta,
-      // });
     }
   };
 
   // userFocus해제시 화면에 고정시킬 좌표를 저장하기위해 실행하는 함수입니다
-  const onRegionChangeComplete = async (region: Region, details: Details) => {
-    if (details.isGesture === true) {
-      setMapPos({
-        latitude: region.latitude,
-        longitude: region.longitude,
-      });
-      setMapDelta({
-        longitudeDelta: region.longitudeDelta,
-        latitudeDelta: region.latitudeDelta,
-      });
-      return;
-    }
-  };
+  // const onRegionChangeComplete = async (region: Region, details: Details) => {
+  //   if (details.isGesture === true) {
+  //     setMapPos({
+  //       latitude: region.latitude,
+  //       longitude: region.longitude,
+  //     });
+  //     setMapDelta({
+  //       longitudeDelta: region.longitudeDelta,
+  //       latitudeDelta: region.latitudeDelta,
+  //     });
+  //     return;
+  //   }
+  // };
 
   const handleMenuPress = () => {
     bottomSheetNav.current &&
@@ -206,10 +211,7 @@ export default function TestMapWalkScreen() {
   };
 
   // 디바이스 전체에 listener설정
-  DeviceEventEmitter.addListener(
-    'navigateToResultScreen',
-    navigateToResultScreen,
-  );
+  DeviceEventEmitter.addListener('openBottomSheetModal', openBottomSheetModal);
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -242,82 +244,97 @@ export default function TestMapWalkScreen() {
   // 디바이스 종료 시 리스너 제거를 위한 useEffect 입니다
   useEffect(() => {
     return () => {
-      DeviceEventEmitter.removeAllListeners('navigateToResultScreen');
+      DeviceEventEmitter.removeAllListeners('openBottomSheetModal');
     };
   }, []);
 
   return (
     <>
-      <MapView
-        ref={mapRef}
-        onClusterPress={handleClusterPress}
-        style={styles.container}
-        provider={PROVIDER_GOOGLE}
-        showsUserLocation
-        showsMyLocationButton={false}
-        zoomEnabled={true}
-        // initialRegion={{...mapPos, ...mapDelta}}
-        onMapReady={() => {
-          Geolocation.getCurrentPosition(
-            info => {
-              const {latitude, longitude} = info.coords;
-              setTrace([{latitude, longitude}]);
-            },
-            () => {
-              console.log('error');
-            },
-            {
-              // 상세 좌표를 요청하는 코드
-              enableHighAccuracy: true,
-              distanceFilter: 0,
-              interval: 3000,
-              fastestInterval: 2000,
-            },
-          );
-        }}
-        region={trackingMode ? {...userLocation, ...mapDelta} : undefined}
-        onRegionChangeComplete={onRegionChangeComplete}
-        onRegionChange={onRegionChange}>
-        <Polyline
-          coordinates={trace}
-          strokeWidth={8}
-          strokeColor={colors.primaryColorBlue}
-        />
-        {route && (
+      {mapPos && (
+        <MapView
+          ref={mapRef}
+          onClusterPress={handleClusterPress}
+          style={styles.container}
+          provider={PROVIDER_GOOGLE}
+          showsUserLocation
+          showsMyLocationButton={true}
+          zoomEnabled={true}
+          initialRegion={{...mapPos, ...mapDelta}}
+          onUserLocationChange={event => {
+            const {latitude, longitude} = event.nativeEvent.coordinate;
+            if (trackingMode) {
+              mapRef.current?.animateToRegion({
+                latitude,
+                longitude,
+                ...mapDelta,
+              });
+            }
+          }}
+          onMapReady={() => {
+            Geolocation.getCurrentPosition(
+              info => {
+                const {latitude, longitude} = info.coords;
+                setTrace([{latitude, longitude}]);
+                setMapPos({latitude, longitude});
+              },
+              () => {
+                console.log('error');
+              },
+              {
+                // 상세 좌표를 요청하는 코드
+                enableHighAccuracy: true,
+                distanceFilter: 0,
+                interval: 3000,
+                fastestInterval: 2000,
+              },
+            );
+          }}
+          // region={trackingMode ? {...userLocation, ...mapDelta} : undefined}
+          // onRegionChangeComplete={onRegionChangeComplete}
+          onRegionChange={onRegionChange}>
           <Polyline
-            coordinates={route}
-            strokeColor={colors.primaryColorPink}
-            strokeWidth={10}
+            coordinates={trace}
+            strokeWidth={8}
+            strokeColor={colors.primaryColorBlue}
           />
-        )}
-        {/* 게시글을 확인해줄 마커들 */}
-        {DUMMY_POSITION.map((data, index) => {
-          return (
-            <CustomMarker
-              key={index}
-              coordinate={data}
-              onPress={event => handleMarkerPress(event.nativeEvent.coordinate)}
-              type={2}
+          {route && (
+            <Polyline
+              coordinates={route}
+              strokeColor={colors.primaryColorPink}
+              strokeWidth={10}
             />
-          );
-        })}
-        {DUMMY_GATHER.map((data, index) => {
-          return (
-            <CustomMarker
-              key={index}
-              coordinate={data}
-              onPress={handleGatherPress}
-              type={3}
-            />
-          );
-        })}
-        <Circle
-          center={{...userLocation}}
-          radius={100}
-          strokeWidth={0}
-          fillColor="rgba(193, 200, 210, 0.5)"
-        />
-      </MapView>
+          )}
+          {/* 게시글을 확인해줄 마커들 */}
+          {DUMMY_POSITION.map((data, index) => {
+            return (
+              <CustomMarker
+                key={index}
+                coordinate={data}
+                onPress={event =>
+                  handleMarkerPress(event.nativeEvent.coordinate)
+                }
+                type={2}
+              />
+            );
+          })}
+          {DUMMY_GATHER.map((data, index) => {
+            return (
+              <CustomMarker
+                key={index}
+                coordinate={data}
+                onPress={handleGatherPress}
+                type={3}
+              />
+            );
+          })}
+          <Circle
+            center={{...userLocation}}
+            radius={100}
+            strokeWidth={0}
+            fillColor="rgba(193, 200, 210, 0.5)"
+          />
+        </MapView>
+      )}
       <View style={[styles.eventIndicator, {top: inset.top || 20}]}>
         <EventIndicator />
       </View>
@@ -361,6 +378,23 @@ export default function TestMapWalkScreen() {
           </NavigationContainer>
         </SafeAreaProvider>
       </BottomSheet>
+      <Modal visible={isVisible} transparent={true} animationType="slide">
+        <SafeAreaView style={styles.centeredView} onTouchEnd={hide}>
+          <View style={styles.modalView} onTouchEnd={e => e.stopPropagation()}>
+            <MainText style={[styles.fontBlack, {textAlign: 'center'}]}>
+              산책을 종료하시겠어요?
+            </MainText>
+            <View style={[styles.row, styles.gap15]}>
+              <Pressable onPress={handleWalkDone} style={styles.modalButton}>
+                <MainText style={[{textAlign: 'center'}]}>산책 종료</MainText>
+              </Pressable>
+              <Pressable onPress={hide} style={styles.modalButton}>
+                <MainText style={[{textAlign: 'center'}]}>취소</MainText>
+              </Pressable>
+            </View>
+          </View>
+        </SafeAreaView>
+      </Modal>
     </>
   );
 }
@@ -369,6 +403,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  row: {
+    flexDirection: 'row',
+  },
+  fontBlack: {color: colors.background},
+  gap15: {gap: 15},
   bottomIndicator: {
     width: Dimensions.get('screen').width,
     height: 70,
@@ -439,5 +478,55 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  testButton: {
+    width: 70,
+    height: 70,
+    position: 'absolute',
+    alignItems: 'center',
+    backgroundColor: colors.white,
+    justifyContent: 'center',
+    right: 15,
+    bottom: 200,
+    borderRadius: 50,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 4,
+  },
+  centeredView: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    width: '70%',
+    height: 200,
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    gap: 15,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalButton: {
+    padding: 10,
+    backgroundColor: colors.buttonBackground,
+    borderRadius: 15,
   },
 });
