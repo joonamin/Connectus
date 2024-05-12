@@ -31,6 +31,8 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>게시글 등록시 사진 선택을 위해 접근 권한 동의가 필요합니다.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>위치확인을 위한 접근 권한 동의가 필요합니다.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -43,8 +45,6 @@
 	<string>게시글 등록시 사진 선택을 위해 접근 권한 동의가 필요합니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>게시글 등록시 사진 선택을 위해 접근 권한 동의가 필요합니다.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>게시글 등록시 사진 선택을 위해 접근 권한 동의가 필요합니다.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -56,8 +56,8 @@
 		<string>FontAwesome5_Regular.ttf</string>
 		<string>FontAwesome5_Solid.ttf</string>
 		<string>Ionicons.ttf</string>
- 		<string>MaterialIcons.ttf</string>
- 		<string>MaterialCommunityIcons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
 		<string>GmarketSansTTFBold.ttf</string>
 		<string>GmarketSansTTFLight.ttf</string>
 		<string>GmarketSansTTFMedium.ttf</string>
@@ -71,8 +71,12 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
