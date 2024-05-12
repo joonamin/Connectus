@@ -86,9 +86,7 @@ export default function FeedHomeScreen() {
               해당 방명록의 위치를 확인하시겠습니까?
             </Text>
             <View style={styles.confirmButtonContainer}>
-              <Pressable
-                style={styles.confirimButton}
-                onPress={() => console.log('helo')}>
+              <Pressable style={styles.confirimButton}>
                 <Text style={styles.buttonText}>보러가기</Text>
               </Pressable>
               <Pressable style={styles.confirimButton} onPress={moveModalHide}>
