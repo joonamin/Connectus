@@ -19,7 +19,7 @@ export type Navigation = CompositeNavigationProp<
  */
 export default function MyWalkHistoryScreen({
   navigation,
-}: StackScreenProps<MyStackParamList>) {
+}: StackScreenProps<MyStackParamList, 'MyWalkHistory'>) {
   const onWalkSelected = (walkId: number) => {
     navigation.navigate('MyWalkDetail', {
       walkId: walkId,
