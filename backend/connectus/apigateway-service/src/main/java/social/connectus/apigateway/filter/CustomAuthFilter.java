@@ -11,17 +11,25 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
+import social.connectus.apigateway.jwt.JwtVerifier;
 
+@Slf4j
 @Component
 public class CustomAuthFilter extends AbstractGatewayFilterFactory<CustomAuthFilter.Config> {
-	public CustomAuthFilter() {
+
+	private final JwtVerifier jwtVerifier;
+
+	public CustomAuthFilter(JwtVerifier jwtVerifier) {
 		super(Config.class);
+		this.jwtVerifier = jwtVerifier;
 	}
 
 	@Override
 	public GatewayFilter apply(Config config) {
-		return ((exchange, chain) -> {
+		return (exchange, chain) -> {
 			ServerHttpRequest request = exchange.getRequest();
 
 			// filter가 적용되지 않는 request path(=endpoint)는 filter 적용에서 예외시킨다.
@@ -42,13 +50,16 @@ public class CustomAuthFilter extends AbstractGatewayFilterFactory<CustomAuthFil
 
 
 			// 토큰 검증
-			if(!tokenString.equals("${jwt.secret-key}")) {
+			if(!jwtVerifier.verify(tokenString)) {
 				return handleUnAuthorized(exchange); // 토큰이 일치하지 않을 때
 			}
 
+			// todo: 여기서 sanitize 작업 수행
+			// 먼저, 모든 api의 endpoint를 확인하여 통일성을 갖추는 것이 급선무임
+
 			return chain.filter(exchange); // 토큰이 일치할 때
 
-		});
+		};
 	}
 	private Mono<Void> handleUnAuthorized(ServerWebExchange exchange) {
 		ServerHttpResponse response = exchange.getResponse();
