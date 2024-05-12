@@ -1,9 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import CustomButton from '@/components/buttons/CustomButton';
 import {Image, StyleSheet} from 'react-native';
-import {Navigation} from '@/screens/my/MyWalkHistoryScreen';
-import {useNavigation} from '@react-navigation/native';
 import colors from '@/constants/colors';
+import {OnWalkSelectedContext} from '@/contexts/WalkHistoryContext';
 
 /**
  * WalkHistoryThumbnail의 인자를 지정합니다
@@ -21,7 +20,7 @@ export interface WalkHistoryThumbnailProps {
  * @returns WalkHistoryThumbnail
  */
 export default function WalkHistoryThumbnail({id}: WalkHistoryThumbnailProps) {
-  const navigation = useNavigation<Navigation>();
+  const onWalkSelected = useContext(OnWalkSelectedContext);
 
   return (
     <CustomButton
@@ -29,9 +28,9 @@ export default function WalkHistoryThumbnail({id}: WalkHistoryThumbnailProps) {
       containerStyle={styles.historyItemContainer}
       backgroundColor="transparent"
       onPress={() => {
-        navigation.navigate('MyWalkDetail', {
-          walkId: id,
-        });
+        if (typeof onWalkSelected !== 'undefined') {
+          onWalkSelected(id);
+        }
       }}>
       <Image style={styles.historyItemImage} source={defaultImage} />
     </CustomButton>

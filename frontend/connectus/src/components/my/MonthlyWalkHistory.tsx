@@ -18,7 +18,7 @@ export interface MonthlyWalkHistoryProps {
   /**
    * 해당 월 산책 기록 요약 정보
    */
-  summary: {
+  summary?: {
     /**
      * 산책 횟수
      */
@@ -33,6 +33,10 @@ export interface MonthlyWalkHistoryProps {
     timeSpent: number;
   };
   /**
+   * 월별 요약 정보 표시 여부를 지정합니다
+   */
+  showSummary?: boolean;
+  /**
    * 해당 월 내 일별 산책 기록
    */
   list: DailyWalkHistoryProps[];
@@ -45,6 +49,7 @@ export interface MonthlyWalkHistoryProps {
  */
 export default function MonthlyWalkHistory({
   summary,
+  showSummary,
   list,
 }: MonthlyWalkHistoryProps) {
   const year = useContext(WalkHistoryYearContext);
@@ -59,13 +64,17 @@ export default function MonthlyWalkHistory({
         </HeadingText>
       </MainContainer>
       {/* 해당 월 요약 정보 */}
-      <MainContainer style={styles.monthlyItem}>
-        <MonthlySummary
-          daysWalked={summary.daysWalked}
-          distance={summary.distance}
-          timeSpent={summary.timeSpent}
-        />
-      </MainContainer>
+      {typeof summary !== 'undefined' && showSummary ? (
+        <MainContainer style={styles.monthlyItem}>
+          <MonthlySummary
+            daysWalked={summary.daysWalked}
+            distance={summary.distance}
+            timeSpent={summary.timeSpent}
+          />
+        </MainContainer>
+      ) : (
+        <></>
+      )}
       {/* 해당 월 산책 기록 */}
       <View style={styles.historyGrid}>
         {list.map(item => (
