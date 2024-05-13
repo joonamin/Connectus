@@ -37,6 +37,7 @@ public class WalkService implements WalkUseCase {
     public CreateWalkResponse createWalk(CreateWalkCommand command) {
         /*
         TODO: 업적 갱신 요청 보내기
+        TODO: 위치 저장 및 위치ID 얻기
          */
 
         Walk walk = walkPort.createWalk(command);
