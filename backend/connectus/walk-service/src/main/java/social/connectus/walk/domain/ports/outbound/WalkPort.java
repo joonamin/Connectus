@@ -32,4 +32,6 @@ public interface WalkPort {
     Slice<Long> getWalksByPosition(GetWalksByPositionCommand command);
 
     List<Long> getAchievementsByWalk(GetAchievementsCommand command);
+
+    void routeLikeCancle(RouteLikeCommand command);
 }

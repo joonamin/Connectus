@@ -63,6 +63,13 @@ public class WalkController {
         return ResponseEntity.ok("Like is successfully registered.");
     }
 
+    @Operation(summary = "산책 기록 좋아요 취소")
+    @PutMapping("/route-like-cancle")
+    public ResponseEntity<String> routeLikeCancle(@RequestBody RouteLikeRequest request){
+        walkUseCase.routeLikeCancle(RouteLikeCommand.from(request));
+        return ResponseEntity.ok("Like is successfully canceled.");
+    }
+
     @Operation(summary = "산책 기록 공유")
     @PatchMapping("/route-share")
     public ResponseEntity<String> routeShare(@RequestBody RouteShareRequest request){

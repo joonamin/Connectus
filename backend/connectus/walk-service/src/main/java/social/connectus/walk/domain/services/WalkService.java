@@ -6,6 +6,7 @@ import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.common.customannotations.UseCase;
 import social.connectus.walk.common.exception.AlreadyExistsDataException;
 import social.connectus.walk.domain.command.*;
+import social.connectus.walk.domain.model.entity.LikeUser;
 import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
@@ -99,5 +100,18 @@ public class WalkService implements WalkUseCase {
     @Override
     public List<Long> getAchievementsByWalk(GetAchievementsCommand command) {
         return walkPort.getAchievementsByWalk(command);
+    }
+
+    @Override
+    public void routeLikeCancle(RouteLikeCommand command) {
+        Walk walk = walkPort.getWalkById(command.getWalkId());
+
+        for(LikeUser user : walk.getLikeUsers()){
+            if(user.getUserId() == command.getUserId()){
+                walkPort.routeLikeCancle(command);
+                return;
+            }
+        }
+        throw new AlreadyExistsDataException("User already doesn't like this walk.");
     }
 }
