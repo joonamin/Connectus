@@ -11,5 +11,5 @@ import social.connectus.application.rest.response.FollowPostResponse;
 @FeignClient(name = "location-service")
 public interface LocationServiceClient {
 	@GetMapping("/location/{postId}/returnPostLocation")
-	FollowPostResponse getPostLocation(@PathVariable Long postId, @RequestParam String type);
+	FollowPostResponse getPostLocation(@PathVariable("postId") Long postId, @RequestParam("type") String type);
 }
