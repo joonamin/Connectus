@@ -372,11 +372,8 @@ export default function TestMapWalkScreen() {
             )}km`}</MainText>
           </View>
         </View>
-        <Pressable
-          style={styles.menuButton}
-          color={colors.background}
-          onPress={handleMenuPress}>
-          <Ionicons name="menu" size={42} />
+        <Pressable style={styles.menuButton} onPress={handleMenuPress}>
+          <Ionicons name="menu" color={colors.background} size={42} />
         </Pressable>
       </View>
       <BottomSheet
