@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.common.exception.NotFoundException;
 import social.connectus.userservice.common.type.Achievement;
 import social.connectus.userservice.domain.model.entity.User;
+import social.connectus.userservice.domain.port.client.AchievementClient;
+import social.connectus.userservice.domain.port.client.response.AchievementResponse;
 import social.connectus.userservice.domain.port.external.port.AchievementPort;
 import social.connectus.userservice.domain.port.outbound.command.RefreshAchievementToUserCommand;
 import social.connectus.userservice.domain.port.outbound.command.UserToRefreshAchievementCommand;
@@ -18,6 +20,7 @@ import social.connectus.userservice.domain.port.outbound.repository.UserReposito
 public class AchievementAdapter implements AchievementPort {
 
 	private final UserRepository userRepository;
+	private final AchievementClient achievementClient;
 
 	@Override
 	public List<Achievement> completedAchievement(Long userId) {
@@ -38,6 +41,11 @@ public class AchievementAdapter implements AchievementPort {
 		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists"));
 		user.updateAchievement(command);
 		userRepository.save(user);
+	}
+
+	@Override
+	public List<AchievementResponse> getMyAchievements(Long userId) {
+		return achievementClient.getUserAchievements(userId);
 	}
 
 }
