@@ -6,10 +6,9 @@ spring:
     name: likes-service
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://127.0.0.1:3306/connectus?serverTimezone=Asia/Seoul&characterEncoding=UTF-8 # Database이름 ?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    #    mysql에 생성한 사용자 계정 정보를 써야 합니다.
+    url: jdbc:mariadb://mariadb.connectus.social:3308/like?useUnicode=true&characterEncoding=UTF-8
     username: root
-    password: 1234 # 자신의 mysql 비밀번호
+    password: ssafyE106!
   jpa:
     hibernate:
       ddl-auto: create
