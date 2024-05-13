@@ -19,4 +19,5 @@ public class MyWalkRecordResponse {
 	private int trackingCount;
 	private int walkId;
 	private int userId;
+
 }
