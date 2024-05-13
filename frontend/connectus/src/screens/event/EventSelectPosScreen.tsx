@@ -75,27 +75,30 @@ export default function EventSelectPosScreen({navigation}: ScreenProps) {
 
   return (
     <SafeAreaView style={styles.flex}>
-      <MapView
-        ref={mapRef}
-        style={styles.flex}
-        provider={PROVIDER_GOOGLE}
-        showsUserLocation
-        initialRegion={currentPos}
-        followsUserLocation
-        onPress={handlePressMap}
-        onMapReady={setUserLocation}>
-        {position &&
-          position.map((coordinate, index) => {
-            return (
-              <Marker
-                key={index}
-                coordinate={coordinate}
-                stopPropagation
-                onPress={e => setDeletePos(e.nativeEvent.coordinate)}
-              />
-            );
-          })}
-      </MapView>
+      {currentPos && (
+        <MapView
+          ref={mapRef}
+          style={styles.flex}
+          provider={PROVIDER_GOOGLE}
+          showsUserLocation
+          initialRegion={currentPos}
+          followsUserLocation
+          onPress={handlePressMap}
+          onMapReady={setUserLocation}>
+          {position &&
+            position.map((coordinate, index) => {
+              return (
+                <Marker
+                  key={index}
+                  coordinate={coordinate}
+                  stopPropagation
+                  onPress={e => setDeletePos(e.nativeEvent.coordinate)}
+                />
+              );
+            })}
+        </MapView>
+      )}
+
       <Pressable style={styles.locationButton} onPress={handlePos}>
         <MaterialIcons color={colors.background} name="my-location" size={42} />
       </Pressable>
