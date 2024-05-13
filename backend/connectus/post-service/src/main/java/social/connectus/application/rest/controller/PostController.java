@@ -189,4 +189,9 @@ public class PostController {
 	public ResponseEntity<FollowPostResponse> followPost(@PathVariable("postId") Long postId) throws GlobalException {
 		return ResponseEntity.ok(followPostUseCase.followPost(postId));
 	}
+
+	@GetMapping("/asdf")
+	public ResponseEntity<String> test() {
+		return ResponseEntity.ok("나약하구나");
+	}
 }

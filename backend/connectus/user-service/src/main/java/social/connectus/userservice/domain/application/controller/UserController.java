@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.common.exception.FailedToLoginException;
@@ -24,6 +26,7 @@ import social.connectus.userservice.domain.application.response.LogoutUserRespon
 import social.connectus.userservice.domain.application.response.MyPreferencePostResponse;
 import social.connectus.userservice.domain.application.response.MyPreferenceRouteResponse;
 import social.connectus.userservice.domain.application.response.MyWalkResponse;
+import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.application.response.RefreshAchievementResponse;
 import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
 import social.connectus.userservice.domain.port.inbound.PostUseCase;
@@ -99,4 +102,16 @@ public class UserController {
 		MyPreferencePostCommand command = MyPreferencePostCommand.from(request);
 		return ResponseEntity.ok(postUseCase.getMyPreferencePost(command));
 	}
+
+	@GetMapping("/{userId}/openedPosts")
+	public ResponseEntity<OpenedPostResponse> getOpenedPost(@PathVariable Long userId) throws JsonProcessingException {
+		return ResponseEntity.ok(userUseCase.getOpenedPost(userId));
+	}
+
+	@PostMapping("/{userId}/openedPosts")
+	public ResponseEntity<Void> updateOpenedPosts(@PathVariable Long userId, @RequestBody Long postId) {
+		userUseCase.updateOpenedPosts(userId, postId);
+		return ResponseEntity.ok().build();
+	}
+
 }
