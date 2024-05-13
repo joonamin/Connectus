@@ -65,7 +65,7 @@ public class PostController {
 	}
 
 	@DeleteMapping("/{postId}")
-	public ResponseEntity<String> deletePost(@PathVariable Long postId) {
+	public ResponseEntity<String> deletePost(@PathVariable("postId") Long postId) {
 		// deletePostUseCase.deletePost(postId);
 		return ResponseEntity.ok().body("delete complete");
 	}
@@ -88,7 +88,7 @@ public class PostController {
 	}
 
 	@GetMapping("/user-experience/{postId}")
-	public ResponseEntity<DetailPostResponse> detailPostByUserExperience(@PathVariable Long postId, Long userId ) throws
+	public ResponseEntity<DetailPostResponse> detailPostByUserExperience(@PathVariable("postId") Long postId, Long userId ) throws
 		BusinessException,
 		GlobalException {
 		DetailPostResponse response = detailPostUseCase.detailByUserExperience(postId,userId);
@@ -96,7 +96,7 @@ public class PostController {
 	}
 
 	@GetMapping("/around/{postId}")
-	public ResponseEntity<DetailPostResponse> detailPostByLocation(@PathVariable Long postId, CoordinateRequestDto coordinate) throws
+	public ResponseEntity<DetailPostResponse> detailPostByLocation(@PathVariable("postId") Long postId, CoordinateRequestDto coordinate) throws
 		BusinessException,
 		GlobalException {
 		DetailPostResponse response = detailPostUseCase.detailByLocation(postId,coordinate);
@@ -114,7 +114,7 @@ public class PostController {
 			description = "post 불러오기 성공"
 		)
 	})
-	public ResponseEntity<DetailPostResponse> detailPostById(@PathVariable Long postId, @RequestParam Long userId, @RequestParam Double distance) throws
+	public ResponseEntity<DetailPostResponse> detailPostById(@PathVariable("postId") Long postId, @RequestParam Long userId, @RequestParam Double distance) throws
 		BusinessException,
 		GlobalException {
 		return ResponseEntity.ok().body(detailPostUseCase.detailByPostId(postId, userId, distance));
@@ -131,7 +131,7 @@ public class PostController {
 			description = "comment 저장 성공"
 		)
 	})
-	public ResponseEntity<String> createComment(@PathVariable Long postId,@RequestBody CreateCommentRequestDto dto) throws
+	public ResponseEntity<String> createComment(@PathVariable("postId") Long postId,@RequestBody CreateCommentRequestDto dto) throws
 		GlobalException, NotFoundException {
 		String result = createCommentUseCase.createComment(postId, dto);
 		return ResponseEntity.ok().body(result);
@@ -166,7 +166,7 @@ public class PostController {
 		)
 	})
 	@GetMapping("/feed/{walkId}")
-	public ResponseEntity<FeedResponse> feedDetail(@PathVariable Long walkId) throws GlobalException {
+	public ResponseEntity<FeedResponse> feedDetail(@PathVariable("walkId") Long walkId) throws GlobalException {
 		return ResponseEntity.ok().body(feedUseCase.feedDetail(walkId));
 	}
 
@@ -186,7 +186,7 @@ public class PostController {
 		)
 	})
 	@GetMapping("/follow/{postId}")
-	public ResponseEntity<FollowPostResponse> followPost(@PathVariable Long postId) throws GlobalException {
+	public ResponseEntity<FollowPostResponse> followPost(@PathVariable("postId") Long postId) throws GlobalException {
 		return ResponseEntity.ok(followPostUseCase.followPost(postId));
 	}
 }
