@@ -32,6 +32,7 @@ export default function FeedDetailScreen() {
 
   const [isFeedLiked, setIsFeedLiked] = useState(false);
   const [isUseKeyBoard, setIsUseKeyBoard] = useState(false);
+  const [comment, setComment] = useState('');
   // 스크린 확인을 위한 더미 데이터입니다
   const likeNumber = 12;
   const commentNumber = 42;
@@ -47,7 +48,8 @@ export default function FeedDetailScreen() {
    * 형태의 데이터 전달
    */
   const handlePostComment = async () => {
-    createPostComment(1);
+    const body = {postId: 1, dto: {content: comment, authorId: 1}};
+    createPostComment(1, body);
   };
 
   // 컴포넌트 로드 시 키보드가 보일때 마다 화면을 제어하기위해 이벤트리스너를 부착합니다
@@ -120,6 +122,7 @@ export default function FeedDetailScreen() {
       <View style={commentStyle.commentInputContainer}>
         <TextInput
           multiline
+          onChangeText={text => setComment(text)}
           returnKeyType="send"
           autoCapitalize="none"
           spellCheck={false}
@@ -128,7 +131,9 @@ export default function FeedDetailScreen() {
           placeholderTextColor={colors.white}
           style={commentStyle.commentInput}
         />
-        <Pressable style={commentStyle.submitButton}>
+        <Pressable
+          style={commentStyle.submitButton}
+          onPress={handlePostComment}>
           <MaterialIcons name="message" size={24} color={colors.white} />
         </Pressable>
       </View>
