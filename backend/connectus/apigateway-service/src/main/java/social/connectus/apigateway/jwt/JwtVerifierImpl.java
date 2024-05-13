@@ -17,7 +17,7 @@ public class JwtVerifierImpl implements JwtVerifier {
 
 	private final SecretKey key;
 
-	public JwtVerifierImpl(@Value("${jwt.secret-key") String keyString) {
+	public JwtVerifierImpl(@Value("${jwt.secret-key}") String keyString) {
 		this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(keyString));
 	}
 
