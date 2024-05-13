@@ -1,4 +1,13 @@
-import {Pressable, SafeAreaView, StyleSheet, Text} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import colors from '@/constants/colors';
 import {fonts} from '@/constants';
@@ -26,44 +35,54 @@ export default function AuthRegisterScreen() {
 
   return (
     <MainContainer style={styles.flex}>
-      <SafeAreaView style={styles.mainContainer}>
-        <AuthInput
-          autoFocus
-          inputType="email"
-          value={email}
-          handleChange={setEmail}
-          placeholder="아이디를 입력해주세요"
-          keyboardType="email-address"
-        />
-        <AuthInput
-          autoFocus
-          inputType="nickname"
-          value={nickname}
-          handleChange={setNickname}
-          placeholder="닉네임을 입력해주세요"
-          keyboardType="default"
-        />
-        <AuthInput
-          inputType="password"
-          value={password}
-          handleChange={setPassword}
-          placeholder="비밀번호를 입력해주세요"
-          secureTextEntry
-        />
-        <AuthInput
-          inputType="passwordConfirm"
-          value={passwordConfirm}
-          handleChange={setPasswordConfirm}
-          placeholder="비밀번호를 다시 입력해주세요"
-          checkValue={password}
-          secureTextEntry
-        />
-        <Pressable style={styles.loginButton}>
-          <MainText>회원가입</MainText>
-        </Pressable>
-        <Pressable style={styles.registerButton} onPress={handlePressRegister}>
-          <Text style={styles.registerText}>로그인</Text>
-        </Pressable>
+      <SafeAreaView>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={Platform.OS === 'ios' && styles.kbdView}>
+          <ScrollView>
+            <View style={styles.mainContainer}>
+              <AuthInput
+                autoFocus
+                inputType="email"
+                value={email}
+                handleChange={setEmail}
+                placeholder="아이디를 입력해주세요"
+                keyboardType="email-address"
+              />
+              <AuthInput
+                autoFocus
+                inputType="nickname"
+                value={nickname}
+                handleChange={setNickname}
+                placeholder="닉네임을 입력해주세요"
+                keyboardType="default"
+              />
+              <AuthInput
+                inputType="password"
+                value={password}
+                handleChange={setPassword}
+                placeholder="비밀번호를 입력해주세요"
+                secureTextEntry
+              />
+              <AuthInput
+                inputType="passwordConfirm"
+                value={passwordConfirm}
+                handleChange={setPasswordConfirm}
+                placeholder="비밀번호를 다시 입력해주세요"
+                checkValue={password}
+                secureTextEntry
+              />
+              <Pressable style={styles.loginButton}>
+                <MainText>회원가입</MainText>
+              </Pressable>
+              <Pressable
+                style={styles.registerButton}
+                onPress={handlePressRegister}>
+                <Text style={styles.registerText}>로그인</Text>
+              </Pressable>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </MainContainer>
   );
@@ -74,6 +93,9 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     alignItems: 'center',
+  },
+  kbdView: {
+    flex: 1,
   },
   mainContainer: {
     flex: 1,
