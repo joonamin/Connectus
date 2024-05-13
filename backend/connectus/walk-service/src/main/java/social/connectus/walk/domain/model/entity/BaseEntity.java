@@ -19,4 +19,5 @@ public class BaseEntity {
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+    private long spotId;
 }
