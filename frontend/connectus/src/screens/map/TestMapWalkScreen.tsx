@@ -47,6 +47,7 @@ import CustomMarker from '@/components/map/CustomMarker';
 import Geolocation from '@react-native-community/geolocation';
 import useRouteStore from '@/store/useRouteStore';
 import useModal from '@/hooks/useModal';
+import BottomSheetQuickStackNavigator from '@/navigations/stack/BottomSheetQuickStackNavigator';
 
 const DUMMY_POSITION = [
   {
@@ -131,7 +132,7 @@ export default function TestMapWalkScreen() {
     setDistance(prev => {
       return prev + dist;
     });
-    console.log(distance.toFixed(2));
+    // console.log(distance.toFixed(2));
   };
   useInterval(tick, 1000);
   useInterval(traceTick, 3000);
@@ -374,7 +375,7 @@ export default function TestMapWalkScreen() {
         enablePanDownToClose={true}>
         <SafeAreaProvider>
           <NavigationContainer independent={true} ref={bottomSheetNav}>
-            <MapBottomSheetNavigator />
+            <BottomSheetQuickStackNavigator />
           </NavigationContainer>
         </SafeAreaProvider>
       </BottomSheet>
