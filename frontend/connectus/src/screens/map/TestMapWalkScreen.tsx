@@ -354,17 +354,28 @@ export default function TestMapWalkScreen() {
       <View style={styles.bottomIndicator}>
         <View style={styles.indicatorContainer}>
           <View style={styles.timeTextContainer}>
-            <Ionicons name="timer-outline" size={32} />
+            <Ionicons
+              name="timer-outline"
+              color={colors.background}
+              size={32}
+            />
             <MainText style={styles.timeText}>{indicateTime}</MainText>
           </View>
           <View style={styles.distanceTextContainer}>
-            <FontAwesome5 name={'walking'} size={28} />
+            <FontAwesome5
+              name={'walking'}
+              color={colors.background}
+              size={28}
+            />
             <MainText style={styles.distanceText}>{`${distance.toFixed(
               2,
             )}km`}</MainText>
           </View>
         </View>
-        <Pressable style={styles.menuButton} onPress={handleMenuPress}>
+        <Pressable
+          style={styles.menuButton}
+          color={colors.background}
+          onPress={handleMenuPress}>
           <Ionicons name="menu" size={42} />
         </Pressable>
       </View>
