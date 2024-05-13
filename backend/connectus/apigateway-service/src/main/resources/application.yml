@@ -42,7 +42,7 @@ spring:
         - id: event-service
           uri: http://localhost:8105/
           predicates:
-            - Path=/likes/**
+            - Path=/event/**
     # default-filters:
     #     - name: CustomAuthFilter
     #       args:
