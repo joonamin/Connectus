@@ -13,6 +13,7 @@ import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.VO.Position;
 import social.connectus.walk.domain.model.entity.*;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
+import social.connectus.walk.infrastructure.databases.mariadb.repository.LikeUserRepository;
 import social.connectus.walk.infrastructure.databases.mariadb.repository.RouteRepository;
 import social.connectus.walk.infrastructure.databases.mariadb.repository.WalkRepository;
 import social.connectus.walk.infrastructure.external.UserClient;
@@ -26,6 +27,7 @@ public class WalkAdapter implements WalkPort {
     private final ModelMapper modelMapper;
     private final WalkRepository walkRepository;
     private final RouteRepository routeRepository;
+    private final LikeUserRepository likeUserRepository;
 
     public String feignHealthCheck(){
         return userClient.healthCheck();
@@ -74,6 +76,21 @@ public class WalkAdapter implements WalkPort {
     @Override
     public List<Long> getAchievementsByWalk(GetAchievementsCommand command) {
         return userClient.getAchievementsByWalk(command);
+    }
+
+    @Transactional
+    @Override
+    public void routeLikeCancle(RouteLikeCommand command) {
+//        Walk walk = getWalkById(command.getWalkId());
+//        for(LikeUser user : walk.getLikeUsers()){
+//            if(user.getUserId() == command.getUserId()){
+//                walk.getLikeUsers().remove(user);
+//                break;
+//            }
+//        }
+//        walkRepository.save(walk);
+        List<LikeUser> user = likeUserRepository.findByUserIdAndWalkId(command.getUserId(), command.getWalkId());
+        likeUserRepository.deleteAll(user);
     }
 
     @Transactional
