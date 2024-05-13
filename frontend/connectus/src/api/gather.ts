@@ -1,5 +1,5 @@
 // 모여라에서 사용할 api들을 정리한 파일입니다
-import {axiosGather} from './axios';
+import {axiosInstance} from './axios';
 
 type gather = {
   hostId: number;
@@ -14,7 +14,7 @@ type gather = {
  * @returns {number} 모여라에서 반환된 id를 반환
  */
 const gatherStart = async (body: gather) => {
-  const {data} = await axiosGather.post('/gather', body);
+  const {data} = await axiosInstance.post('/gather', body);
   return data;
 };
 
@@ -24,7 +24,7 @@ const gatherStart = async (body: gather) => {
  * @returns
  */
 const gatherDetail = async (gatherId: number) => {
-  const {data} = await axiosGather.get(`/gather/${gatherId}`);
+  const {data} = await axiosInstance.get(`/gather/${gatherId}`);
   return data;
 };
 
@@ -39,7 +39,7 @@ type requestGather = {
  * @returns
  */
 const gatherDone = async (body: requestGather): Promise<string[]> => {
-  const {data} = await axiosGather.patch('/gather/close', body);
+  const {data} = await axiosInstance.patch('/gather/close', body);
   return data;
 };
 
@@ -49,7 +49,7 @@ const gatherDone = async (body: requestGather): Promise<string[]> => {
  * @returns
  */
 const gatherJoin = async (body: requestGather): Promise<string[]> => {
-  const {data} = await axiosGather.patch('/gather/want_join', body);
+  const {data} = await axiosInstance.patch('/gather/want_join', body);
   return data;
 };
 
@@ -59,7 +59,7 @@ const gatherJoin = async (body: requestGather): Promise<string[]> => {
  * @returns
  */
 const gatherReach = async (body: requestGather): Promise<string[]> => {
-  const {data} = await axiosGather.patch('/gather/join', body);
+  const {data} = await axiosInstance.patch('/gather/join', body);
   return data;
 };
 
