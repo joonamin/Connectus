@@ -81,7 +81,7 @@ public class PostController {
 			description = "post list 불러오기 성공"
 		)
 	})
-	public ResponseEntity<List<MainPostResponse>> mainPostList(@RequestParam List<Long> id) throws
+	public ResponseEntity<List<MainPostResponse>> mainPostList(@RequestParam("id") List<Long> id) throws
 		BusinessException,
 		GlobalException {
 		return ResponseEntity.ok().body(mainPostUseCase.mainPost(id));
@@ -114,7 +114,7 @@ public class PostController {
 			description = "post 불러오기 성공"
 		)
 	})
-	public ResponseEntity<DetailPostResponse> detailPostById(@PathVariable("postId") Long postId, @RequestParam Long userId, @RequestParam Double distance) throws
+	public ResponseEntity<DetailPostResponse> detailPostById(@PathVariable("postId") Long postId, @RequestParam("userId") Long userId, @RequestParam("distance") Double distance) throws
 		BusinessException,
 		GlobalException {
 		return ResponseEntity.ok().body(detailPostUseCase.detailByPostId(postId, userId, distance));
@@ -150,7 +150,7 @@ public class PostController {
 	})
 	public ResponseEntity<SliceResponse<FeedResponse>> feedMain(
 		@ModelAttribute CoordinateRequestDto userPosition,
-		@RequestParam int pageNum,
+		@RequestParam("pageNum") int pageNum,
 		Long userId) throws GlobalException {
 		return ResponseEntity.ok().body(feedUseCase.feedMain(userPosition,pageNum,userId));
 	}
