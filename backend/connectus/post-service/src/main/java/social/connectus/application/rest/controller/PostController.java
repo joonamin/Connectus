@@ -190,8 +190,8 @@ public class PostController {
 		return ResponseEntity.ok(followPostUseCase.followPost(postId));
 	}
 
-	@GetMapping("/asdf")
+	@GetMapping("/health-check")
 	public ResponseEntity<String> test() {
-		return ResponseEntity.ok("나약하구나");
+		return ResponseEntity.ok("Check Good!");
 	}
 }
