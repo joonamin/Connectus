@@ -72,7 +72,7 @@ public class WalkController {
 
     @Operation(summary = "산책 기록 공유 취소")
     @PatchMapping("/route-protect")
-    public ResponseEntity<String> routeShare(@RequestBody RouteProtectRequest request){
+    public ResponseEntity<String> routeProtect(@RequestBody RouteProtectRequest request){
         walkUseCase.routeProtect(RouteProtectCommand.from(request));
         return ResponseEntity.ok("Successfully protected.");
     }
