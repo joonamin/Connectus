@@ -19,6 +19,8 @@ import {
 import HeadCountInput from '@/components/map/HeadCountInput';
 import {NativeViewGestureHandler} from 'react-native-gesture-handler';
 import {getSubmitDate} from '@/utils/date';
+import {gatherStart} from '@/api/gather';
+import {getMinuteDifference} from '@/utils';
 
 // 유저가 설정 가능한 시간
 const GATHERTIME = [5, 10, 15, 20, 30];
@@ -32,7 +34,7 @@ export default function CreateGatherScreen() {
   // 모집 시간
   const [gatherTime, setGatherTime] = useState<number | null>(null);
   // 모집 설명
-  const [content, setContent] = useState<string>();
+  const [content, setContent] = useState<string>('');
 
   const keyBoardDismiss = () => {
     Keyboard.dismiss();
@@ -50,9 +52,19 @@ export default function CreateGatherScreen() {
     setGatherTime(GATHERTIME[index]);
   };
 
-  const handleGatherPress = () => {
+  /**
+   * 모여라 모집을 눌렀을때 현재시간 + 모여라 시간을 적용한 endTime을 계산해 서버에 전송합니다
+   * @todo hostId수정 필요
+   */
+  const handleGatherPress = async () => {
     if (gatherTime !== null) {
-      console.log(getSubmitDate(gatherTime));
+      const endTime = getSubmitDate(gatherTime);
+      gatherStart({
+        hostId: 1,
+        content: content,
+        maxJoiner: headCount,
+        endTime: endTime,
+      });
     }
   };
 
