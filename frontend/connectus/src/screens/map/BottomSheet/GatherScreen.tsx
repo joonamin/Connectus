@@ -6,16 +6,42 @@ import colors from '@/constants/colors';
 import CustomTextButton from '@/components/buttons/CustomTextButton';
 import {fonts} from '@/constants';
 import MainText from '@/components/text/MainText';
+import {gatherDone, gatherJoin, gatherReach} from '@/api/gather';
 
 type GatherScreenType = {
   id: number;
 };
 /**
  * 맵에있는 모여라 마커를 press했을 시, 이동하게될 screen입니다.
+ * @todo duration에 남은시간 초로 전달
+ * @todo 남은 인원수 표시
+ * @todo 해당 마커의 좌표와 현재 유저의 좌표(거리) 계산 후, 거리에 따른 참여버튼 수정 필요
  */
 export default function GatherScreen() {
   // 게시자를 확인하고 모집인원 아래의 ui를 변하게 합니다.
   const [isPublisher, setIsPublisher] = useState<boolean>(false);
+
+  /**
+   *  모여라의 id와 user의 id를 제공해 모여라를 close
+   */
+  const handleGatherClose = async () => {
+    await gatherDone({gatherId: 1, userId: 1});
+  };
+
+  /**
+   * 요청을 희망하는 유저가 호출할 axios요청입니다
+   */
+  const handleWantJoin = async () => {
+    await gatherJoin({gatherId: 1, userId: 1});
+  };
+
+  /**
+   * @todo 거리계산 후, 어느정도 거리 안에 들어온 유저가 호출할수있도록 수정필요
+   */
+  const handleGatherReach = async () => {
+    await gatherReach({gatherId: 1, userId: 1});
+  };
+
   return (
     <MainContainer style={styles.mainContainer}>
       <View style={styles.topIndicator}>
@@ -60,8 +86,12 @@ export default function GatherScreen() {
           {'이곳에 설명이 들어올 것이다 닝겐...'}
         </Text>
       </View>
-      {isPublisher && <CustomTextButton label="모여라 종료" />}
-      {!isPublisher && <CustomTextButton label="모여라 신청" />}
+      {isPublisher && (
+        <CustomTextButton label="모여라 종료" onPress={handleGatherClose} />
+      )}
+      {!isPublisher && (
+        <CustomTextButton label="모여라 신청" onPress={handleWantJoin} />
+      )}
     </MainContainer>
   );
 }

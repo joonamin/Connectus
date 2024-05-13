@@ -13,9 +13,21 @@ type gather = {
  * @param {gather} body
  * @returns {number} 모여라에서 반환된 id를 반환
  */
-const gatherStart = async (body: gather) => {
-  const {data} = await axiosInstance.post('/gather', body);
-  return data;
+const gatherStart = async (body: gather): Promise<any> => {
+  try {
+    const {data} = await axiosInstance.post('/gather', body);
+    console.log(data);
+    return data;
+  } catch (error: any) {
+    if (error.response) {
+      console.error('에러 응답:', error.response.data);
+      console.error('에러 코드:', error.response.status);
+    } else if (error.request) {
+      console.error('요청을 보냈지만 응답을 받지 못했습니다.');
+    } else {
+      console.error('요청을 설정하는 중에 에러가 발생했습니다:', error.message);
+    }
+  }
 };
 
 /**
