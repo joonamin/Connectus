@@ -11,10 +11,10 @@ import social.connectus.application.rest.response.OpenedPostResponse;
 @FeignClient(name = "user-service")
 public interface UserServiceClient {
 	@GetMapping("/user/{userId}/openedPosts")
-	OpenedPostResponse getOpenedPost(@PathVariable Long userId);
+	OpenedPostResponse getOpenedPost(@PathVariable("userId") Long userId);
 
 	@PostMapping("/user/{userId}/openedPosts")
-	void updateOpenedPost(@PathVariable Long userId, @RequestBody Long postId);
+	void updateOpenedPost(@PathVariable("userId") Long userId, @RequestBody Long postId);
 
 	@GetMapping("/user/health-check")
 	String healthCheck();

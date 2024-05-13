@@ -13,10 +13,10 @@ import social.connectus.application.rest.request.CoordinateRequestDto;
 public interface WalkServiceClient {
 	@GetMapping("/walk/feed-list")
 	Slice<Long> getFeedList(
-		@RequestParam CoordinateRequestDto coordinate,
-		@RequestParam int pageNum,
-		@RequestParam int pageSize,
-		@RequestParam Long userId,
+		@RequestParam("coordinate") CoordinateRequestDto coordinate,
+		@RequestParam("pageNum") int pageNum,
+		@RequestParam("pageSize") int pageSize,
+		@RequestParam("userId") Long userId,
 		Double radius
 		);
 }

@@ -7,5 +7,5 @@ public interface LikePort {
 
 	int getLikeCount(Long domainId, Type type);
 
-	boolean isLike(Long domainId);
+	boolean isLike(Long domainId, Type type);
 }

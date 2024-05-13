@@ -9,5 +9,5 @@ import social.connectus.application.rest.request.CoordinateRequestDto;
 @FeignClient(name = "position-service")
 public interface 	PositionServiceClient {
 	@GetMapping("/position-service/{locationId}/coordinate")
-	CoordinateRequestDto getPostPosition(@PathVariable Long postId);
+	CoordinateRequestDto getPostPosition(@PathVariable("postId") Long postId);
 }
