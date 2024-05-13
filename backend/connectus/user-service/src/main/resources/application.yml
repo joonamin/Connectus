@@ -1,5 +1,5 @@
 server:
-  port: 3007
+  port: 8107
 
 spring:
   application:
@@ -9,9 +9,9 @@ spring:
     port: 6379
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3306/connectus?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mariadb://mariadb.connectus.social:3307/user?useUnicode=true&characterEncoding=UTF-8
     username: root
-    password: 1234
+    password: ssafyE106!
   jpa:
     hibernate:
       ddl-auto: update

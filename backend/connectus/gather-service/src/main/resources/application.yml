@@ -1,12 +1,12 @@
 server:
-  port: 8080
+  port: 8102
 
 spring:
   application:
     name: gather-service
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://mariadb.connectus.social:3302/gather?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mariadb://mariadb.connectus.social:3302/gather?useUnicode=true&characterEncoding=UTF-8
     username: root
     password: ssafyE106!
   jpa:
