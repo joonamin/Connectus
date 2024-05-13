@@ -21,8 +21,8 @@ public class GatherController {
 
     private final GatherUseCase gatherUseCase;
 
-    @GetMapping("/health_check")
-    public String health_check(){
+    @GetMapping("/health-check")
+    public String healthCheck(){
         return "It's working on gather-service!";
     }
 
