@@ -1,5 +1,6 @@
 package social.connectus.walk.application.rest.controller;
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
@@ -83,7 +84,8 @@ public class WalkController {
     @GetMapping("/end-walk")
     public ResponseEntity<GetAchievementsResponse> getAchievementsByWalk(@RequestBody GetAchievementsRequest request){
         List<Long> achievementIds = walkUseCase.getAchievementsByWalk(GetAchievementsCommand.from((request)));
-        return ResponseEntity.ok(GetAchievementsResponse.builder().achievementIds(achievementIds).build());
+//        return ResponseEntity.ok(GetAchievementsResponse.builder().achievementIds(achievementIds).build());
+        return null;
     }
 
 }

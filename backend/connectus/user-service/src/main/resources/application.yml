@@ -1,5 +1,5 @@
 server:
-  port: 3007
+  port: 8107
 
 spring:
   application:
