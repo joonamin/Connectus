@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import social.connectus.common.type.Type;
+import social.connectus.domain.model.Likes;
 
 @RequiredArgsConstructor
 @Repository
@@ -21,5 +22,14 @@ public class LikeRepositoryCustomImpl implements LikeRepositoryCustom {
 			.from(likes)
 			.where(likes.domainId.eq(domainId).and(likes.type.eq(type)))
 			.fetchOne();
+	}
+
+	@Override
+	public boolean existsByDomainId(Long domainId, Type type) {
+		Integer fetchFirst = jpaQueryFactory.selectOne()
+			.from(likes)
+			.where(likes.domainId.eq(domainId).and(likes.type.eq(type)))
+			.fetchOne();
+		return fetchFirst != null;
 	}
 }

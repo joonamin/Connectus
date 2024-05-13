@@ -13,25 +13,40 @@ spring:
     name: apigateway-service
   cloud:
     gateway:
-      mvc:
-        routes:
-          - id: gather-service
-            uri: http://localhost:8080/
-            predicates:
-              - Path=/gather/**
-          - id: walk-service
-            uri: http://localhost:8081/
-            predicates:
-              - Path=/walk/**
-          - id: post-service
-            uri: http://localhost:3001/
-            predicates:
-              - Path=/post/**
-          - id: user-service
-            uri: http://localhost:3007/
-            predicates:
-              - Path=/user/**
-          - id: likes-service
-            uri: http://localhost:3008/
-            predicates:
-              - Path=/likes/**
+      routes:
+        - id: gather-service
+          uri: http://localhost:8080/
+          predicates:
+            - Path=/gather/**
+        - id: walk-service
+          uri: http://localhost:8081/
+          predicates:
+            - Path=/walk/**
+        - id: post-service
+          uri: http://localhost:3001/
+          predicates:
+            - Path=/post/**
+        - id: user-service
+          uri: http://localhost:3007/
+          predicates:
+            - Path=/user/**
+          filters:
+            - name: CustomAuthFilter
+              args:
+                excludedFilterPathPattern: /user/(login|register)
+
+        - id: likes-service
+          uri: http://localhost:3008/
+          predicates:
+            - Path=/likes/**
+#    default-filters:
+#        - name: CustomAuthFilter
+#          args:
+#            excludedFilterPathPattern: "http://localhost:3007/user/(login|register)"
+
+jwt:
+  secret-key: 9741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F7
+
+logging:
+  level:
+    org.springframework.cloud.gateway: trace
