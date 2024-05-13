@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
   Pressable,
@@ -6,7 +6,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {LatLng, PROVIDER_GOOGLE} from 'react-native-maps';
 import useUserLocation from '../../hooks/useUserLocation';
 import MainText from '@/components/text/MainText';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
@@ -15,6 +15,7 @@ import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
 import colors from '@/constants/colors';
+import Geolocation from '@react-native-community/geolocation';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
@@ -24,7 +25,7 @@ type Navigation = CompositeNavigationProp<
 export default function MapHomeScreen() {
   const mapRef = useRef<MapView | null>(null);
   const navigation = useNavigation<Navigation>();
-  const {userLocation} = useUserLocation();
+  const [initPos, setInitPos] = useState<LatLng>();
 
   /**
    * 산책 시작 버튼 press시 이동할 screen을 잠시 test로 설정해뒀습니다.
@@ -34,22 +35,45 @@ export default function MapHomeScreen() {
     navigation.navigate('WalkTest');
   };
 
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      info => {
+        const {latitude, longitude} = info.coords;
+        // 초기 좌표값 설정.
+        setInitPos({latitude, longitude});
+      },
+      () => {
+        console.log('error');
+      },
+      {
+        // 상세 좌표를 요청하는 코드
+        enableHighAccuracy: true,
+        distanceFilter: 0,
+        interval: 3000,
+        fastestInterval: 2000,
+      },
+    );
+  }, []);
+
   return (
     <SafeAreaView style={{flex: 1}}>
-      <MapView
-        ref={mapRef}
-        style={styles.container}
-        provider={PROVIDER_GOOGLE}
-        showsUserLocation
-        followsUserLocation
-        showsMyLocationButton={true}
-        region={{
-          ...userLocation,
-          latitudeDelta: 0.012,
-          longitudeDelta: 0.011,
-        }}>
-        {}
-      </MapView>
+      {initPos && (
+        <MapView
+          ref={mapRef}
+          style={styles.container}
+          provider={PROVIDER_GOOGLE}
+          showsUserLocation
+          followsUserLocation
+          showsMyLocationButton={true}
+          initialRegion={{
+            ...initPos,
+            latitudeDelta: 0.012,
+            longitudeDelta: 0.011,
+          }}>
+          {}
+        </MapView>
+      )}
+
       <View style={styles.buttonContainer}>
         <Pressable style={styles.startButton} onPress={handlePressStart}>
           <MainText>산책시작</MainText>
