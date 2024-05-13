@@ -1,5 +1,7 @@
 package social.connectus.userservice.domain.port.inbound;
 
+import java.util.List;
+
 import social.connectus.userservice.domain.application.request.RefreshAchievementRequest;
 import social.connectus.userservice.domain.application.response.AchievementResponse;
 import social.connectus.userservice.domain.application.response.CompletedAchievementListResponse;
@@ -10,5 +12,5 @@ public interface AchievementUseCase {
 
 	public RefreshAchievementResponse refreshAchievement(Long userId, RefreshAchievementRequest request);
 
-	public AchievementResponse getMyAchievements(Long userId);
+	public List<AchievementResponse> getMyAchievements(Long userId);
 }

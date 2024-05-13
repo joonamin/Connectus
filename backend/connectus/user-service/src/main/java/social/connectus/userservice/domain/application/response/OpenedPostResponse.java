@@ -3,7 +3,6 @@ package social.connectus.userservice.domain.application.response;
 import java.io.Serializable;
 import java.util.List;
 
-import com.netflix.discovery.provider.Serializer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
