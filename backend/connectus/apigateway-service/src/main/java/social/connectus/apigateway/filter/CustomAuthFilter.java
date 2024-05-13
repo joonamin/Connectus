@@ -31,7 +31,7 @@ public class CustomAuthFilter extends AbstractGatewayFilterFactory<CustomAuthFil
 	public GatewayFilter apply(Config config) {
 		return (exchange, chain) -> {
 			ServerHttpRequest request = exchange.getRequest();
-
+			System.out.println("넌 통과하면 안되는데");
 			// filter가 적용되지 않는 request path(=endpoint)는 filter 적용에서 예외시킨다.
 			// 대부분의 서비스는 authorization이 필요하기 때문에, 여집합으로 처리하였습니다.
 			// ex) https://localhost:8800/user-service/login

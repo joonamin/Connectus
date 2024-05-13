@@ -73,7 +73,7 @@ public class LikesController {
 			description = "좋아요 여부 리턴"
 		)
 	})
-	public ResponseEntity<Boolean> isLike(@PathVariable Long domainId, @RequestBody String typeString){
+	public ResponseEntity<Boolean> isLike(@PathVariable Long domainId, @RequestParam String typeString){
 		Type type = Type.valueOf(typeString);
 		return ResponseEntity.ok(likeUseCase.isLike(domainId,type));
 	}
