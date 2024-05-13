@@ -52,22 +52,25 @@ export default function QuickMenuHomeScreen() {
       <MainText style={styles.header}>빠른 메뉴</MainText>
       <View style={styles.moveButtonContainer}>
         <Pressable style={styles.moveButton} onPress={handlePressCreateFeed}>
-          <Ionicons name="book-outline" size={32} />
+          <Ionicons name="book-outline" color={colors.background} size={32} />
           <MainText style={styles.bottomSheetOptionText}>방명록 작성</MainText>
         </Pressable>
         <Pressable style={styles.moveButton} onPress={handlePressCreateGather}>
-          <Ionicons name="radio" size={32} />
+          <Ionicons name="radio" color={colors.background} size={32} />
           <MainText style={styles.bottomSheetOptionText}>모여라 작성</MainText>
         </Pressable>
       </View>
       <View style={styles.toogleButtonContainer}>
-        <FontAwesome5 name="map-marked-alt" size={32} />
+        <FontAwesome5
+          name="map-marked-alt"
+          color={colors.background}
+          size={32}
+        />
         <MainText style={styles.bottomSheetOptionText}>
           사용자 위치 공유
         </MainText>
         <Switch style={{transform: [{scaleX: 1.5}, {scaleY: 1.5}]}} />
       </View>
-
       <Pressable
         style={[styles.endWalkButton, styles.quitButton]}
         onPress={handlePressQuit}>
