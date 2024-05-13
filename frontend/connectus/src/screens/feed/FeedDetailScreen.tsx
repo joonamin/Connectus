@@ -80,6 +80,7 @@ export default function FeedDetailScreen() {
               source={require('@/assets/test-feed-image.jpg')}
             />
           </View>
+          {/* 좋아요 버튼 */}
           <View style={styles.feedIndicator}>
             {isFeedLiked ? (
               <Pressable onPress={handlePressLikeButton}>
