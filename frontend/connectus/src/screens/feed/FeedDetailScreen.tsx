@@ -17,6 +17,7 @@ import MainText from '@/components/text/MainText';
 import colors from '@/constants/colors';
 import useModal from '@/hooks/useModal';
 import Comment from '@/components/feed/Comment';
+import {createPostComment} from '@/api/post';
 
 /**
  * @todo feedHomeScreen에서 해당 스크린에 대한 데이터를 전달받아 like, comment의 수를 받아와야하고
@@ -37,6 +38,16 @@ export default function FeedDetailScreen() {
   // 좋아요 버튼을 눌렀을때 실행할 함수로 나중에 api연결이 필요합니다
   const handlePressLikeButton = () => {
     setIsFeedLiked(!isFeedLiked);
+  };
+
+  /**
+   * @todo postId 전달
+   * params로 전달해줄
+   * {postId" : Long, "dto" : {"content" : String,"authorId" : Long}}
+   * 형태의 데이터 전달
+   */
+  const handlePostComment = async () => {
+    createPostComment(1);
   };
 
   // 컴포넌트 로드 시 키보드가 보일때 마다 화면을 제어하기위해 이벤트리스너를 부착합니다
