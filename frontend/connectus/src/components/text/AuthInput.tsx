@@ -10,7 +10,7 @@ import colors from '@/constants/colors';
 import {fonts} from '@/constants';
 import {validateInput} from '@/utils/validate';
 
-export type authType = 'email' | 'password' | 'passwordConfirm';
+export type authType = 'email' | 'nickname' | 'password' | 'passwordConfirm';
 
 interface AuthInputProps extends TextInputProps {
   value: string;

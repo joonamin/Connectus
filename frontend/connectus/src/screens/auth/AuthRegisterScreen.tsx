@@ -22,6 +22,7 @@ export default function AuthRegisterScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [nickname, setNickname] = useState<string>('');
 
   return (
     <MainContainer style={styles.flex}>
@@ -33,6 +34,14 @@ export default function AuthRegisterScreen() {
           handleChange={setEmail}
           placeholder="아이디를 입력해주세요"
           keyboardType="email-address"
+        />
+        <AuthInput
+          autoFocus
+          inputType="nickname"
+          value={nickname}
+          handleChange={setNickname}
+          placeholder="닉네임을 입력해주세요"
+          keyboardType="default"
         />
         <AuthInput
           inputType="password"

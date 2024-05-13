@@ -20,6 +20,16 @@ function validatePasswordConfirm(password: string, passwordConfirm: string) {
   }
 }
 
+function validateNickname(nickname: string) {
+  const data = new TextEncoder().encode(nickname);
+
+  if (data.length >= 6 && data.length <= 18) {
+    return '';
+  }
+
+  return '닉네임의 길이가 적합하지 않습니다';
+}
+
 function validateInput(type: authType, value: any) {
   const error = {message: ''};
   if (type === 'email') {
@@ -28,6 +38,8 @@ function validateInput(type: authType, value: any) {
     error.message = validatePassword(value);
   } else if (type === 'passwordConfirm') {
     error.message = validatePasswordConfirm(value.value, value.checkValue);
+  } else if (type === 'nickname') {
+    error.message = validateNickname(value);
   }
   return error.message;
 }
