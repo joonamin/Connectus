@@ -40,6 +40,8 @@ public class GatherService implements GatherUseCase {
 
     @Override
     public CreateGatherResponse createGather(CreateGatherCommand command) {
+
+        // TODO: 위치 저장 및 위치ID 얻기
         return gatherPort.createGather(command);
     }
 
