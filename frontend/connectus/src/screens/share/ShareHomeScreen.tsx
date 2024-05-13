@@ -51,7 +51,7 @@ export default function ShareHomeScreen() {
   // 화면을 이동시키고 map에 poly라인 설정
   const handleFollowApprove = () => {
     setIsVisible(false);
-    navigation.navigate('MapWalk');
+    navigation.navigate('WalkTest');
   };
 
   // store에 저장된 루트를 삭제하고 modal창을 close
