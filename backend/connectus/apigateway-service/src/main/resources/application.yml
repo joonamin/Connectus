@@ -35,8 +35,3 @@ spring:
             uri: http://localhost:3008/
             predicates:
               - Path=/likes/**
-  datasource:
-    url: jdbc:mysql://localhost:3306/demo?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver

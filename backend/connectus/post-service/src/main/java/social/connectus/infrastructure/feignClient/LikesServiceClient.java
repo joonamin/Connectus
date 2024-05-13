@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "likes-service")
 public interface LikesServiceClient {
 	@GetMapping("/likes/{postId}/like-count")
-	int getLikeCount(@PathVariable Long postId, @RequestParam String typeString);
+	int getLikeCount(@PathVariable("postId") Long postId, @RequestParam String typeString);
 
 	@GetMapping("/likes/{postId}/is-like")
 	boolean isLike(@PathVariable Long postId, @RequestParam String typeString);
