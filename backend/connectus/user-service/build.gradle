@@ -75,3 +75,6 @@ tasks.withType(JavaCompile) {
 
 
 tasks.register("prepareKotlinBuildScriptModel"){}
+jar {
+    enabled = true
+}
