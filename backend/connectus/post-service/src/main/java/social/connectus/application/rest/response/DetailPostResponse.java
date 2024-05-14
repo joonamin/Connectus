@@ -38,6 +38,7 @@ public class DetailPostResponse {
 			.imageUrl(post.getImageUrl())
 			.content(post.getContent())
 			.commentList(commentList)
+			.commentCount(commentList.size())
 			.updatedAt(post.getUpdatedAt())
 			.inRange(true)
 			.build();
