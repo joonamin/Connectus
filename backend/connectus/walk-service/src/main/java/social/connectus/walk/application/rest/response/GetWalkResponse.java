@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import social.connectus.walk.domain.model.VO.Position;
 import social.connectus.walk.domain.model.entity.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +30,7 @@ public class GetWalkResponse {
     private Long participateEvent;
     private Set<Long> trackingUsers;
     private boolean isPublic;
+    private LocalDateTime updatedAt;
 
     // model mapper 를 사용해서, 공통 필드는 자동으로 초기화 되게끔?
     // 할 수가 있어요
@@ -73,6 +75,7 @@ public class GetWalkResponse {
                 .participateEvent(walk.getParticipateEvent())
                 .trackingUsers(trackingUsers)
                 .isPublic(walk.isPublic())
+                .updatedAt(walk.getUpdatedAt())
                 .build();
     }
 }

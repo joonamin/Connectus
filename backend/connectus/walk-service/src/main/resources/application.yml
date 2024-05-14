@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8106
 
 spring:
   application:
@@ -12,8 +12,8 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
-#      ddl-auto: update
+#      ddl-auto: create-drop
+      ddl-auto: update
 
 
 eureka:

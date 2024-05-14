@@ -1,0 +1,41 @@
+server:
+  port: 8103
+
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  ai:
+    vectorstore:
+      milvus:
+        client:
+          host: milvus.connectus.social
+          port: 19530
+        databaseName: default
+        collectionName: spot
+
+  application:
+    name: spot-service
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://spot.mariadb.connectus.social/spot?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: ssafyE106!
+  jpa:
+#    database-platform: org.hibernate.dialect.H2Dialect
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    show-sql: true
+
+eureka:
+  #  instance:
+  #    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
