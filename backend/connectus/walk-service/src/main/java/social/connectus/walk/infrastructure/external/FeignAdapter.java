@@ -15,10 +15,6 @@ import java.util.List;
 public class FeignAdapter implements FeignPort {
     private final UserClient userClient;
     private final PostClient postClient;
-
-    public String feignHealthCheck(){
-        return userClient.healthCheck();
-    }
     @Override
     public List<AchievementResponse> getAchievementsByWalk(Long userId, GetAchievementsCommand command) {
         return userClient.getAchievementsByWalk(userId, command);
