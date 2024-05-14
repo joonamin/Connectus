@@ -17,4 +17,5 @@ public class JwtPayload {
 	private String email;
 	private Date issuedAt;
 	private String issuer;
+	private Long userId; // entityId
 }

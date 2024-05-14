@@ -40,14 +40,15 @@ public class UserService implements UserUseCase {
 
 	@Override
 	public LoginUserResponse login(UserLoginCommand command) throws FailedToLoginException {
-		User user = Optional.ofNullable(userPort.loginUser(command)).orElseThrow(() -> {
-			throw new FailedToLoginException("유저가 존재하지 않습니다");
-		});
+		User user = Optional.ofNullable(userPort.loginUser(command)).orElseThrow(() -> new FailedToLoginException(
+			"유저가 존재하지 않습니다"));
 
 		String accessToken = jwtProvider.createAccessToken(JwtPayload.builder()
 			.issuedAt(new Date())
 			.issuer(JwtPropertiesProvider.ISSUER.getValue())
-			.email(user.getEmail()).build());
+			.email(user.getEmail())
+			.userId(user.getUserId())
+			.build());
 
 		return LoginUserResponse.builder().accessToken(accessToken).build();
 	}
