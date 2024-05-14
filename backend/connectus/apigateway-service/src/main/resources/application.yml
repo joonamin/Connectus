@@ -43,6 +43,10 @@ spring:
           uri: http://localhost:8105/
           predicates:
             - Path=/event/**
+        - id: spot-service
+          uri: http://localhost:8103/
+          predicates:
+            - Path=/spot/**
     # default-filters:
     #     - name: CustomAuthFilter
     #       args:
