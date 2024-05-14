@@ -7,7 +7,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import MainText from '@/components/text/MainText';
 import WalkResult from '@/components/map/WalkResult';
 import Achievement from '@/components/map/Achievement';
@@ -18,6 +18,8 @@ import RecordedPost from '@/components/map/RecordedPost';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 import {convertSecondsToTime, formatTime} from '@/utils';
+import {StackScreenProps} from '@react-navigation/stack';
+import RouteMap from '@/components/map/RouteMap';
 
 const DUMMY_ACHIEVE = [
   {
@@ -26,20 +28,40 @@ const DUMMY_ACHIEVE = [
   },
 ];
 
-// type test = BottomTabScreenProps<MapStackParamList>;
+type ScreenProps = StackScreenProps<MapStackParamList>;
 
 /**
  *  산책 종료시 이동하게될 페이지입니다.
  */
-export default function MapResultScreen({route}) {
-  const [walkTitle, setWalkTitle] = useState<string>('');
+export default function MapResultScreen({route}: ScreenProps) {
   const {seconds, minutes, hours} = convertSecondsToTime(route.params?.time);
+  const [walkTitle, setWalkTitle] = useState<string>('');
   const indicateTime = formatTime(hours, minutes, seconds);
+  const map = useRef<RouteMap | null>(null);
+
+  const [routeImg, setRouteImg] = useState();
+
+  useEffect(() => {
+    map.current?.takeSnapshot().then(base64 => {
+      setRouteImg(base64);
+      console.log(base64);
+    });
+  }, [map]);
+
+  console.log('이것은 경로...', route.params?.walkRoute);
+  if (!route.params) {
+    return <Text>살려줘요</Text>;
+  }
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView>
       <ScrollView>
         <View style={styles.mainContainer}>
           <MainText>산책 종료</MainText>
+          <RouteMap
+            routes={route.params?.walkRoute}
+            ref={map}
+            style={{alignSelf: 'stretch'}}
+          />
           <WalkResult time={indicateTime} distance={route.params?.distance} />
           <Achievement achievs={DUMMY_ACHIEVE} />
           <EventResult />
