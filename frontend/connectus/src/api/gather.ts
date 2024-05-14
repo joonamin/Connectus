@@ -6,6 +6,8 @@ type gather = {
   content: String;
   maxJoiner: number;
   endTime: String;
+  longitude: number;
+  latitude: number;
 };
 
 /**
@@ -30,12 +32,25 @@ const gatherStart = async (body: gather): Promise<any> => {
   }
 };
 
+type responseGatherDetail = {
+  gatherId: number;
+  content: string;
+  hostId: number;
+  maxJoiner: number;
+  candidateList: number[];
+  joinerList: number[];
+  endTime: string;
+  closed: boolean;
+};
+
 /**
  * 모여라 상세정보를 위한 axios요청
  * @param {number} gatherId
  * @returns
  */
-const gatherDetail = async (gatherId: number) => {
+const gatherDetail = async (
+  gatherId: number,
+): Promise<responseGatherDetail> => {
   const {data} = await axiosInstance.get(`/gather/${gatherId}`);
   return data;
 };
@@ -60,9 +75,14 @@ const gatherDone = async (body: requestGather): Promise<string[]> => {
  * @param body
  * @returns
  */
-const gatherJoin = async (body: requestGather): Promise<string[]> => {
-  const {data} = await axiosInstance.patch('/gather/want_join', body);
-  return data;
+const gatherWant = async (body: requestGather) => {
+  try {
+    const {data} = await axiosInstance.put('/gather/want_join', body);
+    console.log(data);
+    return data;
+  } catch (error: any) {
+    console.log(error);
+  }
 };
 
 /**
@@ -71,8 +91,8 @@ const gatherJoin = async (body: requestGather): Promise<string[]> => {
  * @returns
  */
 const gatherReach = async (body: requestGather): Promise<string[]> => {
-  const {data} = await axiosInstance.patch('/gather/join', body);
+  const {data} = await axiosInstance.put('/gather/join', body);
   return data;
 };
 
-export {gatherStart, gatherDetail, gatherDone, gatherJoin, gatherReach};
+export {gatherStart, gatherDetail, gatherDone, gatherWant, gatherReach};

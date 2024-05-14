@@ -7,7 +7,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MainContainer from '@/components/containers/MainContainer';
 import MainText from '@/components/text/MainText';
 import colors from '@/constants/colors';
@@ -21,6 +21,8 @@ import {NativeViewGestureHandler} from 'react-native-gesture-handler';
 import {getSubmitDate} from '@/utils/date';
 import {gatherStart} from '@/api/gather';
 import {getMinuteDifference} from '@/utils';
+import Geolocation from '@react-native-community/geolocation';
+import {LatLng} from 'react-native-maps';
 
 // 유저가 설정 가능한 시간
 const GATHERTIME = [5, 10, 15, 20, 30];
@@ -35,6 +37,28 @@ export default function CreateGatherScreen() {
   const [gatherTime, setGatherTime] = useState<number | null>(null);
   // 모집 설명
   const [content, setContent] = useState<string>('');
+  const [gatherPos, getGatherPos] = useState<LatLng>();
+
+  // 모집 시, 전달해줄 LatLng 데이터를 가져오는 과정
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      info => {
+        console.log(info);
+        getGatherPos({
+          latitude: info.coords.latitude,
+          longitude: info.coords.longitude,
+        });
+      },
+      () => {
+        console.log('error');
+      },
+      {
+        // 상세 좌표를 요청하는 코드
+        enableHighAccuracy: true,
+        distanceFilter: 0,
+      },
+    );
+  }, []);
 
   const keyBoardDismiss = () => {
     Keyboard.dismiss();
@@ -57,13 +81,15 @@ export default function CreateGatherScreen() {
    * @todo hostId수정 필요
    */
   const handleGatherPress = async () => {
-    if (gatherTime !== null) {
+    if (gatherTime !== null && gatherPos) {
       const endTime = getSubmitDate(gatherTime);
       gatherStart({
         hostId: 1,
         content: content,
         maxJoiner: headCount,
         endTime: endTime,
+        latitude: gatherPos?.latitude,
+        longitude: gatherPos?.longitude,
       });
     }
   };
