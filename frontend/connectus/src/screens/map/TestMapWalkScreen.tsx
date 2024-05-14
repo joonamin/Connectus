@@ -66,14 +66,17 @@ const DUMMY_POSITION = [
 
 const DUMMY_GATHER = [
   {
+    gatherId: 1,
     latitude: 35.09064834938094,
     longitude: 128.85494849796893,
   },
   {
+    gatherId: 1,
     latitude: 35.09063223602116,
     longitude: 128.85511808214923,
   },
   {
+    gatherId: 1,
     latitude: 35.09060123205063,
     longitude: 128.85478844604273,
   },
@@ -329,7 +332,7 @@ export default function TestMapWalkScreen() {
               <CustomMarker
                 key={index}
                 coordinate={data}
-                onPress={() => handleGatherPress(1)}
+                onPress={() => handleGatherPress(data.gatherId)}
                 type={3}
               />
             );
