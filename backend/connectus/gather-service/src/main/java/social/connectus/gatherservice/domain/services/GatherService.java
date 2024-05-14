@@ -26,20 +26,21 @@ public class GatherService implements GatherUseCase {
     @Override
     public void closeGather(CloseGatherCommand command) throws ResourceNotFoundException, ClosedGatherException, InvalidHostIdException {
         long gatherId = command.getGatherId();
-        long userId = command.getUserId();
         // gather의 주최자가 user_id인지 확인
         Gather gather = gatherPort.getGatherById(gatherId);
 
         if(gather.isClosed())
             throw new ClosedGatherException(GatherConstants.ALREADY_CLOSED_GATHER + gatherId);
-        if(gather.getHostId() != userId)
-            throw new InvalidHostIdException(GatherConstants.INVALID_HOST_ID + userId);
+//        if(gather.getHostId() != userId)
+//            throw new InvalidHostIdException(GatherConstants.INVALID_HOST_ID + userId);
 
         gatherPort.closeGather(command);
     }
 
     @Override
     public CreateGatherResponse createGather(CreateGatherCommand command) {
+
+        // TODO: 위치 저장 및 위치ID 얻기
         return gatherPort.createGather(command);
     }
 
