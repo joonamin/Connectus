@@ -35,7 +35,6 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.3'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.mysql:mysql-connector-j'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
@@ -68,4 +67,8 @@ tasks.withType(JavaCompile) {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jar {
+    enabled = true
 }
