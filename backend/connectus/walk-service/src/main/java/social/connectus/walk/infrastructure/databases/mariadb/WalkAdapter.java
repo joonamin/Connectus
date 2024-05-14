@@ -23,6 +23,7 @@ import java.util.Set;
 @Component
 @RequiredArgsConstructor
 public class WalkAdapter implements WalkPort {
+
     private final ModelMapper modelMapper;
     private final WalkRepository walkRepository;
     private final RouteRepository routeRepository;
@@ -66,22 +67,6 @@ public class WalkAdapter implements WalkPort {
         PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize());
         Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
         return new SliceImpl<>(routeList.getContent().stream().map(route -> route.getWalk().getId()).toList(), pageRequest, routeList.hasNext());
-    }
-
-
-    @Transactional
-    @Override
-    public void routeLikeCancle(RouteLikeCommand command) {
-//        Walk walk = getWalkById(command.getWalkId());
-//        for(LikeUser user : walk.getLikeUsers()){
-//            if(user.getUserId() == command.getUserId()){
-//                walk.getLikeUsers().remove(user);
-//                break;
-//            }
-//        }
-//        walkRepository.save(walk);
-        List<LikeUser> user = likeUserRepository.findByUserIdAndWalkId(command.getUserId(), command.getWalkId());
-        likeUserRepository.deleteAll(user);
     }
 
     @Transactional
