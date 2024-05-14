@@ -15,21 +15,16 @@ import social.connectus.walk.domain.model.entity.*;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
 import social.connectus.walk.infrastructure.databases.mariadb.repository.RouteRepository;
 import social.connectus.walk.infrastructure.databases.mariadb.repository.WalkRepository;
-import social.connectus.walk.infrastructure.external.UserClient;
+
 import java.util.List;
 import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
 public class WalkAdapter implements WalkPort {
-    private final UserClient userClient;
     private final ModelMapper modelMapper;
     private final WalkRepository walkRepository;
     private final RouteRepository routeRepository;
-
-    public String feignHealthCheck(){
-        return userClient.healthCheck();
-    }
 
     @Override
     public Walk getWalkById(long walkId) {
@@ -71,10 +66,6 @@ public class WalkAdapter implements WalkPort {
         return new SliceImpl<>(routeList.getContent().stream().map(route -> route.getWalk().getId()).toList(), pageRequest, routeList.hasNext());
     }
 
-    @Override
-    public List<Long> getAchievementsByWalk(GetAchievementsCommand command) {
-        return userClient.getAchievementsByWalk(command);
-    }
 
     @Transactional
     @Override
@@ -91,21 +82,20 @@ public class WalkAdapter implements WalkPort {
                 .title(command.getTitle())
                 .route(command.getRoute())
                 .walkDistance(command.getWalkDistance())
-                .postList(command.getPostList())
                 .walkTime(command.getWalkTime())
                 .completedAchievement(command.getCompletedAchievement())
                 .participateEvent(command.getParticipateEvent())
                 .isPublic(command.isPublic())
                 .build();
 
-        createPostList(walk.getPostList(), walk);
         createRoute(walk.getRoute(), walk);
         createAchievement(walk.getCompletedAchievement(), walk);
         walkRepository.save(walk);
         return walk;
     }
 
-    private void createPostList(List<Post> postList, Walk walk) {
+    @Override
+    public void createPostList(List<Post> postList, Walk walk) {
         postList.forEach(post -> post.setWalk(walk));
     }
 

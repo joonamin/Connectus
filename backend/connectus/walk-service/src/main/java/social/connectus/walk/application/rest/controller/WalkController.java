@@ -3,6 +3,7 @@ package social.connectus.walk.application.rest.controller;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import social.connectus.walk.application.rest.request.*;
@@ -45,7 +46,7 @@ public class WalkController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<CreateWalkResponse> createWalk(@RequestBody CreateWalkRequest request){
         // TODO: request 검증
         return ResponseEntity.ok(walkUseCase.createWalk(CreateWalkCommand.from(request)));
