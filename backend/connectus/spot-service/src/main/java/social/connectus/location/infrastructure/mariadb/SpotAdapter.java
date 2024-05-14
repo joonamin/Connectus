@@ -13,6 +13,6 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class SpotAdapter implements SpotPort {
 
-    private final SpotRepository spotRepository;
+//    private final SpotRepository spotRepository;
 
 }
