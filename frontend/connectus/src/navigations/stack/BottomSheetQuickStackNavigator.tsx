@@ -18,7 +18,7 @@ export type BottomSheetStackParamList = {
   MarkerList: undefined;
   FeedList: undefined;
   Feed: undefined;
-  Gather: undefined;
+  Gather: {gatherId: number};
 };
 
 const Stack = createStackNavigator<BottomSheetStackParamList>();
