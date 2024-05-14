@@ -11,6 +11,6 @@ import social.connectus.walk.application.rest.request.GetAchievementsRequest;
 @AllArgsConstructor
 @Builder
 public class GetAchievementsCommand {
-    private int postCount;
-    private long participateEvent;
+    private Integer postCount;
+    private Long participateEvent;
 }
