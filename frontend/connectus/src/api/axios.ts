@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
 
 // 매 요청마다 Authorization 헤더를 추가합니다
 axiosInstance.interceptors.request.use(config => {
-  config.headers.Authorization = `Bearer ${
+  config.headers.Authorization = `${
     useAuthStore.getState().accessToken
   }`;
   return config;
