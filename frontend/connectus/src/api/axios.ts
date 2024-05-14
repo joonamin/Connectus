@@ -5,7 +5,7 @@ import axios, {AxiosError, AxiosResponse} from 'axios';
  * 사용자 인증을 제외한 API 요청에 사용되는 axiosInstance입니다
  */
 const axiosInstance = axios.create({
-  baseURL: 'http://3.38.245.137:8000',
+  baseURL: 'https://api.connectus.social',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -34,7 +34,7 @@ axiosInstance.interceptors.response.use(
  * 로그인 및 회원가입 시 사용되는 axiosInstance입니다
  */
 const authAxios = axios.create({
-  baseURL: 'http://3.38.245.137:8000',
+  baseURL: 'https://api.connectus.social',
 });
 
 export {axiosInstance, authAxios};
