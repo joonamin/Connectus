@@ -49,8 +49,16 @@ public class JwtProvider {
 		Jws<Claims> claimsJws = Jwts.parser().verifyWith(secretKey).build()
 			.parseSignedClaims(jwtToken);
 
+		Claims payload = claimsJws.getPayload();
 		String email = JwtPropertiesProvider.EMAIL.getValue();
-		return new JwtPayload(claimsJws.getPayload().get(email, String.class), claimsJws.getPayload().getIssuedAt(), claimsJws.getPayload().getIssuer());
+		String userId = JwtPropertiesProvider.USER_ID.getValue();
+
+		return JwtPayload.builder()
+			.userId(payload.get(userId, Long.class))
+			.email(payload.get(email, String.class))
+			.issuedAt(payload.getIssuedAt())
+			.issuer(payload.getIssuer())
+			.build();
 	}
 
 }

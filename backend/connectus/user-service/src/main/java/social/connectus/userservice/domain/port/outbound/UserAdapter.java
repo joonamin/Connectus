@@ -49,6 +49,8 @@ public class UserAdapter implements UserPort {
 			.password(encryptedPassword)
 			.nickname(command.getNickname())
 			.phoneNumber(command.getPhoneNumber())
+			.walkCount(0)
+			.postCount(0)
 			.build();
 		userRepository.save(user);
 	}
