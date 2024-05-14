@@ -1,6 +1,7 @@
 package social.connectus.walk.domain.command;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 import social.connectus.walk.application.rest.request.CreateWalkRequest;
 import social.connectus.walk.application.rest.request.PostRequestForWalk;
 import social.connectus.walk.domain.model.entity.CompletedAchievement;
@@ -23,6 +24,7 @@ public class CreateWalkCommand {
     private double walkDistance;   // 산책 거리
     private Long participateEvent;
     private boolean isPublic;
+    private MultipartFile image;
 
     public static CreateWalkCommand from(CreateWalkRequest request){
         return CreateWalkCommand.builder()
@@ -35,6 +37,7 @@ public class CreateWalkCommand {
                 .walkDistance(request.getWalkDistance())
                 .participateEvent(request.getParticipateEvent())
                 .isPublic(request.isPublic())
+                .image(request.getImage())
                 .build();
     }
 

@@ -30,6 +30,7 @@ public class GetWalkResponse {
     private Long participateEvent;
     private Set<Long> trackingUsers;
     private boolean isPublic;
+    private String imageUrl;
     private LocalDateTime updatedAt;
 
     // model mapper 를 사용해서, 공통 필드는 자동으로 초기화 되게끔?
@@ -76,6 +77,7 @@ public class GetWalkResponse {
                 .trackingUsers(trackingUsers)
                 .isPublic(walk.isPublic())
                 .updatedAt(walk.getUpdatedAt())
+                .imageUrl(walk.getImageUrl())
                 .build();
     }
 }

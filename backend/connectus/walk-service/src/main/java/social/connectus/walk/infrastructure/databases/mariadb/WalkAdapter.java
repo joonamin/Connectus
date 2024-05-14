@@ -91,17 +91,7 @@ public class WalkAdapter implements WalkPort {
 
     @Override
     @Transactional
-    public Walk createWalk(CreateWalkCommand command) {
-        Walk walk = Walk.builder()
-                .userId(command.getUserId())
-                .title(command.getTitle())
-                .route(command.getRoute())
-                .walkDistance(command.getWalkDistance())
-                .walkTime(command.getWalkTime())
-                .completedAchievement(command.getCompletedAchievement())
-                .participateEvent(command.getParticipateEvent())
-                .isPublic(command.isPublic())
-                .build();
+    public Walk createWalk(Walk walk) {
 
         createRoute(walk.getRoute(), walk);
         createAchievement(walk.getCompletedAchievement(), walk);

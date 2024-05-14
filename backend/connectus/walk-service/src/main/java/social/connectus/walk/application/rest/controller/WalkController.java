@@ -14,6 +14,7 @@ import social.connectus.walk.domain.model.entity.Route;
 import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -52,7 +53,7 @@ public class WalkController {
 
     @Operation(summary = "산책 기록 작성")
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<CreateWalkResponse> createWalk(@RequestBody CreateWalkRequest request){
+    public ResponseEntity<CreateWalkResponse> createWalk(@RequestBody CreateWalkRequest request) throws IOException {
         // TODO: request 검증
         return ResponseEntity.ok(walkUseCase.createWalk(CreateWalkCommand.from(request)));
     }

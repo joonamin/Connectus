@@ -1,5 +1,6 @@
 package social.connectus.walk.domain.ports.outbound;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Slice;
 import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.entity.CompletedAchievement;
@@ -11,7 +12,9 @@ import java.util.List;
 import java.util.Set;
 
 public interface WalkPort {
-    Walk createWalk(CreateWalkCommand command);
+
+    @Transactional
+    Walk createWalk(Walk walk);
 
     void createPostList(List<Post> postList, Walk walk);
 

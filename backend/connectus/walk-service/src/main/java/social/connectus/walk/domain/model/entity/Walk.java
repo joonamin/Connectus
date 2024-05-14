@@ -49,4 +49,6 @@ public class Walk extends BaseEntity{
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private boolean isPublic;
 
+    private String imageUrl;
+
 }

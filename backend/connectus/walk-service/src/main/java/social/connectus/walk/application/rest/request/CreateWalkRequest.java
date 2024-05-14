@@ -1,6 +1,7 @@
 package social.connectus.walk.application.rest.request;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 import social.connectus.walk.domain.model.entity.CompletedAchievement;
 import social.connectus.walk.domain.model.entity.Route;
 
@@ -20,4 +21,5 @@ public class CreateWalkRequest {
     private double walkDistance;   // 산책 거리
     private Long participateEvent;
     private boolean isPublic;
+    private MultipartFile image;
 }
