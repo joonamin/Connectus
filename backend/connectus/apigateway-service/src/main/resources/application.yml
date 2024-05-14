@@ -30,11 +30,6 @@ spring:
           uri: http://localhost:8107/
           predicates:
             - Path=/user/**
-          filters:
-            - name: CustomAuthFilter
-              args:
-                excludedFilterPathPattern: /user/(login|register)
-
         - id: likes-service
           uri: http://localhost:8108/
           predicates:
@@ -47,10 +42,10 @@ spring:
           uri: http://localhost:8103/
           predicates:
             - Path=/spot/**
-    # default-filters:
-    #     - name: CustomAuthFilter
-    #       args:
-    #         excludedFilterPathPattern: "http://localhost:3007/user/(login|register)"
+      default-filters:
+        - name: CustomAuthFilter
+          args:
+            excludedFilterPathPattern: "/user/(login|register)"
 
 jwt:
   secret-key: 9741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F7
