@@ -9,6 +9,7 @@ public enum JwtPropertiesProvider {
 
 	EMAIL("email"),
 	ISSUER("user-service"),
+	USER_ID("userId"),
 	PAYLOAD("payload");
 
 	private final String value;
