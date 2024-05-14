@@ -5,4 +5,4 @@ ADD ${JAR_FILE} /post-service.jar
 
 EXPOSE 8101
 
-ENTRYPOINT ["java","-jar" "/post-service.jar"]
+ENTRYPOINT ["java","-jar", "/post-service.jar"]
