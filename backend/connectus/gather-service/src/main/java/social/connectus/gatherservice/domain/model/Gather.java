@@ -29,6 +29,9 @@ public class Gather extends BaseEntity{
     private long hostId;
 
     @Column(nullable = false)
+    private long spotId;
+
+    @Column(nullable = false)
     private int maxJoiner;
 
     @ElementCollection(fetch = FetchType.LAZY)
@@ -39,13 +42,4 @@ public class Gather extends BaseEntity{
 
     @Column(nullable = false)
     private String endTime;
-
-    public static Gather from(CreateGatherCommand command){
-        return Gather.builder()
-                .hostId(command.getHostId())
-                .content(command.getContent())
-                .maxJoiner(command.getMaxJoiner())
-                .endTime(command.getEndTime())
-                .build();
-    }
 }

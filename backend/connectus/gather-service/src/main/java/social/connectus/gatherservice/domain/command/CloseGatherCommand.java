@@ -12,11 +12,9 @@ import social.connectus.gatherservice.application.rest.request.CloseGatherReques
 @Builder
 public class CloseGatherCommand {
     private long gatherId;
-    private long userId;
     public static CloseGatherCommand from(CloseGatherRequest request){
         return CloseGatherCommand.builder()
                 .gatherId(request.getGatherId())
-                .userId(request.getUserId())
                 .build();
     }
 }

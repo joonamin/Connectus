@@ -27,6 +27,9 @@ public class QJoiner extends EntityPathBase<Joiner> {
     public final NumberPath<Long> joinerId = createNumber("joinerId", Long.class);
 
     //inherited
+    public final NumberPath<Long> spotId = _super.spotId;
+
+    //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public final NumberPath<Long> userId = createNumber("userId", Long.class);

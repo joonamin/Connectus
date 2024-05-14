@@ -42,6 +42,9 @@ public class QGather extends EntityPathBase<Gather> {
     public final NumberPath<Integer> maxJoiner = createNumber("maxJoiner", Integer.class);
 
     //inherited
+    public final NumberPath<Long> spotId = _super.spotId;
+
+    //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public QGather(String variable) {

@@ -15,33 +15,37 @@ spring:
     gateway:
       routes:
         - id: gather-service
-          uri: http://localhost:8080/
+          uri: http://localhost:8102/
           predicates:
             - Path=/gather/**
         - id: walk-service
-          uri: http://localhost:8081/
+          uri: http://localhost:8106/
           predicates:
             - Path=/walk/**
         - id: post-service
-          uri: http://localhost:3001/
+          uri: http://localhost:8101/
           predicates:
             - Path=/post/**
         - id: user-service
-          uri: http://localhost:3007/
+          uri: http://localhost:8107/
           predicates:
             - Path=/user/**
-#          filters:
-#            - name: CustomAuthFilter
-#              args:
-#                excludedFilterPathPattern: /user/(login|register)
         - id: likes-service
-          uri: http://localhost:3008/
+          uri: http://localhost:8108/
           predicates:
             - Path=/likes/**
+        - id: event-service
+          uri: http://localhost:8105/
+          predicates:
+            - Path=/event/**
+        - id: spot-service
+          uri: http://localhost:8103/
+          predicates:
+            - Path=/spot/**
       default-filters:
-          - name: CustomAuthFilter
-            args:
-              excludedFilterPathPattern: "/user/(login|register)"
+        - name: CustomAuthFilter
+          args:
+            excludedFilterPathPattern: "/user/(login|register)"
 
 jwt:
   secret-key: 9741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F7
