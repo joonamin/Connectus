@@ -14,8 +14,10 @@ import social.connectus.walk.domain.model.entity.Post;
 import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
 import social.connectus.walk.domain.ports.outbound.FeignPort;
+import social.connectus.walk.domain.ports.outbound.ImagePort;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ import java.util.List;
 public class WalkService implements WalkUseCase {
 
     private final WalkPort walkPort;
+    private final ImagePort imagePort;
     private final FeignPort feignPort;
 
     @Override
@@ -42,12 +45,25 @@ public class WalkService implements WalkUseCase {
     }
 
     @Override
-    public CreateWalkResponse createWalk(CreateWalkCommand command) {
+    public CreateWalkResponse createWalk(CreateWalkCommand command) throws IOException {
         /*
         TODO: 업적 갱신 요청 보내기
          */
 
-        Walk walk = walkPort.createWalk(command);
+        String imageUrl = imagePort.uploadImage(command.getImage());
+
+        Walk walk = Walk.builder()
+                .userId(command.getUserId())
+                .title(command.getTitle())
+                .route(command.getRoute())
+                .walkDistance(command.getWalkDistance())
+                .walkTime(command.getWalkTime())
+                .completedAchievement(command.getCompletedAchievement())
+                .participateEvent(command.getParticipateEvent())
+                .isPublic(command.isPublic())
+                .imageUrl(imageUrl)
+                .build();
+        walkPort.createWalk(walk);
         long walkId = walk.getId();
 
         List<PostVO> postVOList = new ArrayList<>();

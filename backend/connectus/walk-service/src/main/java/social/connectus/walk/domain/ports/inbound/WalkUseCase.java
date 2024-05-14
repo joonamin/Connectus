@@ -6,10 +6,11 @@ import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.entity.Walk;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface WalkUseCase {
-    CreateWalkResponse createWalk(CreateWalkCommand command);
+    CreateWalkResponse createWalk(CreateWalkCommand command) throws IOException;
 
     String feignHealthCheck();
 
