@@ -114,4 +114,8 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
+	@GetMapping("/{userId}/get-author-name")
+	public ResponseEntity<String> getAuthorName(@PathVariable("userId") Long userId) {
+		return ResponseEntity.ok(userUseCase.getUserName(userId));
+	}
 }

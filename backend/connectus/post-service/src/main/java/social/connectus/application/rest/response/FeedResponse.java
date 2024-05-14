@@ -21,17 +21,19 @@ import social.connectus.domain.model.RDBMS.Post;
 public class FeedResponse {
 	private Long walkId;
 	private Long authorId;
+	private String authorName;
 	List<DetailPostResponse> postList;
 
-	public static FeedResponse from(List<Post> postList) {
+	public static FeedResponse from(List<Post> postList, String authorName) {
 		Post postHead = postList.get(0);
 		List<DetailPostResponse> detailPostResponseList = new ArrayList<>();
 		for(Post post : postList) {
-			detailPostResponseList.add(DetailPostResponse.samplePostFrom(post));
+			detailPostResponseList.add(DetailPostResponse.samplePostFrom(post,authorName));
 		}
 		return FeedResponse.builder()
 			.walkId(postHead.getWalkId())
 			.authorId(postHead.getAuthorId())
+			.authorName(authorName)
 			.postList(detailPostResponseList)
 			.build();
 	}
