@@ -35,6 +35,8 @@ public class MilvusAdapter implements MilvusPort {
         pingInfo.put("spot", vectorList);
         pingInfo.put("type", type);
         pingInfo.put("domain_id", domainId);
+        pingInfo.put("latitude", latitude);
+        pingInfo.put("longitude", longitude);
         pingInfo.put("created_at", LocalDateTime.now().toString());
         pingInfo.put("updated_at", LocalDateTime.now().toString());
 
@@ -62,7 +64,7 @@ public class MilvusAdapter implements MilvusPort {
         QueryReq queryReq = QueryReq.builder()
                 .collectionName(milvusConfig.getCollectionName())
                 .filter(filter)
-                .outputFields(Arrays.asList("spot_id", "spot", "type", "domain_id", "created_at", "updated_at"))
+                .outputFields(Arrays.asList("spot_id", "spot", "latitude", "longitude", "type", "domain_id", "created_at", "updated_at"))
                 .limit(10)
                 .build();
 
