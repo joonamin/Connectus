@@ -17,6 +17,17 @@ import MainContainer from '@/components/containers/MainContainer';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {AuthStackParamList} from '@/navigations/stack/AuthStackNavigator';
 import {useNavigation} from '@react-navigation/native';
+import {validateInput} from '@/utils/validate';
+import Dialog from '@/components/containers/Dialog';
+import LightText from '@/components/text/LightText';
+import PrimaryButton, {
+  PrimaryButtonText,
+} from '@/components/buttons/PrimaryButton';
+import {RegisterRequest, register} from '@/api/user';
+import SecondaryButton, {
+  SecondaryButtonText,
+} from '@/components/buttons/SecondaryButton';
+import {AxiosError, AxiosResponse} from 'axios';
 
 type Navigate = StackNavigationProp<AuthStackParamList>;
 
@@ -24,6 +35,7 @@ export default function AuthRegisterScreen() {
   const navigation = useNavigation<Navigate>();
 
   const handlePressRegister = () => {
+    closeDialog();
     navigation.pop();
     navigation.navigate('AuthLogin');
   };
@@ -32,6 +44,64 @@ export default function AuthRegisterScreen() {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [nickname, setNickname] = useState<string>('');
+
+  const [dialogVisibility, setDialogVisibility] = useState<boolean>(false);
+  const [dialogMessage, setDialogMessage] = useState<string | undefined>();
+  const [registrationComplete, setRegistrationComplete] =
+    useState<boolean>(false);
+
+  const openDialog = () => {
+    setDialogVisibility(true);
+  };
+  const closeDialog = () => {
+    setRegistrationComplete(false);
+    setDialogVisibility(false);
+  };
+
+  const onRegistration = () => {
+    let message: string | undefined = '';
+
+    // 입력 확인
+    if (
+      (message = validateInput('email', email)) ||
+      (message = validateInput('nickname', nickname)) ||
+      (message = validateInput('password', password)) ||
+      (message = validateInput('passwordConfirm', {
+        value: password,
+        checkValue: passwordConfirm,
+      }))
+    ) {
+      setDialogMessage(message);
+      openDialog();
+
+      return;
+    }
+
+    // 입력 확인 완료 - 로그인 요청 진행
+    const request: RegisterRequest = {
+      email: email,
+      password: password,
+      nickname: nickname,
+    };
+    register(request)
+      .then(() => {
+        setDialogMessage('회원가입이 완료되었습니다');
+        setRegistrationComplete(true);
+      })
+      .catch((error: AxiosError) => {
+        let data: any;
+
+        // 서버의 응답이 있는 경우 출력
+        if ((data = (error?.response as AxiosResponse)?.data)) {
+          setDialogMessage(data);
+        } else {
+          setDialogMessage('회원가입에 실패했습니다');
+        }
+      })
+      .finally(() => {
+        openDialog();
+      });
+  };
 
   return (
     <MainContainer style={styles.flex}>
@@ -72,7 +142,7 @@ export default function AuthRegisterScreen() {
                 checkValue={password}
                 secureTextEntry
               />
-              <Pressable style={styles.loginButton}>
+              <Pressable onPress={onRegistration} style={styles.loginButton}>
                 <MainText>회원가입</MainText>
               </Pressable>
               <Pressable
@@ -81,6 +151,28 @@ export default function AuthRegisterScreen() {
                 <Text style={styles.registerText}>로그인</Text>
               </Pressable>
             </View>
+            <Dialog
+              style={styles.modal}
+              visible={dialogVisibility}
+              onRequestClose={closeDialog}>
+              <LightText>{dialogMessage}</LightText>
+              <View style={styles.buttonRow}>
+                {registrationComplete ? (
+                  <>
+                    <PrimaryButton onPress={handlePressRegister}>
+                      <PrimaryButtonText>로그인</PrimaryButtonText>
+                    </PrimaryButton>
+                    <SecondaryButton onPress={closeDialog}>
+                      <SecondaryButtonText>확인</SecondaryButtonText>
+                    </SecondaryButton>
+                  </>
+                ) : (
+                  <PrimaryButton onPress={closeDialog}>
+                    <PrimaryButtonText>확인</PrimaryButtonText>
+                  </PrimaryButton>
+                )}
+              </View>
+            </Dialog>
           </ScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>
@@ -126,5 +218,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryColorBlue,
     padding: 15,
     borderRadius: 15,
+  },
+  modal: {
+    gap: 30,
+    alignItems: 'center',
+  },
+  buttonRow: {
+    gap: 15,
+    flexDirection: 'row',
   },
 });
