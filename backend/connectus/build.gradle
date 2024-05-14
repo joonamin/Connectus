@@ -79,3 +79,10 @@ clean {
 tasks.withType(JavaCompile) {
     options.generatedSourceOutputDirectory = file(querydslSrcDir)
 }
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
