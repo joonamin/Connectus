@@ -84,4 +84,9 @@ public class UserAdapter implements UserPort {
 	public OpenedPostResponse getOpenedPost(Long userId) {
 		return new OpenedPostResponse(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")).getPostHistory());
 	}
+
+	@Override
+	public String getUserName(Long userId) {
+		return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")).getNickname();
+	}
 }

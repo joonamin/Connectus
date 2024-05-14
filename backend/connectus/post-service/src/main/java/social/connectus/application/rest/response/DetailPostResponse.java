@@ -22,30 +22,34 @@ public class DetailPostResponse {
 	private String imageUrl;
 	private String content;
 	private Long authorId;
+	private String authorName;
 	private int likeCount;
-	private List<Comment> commentList;
+	private List<CommentResponse> commentList;
+	private int commentCount;
 	private LocalDateTime updatedAt;
 	private boolean isLike;
 	private boolean inRange;
 
-	public static DetailPostResponse detailPostFrom(Post post) {
+	public static DetailPostResponse detailPostFrom(Post post, List<CommentResponse> commentList, String authorName) {
 		return DetailPostResponse.builder()
 			.postId(post.getId())
 			.authorId(post.getAuthorId())
+			.authorName(authorName)
 			.imageUrl(post.getImageUrl())
 			.content(post.getContent())
-			.commentList(post.getCommentList())
+			.commentList(commentList)
 			.updatedAt(post.getUpdatedAt())
 			.inRange(true)
 			.build();
 	}
 
-	public static DetailPostResponse samplePostFrom(Post post) {
+	public static DetailPostResponse samplePostFrom(Post post, String authorName) {
 		return DetailPostResponse.builder()
 			.postId(post.getId())
 			.authorId(post.getAuthorId())
+			.authorName(authorName)
 			.imageUrl(post.getImageUrl())
-			.commentList(post.getCommentList())
+			.commentCount(post.getCommentList().size())
 			.updatedAt(post.getUpdatedAt())
 			.inRange(false)
 			.build();

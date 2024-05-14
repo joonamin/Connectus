@@ -1,11 +1,16 @@
 package social.connectus.infrastructure.adapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import social.connectus.application.rest.request.CoordinateRequestDto;
+import social.connectus.application.rest.response.CommentResponse;
 import social.connectus.application.rest.response.DetailPostResponse;
 import social.connectus.application.rest.response.OpenedPostResponse;
 import social.connectus.common.exception.BusinessException;
+import social.connectus.domain.model.RDBMS.Comment;
 import social.connectus.domain.model.RDBMS.Post;
 import social.connectus.domain.ports.outbound.DetailPostPort;
 import social.connectus.infrastructure.databases.mariadb.repository.PostRepository;
@@ -27,7 +32,8 @@ public class DetailPostAdapter implements DetailPostPort {
 		Post post = postRepository.findById(postId).orElseThrow(()->new BusinessException("Post doesn't exists"));
 		int likeCount = likesServiceClient.getLikeCount(postId,"POST");
 		boolean isLike = likesServiceClient.isLike(postId,"POST");
-		DetailPostResponse response = DetailPostResponse.samplePostFrom(post);
+		String authorName = userServiceClient.getAuthorName(post.getAuthorId());
+		DetailPostResponse response = DetailPostResponse.samplePostFrom(post,authorName);
 		response.setLikeCount(likeCount);
 		response.setLike(isLike);
 		return response;
@@ -38,7 +44,16 @@ public class DetailPostAdapter implements DetailPostPort {
 		Post post = postRepository.findById(postId).orElseThrow(()->new BusinessException("Post doesn't exists"));
 		int likeCount = likesServiceClient.getLikeCount(postId,"POST");
 		boolean isLike = likesServiceClient.isLike(postId,"POST");
-		DetailPostResponse response = DetailPostResponse.detailPostFrom(post);
+		String authorName = userServiceClient.getAuthorName(post.getAuthorId());
+		List<CommentResponse> commentResponseList = new ArrayList<>();
+		for(Comment comment : post.getCommentList()) {
+			String commentAuthorName = userServiceClient.getAuthorName(comment.getAuthorId());
+			CommentResponse response = CommentResponse.from(comment);
+			response.setAuthorName(commentAuthorName);
+			commentResponseList.add(response);
+		}
+
+		DetailPostResponse response = DetailPostResponse.detailPostFrom(post, commentResponseList,authorName);
 		response.setLike(isLike);
 		response.setLikeCount(likeCount);
 		return response;

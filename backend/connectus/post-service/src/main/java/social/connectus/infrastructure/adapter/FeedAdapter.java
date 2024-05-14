@@ -10,18 +10,21 @@ import social.connectus.application.rest.response.FeedResponse;
 import social.connectus.domain.model.RDBMS.Post;
 import social.connectus.domain.ports.outbound.FeedPort;
 import social.connectus.infrastructure.databases.mariadb.repository.PostRepository;
+import social.connectus.infrastructure.feignClient.UserServiceClient;
 
 @Component
 @RequiredArgsConstructor
 public class FeedAdapter implements FeedPort {
 	private final PostRepository postRepository;
+	private final UserServiceClient userServiceClient;
 
 	@Override
 	public List<FeedResponse> feedMain(List<Long> walkIdList) {
 		List<FeedResponse> feedResponseList = new ArrayList<>();
 		for(Long walkId : walkIdList) {
 			List<Post> postList = postRepository.findByWalkId(walkId);
-			feedResponseList.add(FeedResponse.from(postList));
+			String authorName = userServiceClient.getAuthorName(postList.get(0).getAuthorId());
+			feedResponseList.add(FeedResponse.from(postList, authorName));
 		}
 		return feedResponseList;
 	}
@@ -29,6 +32,7 @@ public class FeedAdapter implements FeedPort {
 	@Override
 	public FeedResponse feedDetail(Long walkId) {
 		List<Post> postList = postRepository.findByWalkId(walkId);
-		return FeedResponse.from(postList);
+		String authorName = userServiceClient.getAuthorName(postList.get(0).getAuthorId());
+		return FeedResponse.from(postList, authorName);
 	}
 }
