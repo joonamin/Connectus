@@ -1,5 +1,5 @@
 server:
-  port: 3010
+  port: 8105
 
 spring:
   application:
@@ -27,3 +27,9 @@ spring:
         auto: false
       stack:
         auto: false
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
