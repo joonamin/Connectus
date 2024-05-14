@@ -3,6 +3,7 @@ package social.connectus.walk.application.rest.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import social.connectus.walk.application.rest.request.*;
@@ -50,7 +51,7 @@ public class WalkController {
     }
 
     @Operation(summary = "산책 기록 작성")
-    @PostMapping
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<CreateWalkResponse> createWalk(@RequestBody CreateWalkRequest request){
         // TODO: request 검증
         return ResponseEntity.ok(walkUseCase.createWalk(CreateWalkCommand.from(request)));
@@ -61,13 +62,6 @@ public class WalkController {
     public ResponseEntity<String> routeLike(@RequestBody RouteLikeRequest request){
         walkUseCase.routeLike(RouteLikeCommand.from(request));
         return ResponseEntity.ok("Like is successfully registered.");
-    }
-
-    @Operation(summary = "산책 기록 좋아요 취소")
-    @PutMapping("/route-like-cancle")
-    public ResponseEntity<String> routeLikeCancle(@RequestBody RouteLikeRequest request){
-        walkUseCase.routeLikeCancle(RouteLikeCommand.from(request));
-        return ResponseEntity.ok("Like is successfully canceled.");
     }
 
     @Operation(summary = "산책 기록 공유")
