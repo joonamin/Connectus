@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import social.connectus.walk.domain.model.entity.Post;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -11,5 +14,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class GetAchievementsRequest {
     private Long userId;
-    private String jsonOfClientData;
+    private Integer postCount;
+    private Long participateEvent;
 }

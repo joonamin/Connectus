@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class GetAchievementsResponse {
-    private List<Long> achievementIds;
+    private List<AchievementResponse> achievementList;
 }
