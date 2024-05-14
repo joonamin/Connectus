@@ -31,5 +31,7 @@ public interface WalkPort {
 
     void routeProtect(RouteProtectCommand command);
 
-    Slice<Long> getWalksByPosition(GetWalksByPositionCommand command);
+    Slice<Long> getWalkIdsByPosition(GetWalksByPositionCommand command);
+
+    Slice<Walk> getWalksByPosition(GetWalksByPositionCommand command);
 }
