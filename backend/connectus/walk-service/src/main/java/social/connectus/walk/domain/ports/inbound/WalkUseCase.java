@@ -12,9 +12,6 @@ import java.util.List;
 public interface WalkUseCase {
     CreateWalkResponse createWalk(CreateWalkCommand command) throws IOException;
 
-    String feignHealthCheck();
-
-
     void routeLike(RouteLikeCommand from);
 
     Walk getWalkById(long walkId);

@@ -34,7 +34,8 @@ public class WalkController {
     @GetMapping("/feign-health-check")
     public String feignHealthCheck() {
         // TODO: 다른 모든 서비스의 healthCheck를 받아 json 객체로 반환
-        return walkUseCase.feignHealthCheck();
+//        return walkUseCase.feignHealthCheck();
+        return null;
     }
 
     @Operation(summary = "산책 상세조회")
@@ -94,7 +95,7 @@ public class WalkController {
     }
 
     @Operation(summary = "위치 기준 주변 산책 기록 조회")
-    @GetMapping("/position")
+    @GetMapping("/detail-position")
     public ResponseEntity<GetWalkSliceResponse> getWalksByPosition(@RequestBody GetWalksByPositionRequest request){
         Slice<Walk> walkSlice = walkUseCase.getWalksByPosition(GetWalksByPositionCommand.from(request));
         List<GetWalkResponse> walkList = walkSlice.getContent().stream()
