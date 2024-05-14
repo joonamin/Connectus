@@ -12,6 +12,7 @@ import SecondaryButton, {
   SecondaryButtonText,
 } from '@/components/buttons/SecondaryButton';
 import LightText from '@/components/text/LightText';
+import Dialog from '@/components/containers/Dialog';
 
 /**
  * 유저의 지난 산책 기록들을 선택해서 공유할 수 있는 스크린입니다.
@@ -84,64 +85,34 @@ export default function ShareRecordScreen({
     <ScrollView>
       <WalkHistory onWalkSelected={onShareItemSelected} showSummary={false} />
       {/* 업적 상세 정보 modal */}
-      <Modal
+      <Dialog
+        style={styles.modal}
         visible={shareDialogVisibility}
         transparent={true}
         animationType="fade"
         onRequestClose={closeShareDialog}>
-        <SafeAreaView
-          style={styles.modalContainer}
-          onTouchEnd={closeShareDialog}>
-          <MainContainer
-            style={styles.modal}
-            onTouchEnd={e => {
-              // stopPropagation으로 modal 내 touch 시
-              // modal이 닫히는 현상 방지
-              e.stopPropagation();
-            }}>
-            <View style={styles.modalContents}>
-              {typeof dialogMessage === 'undefined' ? (
-                <>
-                  <LightText>해당 경로를 공유하시겠어요?</LightText>
-                  <View style={styles.buttonRow}>
-                    <PrimaryButton onPress={onShare}>
-                      <PrimaryButtonText>예</PrimaryButtonText>
-                    </PrimaryButton>
-                    <SecondaryButton onPress={closeShareDialog}>
-                      <SecondaryButtonText>아니오</SecondaryButtonText>
-                    </SecondaryButton>
-                  </View>
-                </>
-              ) : (
-                <LightText>{dialogMessage}</LightText>
-              )}
+        {typeof dialogMessage === 'undefined' ? (
+          <>
+            <LightText>해당 경로를 공유하시겠어요?</LightText>
+            <View style={styles.buttonRow}>
+              <PrimaryButton onPress={onShare}>
+                <PrimaryButtonText>예</PrimaryButtonText>
+              </PrimaryButton>
+              <SecondaryButton onPress={closeShareDialog}>
+                <SecondaryButtonText>아니오</SecondaryButtonText>
+              </SecondaryButton>
             </View>
-          </MainContainer>
-        </SafeAreaView>
-      </Modal>
+          </>
+        ) : (
+          <LightText>{dialogMessage}</LightText>
+        )}
+      </Dialog>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-  },
   modal: {
-    borderRadius: 15,
-    margin: 15,
-    gap: 30,
-    alignItems: 'stretch',
-    backgroundColor: defaultColors.surfaceContainerHigh,
-  },
-  modalContents: {
-    paddingVertical: 15,
     gap: 30,
     alignItems: 'center',
   },
