@@ -41,8 +41,9 @@ public class LikesController {
 		)
 	})
 	public ResponseEntity<String> insertPostLike(@RequestBody LikeRequest likeRequest) throws GlobalException {
+		Type type = Type.valueOf(likeRequest.getType());
 		return ResponseEntity.ok(
-			likeUseCase.insertLike(likeRequest.getDomainId(), likeRequest.getUserId(), likeRequest.getType()));
+			likeUseCase.insertLike(likeRequest.getDomainId(), likeRequest.getUserId(), type));
 	}
 
 	@GetMapping("/{domainId}/like-count")
@@ -73,7 +74,7 @@ public class LikesController {
 			description = "좋아요 여부 리턴"
 		)
 	})
-	public ResponseEntity<Boolean> isLike(@PathVariable Long domainId, @RequestBody String typeString){
+	public ResponseEntity<Boolean> isLike(@PathVariable Long domainId, @RequestParam String typeString){
 		Type type = Type.valueOf(typeString);
 		return ResponseEntity.ok(likeUseCase.isLike(domainId,type));
 	}
