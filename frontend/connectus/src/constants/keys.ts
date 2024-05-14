@@ -5,6 +5,7 @@
 const queryKeys = {
   GET_GATHER: 'getGather',
   GET_FEED_LIST: 'getFeedList',
+  GET_FEED_DETAIL: 'getFeedDetail',
 } as const;
 
 export {queryKeys};
