@@ -1,6 +1,8 @@
-FROM openjdk:17-jdk
-LABEL authors="joonamin"
-ARG JAR_FILE=build/libs/event-service-0.0.1-SNAPSHOT.jar
-ADD ${JAR_FILE} event-service.jar
+FROM openjdk:17
 
-ENTRYPOINT ["java","-jar","/event-service.jar"]
+ARG JAR_FILE=build/libs/event-service-0.0.1-SNAPSHOT.jar
+ADD ${JAR_FILE} /event-service.jar
+
+EXPOSE 8105
+
+ENTRYPOINT ["java","-jar" "/event-service.jar"]

@@ -2,15 +2,20 @@ package social.connectus.walk.domain.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
+import social.connectus.walk.application.rest.request.CreatePostRequest;
+import social.connectus.walk.application.rest.request.PostRequestForWalk;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.common.customannotations.UseCase;
 import social.connectus.walk.common.exception.AlreadyExistsDataException;
 import social.connectus.walk.domain.command.*;
-import social.connectus.walk.domain.model.entity.LikeUser;
+import social.connectus.walk.domain.model.VO.PostVO;
+import social.connectus.walk.domain.model.entity.Post;
 import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
+import social.connectus.walk.domain.ports.outbound.FeignPort;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @UseCase
@@ -18,10 +23,11 @@ import java.util.List;
 public class WalkService implements WalkUseCase {
 
     private final WalkPort walkPort;
+    private final FeignPort feignPort;
 
     @Override
     public String feignHealthCheck() {
-        return walkPort.feignHealthCheck();
+        return feignPort.feignHealthCheck();
     }
 
     @Override
@@ -38,10 +44,34 @@ public class WalkService implements WalkUseCase {
     public CreateWalkResponse createWalk(CreateWalkCommand command) {
         /*
         TODO: 업적 갱신 요청 보내기
-        TODO: 위치 저장 및 위치ID 얻기
          */
 
         Walk walk = walkPort.createWalk(command);
+        long walkId = walk.getId();
+
+        List<PostVO> postVOList = new ArrayList<>();
+        for(PostRequestForWalk postReq : command.getPostList()){
+            PostVO postVO = PostVO.builder()
+                    .content(postReq.getContent())
+                    .image(postReq.getImage())
+                    .authorId(postReq.getAuthorId())
+                    .walkId(walkId)
+                    .build();
+            postVOList.add(postVO);
+        }
+        List<Long> postIdList = feignPort.createPost(CreatePostRequest.builder()
+                        .walkId(walkId)
+                        .postList(postVOList)
+                .build());
+        List<Post> postList = new ArrayList<>();
+        for(Long postId : postIdList){
+            Post post = new Post(postId);
+            postList.add(post);
+        }
+        walk.setPostList(postList);
+
+        walkPort.createPostList(postList, walk);
+
         return CreateWalkResponse.from(walk);
     }
 
@@ -100,18 +130,5 @@ public class WalkService implements WalkUseCase {
     @Override
     public List<Long> getAchievementsByWalk(GetAchievementsCommand command) {
         return walkPort.getAchievementsByWalk(command);
-    }
-
-    @Override
-    public void routeLikeCancle(RouteLikeCommand command) {
-        Walk walk = walkPort.getWalkById(command.getWalkId());
-
-        for(LikeUser user : walk.getLikeUsers()){
-            if(user.getUserId() == command.getUserId()){
-                walkPort.routeLikeCancle(command);
-                return;
-            }
-        }
-        throw new AlreadyExistsDataException("User already doesn't like this walk.");
     }
 }

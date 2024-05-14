@@ -5,23 +5,15 @@ spring:
   application:
     name: discovery-service
   datasource:
-    url: jdbc:mysql://localhost:3306/demo?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://mariadb.connectus.social:3304/chat?useUnicode=true&characterEncoding=UTF-8
     username: root
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ssafyE106!
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    open-in-view: false
-    hibernate:
-      ddl-auto: create-drop
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
     show-sql: true
-  h2:
-    console:
-      enabled: true
 
 
 eureka:

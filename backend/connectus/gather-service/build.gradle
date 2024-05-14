@@ -30,7 +30,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
-//    implementation 'mysql:mysql-connector-java:8.0.33'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -60,4 +59,7 @@ clean {
 }
 tasks.withType(JavaCompile) {
     options.generatedSourceOutputDirectory = file(querydslSrcDir)
+}
+jar {
+    enabled = true
 }
