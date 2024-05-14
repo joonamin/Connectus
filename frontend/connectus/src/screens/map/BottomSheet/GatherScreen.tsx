@@ -36,14 +36,10 @@ export default function GatherScreen({route}: GatherScreenProps) {
 
   /**
    * 모여라의 id와 user의 id를 제공해 모여라를 close
-   * @todo useId 수정
    */
   const handleGatherClose = async () => {
     if (data) {
-      await gatherDone({
-        gatherId: data?.gatherId,
-        userId: 1,
-      });
+      await gatherDone(data?.gatherId);
     }
   };
 

@@ -62,10 +62,11 @@ type requestGather = {
 
 /**
  * 모여라를 조기종료할 떄, 실행할 axios
- * @param {{userId: number,gatherId: number; }} body
+ * @param {number} gatherId
  * @returns
  */
-const gatherDone = async (body: requestGather): Promise<string[]> => {
+const gatherDone = async (gatherId: number): Promise<string[]> => {
+  const body = {gatherId: gatherId};
   const {data} = await axiosInstance.patch('/gather/close', body);
   return data;
 };
