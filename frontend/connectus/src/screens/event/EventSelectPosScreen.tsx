@@ -39,8 +39,8 @@ export default function EventSelectPosScreen({navigation}: ScreenProps) {
         // 상세 좌표를 요청하는 코드
         enableHighAccuracy: true,
         distanceFilter: 0,
-        interval: 3000,
-        fastestInterval: 2000,
+        // interval: 3000,
+        // fastestInterval: 2000,
       },
     );
   };
