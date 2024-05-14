@@ -129,6 +129,6 @@ public class WalkService implements WalkUseCase {
 
     @Override
     public List<Long> getAchievementsByWalk(GetAchievementsCommand command) {
-        return walkPort.getAchievementsByWalk(command);
+        return feignPort.getAchievementsByWalk(command);
     }
 }
