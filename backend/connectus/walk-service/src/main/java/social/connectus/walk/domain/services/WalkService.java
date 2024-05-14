@@ -45,7 +45,9 @@ public class WalkService implements WalkUseCase {
         TODO: 업적 갱신 요청 보내기
          */
 
-        String imageUrl = imagePort.uploadImage(command.getImage());
+        String imageUrl = null;
+        if(command.getImage() != null)
+            imageUrl = imagePort.uploadImage(command.getImage());
 
         Walk walk = Walk.builder()
                 .userId(command.getUserId())
