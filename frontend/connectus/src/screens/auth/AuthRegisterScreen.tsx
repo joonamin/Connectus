@@ -58,10 +58,9 @@ export default function AuthRegisterScreen() {
     setDialogVisibility(false);
   };
 
-  const onRegistration = () => {
+  const validate = (): string | false => {
     let message: string | undefined = '';
 
-    // 입력 확인
     if (
       (message = validateInput('email', email)) ||
       (message = validateInput('nickname', nickname)) ||
@@ -71,6 +70,17 @@ export default function AuthRegisterScreen() {
         checkValue: passwordConfirm,
       }))
     ) {
+      return message;
+    }
+
+    return false;
+  };
+
+  const onRegistration = () => {
+    let message: ReturnType<typeof validate> = '';
+
+    // 입력 확인
+    if ((message = validate())) {
       setDialogMessage(message);
       openDialog();
 
