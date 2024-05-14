@@ -1,0 +1,29 @@
+server:
+  port: 3010
+
+spring:
+  application:
+    name: event-service
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://mariadb.connectus.social:3305/event?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: ssafyE106!
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+
+  cloud:
+    aws:
+      s3:
+        bucket: e106-connectus
+      credentials:
+        access-key: accessKey
+        secret-key: secretKey
+      region:
+        static: ap-northeast-2
+        auto: false
+      stack:
+        auto: false
