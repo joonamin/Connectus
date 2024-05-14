@@ -151,7 +151,11 @@ export default function TestMapWalkScreen() {
   const handleWalkDone = () => {
     hide();
     navigation.pop();
-    navigation.navigate('MapResult', {time: time, distance: distance});
+    navigation.navigate('MapResult', {
+      time: time,
+      distance: distance,
+      walkRoute: trace,
+    });
   };
 
   // map screen에서 드래그 시, 화면고정을 해제합니다
@@ -200,9 +204,10 @@ export default function TestMapWalkScreen() {
   };
 
   // 모여라 press시 모여라 페이지로 이동합니다
-  const handleGatherPress = () => {
+  const handleGatherPress = (gatehrId: number) => {
     setTrackingMode(false);
-    bottomSheetNav.current && bottomSheetNav.current.navigate('Gather');
+    bottomSheetNav.current &&
+      bottomSheetNav.current.navigate('Gather', {gatherId: gatehrId});
     handleBottomSheetOpen();
   };
 
@@ -254,7 +259,7 @@ export default function TestMapWalkScreen() {
       {mapPos && (
         <MapView
           ref={mapRef}
-          onClusterPress={handleClusterPress}
+          // onClusterPress={handleClusterPress}
           style={styles.container}
           provider={PROVIDER_GOOGLE}
           showsUserLocation
@@ -285,8 +290,8 @@ export default function TestMapWalkScreen() {
                 // 상세 좌표를 요청하는 코드
                 enableHighAccuracy: true,
                 distanceFilter: 0,
-                interval: 3000,
-                fastestInterval: 2000,
+                // interval: 3000,
+                // fastestInterval: 2000,
               },
             );
           }}
@@ -318,12 +323,13 @@ export default function TestMapWalkScreen() {
               />
             );
           })}
+          {/* 모여라 좌표 */}
           {DUMMY_GATHER.map((data, index) => {
             return (
               <CustomMarker
                 key={index}
                 coordinate={data}
-                onPress={handleGatherPress}
+                onPress={() => handleGatherPress(1)}
                 type={3}
               />
             );

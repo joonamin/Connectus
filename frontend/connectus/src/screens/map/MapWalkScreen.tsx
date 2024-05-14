@@ -136,7 +136,11 @@ export default function MapWalkScreen() {
     handleBottomSheetClose();
     // 이전 스크린에서의 작동(setInterval 등)을 없애기 위한 pop
     navigation.pop();
-    navigation.navigate('MapResult', {time: time, distance: distance});
+    navigation.navigate('MapResult', {
+      time: time,
+      distance: distance,
+      walkRoute: trace,
+    });
   };
 
   // map screen에서 드래그 시, 화면고정을 해제합니다
