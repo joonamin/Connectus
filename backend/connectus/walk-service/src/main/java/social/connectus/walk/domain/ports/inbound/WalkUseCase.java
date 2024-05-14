@@ -30,6 +30,4 @@ public interface WalkUseCase {
     double getDistance(double latStart, double lonStart, double latEnd, double lonEnd);
 
     List<Long> getAchievementsByWalk(GetAchievementsCommand command);
-
-    void routeLikeCancle(RouteLikeCommand from);
 }
