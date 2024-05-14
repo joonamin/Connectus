@@ -18,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import social.connectus.domain.service.command.InsertPostCommand;
 
 @Entity
 @Builder
@@ -34,7 +35,7 @@ public class Post extends BaseEntity {
 	private String content;
 	@OneToMany(targetEntity = Comment.class, mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Comment> commentList;
-	public static Post from (PostRequestDto dto) {
+	public static Post from (InsertPostCommand dto) {
 		return Post.builder()
 			.authorId(dto.getAuthorId())
 			.imageUrl(dto.getImageUrl())
