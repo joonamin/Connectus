@@ -43,8 +43,11 @@ export default function FeedPreview({
     setViewIsLiked(!viewIsLiked);
   };
 
+  /**
+   * @todo 라우터 params 설정하기
+   */
   const handlePressPressFeedDetail = () => {
-    navigation.navigate('FeedDetail');
+    navigation.navigate('FeedDetail', {feedId: 9, distance: 5});
   };
 
   return (
