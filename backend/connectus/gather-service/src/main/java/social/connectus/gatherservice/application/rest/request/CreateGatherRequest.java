@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateGatherRequest {
+    private double latitude;
+    private double longitude;
     private long hostId;
     private String content;
     private int maxJoiner;

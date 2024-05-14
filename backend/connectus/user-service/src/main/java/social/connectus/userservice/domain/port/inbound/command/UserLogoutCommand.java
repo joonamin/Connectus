@@ -17,6 +17,7 @@ public class UserLogoutCommand {
 
 	public static UserLogoutCommand from(UserLogoutRequest request) {
 		// todo: jwt 검증 로직 필요, claim 추출, request의 accessToken과 email이 일치하는지..
+
 		return UserLogoutCommand.builder()
 			.accessToken(request.getAccessToken())
 			.build();

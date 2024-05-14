@@ -27,6 +27,9 @@ public class QCandidate extends EntityPathBase<Candidate> {
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     //inherited
+    public final NumberPath<Long> spotId = _super.spotId;
+
+    //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public final NumberPath<Long> userId = createNumber("userId", Long.class);
