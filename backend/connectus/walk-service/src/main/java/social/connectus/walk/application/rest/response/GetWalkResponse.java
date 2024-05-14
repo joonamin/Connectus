@@ -26,7 +26,7 @@ public class GetWalkResponse {
     private double walkDistance;
     private Set<Long> likeUsers;
     private List<Long> postList;
-    private Set<AchievementResponse> completedAchievement;
+    private Set<AchievementIdResponse> completedAchievement;
     private Long participateEvent;
     private Set<Long> trackingUsers;
     private boolean isPublic;
@@ -49,9 +49,9 @@ public class GetWalkResponse {
                 .stream()
                 .map(LikeUser::getUserId)
                 .collect(Collectors.toSet());
-        Set<AchievementResponse> completedAchievement = walk.getCompletedAchievement()
+        Set<AchievementIdResponse> completedAchievement = walk.getCompletedAchievement()
                 .stream()
-                .map(AchievementResponse::from)
+                .map(AchievementIdResponse::from)
                 .collect(Collectors.toSet());
         Set<Long> trackingUsers = walk.getTrackingUsers()
                 .stream()

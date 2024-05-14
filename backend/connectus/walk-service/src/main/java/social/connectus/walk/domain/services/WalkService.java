@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import social.connectus.walk.application.rest.request.CreatePostRequest;
 import social.connectus.walk.application.rest.request.PostRequestForWalk;
+import social.connectus.walk.application.rest.response.AchievementResponse;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.common.customannotations.UseCase;
 import social.connectus.walk.common.exception.AlreadyExistsDataException;
@@ -111,8 +112,8 @@ public class WalkService implements WalkUseCase {
     }
 
     @Override
-    public Slice<Long> getWalksByPosition(GetWalksByPositionCommand command) {
-        return walkPort.getWalksByPosition(command);
+    public Slice<Long> getWalkIdsByPosition(GetWalksByPositionCommand command) {
+        return walkPort.getWalkIdsByPosition(command);
     }
 
     @Override
@@ -128,7 +129,12 @@ public class WalkService implements WalkUseCase {
     }
 
     @Override
-    public List<Long> getAchievementsByWalk(GetAchievementsCommand command) {
-        return feignPort.getAchievementsByWalk(command);
+    public List<AchievementResponse> getAchievementsByWalk(Long userId, GetAchievementsCommand command) {
+        return feignPort.getAchievementsByWalk(userId, command);
+    }
+
+    @Override
+    public Slice<Walk> getWalksByPosition(GetWalksByPositionCommand command) {
+        return walkPort.getWalksByPosition(command);
     }
 }
