@@ -21,6 +21,18 @@ spring:
     show-sql: true
     generate-ddl: true
     defer-datasource-initialization: true
+  cloud:
+    aws:
+      s3:
+        bucket: e106-connectus
+        credentials:
+          access-key: AKIAUMBXWTXOPPW2YL5M
+          secret-key: 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
+      region:
+        static: ap-northeast-2
+        auto: false
+      stack:
+        auto: false
 
 eureka:
   client:
