@@ -11,7 +11,7 @@ import social.connectus.application.rest.request.CoordinateRequestDto;
 
 @FeignClient(name = "walk-service")
 public interface WalkServiceClient {
-	@GetMapping("/walk/feed-list")
+	@GetMapping("/walk/position")
 	Slice<Long> getFeedList(
 		@RequestParam("coordinate") CoordinateRequestDto coordinate,
 		@RequestParam("pageNum") int pageNum,

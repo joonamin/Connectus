@@ -64,6 +64,11 @@ public class UserService implements UserUseCase {
 	}
 
 	@Override
+	public String getUserName(Long userId) {
+		return userPort.getUserName(userId);
+	}
+
+	@Override
 	@YetNotImplemented
 	public LogoutUserResponse logout(UserLogoutCommand command) throws FailedToLogoutException {
 		return null;
