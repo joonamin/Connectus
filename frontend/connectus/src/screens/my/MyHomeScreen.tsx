@@ -11,6 +11,8 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {MyStackParamList} from '@/navigations/stack/MyStackNavigator';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
+import useAuthStore from '@/store/useAuthStore';
+import {defaultColors} from '@/constants/colors';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MyStackParamList>,
@@ -34,6 +36,9 @@ export default function MyHomeScreen() {
       gap: 5,
       alignContent: 'stretch',
     },
+    logoutText: {
+      color: defaultColors.onErrorContainer,
+    },
   });
 
   const navigation = useNavigation<Navigation>();
@@ -44,6 +49,9 @@ export default function MyHomeScreen() {
   const gotoHistory = () => {
     navigation.navigate('MyWalkHistory');
   };
+
+  // 로그아웃 기능 수행
+  const {invalidate} = useAuthStore();
 
   return (
     <ScrollView>
@@ -89,6 +97,15 @@ export default function MyHomeScreen() {
             iconType="Ionicons"
             iconName="heart"
             text="좋아요 기록"
+          />
+        </MainContainer>
+        <MainContainer style={styles.listGroup}>
+          <IconItemButton
+            onPress={invalidate}
+            backgroundColor={defaultColors.errorContainer}
+            iconType="MaterialIcons"
+            iconName="logout"
+            text="로그아웃"
           />
         </MainContainer>
       </MainContainer>
