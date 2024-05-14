@@ -1,11 +1,7 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import colors from '@/constants/colors';
-
-type commentProps = {
-  userName: string;
-  comment: string;
-};
+import {comment} from '@/types';
 
 /**
  * @param {string} userName
@@ -14,7 +10,7 @@ type commentProps = {
  * 스크린에 출력할 댓글 내용입니다
  * @returns
  */
-export default function Comment() {
+export default function Comment({params}: {params: comment}) {
   return (
     <View style={styles.commentContainer}>
       <View style={styles.profileImageContainer}>
@@ -24,8 +20,8 @@ export default function Comment() {
         />
       </View>
       <View style={styles.commentTextContaier}>
-        <Text style={styles.userText}>{'userName'}</Text>
-        <Text style={styles.commentText}>{'comment'}</Text>
+        <Text style={styles.userText}>{params.authorName}</Text>
+        <Text style={styles.commentText}>{params.content}</Text>
       </View>
     </View>
   );

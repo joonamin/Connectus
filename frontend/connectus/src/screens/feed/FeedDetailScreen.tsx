@@ -17,7 +17,11 @@ import MainText from '@/components/text/MainText';
 import colors from '@/constants/colors';
 import useModal from '@/hooks/useModal';
 import Comment from '@/components/feed/Comment';
-import {createPostComment} from '@/api/post';
+import {createPostComment, getPostDetail} from '@/api/post';
+import {useQuery} from '@tanstack/react-query';
+import useAuthStore from '@/store/useAuthStore';
+import {queryKeys} from '@/constants';
+import {comment} from '@/types';
 
 /**
  * @todo feedHomeScreen에서 해당 스크린에 대한 데이터를 전달받아 like, comment의 수를 받아와야하고
@@ -33,6 +37,7 @@ export default function FeedDetailScreen() {
   const [isFeedLiked, setIsFeedLiked] = useState(false);
   const [isUseKeyBoard, setIsUseKeyBoard] = useState(false);
   const [comment, setComment] = useState('');
+  const {user} = useAuthStore();
   // 스크린 확인을 위한 더미 데이터입니다
   const likeNumber = 12;
   const commentNumber = 42;
@@ -41,10 +46,15 @@ export default function FeedDetailScreen() {
     setIsFeedLiked(!isFeedLiked);
   };
 
+  const {data, isLoading, isError} = useQuery({
+    queryFn: () => getPostDetail(9, {userId: 1, distance: 5}),
+    queryKey: [queryKeys.GET_FEED_DETAIL],
+  });
+
   /**
    * @todo postId 전달
    * params로 전달해줄
-   * {postId" : Long, "dto" : {"content" : String,"authorId" : Long}}
+   * {"content" : String,"authorId" : Long }
    * 형태의 데이터 전달
    */
   const handlePostComment = async () => {
@@ -66,6 +76,14 @@ export default function FeedDetailScreen() {
     };
   }, []);
 
+  if (isLoading) {
+    return <Text>로딩중입니당...</Text>;
+  }
+
+  if (isError || data === undefined) {
+    return <Text>요청에 실패했습니다...</Text>;
+  }
+
   return (
     <>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -78,7 +96,7 @@ export default function FeedDetailScreen() {
               />
             </View>
             <View style={styles.feedInfoContainer}>
-              <MainText>{'userName'}</MainText>
+              <MainText>{data.authorName}</MainText>
               <Text style={styles.postDate}>{'2024-04-29'}</Text>
             </View>
             <Pressable style={styles.moveButton}>
@@ -88,10 +106,7 @@ export default function FeedDetailScreen() {
             </Pressable>
           </View>
           <View style={styles.feedImageContainer}>
-            <Image
-              style={styles.feedImage}
-              source={require('@/assets/test-feed-image.jpg')}
-            />
+            <Image style={styles.feedImage} source={{uri: data.imageUrl}} />
           </View>
           {/* 좋아요 버튼 */}
           <View style={styles.feedIndicator}>
@@ -104,16 +119,20 @@ export default function FeedDetailScreen() {
                 <Ionicons name="heart-outline" size={32} color={'white'} />
               </Pressable>
             )}
-            <Text style={styles.feedIndicatorText}>좋아요 {likeNumber}개</Text>
-            <Text style={styles.feedIndicatorText}>댓글 {commentNumber}개</Text>
+            <Text style={styles.feedIndicatorText}>
+              좋아요 {data.likeCount}개
+            </Text>
+            <Text style={styles.feedIndicatorText}>
+              댓글 {data.commentCount}개
+            </Text>
           </View>
           <View style={styles.feedContentContainer}>
-            <MainText>메인내용</MainText>
+            <MainText>{data.content}</MainText>
           </View>
           <View style={styles.commentListContainer}>
-            <Comment />
-            <Comment />
-            <Comment />
+            {data.commentList.map((comment: comment, index) => {
+              return <Comment key={index} params={comment} />;
+            })}
           </View>
           <View style={styles.defaultBottomPadding} />
           <View style={isUseKeyBoard ? styles.keyboardBottomPadding : null} />
@@ -187,10 +206,12 @@ const styles = StyleSheet.create({
     borderColor: colors.white,
     borderWidth: 1,
     borderRadius: 50,
+    overflow: 'hidden',
   },
   profileImage: {
     width: '100%',
     height: '100%',
+    borderRadius: 50,
   },
   feedInfoContainer: {justifyContent: 'center', paddingLeft: 10},
   userName: {fontSize: 24, color: colors.white},
@@ -249,6 +270,8 @@ const styles = StyleSheet.create({
     paddingBottom: 60,
   },
   feedContentContainer: {
-    padding: 5,
+    padding: 15,
+    borderBottomColor: colors.white,
+    borderBottomWidth: 1,
   },
 });
