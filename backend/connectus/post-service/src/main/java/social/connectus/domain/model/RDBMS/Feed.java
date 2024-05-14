@@ -25,9 +25,9 @@ public class Feed {
 	private Long id;
 	private Long walkId;
 	private String postIdList;
-	public static Feed from(CreateFeedRequestDto dto, List<Long> postIdList) {
+	public static Feed from(Long walkId, List<Long> postIdList) {
 		return Feed.builder()
-			.walkId(dto.getWalkId())
+			.walkId(walkId)
 			.postIdList(postIdList.toString())
 			.build();
 	}
