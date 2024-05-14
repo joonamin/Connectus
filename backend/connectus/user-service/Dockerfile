@@ -5,4 +5,4 @@ ADD ${JAR_FILE} /user-service.jar
 
 EXPOSE 8107
 
-ENTRYPOINT ["java","-jar" "/user-service.jar"]
+ENTRYPOINT ["java","-jar", "/user-service.jar"]
