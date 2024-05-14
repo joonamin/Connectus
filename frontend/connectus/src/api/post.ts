@@ -33,11 +33,8 @@ const getPostDetail = async (postId: number, body: getPostDetailBody) => {
 };
 
 interface createPostCommentParams {
-  postId: number;
-  dto: {
-    content: String;
-    authorId: number;
-  };
+  content: String;
+  authorId: number;
 }
 
 /**
@@ -52,12 +49,28 @@ const createPostComment = async (
   body: createPostCommentParams,
 ) => {
   const {data} = await axiosInstance.post(`/post/${postId}/comment`, body);
+  console.log(data);
   return data;
 };
 
-interface getFeedListParams {
-  longitude: number;
-  latitude: number;
+interface reponseGedFeedList {
+  content: {
+    walkId: number;
+    authorId: number;
+    authorName: String;
+    postList: [
+      {
+        postId: number;
+        authorId: number;
+        authorName: String;
+        imageUrl: String;
+        countCount: number;
+        updatedAt: String;
+        inRange: boolean;
+      },
+    ];
+  };
+  hasNext: boolean;
   pageNum: number;
 }
 /**
@@ -65,8 +78,14 @@ interface getFeedListParams {
  * @param params : longitude latitude pageNum
  * pageNum을 1씩 증가시키면서 요청을 이어나갑니다.
  */
-const getFeedList = async (params: getFeedListParams) => {
-  const {data} = await axiosInstance.get(`/post/feed/main`, {params: params});
+const getFeedList = async (
+  longitude: number,
+  latitude: number,
+  pageNum = 0,
+): Promise<reponseGedFeedList[]> => {
+  const {data} = await axiosInstance.get(
+    `/post/feed/main?longitude=${longitude}&latitude=${latitude}&pageNum=${pageNum}`,
+  );
   return data;
 };
 

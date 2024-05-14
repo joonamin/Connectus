@@ -70,7 +70,9 @@ export default function FeedPreview({
         <View style={styles.feedImageContainer}>
           <Image
             style={styles.feedImage}
-            source={require('@/assets/test-feed-image.jpg')}
+            source={{
+              uri: 'https://e106-connectus.s3.ap-northeast-2.amazonaws.com/test.jpg',
+            }}
           />
         </View>
         <View style={styles.feedIndicator}>
