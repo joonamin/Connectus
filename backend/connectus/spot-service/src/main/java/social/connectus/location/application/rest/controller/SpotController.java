@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import social.connectus.location.application.rest.request.FindNearbyElementRequest;
+import social.connectus.location.application.rest.response.FindNearbyElementResponse;
 import social.connectus.location.domain.command.FindNearbyElementCommand;
 import social.connectus.location.domain.ports.inbound.SpotUseCase;
 
@@ -23,10 +24,9 @@ public class SpotController {
 
 
     @PostMapping("/findNearby")
-    public String findNearbyElement(FindNearbyElementRequest request) {
+    public FindNearbyElementResponse findNearbyElement(FindNearbyElementRequest request) {
         FindNearbyElementCommand command = new FindNearbyElementCommand(request.getLongitude(), request.getLongitude());
-        spotUseCase.findNearbyElement(command);
-        return "It's working on spot-service!";
+        return spotUseCase.findNearbyElement(command);
     }
 
 
