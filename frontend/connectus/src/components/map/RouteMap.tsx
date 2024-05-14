@@ -20,6 +20,10 @@ export interface RouteMapProps extends ViewProps {
    * 산책 경로
    */
   routes: LatLng[];
+  /**
+   * 지도가 준비되었을 시 실행되는 callback을 지정합니다
+   */
+  onMapReady?: () => void;
 }
 
 /**
@@ -49,6 +53,11 @@ export default class RouteMap extends React.Component<RouteMapProps> {
   protected viewProps: ViewProps;
 
   /**
+   * 지도가 준비되었을 시 실행되는 callback
+   */
+  protected onMapReady?: RouteMapProps['onMapReady'];
+
+  /**
    * RouteMap을 생성합니다
    *
    * @param props RouterMap 생성 시 사용할 인자
@@ -60,13 +69,14 @@ export default class RouteMap extends React.Component<RouteMapProps> {
 
     this.viewProps = props;
     this.routes = props.routes;
+    this.onMapReady = props.onMapReady;
 
     this.mapProps = {
       style: styles.map,
       scrollEnabled: false,
       zoomEnabled: false,
       provider: PROVIDER_GOOGLE,
-      onMapReady: this.onMapReady.bind(this),
+      onMapReady: this.onMapReadyInternal.bind(this),
       children: (
         <>
           <StartMarker coordinate={this.routes[0]} />
@@ -84,7 +94,7 @@ export default class RouteMap extends React.Component<RouteMapProps> {
   /**
    * 지도 준비 완료 시 실행할 함수입니다
    */
-  protected onMapReady() {
+  protected onMapReadyInternal() {
     // 지도를 적절한 위치에 위치
     if (Platform.OS === 'ios') {
       this.map.current?.fitToElements();
@@ -98,6 +108,10 @@ export default class RouteMap extends React.Component<RouteMapProps> {
           right: 30,
         },
       });
+    }
+
+    if (this.onMapReady) {
+      this.onMapReady();
     }
   }
 
