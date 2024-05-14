@@ -12,4 +12,5 @@ public interface RouteRepository extends JpaRepository<Route, Long> {
     @Query(value="SELECT * from route group by walk_id HAVING sqrt(POW(abs(latitude - ?1) * ?4,2) + pow(abs(longitude - ?2) * ?5,2)) < ?3", nativeQuery = true)
     Slice<Route> findSliceByPosition(double userLatitude, double userLongitude, double kmRadius, double KM_PER_LAT, double KM_PER_LON, Pageable pageable);
 
+
 }
