@@ -11,8 +11,15 @@ import colors from '@/constants/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MainText from '../text/MainText';
 import {LatLng} from 'react-native-maps';
+import {routeLike} from '@/api/walk';
 
 type Props = {
+  route?: LatLng[];
+  walkTime?: number;
+  walkDistance?: number;
+  likeUsers?: number[];
+  postList?: number[];
+  trackingUsers?: number[];
   modalOpen: (route: LatLng[]) => void;
 };
 
@@ -33,7 +40,11 @@ export default function SharePost({modalOpen}: Props) {
     {latitude: 35.08920490612796, longitude: 128.85269005548565},
   ];
 
+  /**
+   * @todo route like 인수 변경
+   */
   const handlePressLikeButton = () => {
+    routeLike(1, 1);
     setViewIsLiked(!viewIsLiked);
   };
 

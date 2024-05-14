@@ -17,6 +17,7 @@ import MainText from '@/components/text/MainText';
 import colors from '@/constants/colors';
 import Comment from '@/components/feed/Comment';
 import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
+import {createPostComment} from '@/api/post';
 
 /**
  * 바텀시트에서 사용할 Feed Detail Screen
@@ -26,12 +27,24 @@ import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
 export default function FeedDetailScreen() {
   const [isFeedLiked, setIsFeedLiked] = useState(false);
   const [isUseKeyBoard, setIsUseKeyBoard] = useState(false);
+  const [comment, setComment] = useState('');
   // 스크린 확인을 위한 더미 데이터입니다
   const likeNumber = 12;
   const commentNumber = 42;
+
   // 좋아요 버튼을 눌렀을때 실행할 함수로 나중에 api연결이 필요합니다
   const handlePressLikeButton = () => {
     setIsFeedLiked(!isFeedLiked);
+  };
+
+  /**
+   * 댙긑 제출함수
+   * @todo 추후 postId, {content , authorId} 수정
+   */
+  const handleSubmitComment = async () => {
+    await createPostComment(2, {content: comment, authorId: 1});
+    setComment('');
+    Keyboard.dismiss();
   };
 
   // 컴포넌트 로드 시 키보드가 보일때 마다 화면을 제어하기위해 이벤트리스너를 부착합니다
@@ -111,8 +124,12 @@ export default function FeedDetailScreen() {
           placeholder="댓글 남기기"
           placeholderTextColor={colors.white}
           style={commentStyle.commentInput}
+          value={comment}
+          onChangeText={text => setComment(text)}
         />
-        <Pressable style={commentStyle.submitButton}>
+        <Pressable
+          style={commentStyle.submitButton}
+          onPress={handleSubmitComment}>
           <MaterialIcons name="message" size={24} color={colors.white} />
         </Pressable>
       </View>
