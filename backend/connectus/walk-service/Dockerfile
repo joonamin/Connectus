@@ -5,4 +5,4 @@ ADD ${JAR_FILE} /walk-service.jar
 
 EXPOSE 8106
 
-ENTRYPOINT ["java","-jar" "/walk-service.jar"]
+ENTRYPOINT ["java","-jar", "/walk-service.jar"]
