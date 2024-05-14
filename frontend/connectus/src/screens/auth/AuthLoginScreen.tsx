@@ -16,6 +16,7 @@ import PrimaryButton, {
 import {LoginRequest, LoginResponse, login} from '@/api/user';
 import {validateInput} from '@/utils/validate';
 import {AxiosError, AxiosResponse} from 'axios';
+import useAuthStore from '@/store/useAuthStore';
 
 type Navigate = StackNavigationProp<AuthStackParamList>;
 
@@ -25,6 +26,8 @@ export default function AuthLoginScreen() {
     navigation.pop();
     navigation.navigate('AuthRegister');
   };
+
+  const {setAccessToken} = useAuthStore();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -72,6 +75,7 @@ export default function AuthLoginScreen() {
       .then((response: LoginResponse) => {
         // 로그인 완료
         setDialogMessage(response.accessToken);
+        setAccessToken(response.accessToken);
         openDialog();
       })
       .catch((error: AxiosError) => {

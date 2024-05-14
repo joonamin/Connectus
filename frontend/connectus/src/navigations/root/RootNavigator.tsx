@@ -4,6 +4,6 @@ import AuthStackNavigator from '../stack/AuthStackNavigator';
 import useAuthStore from '@/store/useAuthStore';
 
 export default function RootNavigator() {
-  const {isLogin} = useAuthStore();
-  return <>{isLogin ? <MapBottomTabsNavigator /> : <AuthStackNavigator />}</>;
+  const {user} = useAuthStore();
+  return <>{user ? <MapBottomTabsNavigator /> : <AuthStackNavigator />}</>;
 }
