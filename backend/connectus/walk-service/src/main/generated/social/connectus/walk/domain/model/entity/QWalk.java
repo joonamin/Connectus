@@ -39,6 +39,9 @@ public class QWalk extends EntityPathBase<Walk> {
 
     public final ListPath<Route, QRoute> route = this.<Route, QRoute>createList("route", Route.class, QRoute.class, PathInits.DIRECT2);
 
+    //inherited
+    public final NumberPath<Long> spotId = _super.spotId;
+
     public final StringPath title = createString("title");
 
     public final SetPath<TrackingUser, QTrackingUser> trackingUsers = this.<TrackingUser, QTrackingUser>createSet("trackingUsers", TrackingUser.class, QTrackingUser.class, PathInits.DIRECT2);
