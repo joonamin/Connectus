@@ -11,6 +11,7 @@ import social.connectus.application.rest.request.PostRequestDto;
 import social.connectus.domain.model.RDBMS.Feed;
 import social.connectus.domain.model.RDBMS.Post;
 import social.connectus.domain.ports.outbound.CreatePostPort;
+import social.connectus.domain.service.command.InsertPostCommand;
 import social.connectus.infrastructure.databases.mariadb.repository.FeedRepository;
 import social.connectus.infrastructure.databases.mariadb.repository.PostRepository;
 
@@ -20,16 +21,15 @@ public class CreatePostAdapter implements CreatePostPort {
 	private final PostRepository postRepository;
 	private final FeedRepository feedRepository;
 	@Override
-	public String createPost(CreateFeedRequestDto requestDto) {
+	public List<Long> createPost(Long walkId, List<InsertPostCommand> postCommandList) {
 		List<Post> postList = new ArrayList<>();
-		for(PostRequestDto request : requestDto.getPostList()) {
+		for(InsertPostCommand request : postCommandList) {
 			Post post = Post.from(request);
 			postList.add(post);
 		}
-		postRepository.saveAll(postList);
-		List<Long> postIdList = postList.stream().map(Post::getId).toList();
-		feedRepository.save(Feed.from(requestDto,postIdList));
+		List<Long> postIdList = postRepository.saveAll(postList).stream().map(Post::getId).toList();
+		feedRepository.save(Feed.from(walkId,postIdList));
 
-		return "Complete save Feed";
+		return postIdList;
 	}
 }

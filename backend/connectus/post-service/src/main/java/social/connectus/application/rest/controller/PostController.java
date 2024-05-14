@@ -1,5 +1,6 @@
 package social.connectus.application.rest.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -11,11 +12,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.Produces;
 import lombok.RequiredArgsConstructor;
 import social.connectus.application.rest.request.CoordinateRequestDto;
 import social.connectus.application.rest.request.CreateCommentRequestDto;
@@ -58,10 +63,12 @@ public class PostController {
 			description = "post 저장 성공"
 		)
 	})
-	public ResponseEntity<String> createPost(@RequestBody CreateFeedRequestDto requestFeed) throws
-		GlobalException {
-		String result = createPostUseCase.createPost(requestFeed);
-		return ResponseEntity.ok().body(result);
+	public ResponseEntity<List<Long>> createPost(
+		@Valid CreateFeedRequestDto requestFeed
+	) throws
+		GlobalException, IOException {
+		System.out.println(requestFeed.getPostList().get(0).getContent());
+		return ResponseEntity.ok().body(createPostUseCase.createPost(requestFeed));
 	}
 
 	@DeleteMapping("/{postId}")
@@ -188,5 +195,10 @@ public class PostController {
 	@GetMapping("/follow/{postId}")
 	public ResponseEntity<FollowPostResponse> followPost(@PathVariable("postId") Long postId) throws GlobalException {
 		return ResponseEntity.ok(followPostUseCase.followPost(postId));
+	}
+
+	@GetMapping("/health-check")
+	public ResponseEntity<String> test() {
+		return ResponseEntity.ok("Check Good!");
 	}
 }

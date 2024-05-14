@@ -9,5 +9,5 @@ import social.connectus.common.type.Type;
 public class LikeRequest {
 	private Long userId;
 	private Long domainId;
-	private Type type;
+	private String type;
 }
