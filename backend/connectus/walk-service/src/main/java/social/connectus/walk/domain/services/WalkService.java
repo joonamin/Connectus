@@ -30,11 +30,6 @@ public class WalkService implements WalkUseCase {
     private final FeignPort feignPort;
 
     @Override
-    public String feignHealthCheck() {
-        return feignPort.feignHealthCheck();
-    }
-
-    @Override
     public Walk getWalkById(long walkId){
         return walkPort.getWalkById(walkId);
     }

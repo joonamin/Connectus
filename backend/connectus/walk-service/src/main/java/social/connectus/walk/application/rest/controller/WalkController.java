@@ -34,7 +34,8 @@ public class WalkController {
     @GetMapping("/feign-health-check")
     public String feignHealthCheck() {
         // TODO: 다른 모든 서비스의 healthCheck를 받아 json 객체로 반환
-        return walkUseCase.feignHealthCheck();
+//        return walkUseCase.feignHealthCheck();
+        return null;
     }
 
     @Operation(summary = "산책 상세조회")

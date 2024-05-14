@@ -8,7 +8,6 @@ import social.connectus.walk.domain.command.GetAchievementsCommand;
 import java.util.List;
 
 public interface FeignPort {
-    String feignHealthCheck();
     List<AchievementResponse> getAchievementsByWalk(Long userId, GetAchievementsCommand command);
 
     List<Long> createPost(CreatePostRequest request);
