@@ -39,16 +39,13 @@ export default function MapResultScreen({route}: ScreenProps) {
   const indicateTime = formatTime(hours, minutes, seconds);
   const map = useRef<RouteMap | null>(null);
 
-  const [routeImg, setRouteImg] = useState();
+  // const [routeImg, setRouteImg] = useState();
 
-  useEffect(() => {
-    map.current?.takeSnapshot().then(base64 => {
-      setRouteImg(base64);
-      console.log(base64);
-    });
-  }, [map]);
+  const onMapReady = async () => {
+    const routeImage = await map.current?.takeSnapshot({result: 'file'});
+    console.log(routeImage);
+  };
 
-  console.log('이것은 경로...', route.params?.walkRoute);
   if (!route.params) {
     return <Text>살려줘요</Text>;
   }
@@ -61,6 +58,7 @@ export default function MapResultScreen({route}: ScreenProps) {
             routes={route.params?.walkRoute}
             ref={map}
             style={{alignSelf: 'stretch'}}
+            onMapReady={onMapReady}
           />
           <WalkResult time={indicateTime} distance={route.params?.distance} />
           <Achievement achievs={DUMMY_ACHIEVE} />
