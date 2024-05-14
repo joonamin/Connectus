@@ -22,3 +22,12 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+aws:
+  s3:
+    type: AWS Signature
+    bucket: e106-connectus
+    access-key: AKIAUMBXWTXODM2UVM7T
+    secret-key: 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
+    region: ap-northeast-2
+    service-name: s3
