@@ -41,8 +41,9 @@ public class LikesController {
 		)
 	})
 	public ResponseEntity<String> insertPostLike(@RequestBody LikeRequest likeRequest) throws GlobalException {
+		Type type = Type.valueOf(likeRequest.getType());
 		return ResponseEntity.ok(
-			likeUseCase.insertLike(likeRequest.getDomainId(), likeRequest.getUserId(), likeRequest.getType()));
+			likeUseCase.insertLike(likeRequest.getDomainId(), likeRequest.getUserId(), type));
 	}
 
 	@GetMapping("/{domainId}/like-count")
