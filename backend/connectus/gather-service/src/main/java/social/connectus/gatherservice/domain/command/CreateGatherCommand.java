@@ -11,6 +11,8 @@ import social.connectus.gatherservice.application.rest.request.CreateGatherReque
 @AllArgsConstructor
 @Builder
 public class CreateGatherCommand {
+    private double latitude;
+    private double longitude;
     private long hostId;
     private String content;
     private int maxJoiner;
@@ -18,6 +20,8 @@ public class CreateGatherCommand {
 
     public static CreateGatherCommand from(CreateGatherRequest request){
         return CreateGatherCommand.builder()
+                .latitude(request.getLatitude())
+                .longitude(request.getLongitude())
                 .hostId(request.getHostId())
                 .content(request.getContent())
                 .maxJoiner(request.getMaxJoiner())
