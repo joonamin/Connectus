@@ -23,6 +23,7 @@ import {gatherStart} from '@/api/gather';
 import {getMinuteDifference} from '@/utils';
 import Geolocation from '@react-native-community/geolocation';
 import {LatLng} from 'react-native-maps';
+import useAuthStore from '@/store/useAuthStore';
 
 // 유저가 설정 가능한 시간
 const GATHERTIME = [5, 10, 15, 20, 30];
@@ -38,7 +39,8 @@ export default function CreateGatherScreen() {
   // 모집 설명
   const [content, setContent] = useState<string>('');
   const [gatherPos, getGatherPos] = useState<LatLng>();
-
+  const {user} = useAuthStore();
+  console.log(user?.userId);
   // 모집 시, 전달해줄 LatLng 데이터를 가져오는 과정
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -81,10 +83,10 @@ export default function CreateGatherScreen() {
    * @todo hostId수정 필요
    */
   const handleGatherPress = async () => {
-    if (gatherTime !== null && gatherPos) {
+    if (gatherTime !== null && gatherPos && user) {
       const endTime = getSubmitDate(gatherTime);
       gatherStart({
-        hostId: 1,
+        hostId: user?.userId,
         content: content,
         maxJoiner: headCount,
         endTime: endTime,
