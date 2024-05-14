@@ -48,11 +48,15 @@ type responseGatherDetail = {
  * @param {number} gatherId
  * @returns
  */
-const gatherDetail = async (
-  gatherId: number,
-): Promise<responseGatherDetail> => {
-  const {data} = await axiosInstance.get(`/gather/${gatherId}`);
-  return data;
+const gatherDetail = async (gatherId: number) => {
+  try {
+    const {data} = await axiosInstance.get(`/gather/${gatherId}`);
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error.status);
+    return error;
+  }
 };
 
 type requestGather = {

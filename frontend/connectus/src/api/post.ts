@@ -1,3 +1,4 @@
+import {postDetail} from '@/types';
 import {axiosInstance} from './axios';
 
 /**
@@ -16,9 +17,11 @@ const getFeedDetail = async (walkId: number) => {
 };
 
 interface getPostDetailBody {
-  postId: number;
   userId: number;
   distance: number;
+}
+interface AxiosResponse<T> {
+  data: T;
 }
 
 /**
@@ -27,9 +30,19 @@ interface getPostDetailBody {
  * @param postId : 요청을 보낼 포스트 아이디
  * @param body : postId, userId, distance
  */
-const getPostDetail = async (postId: number, body: getPostDetailBody) => {
-  const {data} = await axiosInstance.get(`/post/${postId}`, {params: body});
-  return data;
+const getPostDetail = async (
+  postId: number,
+  params: getPostDetailBody,
+): Promise<AxiosResponse<postDetail> | Error> => {
+  try {
+    const {data} = await axiosInstance.get(
+      `/post/${postId}?userId=${params.userId}&distance=${params.distance}`,
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 };
 
 interface createPostCommentParams {
