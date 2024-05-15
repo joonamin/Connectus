@@ -26,10 +26,11 @@ public class GetWalkResponse {
     private double walkDistance;
     private Set<Long> likeUsers;
     private List<Long> postList;
-    private Set<AchievementResponse> completedAchievement;
+    private Set<AchievementIdResponse> completedAchievement;
     private Long participateEvent;
     private Set<Long> trackingUsers;
     private boolean isPublic;
+    private String imageUrl;
     private LocalDateTime updatedAt;
 
     // model mapper 를 사용해서, 공통 필드는 자동으로 초기화 되게끔?
@@ -49,9 +50,9 @@ public class GetWalkResponse {
                 .stream()
                 .map(LikeUser::getUserId)
                 .collect(Collectors.toSet());
-        Set<AchievementResponse> completedAchievement = walk.getCompletedAchievement()
+        Set<AchievementIdResponse> completedAchievement = walk.getCompletedAchievement()
                 .stream()
-                .map(AchievementResponse::from)
+                .map(AchievementIdResponse::from)
                 .collect(Collectors.toSet());
         Set<Long> trackingUsers = walk.getTrackingUsers()
                 .stream()
@@ -76,6 +77,7 @@ public class GetWalkResponse {
                 .trackingUsers(trackingUsers)
                 .isPublic(walk.isPublic())
                 .updatedAt(walk.getUpdatedAt())
+                .imageUrl(walk.getImageUrl())
                 .build();
     }
 }

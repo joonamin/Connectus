@@ -47,6 +47,8 @@ public class GatherService implements GatherUseCase {
     @Override
     public GetGatherResponse getGather(long gatherId) throws ResourceNotFoundException {
         Gather gather = gatherPort.getGatherById(gatherId);
+        // TODO: 가능하면 위치 자체를 반환하도록 변경
+        // 위치 서비스에 spotId로 요청하기
         return modelMapper.map(gather, GetGatherResponse.class);
     }
 

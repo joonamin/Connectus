@@ -29,6 +29,8 @@ public class QWalk extends EntityPathBase<Walk> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath imageUrl = createString("imageUrl");
+
     public final BooleanPath isPublic = createBoolean("isPublic");
 
     public final SetPath<LikeUser, QLikeUser> likeUsers = this.<LikeUser, QLikeUser>createSet("likeUsers", LikeUser.class, QLikeUser.class, PathInits.DIRECT2);
@@ -38,9 +40,6 @@ public class QWalk extends EntityPathBase<Walk> {
     public final ListPath<Post, QPost> postList = this.<Post, QPost>createList("postList", Post.class, QPost.class, PathInits.DIRECT2);
 
     public final ListPath<Route, QRoute> route = this.<Route, QRoute>createList("route", Route.class, QRoute.class, PathInits.DIRECT2);
-
-    //inherited
-    public final NumberPath<Long> spotId = _super.spotId;
 
     public final StringPath title = createString("title");
 

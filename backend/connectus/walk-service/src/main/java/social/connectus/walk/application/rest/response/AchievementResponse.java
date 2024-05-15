@@ -4,19 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import social.connectus.walk.domain.model.entity.CompletedAchievement;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class AchievementResponse {
-    private Long achievementId;
-    private boolean isSucccess;
-    public static AchievementResponse from(CompletedAchievement completedAchievement){
-        return AchievementResponse.builder()
-                .achievementId(completedAchievement.getAchievementId())
-                .isSucccess(completedAchievement.isSuccess())
-                .build();
-    }
+    String title;
+    String content;
+    int reward;
 }

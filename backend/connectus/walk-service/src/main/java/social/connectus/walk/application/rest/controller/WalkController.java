@@ -3,17 +3,18 @@ package social.connectus.walk.application.rest.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import social.connectus.walk.application.rest.request.*;
-import social.connectus.walk.application.rest.response.CreateWalkResponse;
-import social.connectus.walk.application.rest.response.GetAchievementsResponse;
-import social.connectus.walk.application.rest.response.GetWalkResponse;
-import social.connectus.walk.application.rest.response.GetWalksByUserResponse;
+import social.connectus.walk.application.rest.response.*;
 import social.connectus.walk.domain.command.*;
+import social.connectus.walk.domain.model.entity.Route;
+import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -33,7 +34,8 @@ public class WalkController {
     @GetMapping("/feign-health-check")
     public String feignHealthCheck() {
         // TODO: 다른 모든 서비스의 healthCheck를 받아 json 객체로 반환
-        return walkUseCase.feignHealthCheck();
+//        return walkUseCase.feignHealthCheck();
+        return null;
     }
 
     @Operation(summary = "산책 상세조회")
@@ -52,7 +54,7 @@ public class WalkController {
 
     @Operation(summary = "산책 기록 작성")
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<CreateWalkResponse> createWalk(@RequestBody CreateWalkRequest request){
+    public ResponseEntity<CreateWalkResponse> createWalk(@RequestBody CreateWalkRequest request) throws IOException {
         // TODO: request 검증
         return ResponseEntity.ok(walkUseCase.createWalk(CreateWalkCommand.from(request)));
     }
@@ -85,18 +87,36 @@ public class WalkController {
         return ResponseEntity.ok("Successfully tracked.");
     }
 
-    @Operation(summary = "위치 기준 주변 산책 기록 조회")
+    @Operation(summary = "위치 기준 주변 산책 기록 id 조회")
     @GetMapping("/position")
-    public ResponseEntity<Slice<Long>> getWalksByPosition(@RequestBody GetWalksByPositionRequest request){
-        Slice<Long> walkIdSlice = walkUseCase.getWalksByPosition(GetWalksByPositionCommand.from(request));
+    public ResponseEntity<Slice<Long>> getWalkIdsByPosition(@RequestBody GetWalksByPositionRequest request){
+        Slice<Long> walkIdSlice = walkUseCase.getWalkIdsByPosition(GetWalksByPositionCommand.from(request));
         return ResponseEntity.ok(walkIdSlice);
+    }
+
+    @Operation(summary = "위치 기준 주변 산책 기록 조회")
+    @GetMapping("/detail-position")
+    public ResponseEntity<GetWalkSliceResponse> getWalksByPosition(@RequestBody GetWalksByPositionRequest request){
+        Slice<Walk> walkSlice = walkUseCase.getWalksByPosition(GetWalksByPositionCommand.from(request));
+        List<GetWalkResponse> walkList = walkSlice.getContent().stream()
+                .map(walk->GetWalkResponse.from(walk))
+                .toList();
+        return ResponseEntity.ok(GetWalkSliceResponse.builder()
+                        .walksList(walkList)
+                        .hasNext(walkSlice.hasNext())
+                        .pageNum(walkSlice.getNumber())
+                        .pageSize(walkSlice.getSize())
+                .build());
     }
 
     @Operation(summary = "산책 종료시 달성한 업적 조회")
     @GetMapping("/end-walk")
     public ResponseEntity<GetAchievementsResponse> getAchievementsByWalk(@RequestBody GetAchievementsRequest request){
-        List<Long> achievementIds = walkUseCase.getAchievementsByWalk(GetAchievementsCommand.from((request)));
-        return ResponseEntity.ok(GetAchievementsResponse.builder().achievementIds(achievementIds).build());
+        List<AchievementResponse> achievementList = walkUseCase.getAchievementsByWalk(request.getUserId(), GetAchievementsCommand.builder()
+                .postCount(request.getPostCount())
+                .participateEvent(request.getParticipateEvent())
+                .build());
+        return ResponseEntity.ok(GetAchievementsResponse.builder().achievementList(achievementList).build());
     }
 
 }
