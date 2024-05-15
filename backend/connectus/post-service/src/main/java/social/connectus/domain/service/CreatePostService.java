@@ -17,6 +17,7 @@ import social.connectus.domain.ports.outbound.CreatePostPort;
 import lombok.RequiredArgsConstructor;
 import social.connectus.domain.ports.outbound.ImagePort;
 import social.connectus.domain.service.command.InsertPostCommand;
+import social.connectus.domain.service.command.PostPositionCommand;
 
 @UseCase
 @RequiredArgsConstructor
@@ -30,14 +31,6 @@ public class CreatePostService implements CreatePostUseCase {
 		} catch (Exception e) {
 			throw new GlobalException("createPost : " + e.getMessage());
 		}
-		List<InsertPostCommand> request = new ArrayList<>();
-		for(PostRequestDto postRequestDto : requestDto.getPostList()) {
-			InsertPostCommand command = InsertPostCommand.from(postRequestDto);
-			if(postRequestDto.getImage() != null) {
-				command.setImageUrl(imagePort.uploadImage(postRequestDto.getImage()));
-			}
-			request.add(command);
-		}
-		return createPostPort.createPost(requestDto.getWalkId(), request);
+		return createPostPort.createPost(requestDto);
 	}
 }
