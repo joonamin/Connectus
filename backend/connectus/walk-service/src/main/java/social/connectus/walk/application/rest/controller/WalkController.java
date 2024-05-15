@@ -55,7 +55,7 @@ public class WalkController {
 
     @Operation(summary = "산책 기록 작성")
     @PostMapping
-    public ResponseEntity<CreateWalkResponse> createWalk(@Valid CreateWalkRequest request) throws IOException {
+    public ResponseEntity<CreateWalkResponse> createWalk(@ModelAttribute CreateWalkRequest request) throws IOException {
         // TODO: request 검증
         return ResponseEntity.ok(walkUseCase.createWalk(CreateWalkCommand.from(request)));
     }

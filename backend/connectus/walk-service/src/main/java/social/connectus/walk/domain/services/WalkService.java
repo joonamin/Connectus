@@ -62,34 +62,36 @@ public class WalkService implements WalkUseCase {
         walkPort.createWalk(walk);
         long walkId = walk.getId();
 
-        List<PostVO> postVOList = new ArrayList<>();
-        for(PostRequestForWalk postReq : command.getPostList()){
-            String postImageUrl = null;
-            if(postReq.getImage() != null)
-                postImageUrl = imagePort.uploadImage(postReq.getImage());
-            PostVO postVO = PostVO.builder()
-                    .content(postReq.getContent())
-                    .imageUrl(postImageUrl)
-                    .authorId(postReq.getAuthorId())
-                    .walkId(walkId)
-                    .longitude(postReq.getLongitude())
-                    .latitude(postReq.getLatitude())
-                    .build();
-            postVOList.add(postVO);
-        }
-
-        List<Long> postIdList = feignPort.createPost(CreatePostRequest.builder()
+        if(command.getPostList() != null) {
+            List<PostVO> postVOList = new ArrayList<>();
+            for (PostRequestForWalk postReq : command.getPostList()) {
+                String postImageUrl = null;
+                if (postReq.getImage() != null)
+                    postImageUrl = imagePort.uploadImage(postReq.getImage());
+                PostVO postVO = PostVO.builder()
+                        .content(postReq.getContent())
+                        .imageUrl(postImageUrl)
+                        .authorId(postReq.getAuthorId())
                         .walkId(walkId)
-                        .postList(postVOList)
-                .build());
-        List<Post> postList = new ArrayList<>();
-        for(Long postId : postIdList){
-            Post post = new Post(postId);
-            postList.add(post);
-        }
-        walk.setPostList(postList);
+                        .longitude(postReq.getLongitude())
+                        .latitude(postReq.getLatitude())
+                        .build();
+                postVOList.add(postVO);
+            }
 
-        walkPort.createPostList(postList, walk);
+            List<Long> postIdList = feignPort.createPost(CreatePostRequest.builder()
+                    .walkId(walkId)
+                    .postList(postVOList)
+                    .build());
+            List<Post> postList = new ArrayList<>();
+            for (Long postId : postIdList) {
+                Post post = new Post(postId);
+                postList.add(post);
+            }
+            walk.setPostList(postList);
+
+            walkPort.createPostList(postList, walk);
+        }
 
         return CreateWalkResponse.from(walk);
     }

@@ -31,7 +31,7 @@ public class CreatePostAdapter implements CreatePostPort {
 			postIdList.add(post.getId());
 			postPositionList.add(PostSpotCommand.from(post,requestDto));
 		}
-		positionServiceClient.insertPostSpot(postPositionList);
+//		positionServiceClient.insertPostSpot(postPositionList);
 
 		return postIdList;
 	}
