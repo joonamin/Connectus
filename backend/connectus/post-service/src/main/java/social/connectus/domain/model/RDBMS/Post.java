@@ -35,7 +35,7 @@ public class Post extends BaseEntity {
 	private String content;
 	@OneToMany(targetEntity = Comment.class, mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Comment> commentList;
-	public static Post from (InsertPostCommand dto) {
+	public static Post from (PostRequestDto dto) {
 		return Post.builder()
 			.authorId(dto.getAuthorId())
 			.imageUrl(dto.getImageUrl())
