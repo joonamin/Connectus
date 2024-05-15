@@ -96,19 +96,15 @@ export default class RouteMap extends React.Component<RouteMapProps> {
    */
   protected onMapReadyInternal() {
     // 지도를 적절한 위치에 위치
-    if (Platform.OS === 'ios') {
-      this.map.current?.fitToElements();
-    } else {
-      this.map.current?.fitToCoordinates(this.routes, {
-        animated: false,
-        edgePadding: {
-          top: 50,
-          bottom: 30,
-          left: 30,
-          right: 30,
-        },
-      });
-    }
+    this.map.current?.fitToCoordinates(this.routes, {
+      animated: false,
+      edgePadding: {
+        top: 50,
+        bottom: 30,
+        left: 30,
+        right: 30,
+      },
+    });
 
     if (this.onMapReady) {
       this.onMapReady();
