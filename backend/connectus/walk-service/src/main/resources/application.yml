@@ -13,7 +13,7 @@ spring:
     show-sql: true
     hibernate:
 #      ddl-auto: create-drop
-      ddl-auto: create
+      ddl-auto: update
   cloud:
     aws:
       s3:

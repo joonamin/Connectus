@@ -58,6 +58,29 @@ public class WalkService implements WalkUseCase {
                 .isPublic(command.isPublic())
                 .imageUrl(imageUrl)
                 .build();
+
+        // 달성한 업적 갱신 및 조회
+        GetAchievementsCommand getAchievementsCommand = GetAchievementsCommand.builder()
+                .postCount(command.getPostList().size())
+                .participateEvent(command.getParticipateEvent())
+                .build();
+        List<AchievementResponse> achievementResponseList = new ArrayList<>();
+        achievementResponseList.add(AchievementResponse.builder()
+                .achievementCode("WALK1")
+                .reward(1)
+                .content("asdasa")
+                .imageUrl("asdasd")
+                .title("asdasd")
+                .build());
+//        List<AchievementResponse> achievementResponseList = feignPort.getAchievementsByWalk(walk.getUserId(), getAchievementsCommand);
+        if(achievementResponseList != null && !achievementResponseList.isEmpty()){
+            // 달성한 업적이 없으면 pass
+            // 달성한 업적이 있으면 walk.setAchievementCodeList(List<String>)
+            List<String> achievementCodeList = achievementResponseList.stream().map(AchievementResponse::getAchievementCode).toList();
+            walk.setAchievementCode(achievementCodeList);
+        }
+        // 이후 sql문 확인
+
         walkPort.createWalk(walk);
         long walkId = walk.getId();
 
@@ -92,21 +115,11 @@ public class WalkService implements WalkUseCase {
             walkPort.createPostList(postList, walk);
         }
 
-        // 달성한 업적 갱신 및 조회
-        GetAchievementsCommand getAchievementsCommand = GetAchievementsCommand.builder()
-                .postCount(walk.getPostList().size())
-                .participateEvent(walk.getParticipateEvent())
-                .build();
-        List<AchievementResponse> achievementResponseList = feignPort.getAchievementsByWalk(walk.getUserId(), getAchievementsCommand);
-        if(achievementResponseList != null && !achievementResponseList.isEmpty()){
-            // 달성한 업적이 없으면 pass
-            // 달성한 업적이 있으면 walk.setAchievementCodeList(List<String>)
-            List<String> achievementCodeList = achievementResponseList.stream().map(AchievementResponse::getAchievementCode).toList();
-            walk.setAchievementCode(achievementCodeList);
-        }
-        // 이후 sql문 확인
 
-        return CreateWalkResponse.from(walk);
+        return CreateWalkResponse.builder()
+                        .walkId(walkId)
+                        .completedAchievement(achievementResponseList)
+                        .build();
     }
 
     public void routeLike(RouteLikeCommand command){
