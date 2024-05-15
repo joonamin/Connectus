@@ -15,7 +15,7 @@ import social.connectus.domain.model.RDBMS.Post;
 import social.connectus.domain.ports.outbound.DetailPostPort;
 import social.connectus.infrastructure.databases.mariadb.repository.PostRepository;
 import social.connectus.infrastructure.feignClient.LikesServiceClient;
-import social.connectus.infrastructure.feignClient.PositionServiceClient;
+import social.connectus.infrastructure.feignClient.SpotServiceClient;
 import social.connectus.infrastructure.feignClient.UserServiceClient;
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class DetailPostAdapter implements DetailPostPort {
 	private final PostRepository postRepository;
 	private final UserServiceClient userServiceClient;
-	private final PositionServiceClient positionServiceClient;
+	private final SpotServiceClient spotServiceClient;
 	private final LikesServiceClient likesServiceClient;
 
 	@Override
@@ -70,8 +70,8 @@ public class DetailPostAdapter implements DetailPostPort {
 	}
 
 	@Override
-	public CoordinateRequestDto postPositionByPostId(Long postId) {
-		return positionServiceClient.getPostPosition(postId);
+	public CoordinateRequestDto postSpotByPostId(Long postId) {
+		return spotServiceClient.getPostSpot(postId);
 	}
 
 	@Override
