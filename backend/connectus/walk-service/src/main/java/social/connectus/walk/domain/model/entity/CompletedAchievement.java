@@ -9,6 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CompletedAchievement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +24,9 @@ public class CompletedAchievement {
     @JoinColumn(name = "walk_id")
     private Walk walk;
 
-    @JsonCreator
-    public CompletedAchievement(long achievementId, boolean isSuccess){
-        this.achievementId = achievementId;
-        this.isSuccess = isSuccess;
-    }
+//    @JsonCreator
+//    public CompletedAchievement(long achievementId, boolean isSuccess){
+//        this.achievementId = achievementId;
+//        this.isSuccess = isSuccess;
+//    }
 }
