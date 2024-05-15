@@ -1,21 +1,40 @@
 server:
-  port: 8080
+  port: 8106
 
 spring:
   application:
     name: walk-service
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/demo?serverTimezone=Asia/Seoul&characterEncoding=UTF-8 # Database이름 ?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    #    mysql에 생성한 사용자 계정 정보를 써야 합니다.
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://mariadb.connectus.social:3306/walk?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
-    password: ssafy # 자신의 mysql 비밀번호
+    password: ssafyE106!
+  jpa:
+    show-sql: true
+    hibernate:
+      #      ddl-auto: create-drop
+      ddl-auto: update
+  servlet:
+    multipart:
+      enabled: true # 멀티파트 업로드 지원여부 (default: true)
+      #      file-size-threshold: 0B # 파일을 디스크에 저장하지 않고 메모리에 저장하는 최소 크기 (default: 0B)
+      location: /users/charming/temp # 업로드된 파일이 임시로 저장되는 디스크 위치 (default: WAS가 결정)
+      max-file-size: 100MB # 한개 파일의 최대 사이즈 (default: 1MB)
+      max-request-size: 100MB # 한개 요청의 최대 사이즈 (default: 10MB)
+
 
 eureka:
-  #  instance:
-  #    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+aws:
+  s3:
+    type: AWS Signature
+    bucket: e106-connectus
+    access-key: AKIAUMBXWTXODM2UVM7T
+    secret-key: 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
+    region: ap-northeast-2
+    service-name: s3

@@ -3,4 +3,7 @@ include 'apigateway-service'
 include 'discovery-service'
 include 'gather-service'
 include 'walk-service'
-
+include 'post-service'
+include 'user-service'
+include 'likes-service'
+findProject(':post-service:infrastructure')?.name = 'infrastructure'
