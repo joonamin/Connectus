@@ -24,6 +24,7 @@ public class InsertPostCommand {
 			.content(dto.getContent())
 			.authorId(dto.getAuthorId())
 			.walkId(dto.getWalkId())
+			.imageUrl(dto.getImageUrl())
 			.build();
 	}
 }
