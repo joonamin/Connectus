@@ -3,13 +3,11 @@ package social.connectus.walk.domain.ports.outbound;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Slice;
 import social.connectus.walk.domain.command.*;
-import social.connectus.walk.domain.model.entity.CompletedAchievement;
 import social.connectus.walk.domain.model.entity.Post;
 import social.connectus.walk.domain.model.entity.Route;
 import social.connectus.walk.domain.model.entity.Walk;
 
 import java.util.List;
-import java.util.Set;
 
 public interface WalkPort {
 
@@ -19,8 +17,6 @@ public interface WalkPort {
     void createPostList(List<Post> postList, Walk walk);
 
     void createRoute(List<Route> routes, Walk walk);
-
-    void createAchievement(List<CompletedAchievement> completedAchievements, Walk walk);
 
     void routeLike(RouteLikeCommand command);
 

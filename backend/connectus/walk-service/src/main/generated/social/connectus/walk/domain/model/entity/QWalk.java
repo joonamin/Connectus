@@ -22,7 +22,7 @@ public class QWalk extends EntityPathBase<Walk> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
-    public final ListPath<CompletedAchievement, QCompletedAchievement> completedAchievement = this.<CompletedAchievement, QCompletedAchievement>createList("completedAchievement", CompletedAchievement.class, QCompletedAchievement.class, PathInits.DIRECT2);
+    public final ListPath<String, StringPath> achievementCode = this.<String, StringPath>createList("achievementCode", String.class, StringPath.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
