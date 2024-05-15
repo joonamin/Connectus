@@ -64,7 +64,9 @@ public class WalkService implements WalkUseCase {
 
         List<PostVO> postVOList = new ArrayList<>();
         for(PostRequestForWalk postReq : command.getPostList()){
-            String postImageUrl = imagePort.uploadImage(postReq.getImage());
+            String postImageUrl = null;
+            if(postReq.getImage() != null)
+                postImageUrl = imagePort.uploadImage(postReq.getImage());
             PostVO postVO = PostVO.builder()
                     .content(postReq.getContent())
                     .imageUrl(postImageUrl)
