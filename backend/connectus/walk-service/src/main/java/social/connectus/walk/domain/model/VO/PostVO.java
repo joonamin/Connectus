@@ -17,5 +17,5 @@ public class PostVO {
     private String content;
     private long walkId;
     private long authorId;
-    private MultipartFile image;
+    private String imageUrl;
 }
