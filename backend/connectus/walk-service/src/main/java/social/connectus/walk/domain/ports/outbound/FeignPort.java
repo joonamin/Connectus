@@ -8,7 +8,5 @@ import java.util.List;
 
 public interface FeignPort {
     List<AchievementResponse> getAchievementsByWalk(Long userId, GetAchievementsCommand command);
-
-    // List<Long> createPost(CreatePostRequest request);
     List<Long> createPost(CreatePostRequest request);
 }
