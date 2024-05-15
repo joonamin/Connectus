@@ -64,15 +64,7 @@ public class WalkService implements WalkUseCase {
                 .postCount(command.getPostList().size())
                 .participateEvent(command.getParticipateEvent())
                 .build();
-        List<AchievementResponse> achievementResponseList = new ArrayList<>();
-        achievementResponseList.add(AchievementResponse.builder()
-                .achievementCode("WALK1")
-                .reward(1)
-                .content("asdasa")
-                .imageUrl("asdasd")
-                .title("asdasd")
-                .build());
-//        List<AchievementResponse> achievementResponseList = feignPort.getAchievementsByWalk(walk.getUserId(), getAchievementsCommand);
+        List<AchievementResponse> achievementResponseList = feignPort.getAchievementsByWalk(walk.getUserId(), getAchievementsCommand);
         if(achievementResponseList != null && !achievementResponseList.isEmpty()){
             // 달성한 업적이 없으면 pass
             // 달성한 업적이 있으면 walk.setAchievementCodeList(List<String>)
