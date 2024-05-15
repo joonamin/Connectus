@@ -44,7 +44,6 @@ public class WalkService implements WalkUseCase {
         /*
         TODO: 업적 갱신 요청 보내기
          */
-
         String imageUrl = null;
         if(command.getImage() != null)
             imageUrl = imagePort.uploadImage(command.getImage());
@@ -73,6 +72,7 @@ public class WalkService implements WalkUseCase {
                     .build();
             postVOList.add(postVO);
         }
+
         List<Long> postIdList = feignPort.createPost(CreatePostRequest.builder()
                         .walkId(walkId)
                         .postList(postVOList)
