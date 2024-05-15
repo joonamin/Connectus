@@ -64,11 +64,16 @@ public class WalkService implements WalkUseCase {
 
         List<PostVO> postVOList = new ArrayList<>();
         for(PostRequestForWalk postReq : command.getPostList()){
+            String postImageUrl = null;
+            if(postReq.getImage() != null)
+                postImageUrl = imagePort.uploadImage(postReq.getImage());
             PostVO postVO = PostVO.builder()
                     .content(postReq.getContent())
-                    .image(postReq.getImage())
+                    .imageUrl(postImageUrl)
                     .authorId(postReq.getAuthorId())
                     .walkId(walkId)
+                    .longitude(postReq.getLongitude())
+                    .latitude(postReq.getLatitude())
                     .build();
             postVOList.add(postVO);
         }

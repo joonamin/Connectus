@@ -64,10 +64,9 @@ public class PostController {
 		)
 	})
 	public ResponseEntity<List<Long>> createPost(
-		@Valid CreateFeedRequestDto requestFeed
+		@RequestBody CreateFeedRequestDto requestFeed
 	) throws
 		GlobalException, IOException {
-//		System.out.println(requestFeed.getPostList().get(0).getContent());
 		return ResponseEntity.ok().body(createPostUseCase.createPost(requestFeed));
 	}
 
