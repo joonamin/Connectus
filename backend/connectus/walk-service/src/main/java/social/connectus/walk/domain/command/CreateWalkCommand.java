@@ -18,7 +18,7 @@ public class CreateWalkCommand {
     private Long userId;
     private String title;
     private List<Route> route;
-    private Set<CompletedAchievement> completedAchievement;
+    private List<CompletedAchievement> completedAchievement;
     private List<PostRequestForWalk> postList;
     private int walkTime;
     private double walkDistance;   // 산책 거리
