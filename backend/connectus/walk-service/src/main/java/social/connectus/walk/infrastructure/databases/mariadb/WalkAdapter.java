@@ -99,6 +99,7 @@ public class WalkAdapter implements WalkPort {
     }
 
     @Override
+    @Transactional
     public void createPostList(List<Post> postList, Walk walk) {
         postList.forEach(post -> post.setWalk(walk));
     }
