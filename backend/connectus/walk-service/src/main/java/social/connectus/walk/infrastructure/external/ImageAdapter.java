@@ -15,7 +15,7 @@ import java.io.IOException;
 public class ImageAdapter implements ImagePort {
     private final AmazonS3 amazonS3;
 
-    @Value("{aws.s3.bucket}")
+    @Value("${spring.cloud.aws.s3.bucket}")
     private String bucket;
 
     @Override
