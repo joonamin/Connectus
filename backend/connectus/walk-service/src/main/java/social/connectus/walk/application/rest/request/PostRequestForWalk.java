@@ -16,6 +16,8 @@ import lombok.Setter;
 @Builder
 public class PostRequestForWalk {
     private String content;
+    private Double longitude;
+    private Double latitude;
     private long authorId;
     private MultipartFile image;
 }
