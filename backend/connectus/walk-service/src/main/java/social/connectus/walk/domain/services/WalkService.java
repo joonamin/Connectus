@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import social.connectus.walk.application.rest.request.CreatePostRequest;
 import social.connectus.walk.application.rest.request.PostRequestForWalk;
+import social.connectus.walk.application.rest.response.AchievementResponse;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.common.customannotations.UseCase;
 import social.connectus.walk.common.exception.AlreadyExistsDataException;
@@ -13,8 +14,10 @@ import social.connectus.walk.domain.model.entity.Post;
 import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
 import social.connectus.walk.domain.ports.outbound.FeignPort;
+import social.connectus.walk.domain.ports.outbound.ImagePort;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +26,8 @@ import java.util.List;
 public class WalkService implements WalkUseCase {
 
     private final WalkPort walkPort;
+    private final ImagePort imagePort;
     private final FeignPort feignPort;
-
-    @Override
-    public String feignHealthCheck() {
-        return feignPort.feignHealthCheck();
-    }
 
     @Override
     public Walk getWalkById(long walkId){
@@ -41,12 +40,27 @@ public class WalkService implements WalkUseCase {
     }
 
     @Override
-    public CreateWalkResponse createWalk(CreateWalkCommand command) {
+    public CreateWalkResponse createWalk(CreateWalkCommand command) throws IOException {
         /*
         TODO: 업적 갱신 요청 보내기
          */
 
-        Walk walk = walkPort.createWalk(command);
+        String imageUrl = null;
+        if(command.getImage() != null)
+            imageUrl = imagePort.uploadImage(command.getImage());
+
+        Walk walk = Walk.builder()
+                .userId(command.getUserId())
+                .title(command.getTitle())
+                .route(command.getRoute())
+                .walkDistance(command.getWalkDistance())
+                .walkTime(command.getWalkTime())
+                .completedAchievement(command.getCompletedAchievement())
+                .participateEvent(command.getParticipateEvent())
+                .isPublic(command.isPublic())
+                .imageUrl(imageUrl)
+                .build();
+        walkPort.createWalk(walk);
         long walkId = walk.getId();
 
         List<PostVO> postVOList = new ArrayList<>();
@@ -111,8 +125,8 @@ public class WalkService implements WalkUseCase {
     }
 
     @Override
-    public Slice<Long> getWalksByPosition(GetWalksByPositionCommand command) {
-        return walkPort.getWalksByPosition(command);
+    public Slice<Long> getWalkIdsByPosition(GetWalksByPositionCommand command) {
+        return walkPort.getWalkIdsByPosition(command);
     }
 
     @Override
@@ -128,7 +142,12 @@ public class WalkService implements WalkUseCase {
     }
 
     @Override
-    public List<Long> getAchievementsByWalk(GetAchievementsCommand command) {
-        return feignPort.getAchievementsByWalk(command);
+    public List<AchievementResponse> getAchievementsByWalk(Long userId, GetAchievementsCommand command) {
+        return feignPort.getAchievementsByWalk(userId, command);
+    }
+
+    @Override
+    public Slice<Walk> getWalksByPosition(GetWalksByPositionCommand command) {
+        return walkPort.getWalksByPosition(command);
     }
 }

@@ -57,7 +57,7 @@ public class WalkAdapter implements WalkPort {
     }
 
     @Override
-    public Slice<Long> getWalksByPosition(GetWalksByPositionCommand command) {
+    public Slice<Long> getWalkIdsByPosition(GetWalksByPositionCommand command) {
         Position userPosition = Position.builder()
                 .latitude(command.getLatitude())
                 .longitude(command.getLongitude())
@@ -69,6 +69,19 @@ public class WalkAdapter implements WalkPort {
         return new SliceImpl<>(routeList.getContent().stream().map(route -> route.getWalk().getId()).toList(), pageRequest, routeList.hasNext());
     }
 
+    @Override
+    public Slice<Walk> getWalksByPosition(GetWalksByPositionCommand command) {
+        Position userPosition = Position.builder()
+                .latitude(command.getLatitude())
+                .longitude(command.getLongitude())
+                .build();
+        double kmRadius = command.getKmRadius();
+        long userId = command.getUserId();
+        PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize());
+        Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
+        return new SliceImpl<>(routeList.getContent().stream().map(Route::getWalk).toList(), pageRequest, routeList.hasNext());
+    }
+
     @Transactional
     @Override
     public void routeTrack(RouteTrackCommand command) {
@@ -78,17 +91,7 @@ public class WalkAdapter implements WalkPort {
 
     @Override
     @Transactional
-    public Walk createWalk(CreateWalkCommand command) {
-        Walk walk = Walk.builder()
-                .userId(command.getUserId())
-                .title(command.getTitle())
-                .route(command.getRoute())
-                .walkDistance(command.getWalkDistance())
-                .walkTime(command.getWalkTime())
-                .completedAchievement(command.getCompletedAchievement())
-                .participateEvent(command.getParticipateEvent())
-                .isPublic(command.isPublic())
-                .build();
+    public Walk createWalk(Walk walk) {
 
         createRoute(walk.getRoute(), walk);
         createAchievement(walk.getCompletedAchievement(), walk);

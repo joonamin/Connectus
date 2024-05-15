@@ -5,4 +5,4 @@ ADD ${JAR_FILE} /apigateway-service.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java","-jar" "/apigateway-service.jar"]
+ENTRYPOINT ["java","-jar", "/apigateway-service.jar"]

@@ -5,4 +5,4 @@ ADD ${JAR_FILE} /event-service.jar
 
 EXPOSE 8105
 
-ENTRYPOINT ["java","-jar" "/event-service.jar"]
+ENTRYPOINT ["java","-jar", "/event-service.jar"]
