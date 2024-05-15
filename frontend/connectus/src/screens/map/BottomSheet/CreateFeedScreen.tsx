@@ -24,6 +24,7 @@ import usePermission from '@/hooks/usePermission';
 import useUserLocation from '@/hooks/useUserLocation';
 import useModal from '@/hooks/useModal';
 import usePostStore from '@/store/usePostStore';
+import useAuthStore from '@/store/useAuthStore';
 
 type Navigation = CompositeNavigationProp<
   MaterialTopTabNavigationProp<MapBottomSheetTabParamList>,
@@ -41,19 +42,28 @@ export default function CreateFeedScreen() {
   const {isVisible, show, hide} = useModal();
   // 전역 store에 작성 기록을 저장하기 위한 store를 import 받아옵니다.
   const {posts, setAddPost} = usePostStore();
+  const {user} = useAuthStore();
   usePermission('PHOTO');
 
   const keyBoardDismiss = () => {
     Keyboard.dismiss();
   };
 
+  /**
+   * @todo 서버에 보낼 이미지 파일 폼데이터로 변환필요
+   */
   const handlePressSubmit = () => {
     console.log(
       `userLocation: ${userLocation.latitude}, ${userLocation.longitude} , content : ${content}`,
     );
+    const formData = new FormData();
+    formData.append('image', imagePicker.imageData);
+
     setAddPost({
+      authorId: user?.userId as number,
       content: content,
       image: imagePicker.imageData,
+      formImage: formData,
       postLocation: userLocation,
     });
     console.log(posts);

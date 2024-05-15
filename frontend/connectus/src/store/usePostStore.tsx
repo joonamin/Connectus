@@ -3,8 +3,10 @@ import {LatLng} from 'react-native-maps';
 import {create} from 'zustand';
 
 type PostType = {
+  authorId?: number;
   content: string;
   image: Image | null;
+  formImage?: any;
   postLocation: LatLng;
 };
 

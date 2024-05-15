@@ -60,7 +60,7 @@ interface createPostCommentParams {
 const createPostComment = async (
   postId: number,
   body: createPostCommentParams,
-) => {
+): Promise<any> => {
   const {data} = await axiosInstance.post(`/post/${postId}/comment`, body);
   console.log(data);
   return data;
@@ -102,10 +102,21 @@ const getFeedList = async (
   return data;
 };
 
+type postFeedLikeParmas = {
+  userId: number;
+  domainId: number;
+  type: 'POST' | 'ROUTE';
+};
+const postFeedLike = async (body: postFeedLikeParmas) => {
+  const {data} = await axiosInstance.post('/likes/insert', body);
+  return data;
+};
+
 export {
   getPostDetailList,
   getPostDetail,
   createPostComment,
   getFeedList,
   getFeedDetail,
+  postFeedLike,
 };
