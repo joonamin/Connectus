@@ -20,7 +20,7 @@ public interface WalkPort {
 
     void createRoute(List<Route> routes, Walk walk);
 
-    void createAchievement(Set<CompletedAchievement> completedAchievements, Walk walk);
+    void createAchievement(List<CompletedAchievement> completedAchievements, Walk walk);
 
     void routeLike(RouteLikeCommand command);
 

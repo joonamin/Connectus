@@ -38,7 +38,7 @@ public class Walk extends BaseEntity{
     private Set<LikeUser> likeUsers;
 
     @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
-    private Set<CompletedAchievement> completedAchievement;
+    private List<CompletedAchievement> completedAchievement;
 
     private Long participateEvent;
 
