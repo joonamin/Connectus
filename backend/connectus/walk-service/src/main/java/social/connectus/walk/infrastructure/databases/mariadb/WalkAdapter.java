@@ -63,7 +63,6 @@ public class WalkAdapter implements WalkPort {
                 .longitude(command.getLongitude())
                 .build();
         double kmRadius = command.getKmRadius();
-        long userId = command.getUserId();
         PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize());
         Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
         return new SliceImpl<>(routeList.getContent().stream().map(route -> route.getWalk().getId()).toList(), pageRequest, routeList.hasNext());
@@ -76,7 +75,6 @@ public class WalkAdapter implements WalkPort {
                 .longitude(command.getLongitude())
                 .build();
         double kmRadius = command.getKmRadius();
-        long userId = command.getUserId();
         PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize());
         Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
         return new SliceImpl<>(routeList.getContent().stream().map(Route::getWalk).toList(), pageRequest, routeList.hasNext());
@@ -92,8 +90,8 @@ public class WalkAdapter implements WalkPort {
     @Override
     @Transactional
     public Walk createWalk(Walk walk) {
-
-        createRoute(walk.getRoute(), walk);
+        if(walk.getRoute() != null)
+            createRoute(walk.getRoute(), walk);
         if(walk.getCompletedAchievement() != null)
             createAchievement(walk.getCompletedAchievement(), walk);
         walkRepository.save(walk);
