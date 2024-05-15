@@ -18,4 +18,6 @@ public class PostVO {
     private long walkId;
     private long authorId;
     private String imageUrl;
+    private Double longitude;
+    private Double latitude;
 }

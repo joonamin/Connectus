@@ -21,7 +21,6 @@ public class ImageAdapter implements ImagePort {
     @Override
     public String uploadImage(MultipartFile image) throws IOException {
         String originalFileName = image.getOriginalFilename();
-
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(image.getSize());
         metadata.setContentType(image.getContentType());

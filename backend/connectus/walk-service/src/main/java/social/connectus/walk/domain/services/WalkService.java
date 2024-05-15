@@ -70,6 +70,8 @@ public class WalkService implements WalkUseCase {
                     .imageUrl(postImageUrl)
                     .authorId(postReq.getAuthorId())
                     .walkId(walkId)
+                    .longitude(postReq.getLongitude())
+                    .latitude(postReq.getLatitude())
                     .build();
             postVOList.add(postVO);
         }
