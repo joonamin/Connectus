@@ -1,6 +1,7 @@
 package social.connectus.walk.application.rest.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -53,8 +54,8 @@ public class WalkController {
     }
 
     @Operation(summary = "산책 기록 작성")
-    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<CreateWalkResponse> createWalk(@RequestBody CreateWalkRequest request) throws IOException {
+    @PostMapping
+    public ResponseEntity<CreateWalkResponse> createWalk(@Valid CreateWalkRequest request) throws IOException {
         // TODO: request 검증
         return ResponseEntity.ok(walkUseCase.createWalk(CreateWalkCommand.from(request)));
     }
