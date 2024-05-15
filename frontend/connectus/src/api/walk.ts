@@ -1,6 +1,10 @@
 // 산책에서 사용할 api들을 정리한 파일입니다
 import {LatLng} from 'react-native-maps';
 import {axiosInstance} from './axios';
+import {postType} from '@/types';
+import {Image} from 'react-native';
+import axios from 'axios';
+import RNFetchBlob from 'rn-fetch-blob';
 
 /**
  * 산책 공유 페이지에서 경로를 좋아요를 할 때 호출할 api입니다.
@@ -20,18 +24,59 @@ type createRoutetype = {
   route: LatLng[];
   walkTime: number;
   walkDistance: number;
-  //   postList: post[];
-  // 아니 이거 뭐야 무서ㅜ어
-  completedAchievement: string[];
-  participateEvent: number;
+  postList: postType[];
+  participateEvent: number | null;
+  image: Image;
 };
 
 /**
  * 산책을 작성할때 (마지막에 산책 완료를 하면서 저장버튼 터치 시)호출할 api입니다
  */
 const createRoute = async (body: createRoutetype) => {
-  const {data} = await axiosInstance.post('/walk', body);
-  return data;
+  console.log('creat body : ', body);
+  const formData = new FormData();
+  formData.append('image', {
+    uri: body.image,
+    type: 'image/jpeg',
+    name: 'test.jpg',
+  });
+  formData.append('title', body.title);
+  formData.append('userId', body.userId);
+  formData.append('walkTime', body.walkTime);
+  formData.append('walkDistance', body.walkDistance);
+
+  body.postList.forEach((post, index) => {
+    console.log('post', post);
+    formData.append(`postList[${index}].content`, post.content);
+    formData.append(`postList[${index}].authorId`, post.authorId);
+    formData.append(`postList[${index}].image`, post.image);
+  });
+
+  body.route.forEach((positoin, index) => {
+    formData.append(`route[${index}].latitude`, positoin.latitude);
+    formData.append(`route[${index}].longitude`, positoin.longitude);
+  });
+
+  formData.append('completeAchivement[0].achievementId', 1);
+  formData.append('completeAchivement[0].isSuccess', true);
+
+  try {
+    console.log('요청은 가니?');
+    const {data} = await axios({
+      method: 'POST',
+      url: 'https://api.connectus.social/walk',
+      // data: {...body, image: formData},
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `eyJhbGciOiJIUzUxMiJ9.eyJwYXlsb2FkIjp7ImVtYWlsIjoiZ21zMjQ1QG5hdmVyLmNvbSIsImlzc3VlZEF0IjoiTWF5IDE0LCAyMDI0LCA0OjUyOjA5IFBNIiwiaXNzdWVyIjoidXNlci1zZXJ2aWNlIiwidXNlcklkIjo3fSwiaXNzIjoidXNlci1zZXJ2aWNlIiwiaWF0IjoxNzE1NzA1NTI5LCJleHAiOjE3MTU4MDU1Mjl9.WRxuYnFOd5ribLfGvgiROtipLA70b_JpKsEtplk4mLlP4fRmBOkALm8LxqxtfgykXm4ii9oB-f2EahJZjOe-Bg`,
+      },
+    });
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 /**

@@ -20,6 +20,11 @@ import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 import {convertSecondsToTime, formatTime} from '@/utils';
 import {StackScreenProps} from '@react-navigation/stack';
 import RouteMap from '@/components/map/RouteMap';
+import {useMutation} from '@tanstack/react-query';
+import {createRoute} from '@/api/walk';
+import useAuthStore from '@/store/useAuthStore';
+import {LatLng} from 'react-native-maps';
+import usePostStore from '@/store/usePostStore';
 
 const DUMMY_ACHIEVE = [
   {
@@ -38,12 +43,41 @@ export default function MapResultScreen({route}: ScreenProps) {
   const [walkTitle, setWalkTitle] = useState<string>('');
   const indicateTime = formatTime(hours, minutes, seconds);
   const map = useRef<RouteMap | null>(null);
+  const {user} = useAuthStore();
+  const {posts, setDeletePost} = usePostStore();
+  const [routeImage, setRouteImg] = useState<any>();
 
   // const [routeImg, setRouteImg] = useState();
 
   const onMapReady = async () => {
-    const routeImage = await map.current?.takeSnapshot({result: 'file'});
-    console.log(routeImage);
+    await map.current?.takeSnapshot({result: 'file'}).then(uri => {
+      setRouteImg(uri);
+    });
+    // const tempImage = await map.current?.takeSnapshot();
+    // setRouteImg(tempImage);
+    // console.log('이미지입니다', tempImage);
+  };
+
+  /**
+   * 산책을 종료할 때 사용할 mutation함수입니다.
+   * 산책 결과 이미지, 산책 거리, 산책 시간, post, 산책 제목을 params로 받아
+   * 산책을 저장합니다.
+   */
+  const endWalk = useMutation({
+    mutationFn: () =>
+      createRoute({
+        userId: user?.userId as number,
+        title: walkTitle,
+        route: route.params?.walkRoute as LatLng[],
+        walkTime: route.params?.time as number,
+        walkDistance: route.params?.distance as number,
+        postList: posts,
+        image: routeImage,
+      }),
+  });
+
+  const handleEndWalk = () => {
+    endWalk.mutate();
   };
 
   if (!route.params) {
@@ -61,8 +95,8 @@ export default function MapResultScreen({route}: ScreenProps) {
             onMapReady={onMapReady}
           />
           <WalkResult time={indicateTime} distance={route.params?.distance} />
-          <Achievement achievs={DUMMY_ACHIEVE} />
-          <EventResult />
+          {/* <Achievement achievs={DUMMY_ACHIEVE} /> */}
+          {/* <EventResult /> */}
           <RecordedPost />
           <View style={styles.titleInputContainer}>
             <MainText>이번 산책의 제목을 입력해주세요</MainText>
@@ -75,7 +109,7 @@ export default function MapResultScreen({route}: ScreenProps) {
               textAlign="center"
             />
           </View>
-          <Pressable style={styles.submitButton}>
+          <Pressable style={styles.submitButton} onPress={handleEndWalk}>
             <MainText>산책 종료하기</MainText>
           </Pressable>
         </View>
