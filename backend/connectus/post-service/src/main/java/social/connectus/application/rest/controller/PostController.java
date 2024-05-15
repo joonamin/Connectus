@@ -67,7 +67,7 @@ public class PostController {
 		@Valid CreateFeedRequestDto requestFeed
 	) throws
 		GlobalException, IOException {
-		System.out.println(requestFeed.getPostList().get(0).getContent());
+//		System.out.println(requestFeed.getPostList().get(0).getContent());
 		return ResponseEntity.ok().body(createPostUseCase.createPost(requestFeed));
 	}
 

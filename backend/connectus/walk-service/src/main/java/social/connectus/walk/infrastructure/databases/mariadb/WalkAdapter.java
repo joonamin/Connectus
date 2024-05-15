@@ -111,7 +111,7 @@ public class WalkAdapter implements WalkPort {
     }
 
     @Override
-    public void createAchievement(Set<CompletedAchievement> completedAchievements, Walk walk){
+    public void createAchievement(List<CompletedAchievement> completedAchievements, Walk walk){
         completedAchievements.forEach(achievement -> achievement.setWalk(walk));
     }
 
