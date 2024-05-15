@@ -17,5 +17,7 @@ public class PostRequestDto {
 	private String content;
 	private Long walkId;
 	private Long authorId;
-	private MultipartFile image;
+	private String imageUrl;
+	private Double longitude;
+	private Double latitude;
 }

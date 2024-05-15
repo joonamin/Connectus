@@ -21,11 +21,11 @@ spring:
         credentials:
           access-key: AKIAUMBXWTXODM2UVM7T
           secret-key: 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
-        region:
-            static: ap-northeast-2
-            auto : false
-        stack:
-          auto: false
+      region:
+        static: ap-northeast-2
+        auto : false
+      stack:
+        auto: false
   servlet:
     multipart:
       enabled: true # 멀티파트 업로드 지원여부 (default: true)
