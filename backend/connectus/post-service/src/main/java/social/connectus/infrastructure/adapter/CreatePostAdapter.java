@@ -2,6 +2,7 @@ package social.connectus.infrastructure.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
