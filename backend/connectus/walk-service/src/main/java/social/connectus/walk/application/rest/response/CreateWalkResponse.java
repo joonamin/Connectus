@@ -15,9 +15,4 @@ import java.util.List;
 public class CreateWalkResponse {
     private long walkId;
     private List<AchievementResponse> completedAchievement;
-    public static CreateWalkResponse from(Walk walk){
-        return CreateWalkResponse.builder()
-                .walkId(walk.getId())
-                .build();
-    }
 }
