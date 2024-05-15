@@ -12,24 +12,24 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      #      ddl-auto: create-drop
+#      ddl-auto: create-drop
       ddl-auto: update
   cloud:
     aws:
       s3:
         bucket: e106-connectus
         credentials:
-          access-key: AKIAUMBXWTXOPPW2YL5M
-          secret-key: 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
-      region:
-        static: ap-northeast-2
-        auto: false
-      stack:
-        auto: false
+          access-key: AKIAUMBXWTXODM2UVM7T
+          secret-key: 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
+        region:
+            static: ap-northeast-2
+            auto : false
+        stack:
+          auto: false
   servlet:
     multipart:
       enabled: true # 멀티파트 업로드 지원여부 (default: true)
-      #      file-size-threshold: 0B # 파일을 디스크에 저장하지 않고 메모리에 저장하는 최소 크기 (default: 0B)
+#      file-size-threshold: 0B # 파일을 디스크에 저장하지 않고 메모리에 저장하는 최소 크기 (default: 0B)
       location: /users/charming/temp # 업로드된 파일이 임시로 저장되는 디스크 위치 (default: WAS가 결정)
       max-file-size: 100MB # 한개 파일의 최대 사이즈 (default: 1MB)
       max-request-size: 100MB # 한개 요청의 최대 사이즈 (default: 10MB)
@@ -41,21 +41,3 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
-
-<<<<<<< HEAD
-aws:
-  s3:
-    type: AWS Signature
-    bucket: e106-connectus
-    access-key: AKIAUMBXWTXODM2UVM7T
-    secret-key: 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
-    region: ap-northeast-2
-    service-name: s3
-#aws:
-#  s3:
-#    type: AWS Signature
-#    bucket: e106-connectus
-#    access-key: AKIAUMBXWTXODM2UVM7T
-#    secret-key: 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
-#    region: ap-northeast-2
-#    service-name: s3
