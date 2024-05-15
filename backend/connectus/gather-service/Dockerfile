@@ -5,4 +5,4 @@ ADD ${JAR_FILE} /gather-service.jar
 
 EXPOSE 8102
 
-ENTRYPOINT ["java","-jar" "/gather-service.jar"]
+ENTRYPOINT ["java","-jar", "/gather-service.jar"]
