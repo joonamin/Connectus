@@ -14,6 +14,18 @@ spring:
     hibernate:
 #      ddl-auto: create-drop
       ddl-auto: update
+  cloud:
+    aws:
+      s3:
+        bucket: e106-connectus
+        credentials:
+          access-key: AKIAUMBXWTXOPPW2YL5M
+          secret-key: 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
+      region:
+        static: ap-northeast-2
+        auto: false
+      stack:
+        auto: false
   servlet:
     multipart:
       enabled: true # 멀티파트 업로드 지원여부 (default: true)
@@ -30,11 +42,11 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
-aws:
-  s3:
-    type: AWS Signature
-    bucket: e106-connectus
-    access-key: AKIAUMBXWTXODM2UVM7T
-    secret-key: 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
-    region: ap-northeast-2
-    service-name: s3
+#aws:
+#  s3:
+#    type: AWS Signature
+#    bucket: e106-connectus
+#    access-key: AKIAUMBXWTXODM2UVM7T
+#    secret-key: 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
+#    region: ap-northeast-2
+#    service-name: s3

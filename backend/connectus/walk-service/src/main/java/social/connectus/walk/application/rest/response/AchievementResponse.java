@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class AchievementResponse {
+    String achievement;
     String title;
     String content;
     int reward;
