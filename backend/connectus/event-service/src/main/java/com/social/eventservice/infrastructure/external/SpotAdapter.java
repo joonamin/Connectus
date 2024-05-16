@@ -29,4 +29,9 @@ public class SpotAdapter implements SpotPort {
 		return spotServiceClient.getSpotById(id);
 	}
 
+	@Override
+	public void initEventId(Long eventId) {
+
+	}
+
 }

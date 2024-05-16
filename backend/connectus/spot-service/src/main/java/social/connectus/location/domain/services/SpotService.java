@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import social.connectus.location.application.rest.response.FindNearbyElementResponse;
+import social.connectus.location.common.type.DomainType;
 import social.connectus.location.common.type.Ping;
 import social.connectus.location.common.type.PingType;
 import social.connectus.location.domain.command.CreateSpotCommand;
@@ -59,5 +60,10 @@ public class SpotService implements SpotUseCase {
     @Override
     public List<Long> createSpot(CreateSpotCommand command){
         return milvusPort.insertAll(command);
+    }
+
+    @Override
+    public void updateDomain(Long spotId, DomainType domainType, Long domainId) {
+        // todo: 이거 업데이트 해주세요
     }
 }

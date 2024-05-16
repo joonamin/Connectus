@@ -29,6 +29,7 @@ public class Spot extends BaseEntity {
     @Column(nullable = false)
     private PingType type;
 
-    @Column(name = "domain_id", nullable = false)
+    // domain 저장, spot 저장의 `순환참조` 문제를 해결하기 위해서, 임시적으로 nullable = true로 설정합니다.
+    @Column(name = "domain_id", nullable = true)
     private Long domainId;
 }

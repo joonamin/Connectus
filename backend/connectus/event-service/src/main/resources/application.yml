@@ -39,3 +39,6 @@ eureka:
 logging:
   level:
     org.springframework: TRACE
+
+external:
+  spot-service: http://localhost:8103/spot
