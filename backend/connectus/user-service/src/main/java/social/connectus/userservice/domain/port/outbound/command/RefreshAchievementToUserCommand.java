@@ -19,6 +19,7 @@ import social.connectus.userservice.domain.application.response.RefreshAchieveme
 public class RefreshAchievementToUserCommand {
 	int walkCount;
 	int postCount;
+	// List<Long> completedEventIdList;
 	List<Achievement> accomplishedAchievement;
 
 	@Getter
@@ -26,6 +27,7 @@ public class RefreshAchievementToUserCommand {
 	public enum Field {
 		WALK_COUNT(RefreshAchievementToUserCommand::getWalkCount),
 		POST_COUNT(RefreshAchievementToUserCommand::getPostCount);
+		// COMPLETED_ACHIEVEMENT(RefreshAchievementToUserCommand::getCompletedEventIdList);
 		private Function<RefreshAchievementToUserCommand, Integer> getter;
 	}
 

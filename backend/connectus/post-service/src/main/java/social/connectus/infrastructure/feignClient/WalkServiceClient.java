@@ -5,18 +5,18 @@ import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import social.connectus.application.rest.request.CoordinateRequestDto;
+import social.connectus.application.rest.request.GetWalksByPositionRequest;
+import social.connectus.common.utils.SliceResponse;
 
 @FeignClient(name = "walk-service")
 public interface WalkServiceClient {
-	@GetMapping("/walk/position")
-	Slice<Long> getFeedList(
-		@RequestParam("coordinate") CoordinateRequestDto coordinate,
-		@RequestParam("pageNum") int pageNum,
-		@RequestParam("pageSize") int pageSize,
-		@RequestParam("userId") Long userId,
-		Double radius
+	@PostMapping("/walk/position")
+	SliceResponse<Long> getFeedList(
+		@RequestBody GetWalksByPositionRequest request
 		);
 }
