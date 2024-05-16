@@ -4,11 +4,9 @@ import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 import social.connectus.walk.application.rest.request.CreateWalkRequest;
 import social.connectus.walk.application.rest.request.PostRequestForWalk;
-import social.connectus.walk.domain.model.entity.CompletedAchievement;
 import social.connectus.walk.domain.model.entity.Route;
 
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -18,7 +16,6 @@ public class CreateWalkCommand {
     private Long userId;
     private String title;
     private List<Route> route;
-    private List<CompletedAchievement> completedAchievement;
     private List<PostRequestForWalk> postList;
     private int walkTime;
     private double walkDistance;   // 산책 거리
@@ -31,7 +28,6 @@ public class CreateWalkCommand {
                 .userId(request.getUserId())
                 .title(request.getTitle())
                 .route(request.getRoute())
-                .completedAchievement(request.getCompletedAchievement())
                 .postList(request.getPostList())
                 .walkTime(request.getWalkTime())
                 .walkDistance(request.getWalkDistance())

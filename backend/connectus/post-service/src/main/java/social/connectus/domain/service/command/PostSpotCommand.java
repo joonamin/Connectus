@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import social.connectus.application.rest.request.CreateFeedRequestDto;
 import social.connectus.application.rest.request.PostRequestDto;
 import social.connectus.domain.model.RDBMS.Post;
 
@@ -14,14 +13,14 @@ import social.connectus.domain.model.RDBMS.Post;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PostPositionCommand {
+public class PostSpotCommand {
 	private Long domainId;
 	private Double longitude;
 	private Double latitude;
 	private String type;
 
-	public static PostPositionCommand from(Post post, PostRequestDto postRequestDto) {
-		return PostPositionCommand.builder()
+	public static PostSpotCommand from(Post post, PostRequestDto postRequestDto) {
+		return PostSpotCommand.builder()
 			.domainId(post.getId())
 			.longitude(postRequestDto.getLongitude())
 			.latitude(postRequestDto.getLatitude())

@@ -2,8 +2,9 @@ package social.connectus.walk.infrastructure.external;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import social.connectus.walk.application.rest.request.CreatePostRequest;
-import social.connectus.walk.application.rest.response.AchievementIdResponse;
 import social.connectus.walk.application.rest.response.AchievementResponse;
 import social.connectus.walk.domain.command.GetAchievementsCommand;
 import social.connectus.walk.domain.ports.outbound.FeignPort;
@@ -21,7 +22,7 @@ public class FeignAdapter implements FeignPort {
     }
 
     @Override
-    public List<Long> createPost(CreatePostRequest request){
+    public List<Long> createPost(@RequestBody CreatePostRequest request){
         return postClient.createPost(request);
     }
 }
