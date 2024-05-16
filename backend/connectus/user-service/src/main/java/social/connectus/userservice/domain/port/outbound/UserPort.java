@@ -17,5 +17,5 @@ public interface UserPort {
 
 	void updateOpenedPosts(Long userId, Long postId);
 	OpenedPostResponse getOpenedPost(Long userId);
-	String getUserName(Long userId);
+	String getUserNickname(Long userId);
 }
