@@ -22,12 +22,14 @@ public class QWalk extends EntityPathBase<Walk> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
-    public final SetPath<CompletedAchievement, QCompletedAchievement> completedAchievement = this.<CompletedAchievement, QCompletedAchievement>createSet("completedAchievement", CompletedAchievement.class, QCompletedAchievement.class, PathInits.DIRECT2);
+    public final ListPath<String, StringPath> achievementCode = this.<String, StringPath>createList("achievementCode", String.class, StringPath.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final StringPath imageUrl = createString("imageUrl");
 
     public final BooleanPath isPublic = createBoolean("isPublic");
 
@@ -38,9 +40,6 @@ public class QWalk extends EntityPathBase<Walk> {
     public final ListPath<Post, QPost> postList = this.<Post, QPost>createList("postList", Post.class, QPost.class, PathInits.DIRECT2);
 
     public final ListPath<Route, QRoute> route = this.<Route, QRoute>createList("route", Route.class, QRoute.class, PathInits.DIRECT2);
-
-    //inherited
-    public final NumberPath<Long> spotId = _super.spotId;
 
     public final StringPath title = createString("title");
 

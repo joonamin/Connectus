@@ -155,10 +155,11 @@ public class PostController {
 		)
 	})
 	public ResponseEntity<SliceResponse<FeedResponse>> feedMain(
-		@ModelAttribute CoordinateRequestDto userPosition,
+		@RequestParam("longitude") Double longitude,
+		@RequestParam("latitude") Double latitude,
 		@RequestParam("pageNum") int pageNum,
-		Long userId) throws GlobalException {
-		return ResponseEntity.ok().body(feedUseCase.feedMain(userPosition,pageNum,userId));
+		@RequestParam Long userId) throws GlobalException {
+		return ResponseEntity.ok().body(feedUseCase.feedMain(longitude, latitude ,pageNum,userId));
 	}
 
 	@Operation(

@@ -9,6 +9,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
 import social.connectus.walk.common.constants.WalkConstants;
 import social.connectus.walk.common.exception.ResourceNotFoundException;
+import social.connectus.walk.common.utils.SliceResponse;
 import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.VO.Position;
 import social.connectus.walk.domain.model.entity.*;
@@ -57,16 +58,27 @@ public class WalkAdapter implements WalkPort {
     }
 
     @Override
-    public Slice<Long> getWalksByPosition(GetWalksByPositionCommand command) {
+    public SliceResponse<Long> getWalkIdsByPosition(GetWalksByPositionCommand command) {
         Position userPosition = Position.builder()
                 .latitude(command.getLatitude())
                 .longitude(command.getLongitude())
                 .build();
         double kmRadius = command.getKmRadius();
-        long userId = command.getUserId();
         PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize());
         Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
-        return new SliceImpl<>(routeList.getContent().stream().map(route -> route.getWalk().getId()).toList(), pageRequest, routeList.hasNext());
+        return new SliceResponse<>(routeList.getContent().stream().map(Route::getId).toList(),routeList.hasNext(),routeList.getNumber());
+    }
+
+    @Override
+    public Slice<Walk> getWalksByPosition(GetWalksByPositionCommand command) {
+        Position userPosition = Position.builder()
+                .latitude(command.getLatitude())
+                .longitude(command.getLongitude())
+                .build();
+        double kmRadius = command.getKmRadius();
+        PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize());
+        Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
+        return new SliceImpl<>(routeList.getContent().stream().map(Route::getWalk).toList(), pageRequest, routeList.hasNext());
     }
 
     @Transactional
@@ -78,25 +90,15 @@ public class WalkAdapter implements WalkPort {
 
     @Override
     @Transactional
-    public Walk createWalk(CreateWalkCommand command) {
-        Walk walk = Walk.builder()
-                .userId(command.getUserId())
-                .title(command.getTitle())
-                .route(command.getRoute())
-                .walkDistance(command.getWalkDistance())
-                .walkTime(command.getWalkTime())
-                .completedAchievement(command.getCompletedAchievement())
-                .participateEvent(command.getParticipateEvent())
-                .isPublic(command.isPublic())
-                .build();
-
-        createRoute(walk.getRoute(), walk);
-        createAchievement(walk.getCompletedAchievement(), walk);
+    public Walk createWalk(Walk walk) {
+        if(walk.getRoute() != null)
+            createRoute(walk.getRoute(), walk);
         walkRepository.save(walk);
         return walk;
     }
 
     @Override
+    @Transactional
     public void createPostList(List<Post> postList, Walk walk) {
         postList.forEach(post -> post.setWalk(walk));
     }
@@ -104,11 +106,6 @@ public class WalkAdapter implements WalkPort {
     @Override
     public void createRoute(List<Route> routes, Walk walk){
         routes.forEach(route -> route.setWalk(walk));
-    }
-
-    @Override
-    public void createAchievement(Set<CompletedAchievement> completedAchievements, Walk walk){
-        completedAchievements.forEach(achievement -> achievement.setWalk(walk));
     }
 
     @Override
