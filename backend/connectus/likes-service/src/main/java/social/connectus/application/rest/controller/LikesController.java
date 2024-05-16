@@ -32,7 +32,7 @@ public class LikesController {
 	@PostMapping("/insert")
 	@Operation(
 		summary = "좋아요 등록",
-		description = "post 혹은 route를(type을 통해 구별) 좋아요 등록합니다."
+		description = "post 혹은 route를(type을 통해 구별) 좋아요 등록 및 해제합니다."
 	)
 	@ApiResponses({
 		@ApiResponse(
