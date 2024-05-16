@@ -2,7 +2,7 @@
 import {LatLng} from 'react-native-maps';
 import {axiosInstance} from './axios';
 import {postType} from '@/types';
-import {Image} from 'react-native';
+import {Image, Platform} from 'react-native';
 import axios from 'axios';
 import RNFetchBlob from 'rn-fetch-blob';
 
@@ -46,15 +46,21 @@ const createRoute = async (body: createRoutetype) => {
   formData.append('walkDistance', body.walkDistance);
 
   body.postList.forEach((post, index) => {
-    console.log('post', post);
+    if (Platform.OS === 'android') {
+      post.image.path.replace('file://', '');
+    }
     formData.append(`postList[${index}].content`, post.content);
     formData.append(`postList[${index}].authorId`, post.authorId);
-    formData.append(`postList[${index}].image`, post.image);
+    formData.append(`postList[${index}].image`, {
+      uri: post.image.path,
+      type: 'image/jpeg',
+      name: 'test.jpg',
+    });
   });
 
-  body.route.forEach((positoin, index) => {
-    formData.append(`route[${index}].latitude`, positoin.latitude);
-    formData.append(`route[${index}].longitude`, positoin.longitude);
+  body.route.forEach((position, index) => {
+    formData.append(`route[${index}].latitude`, position.latitude);
+    formData.append(`route[${index}].longitude`, position.longitude);
   });
 
   formData.append('completeAchivement[0].achievementId', 1);
@@ -69,7 +75,7 @@ const createRoute = async (body: createRoutetype) => {
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: `eyJhbGciOiJIUzUxMiJ9.eyJwYXlsb2FkIjp7ImVtYWlsIjoiZ21zMjQ1QG5hdmVyLmNvbSIsImlzc3VlZEF0IjoiTWF5IDE0LCAyMDI0LCA0OjUyOjA5IFBNIiwiaXNzdWVyIjoidXNlci1zZXJ2aWNlIiwidXNlcklkIjo3fSwiaXNzIjoidXNlci1zZXJ2aWNlIiwiaWF0IjoxNzE1NzA1NTI5LCJleHAiOjE3MTU4MDU1Mjl9.WRxuYnFOd5ribLfGvgiROtipLA70b_JpKsEtplk4mLlP4fRmBOkALm8LxqxtfgykXm4ii9oB-f2EahJZjOe-Bg`,
+        Authorization: `eyJhbGciOiJIUzUxMiJ9.eyJwYXlsb2FkIjp7ImVtYWlsIjoiZ21zMjQ1QG5hdmVyLmNvbSIsImlzc3VlZEF0IjoiTWF5IDE2LCAyMDI0LCAxMjoxNzowMSBBTSIsImlzc3VlciI6InVzZXItc2VydmljZSIsInVzZXJJZCI6N30sImlzcyI6InVzZXItc2VydmljZSIsImlhdCI6MTcxNTgxODYyMSwiZXhwIjoxNzE1OTE4NjIxfQ.pdwODpE4Tjf8wPChnlXmNB0Q1LynbCN0YUhAbaOF7DwL_mdgK1UhR2seMAZ-_3SLk_k1f2S1sICdP9xKY5Zlrg`,
       },
     });
     console.log(data);
@@ -139,6 +145,28 @@ const updateWalker = async (walkId: number, userId: number) => {
   return data;
 };
 
+const getNearWalkRecord = async (
+  latitude: number,
+  longitude: number,
+  pageNumber: number,
+) => {
+  const body = {
+    latitude: latitude,
+    longitude: longitude,
+    kmRadius: 1,
+    pageNumber: pageNumber,
+    pageSize: 10,
+  };
+
+  try {
+    const {data} = await axiosInstance.post('/walk/detail-position', body);
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export {
   routeLike,
   getRouteDetail,
@@ -148,4 +176,5 @@ export {
   shareRoute,
   updateWalker,
   cancelShareRoute,
+  getNearWalkRecord,
 };

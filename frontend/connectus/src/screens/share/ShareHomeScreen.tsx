@@ -4,6 +4,7 @@ import {
   Pressable,
   SafeAreaView,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 import React, {useState} from 'react';
@@ -17,6 +18,7 @@ import useRouteStore from '@/store/useRouteStore';
 import MainText from '@/components/text/MainText';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
+import {getNearWalkRecord} from '@/api/walk';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<ShareStackParamList>,
@@ -33,7 +35,9 @@ export default function ShareHomeScreen() {
   //   setIsVisible(true);
   //   setRoute(route);
   // };
-
+  const handleText = () => {
+    getNearWalkRecord(35.09359333333333, 128.85655833333334, 0);
+  };
   /**
    * 하위 스크린에 모달을 여는 함수를 전달함과 동시에 모달을 열 때
    * 해당 스크린이 가진 route(산책 루트 경로)를 전역으로 설정합니다.
@@ -73,6 +77,9 @@ export default function ShareHomeScreen() {
             return <SharePost modalOpen={handleModalOpen} />;
           }}
         />
+        <Pressable onPress={handleText}>
+          <MainText>나를눌러줘!!!</MainText>
+        </Pressable>
         <Pressable
           style={styles.shareButtonContainer}
           onPress={handlePressShare}>
