@@ -4,11 +4,13 @@ import io.milvus.v2.service.vector.response.QueryResp;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import social.connectus.location.application.rest.request.SpotDto;
 import social.connectus.location.application.rest.response.FindNearbyElementResponse;
 import social.connectus.location.common.type.Ping;
 import social.connectus.location.common.type.PingType;
 import social.connectus.location.domain.command.CreateSpotCommand;
 import social.connectus.location.domain.command.FindNearbyElementCommand;
+import social.connectus.location.domain.command.GetSpotCommand;
 import social.connectus.location.domain.ports.inbound.SpotUseCase;
 import social.connectus.location.domain.ports.outbound.MilvusPort;
 
@@ -59,5 +61,10 @@ public class SpotService implements SpotUseCase {
     @Override
     public List<Long> createSpot(CreateSpotCommand command){
         return milvusPort.insertAll(command);
+    }
+
+    @Override
+    public List<SpotDto> getSpot(GetSpotCommand command) {
+        return milvusPort.getSpotList(command);
     }
 }
