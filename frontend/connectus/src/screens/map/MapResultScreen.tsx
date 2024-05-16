@@ -62,6 +62,7 @@ export default function MapResultScreen({route}: ScreenProps) {
    * 산책을 종료할 때 사용할 mutation함수입니다.
    * 산책 결과 이미지, 산책 거리, 산책 시간, post, 산책 제목을 params로 받아
    * 산책을 저장합니다.
+   * @todo onSuccess시 모달띄우고 창이동하고 업적완료하는 코드 작성
    */
   const endWalk = useMutation({
     mutationFn: () =>
