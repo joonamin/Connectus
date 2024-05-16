@@ -1,0 +1,248 @@
+pipeline {
+    agent any 
+    tools {
+      jdk 'jdk-17'
+      gradle 'gradle_8.7'
+    }
+ environment {
+      dockerHubRegistry = 'jinjoo0402/s4_spring'
+      DOCKERHUB_CREDENTIALS = credentials('DOCKER_HUB_TOKEN') 
+  }
+  stages {
+    stage('Checkout Application Git Branch') {
+        steps {
+            git credentialsId: 'GITLAB_USUR_TOKEN',
+                url: 'https://lab.ssafy.com/jinjoo021/connect-cicd-test.git',
+                branch: 'backend'
+        }
+        post {
+                failure {
+                  echo 'Repository clone failure !'
+                }
+                success {
+                  echo 'Repository clone success !'
+                }
+        }
+    }
+    stage('gardle Jar Build') {
+            steps {
+                dir('./backend/connectus') {
+                    sh 'chmod +x gradlew'
+                    sh './gradlew clean'
+                    sh './gradlew build' 
+                }
+            }
+            post {
+                    failure {
+                      echo 'Gradle jar build failure !'
+                    }
+                    success {
+                      echo 'Gradle jar build success !'
+                    }
+            }
+    }
+    stage('Docker Image Build (1) : Apigateway') {
+            steps {
+                dir('./backend/connectus/apigateway-service') {
+                  sh 'sudo docker build . -t jinjoo0402/connectus_apigateway:latest'
+                }
+            }
+            post {
+                    failure {
+                      echo 'Apigateway docker image ${currentBuild.number} build failure !'
+                    }
+                    success {
+                      echo 'Apigateway docker image ${currentBuild.number} build success !'
+                    }
+            }
+    }
+    stage('Docker Image Build (2) : Discovery') {
+            steps {
+                dir('./backend/connectus/discovery-service') {
+                  sh 'sudo docker build . -t jinjoo0402/connectus_discovery:latest'
+                }
+            }
+            post {
+                    failure {
+                      echo 'Discovery docker image ${currentBuild.number} build failure !'
+                    }
+                    success {
+                      echo 'Discovery docker image ${currentBuild.number} build success !'
+                    }
+            }
+    }
+    stage('Docker Image Build (3) : Event') {
+            steps {
+                dir('./backend/connectus/event-service') {
+                  sh 'sudo docker build . -t jinjoo0402/connectus_event:latest'
+                }
+            }
+            post {
+                    failure {
+                      echo 'Event docker image ${currentBuild.number} build failure !'
+                    }
+                    success {
+                      echo 'Event docker image ${currentBuild.number} build success !'
+                    }
+            }
+    }
+    stage('Docker Image Build (4) : Gather') {
+            steps {
+                dir('./backend/connectus/gather-service') {
+                  sh 'sudo docker build . -t jinjoo0402/connectus_gather:latest'
+                }
+            }
+            post {
+                    failure {
+                      echo 'Gather docker image ${currentBuild.number} build failure !'
+                    }
+                    success {
+                      echo 'Gather docker image ${currentBuild.number} build success !'
+                    }
+            }
+    }
+    stage('Docker Image Build (5) : Likes') {
+            steps {
+                dir('./backend/connectus/likes-service') {
+                  sh 'sudo docker build . -t jinjoo0402/connectus_likes:latest'
+                }
+            }
+            post {
+                    failure {
+                      echo 'Likes docker image ${currentBuild.number} build failure !'
+                    }
+                    success {
+                      echo 'Likes docker image ${currentBuild.number} build success !'
+                    }
+            }
+    }
+    stage('Docker Image Build (6) : Post') {
+            steps {
+                dir('./backend/connectus/post-service') {
+                  sh 'sudo docker build . -t jinjoo0402/connectus_post:latest'
+                }
+            }
+            post {
+                    failure {
+                      echo 'Post docker image ${currentBuild.number} build failure !'
+                    }
+                    success {
+                      echo 'Post docker image ${currentBuild.number} build success !'
+                    }
+            }
+    }
+    stage('Docker Image Build (7) : Spot') {
+            steps {
+                dir('./backend/connectus/spot-service') {
+                  sh 'sudo docker build . -t jinjoo0402/connectus_spot:latest'
+                }
+            }
+            post {
+                    failure {
+                      echo 'Spot docker image ${currentBuild.number} build failure !'
+                    }
+                    success {
+                      echo 'Spot docker image ${currentBuild.number} build success !'
+                    }
+            }
+    }
+    stage('Docker Image Build (8) : User') {
+            steps {
+                dir('./backend/connectus/user-service') {
+                  sh 'sudo docker build . -t jinjoo0402/connectus_user:latest'
+                }
+            }
+            post {
+                    failure {
+                      echo 'User docker image ${currentBuild.number} build failure !'
+                    }
+                    success {
+                      echo 'User docker image ${currentBuild.number} build success !'
+                    }
+            }
+    }
+    stage('Docker Image Build (9) : Walk') {
+            steps {
+                dir('./backend/connectus/walk-service') {
+                  sh 'sudo docker build . -t jinjoo0402/connectus_walk:latest'
+                }
+            }
+            post {
+                    failure {
+                      echo 'Walk docker image ${currentBuild.number} build failure !'
+                    }
+                    success {
+                      echo 'Walk docker image ${currentBuild.number} build success !'
+                    }
+            }
+    }
+    
+    stage('Login Docker Hub'){
+          steps{
+              sh 'docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin' // docker hub 로그인
+          }
+      }
+    stage('Docker Image Push') {
+            steps {
+                      sh 'docker push jinjoo0402/connectus_likes:latest'
+                      sh 'docker push jinjoo0402/connectus_user:latest'
+                      sh 'docker push jinjoo0402/connectus_walk:latest'
+                      sh 'docker push jinjoo0402/connectus_event:latest'
+                      sh 'docker push jinjoo0402/connectus_spot:latest'
+                      sh 'docker push jinjoo0402/connectus_gather:latest'
+                      sh 'docker push jinjoo0402/connectus_post:latest'
+                      sh 'docker push jinjoo0402/connectus_discovery:latest'
+                      sh 'docker push jinjoo0402/connectus_apigateway:latest'
+            }
+            post {
+                    failure {
+                      echo 'Docker Image Push failure !'
+                    }
+                    success {
+                      echo 'Docker image push success !'
+                    }
+            }
+    }
+    stage('Deploy') {
+        steps([$class: 'BapSshPromotionPublisherPlugin']) {
+            sshPublisher(
+                continueOnError: false, failOnError: true,
+                publishers: [
+                    sshPublisherDesc(
+                        configName: 'DEPLOY_SERVER',
+                        verbose: true,
+                        transfers: [
+                            sshTransfer(
+                                // TODO : docker-compose 로 변경 필요
+                                // execCommand: 'docker compose up -d'
+                                '
+                                docker rm -f $(docker ps -qa)
+                                docker rmi $(docker images -q)
+
+                                sudo docker build ./apigateway -t jinjoo0402/connectus_apigateway:latest
+                                sudo docker build ./discovery -t jinjoo0402/connectus_discovery:latest
+                                sudo docker build ./post -t jinjoo0402/connectus_post:latest
+                                sudo docker build ./gather -t jinjoo0402/connectus_gather:latest
+                                sudo docker build ./spot -t jinjoo0402/connectus_spot:latest
+                                sudo docker build ./event -t jinjoo0402/connectus_event:latest
+                                sudo docker build ./walk -t jinjoo0402/connectus_walk:latest
+                                sudo docker build ./user -t jinjoo0402/connectus_user:latest
+                                sudo docker build ./likes -t jinjoo0402/connectus_likes:latest
+                                '
+                                ),
+                        ]
+                    )
+                ]
+            )
+        }
+            post {
+                success {
+                    echo 'Deploy success'
+                }
+                failure {
+                    echo 'Deploy failed'
+                }
+            }
+    }
+  }
+}
