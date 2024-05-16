@@ -2,6 +2,8 @@ package social.connectus.userservice.domain.port.outbound.command;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +19,7 @@ public class UserToRefreshAchievementCommand {
 	List<Achievement> accomplishedAchievement;
 	int postCount;
 	int walkCount;
-
+	@Transactional
 	public static UserToRefreshAchievementCommand from(User user) {
 		return UserToRefreshAchievementCommand.builder()
 			.accomplishedAchievement(user.getAccomplishedAchievements())
