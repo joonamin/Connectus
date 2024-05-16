@@ -4,14 +4,19 @@ import {axiosInstance} from './axios';
 import {postType} from '@/types';
 import {Image, Platform} from 'react-native';
 import axios from 'axios';
+import Geolocation from '@react-native-community/geolocation';
 
 /**
  * 산책 공유 페이지에서 경로를 좋아요를 할 때 호출할 api입니다.
  */
 const routeLike = async (walkId: number, userId: number) => {
-  const body = {walkId, userId};
-  const {data} = await axiosInstance.put('/walk/route-like', body);
-  return data;
+  const body = {userId, domainId: walkId, type: 'ROUTE'};
+  try {
+    const {data} = await axiosInstance.post('/likes/insert', body);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 /**
@@ -74,7 +79,7 @@ const createRoute = async (body: createRoutetype) => {
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: `eyJhbGciOiJIUzUxMiJ9.eyJwYXlsb2FkIjp7ImVtYWlsIjoiZ21zMjQ1QG5hdmVyLmNvbSIsImlzc3VlZEF0IjoiTWF5IDE2LCAyMDI0LCAxMjoxNzowMSBBTSIsImlzc3VlciI6InVzZXItc2VydmljZSIsInVzZXJJZCI6N30sImlzcyI6InVzZXItc2VydmljZSIsImlhdCI6MTcxNTgxODYyMSwiZXhwIjoxNzE1OTE4NjIxfQ.pdwODpE4Tjf8wPChnlXmNB0Q1LynbCN0YUhAbaOF7DwL_mdgK1UhR2seMAZ-_3SLk_k1f2S1sICdP9xKY5Zlrg`,
+        Authorization: `eyJhbGciOiJIUzUxMiJ9.eyJwYXlsb2FkIjp7ImVtYWlsIjoiZ21zMjQ1QG5hdmVyLmNvbSIsImlzc3VlZEF0IjoiTWF5IDE2LCAyMDI0LCA2OjI0OjU4IEFNIiwiaXNzdWVyIjoidXNlci1zZXJ2aWNlIiwidXNlcklkIjo3fSwiaXNzIjoidXNlci1zZXJ2aWNlIiwiaWF0IjoxNzE1ODQwNjk4LCJleHAiOjE3MTU5NDA2OTh9._vmtWZ_wCfx9vLxgMdlb04AkYG_oFoUhwEmW8viwKhoDu02DeJBgghAcjB9XVH762uWtg2X6XgjdtEv_eGN8vQ`,
       },
     });
     console.log(data);
@@ -145,17 +150,29 @@ const updateWalker = async (walkId: number, userId: number) => {
 };
 
 const getNearWalkRecord = async (
-  latitude: number,
-  longitude: number,
+  // latitude: number,
+  // longitude: number,
   pageNumber: number,
 ) => {
-  const body = {
-    latitude: latitude,
-    longitude: longitude,
-    kmRadius: 1,
-    pageNumber: pageNumber,
-    pageSize: 10,
+  const getPosition = function () {
+    return new Promise(function (resolve, reject) {
+      Geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        distanceFilter: 0,
+      });
+    });
   };
+  const userPos = await getPosition();
+
+  const body = {
+    latitude: userPos.coords.latitude,
+    longitude: userPos.coords.longitude,
+    kmRadius: 10,
+    pageNumber: pageNumber,
+    pageSize: 3,
+  };
+  console.log(body);
+  console.log(userPos);
 
   try {
     const {data} = await axiosInstance.post('/walk/detail-position', body);
