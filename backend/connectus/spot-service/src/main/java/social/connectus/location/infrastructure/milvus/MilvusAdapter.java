@@ -4,8 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import io.milvus.v2.client.MilvusClientV2;
 import io.milvus.v2.service.vector.request.InsertReq;
 import io.milvus.v2.service.vector.request.QueryReq;
+import io.milvus.v2.service.vector.request.SearchReq;
 import io.milvus.v2.service.vector.response.InsertResp;
 import io.milvus.v2.service.vector.response.QueryResp;
+import io.milvus.v2.service.vector.response.SearchResp;
+import io.milvus.v2.utils.VectorUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import social.connectus.location.common.config.MilvusConfig;
@@ -59,6 +62,27 @@ public class MilvusAdapter implements MilvusPort {
         MilvusClientV2 client = milvusConfig.createMilvusClient();
         // 조회 요청
         String filter = "spot_id != " + -1;
+
+        List<List<Float>> searchsearch = new ArrayList<>();
+        List<Float> searchData = new ArrayList<>();
+        searchData.add((float)longitude + 1.0f);
+        searchData.add((float)latitude + 1.5f);
+        searchsearch.add(searchData);
+
+        Map<String,Object> searchParams = new HashMap<>();
+        searchParams.put("metric_type ", "L2");
+        searchParams.put("radius", 3.0f);
+        searchParams.put("range_filter ", 5.0f);
+
+
+        SearchReq request = SearchReq.builder()
+                .collectionName("spot")
+                .searchParams(searchParams)
+                .data(searchsearch)
+                .topK(16384)
+                .build();
+        SearchResp resp = client.search(request);
+        System.out.println(resp.getSearchResults());
 
         // 조회 요청 생성
         QueryReq queryReq = QueryReq.builder()
