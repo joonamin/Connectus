@@ -30,4 +30,19 @@ interface postType {
   image: Image;
 }
 
-export type {postDetail, comment, postType};
+interface spotType {
+  id: number;
+  longitude: number;
+  latitude: number;
+  type: String;
+  domainId: number;
+  cretedAt: String;
+  updatedAt: String;
+}
+
+interface spotListType {
+  nearby: spotType[];
+  distance: null | number;
+}
+
+export type {postDetail, comment, postType, spotType, spotListType};
