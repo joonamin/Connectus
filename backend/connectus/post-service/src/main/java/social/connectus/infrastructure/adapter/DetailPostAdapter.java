@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import social.connectus.application.rest.request.CoordinateRequestDto;
+import social.connectus.application.rest.request.GetPostSpotRequest;
 import social.connectus.application.rest.response.CommentResponse;
 import social.connectus.application.rest.response.DetailPostResponse;
 import social.connectus.application.rest.response.OpenedPostResponse;
@@ -69,10 +70,10 @@ public class DetailPostAdapter implements DetailPostPort {
 		return userServiceClient.getOpenedPost(userId);
 	}
 
-	@Override
-	public CoordinateRequestDto postSpotByPostId(Long postId) {
-		return spotServiceClient.getPostSpot(postId);
-	}
+//	@Override
+//	public CoordinateRequestDto postSpotByPostId(GetPostSpotRequest request) {
+//		return spotServiceClient.getPostSpot(request);
+//	}
 
 	@Override
 	public String healthCheck() {

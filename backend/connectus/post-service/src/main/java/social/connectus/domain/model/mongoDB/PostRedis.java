@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import social.connectus.application.rest.request.SpotDto;
 
 @Getter
 @Builder
@@ -25,7 +26,7 @@ public class PostRedis {
 	private double longitude;
 	private double latitude;
 
-	public static PostRedis from(CreatePostRequest request, CoordinateRequestDto coordinateRequestDto) {
+	public static PostRedis from(CreatePostRequest request, SpotDto coordinateRequestDto) {
 		return PostRedis.builder()
 			.authorId(request.getAuthorId())
 			.imageUrl(request.getImageUrl())

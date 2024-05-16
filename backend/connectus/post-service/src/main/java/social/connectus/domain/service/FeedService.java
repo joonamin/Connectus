@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import lombok.RequiredArgsConstructor;
 import social.connectus.application.rest.request.CoordinateRequestDto;
 import social.connectus.application.rest.request.GetWalksByPositionRequest;
+import social.connectus.application.rest.request.SpotDto;
 import social.connectus.application.rest.response.FeedResponse;
 import social.connectus.common.annotation.UseCase;
 import social.connectus.common.exception.GlobalException;
@@ -29,7 +30,10 @@ public class FeedService implements FeedUseCase {
 	private final WalkServiceClient walkServiceClient;
 	@Override
 	public SliceResponse<FeedResponse> feedMain(Double longitude, Double latitude, int pageNum, Long userId) {
-		CoordinateRequestDto userPosition = new CoordinateRequestDto(longitude, latitude);
+		SpotDto userPosition = SpotDto.builder()
+				.latitude(latitude)
+				.longitude(longitude)
+				.build();
 		SliceResponse<Long> walkIdList =
 			walkServiceClient.getFeedList(GetWalksByPositionRequest.from(userPosition,pageNum,5,userId,1.0));
 

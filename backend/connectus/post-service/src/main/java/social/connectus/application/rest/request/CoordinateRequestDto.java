@@ -5,10 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Getter
 @Setter
 public class CoordinateRequestDto {
-	private double longitude;
-	private double latitude;
+	private List<SpotDto> spotList;
 }

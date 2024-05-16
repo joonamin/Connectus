@@ -2,7 +2,6 @@ package social.connectus.location.domain.command;
 
 import lombok.*;
 import social.connectus.location.application.rest.request.GetSpotRequest;
-import social.connectus.location.application.rest.request.SpotDto;
 
 import java.util.List;
 

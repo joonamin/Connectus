@@ -38,23 +38,23 @@ public class DetailPostService implements DetailPostUseCase {
 		return detailPostPort.detailPost(postId);
 	}
 
-	@Override
-	public DetailPostResponse detailByLocation(Long postId, CoordinateRequestDto userLocation) throws GlobalException, BusinessException {
-		CoordinateRequestDto postLocation = detailPostPort.postSpotByPostId(postId);
-		try {
-			if(postId == null) {
-				throw new ParameterNotFoundException("postId");
-			}
-			// TODO : R 크기 정해지면 수정
-			if(getDistance(userLocation, postLocation) < R) {
-				throw new BusinessException("post is too far");
-			}
-		} catch (Exception e) {
-			throw new GlobalException("DetailPostService : " + e.getMessage());
-		}
-		DetailPostResponse response = detailPostPort.detailPost(postId);
-		return response;
-	}
+//	@Override
+//	public DetailPostResponse detailByLocation(Long postId, CoordinateRequestDto userLocation) throws GlobalException, BusinessException {
+//		CoordinateRequestDto postLocation = detailPostPort.postSpotByPostId(postId);
+//		try {
+//			if(postId == null) {
+//				throw new ParameterNotFoundException("postId");
+//			}
+//			// TODO : R 크기 정해지면 수정
+//			if(getDistance(userLocation, postLocation) < R) {
+//				throw new BusinessException("post is too far");
+//			}
+//		} catch (Exception e) {
+//			throw new GlobalException("DetailPostService : " + e.getMessage());
+//		}
+//		DetailPostResponse response = detailPostPort.detailPost(postId);
+//		return response;
+//	}
 
 	@Override
 	public DetailPostResponse detailByPostId(Long postId, Long userId, Double distance) throws
@@ -83,14 +83,6 @@ public class DetailPostService implements DetailPostUseCase {
 	@Override
 	public String healthCheck() {
 		return detailPostPort.healthCheck();
-	}
-
-	private double getDistance(CoordinateRequestDto userLocation, CoordinateRequestDto postLocation) {
-		double dx, dy;
-		dx = Math.pow(userLocation.getLatitude() - postLocation.getLatitude(), 2.0);
-		dy = Math.pow(userLocation.getLongitude() - postLocation.getLongitude(), 2.0);
-
-		return Math.sqrt(dy + dx);
 	}
 
 

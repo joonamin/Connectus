@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import social.connectus.application.rest.request.CoordinateRequestDto;
+import social.connectus.application.rest.request.GetPostSpotRequest;
 import social.connectus.domain.service.command.PostSpotCommand;
 
 @FeignClient(name = "spot-service")
 public interface SpotServiceClient {
 
-	@GetMapping("/spot-service/{locationId}/coordinate")
-	CoordinateRequestDto getPostSpot(@PathVariable("postId") Long postId);
+	@PostMapping("/spot/get")
+	CoordinateRequestDto getPostSpot(GetPostSpotRequest request);
 
-	@PostMapping("/spot-service/insert")
-	void insertPostSpot(@RequestBody List<PostSpotCommand> postSpotCommand);
+	@PostMapping("/spot/insert")
+	void insertPostSpot(@RequestBody PostSpotCommand postSpotCommand);
 }
