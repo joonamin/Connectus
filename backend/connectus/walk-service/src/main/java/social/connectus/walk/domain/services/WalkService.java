@@ -55,39 +55,64 @@ public class WalkService implements WalkUseCase {
                 .route(command.getRoute())
                 .walkDistance(command.getWalkDistance())
                 .walkTime(command.getWalkTime())
-                .completedAchievement(command.getCompletedAchievement())
                 .participateEvent(command.getParticipateEvent())
                 .isPublic(command.isPublic())
                 .imageUrl(imageUrl)
                 .build();
+
+        // 달성한 업적 갱신 및 조회
+        GetAchievementsCommand getAchievementsCommand = GetAchievementsCommand.builder()
+                .postCount(command.getPostList().size())
+                .participateEvent(command.getParticipateEvent())
+                .build();
+        List<AchievementResponse> achievementResponseList = feignPort.getAchievementsByWalk(walk.getUserId(), getAchievementsCommand);
+        if(achievementResponseList != null && !achievementResponseList.isEmpty()){
+            // 달성한 업적이 없으면 pass
+            // 달성한 업적이 있으면 walk.setAchievementCodeList(List<String>)
+            List<String> achievementCodeList = achievementResponseList.stream().map(AchievementResponse::getAchievementCode).toList();
+            walk.setAchievementCode(achievementCodeList);
+        }
+        // 이후 sql문 확인
+
         walkPort.createWalk(walk);
         long walkId = walk.getId();
 
-        List<PostVO> postVOList = new ArrayList<>();
-        for(PostRequestForWalk postReq : command.getPostList()){
-            PostVO postVO = PostVO.builder()
-                    .content(postReq.getContent())
-                    .image(postReq.getImage())
-                    .authorId(postReq.getAuthorId())
-                    .walkId(walkId)
-                    .build();
-            postVOList.add(postVO);
-        }
-
-        List<Long> postIdList = feignPort.createPost(CreatePostRequest.builder()
+        if(command.getPostList() != null) {
+            List<PostVO> postVOList = new ArrayList<>();
+            for (PostRequestForWalk postReq : command.getPostList()) {
+                String postImageUrl = null;
+                if (postReq.getImage() != null)
+                    postImageUrl = imagePort.uploadImage(postReq.getImage());
+                PostVO postVO = PostVO.builder()
+                        .content(postReq.getContent())
+                        .imageUrl(postImageUrl)
+                        .authorId(postReq.getAuthorId())
                         .walkId(walkId)
-                        .postList(postVOList)
-                .build());
-        List<Post> postList = new ArrayList<>();
-        for(Long postId : postIdList){
-            Post post = new Post(postId);
-            postList.add(post);
+                        .longitude(postReq.getLongitude())
+                        .latitude(postReq.getLatitude())
+                        .build();
+                postVOList.add(postVO);
+            }
+
+            List<Long> postIdList = feignPort.createPost(CreatePostRequest.builder()
+                    .walkId(walkId)
+                    .postList(postVOList)
+                    .build());
+            List<Post> postList = new ArrayList<>();
+            for (Long postId : postIdList) {
+                Post post = new Post(postId);
+                postList.add(post);
+            }
+            walk.setPostList(postList);
+
+            walkPort.createPostList(postList, walk);
         }
-        walk.setPostList(postList);
 
-        walkPort.createPostList(postList, walk);
 
-        return CreateWalkResponse.from(walk);
+        return CreateWalkResponse.builder()
+                        .walkId(walkId)
+                        .completedAchievement(achievementResponseList)
+                        .build();
     }
 
     public void routeLike(RouteLikeCommand command){

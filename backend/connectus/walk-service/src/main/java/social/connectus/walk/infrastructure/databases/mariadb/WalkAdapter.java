@@ -64,7 +64,6 @@ public class WalkAdapter implements WalkPort {
                 .longitude(command.getLongitude())
                 .build();
         double kmRadius = command.getKmRadius();
-        long userId = command.getUserId();
         PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize());
         Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
         return new SliceResponse<>(routeList.getContent().stream().map(Route::getId).toList(),routeList.hasNext(),routeList.getNumber());
@@ -77,7 +76,6 @@ public class WalkAdapter implements WalkPort {
                 .longitude(command.getLongitude())
                 .build();
         double kmRadius = command.getKmRadius();
-        long userId = command.getUserId();
         PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize());
         Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
         return new SliceImpl<>(routeList.getContent().stream().map(Route::getWalk).toList(), pageRequest, routeList.hasNext());
@@ -93,15 +91,14 @@ public class WalkAdapter implements WalkPort {
     @Override
     @Transactional
     public Walk createWalk(Walk walk) {
-
-        createRoute(walk.getRoute(), walk);
-        if(walk.getCompletedAchievement() != null)
-            createAchievement(walk.getCompletedAchievement(), walk);
+        if(walk.getRoute() != null)
+            createRoute(walk.getRoute(), walk);
         walkRepository.save(walk);
         return walk;
     }
 
     @Override
+    @Transactional
     public void createPostList(List<Post> postList, Walk walk) {
         postList.forEach(post -> post.setWalk(walk));
     }
@@ -109,11 +106,6 @@ public class WalkAdapter implements WalkPort {
     @Override
     public void createRoute(List<Route> routes, Walk walk){
         routes.forEach(route -> route.setWalk(walk));
-    }
-
-    @Override
-    public void createAchievement(List<CompletedAchievement> completedAchievements, Walk walk){
-        completedAchievements.forEach(achievement -> achievement.setWalk(walk));
     }
 
     @Override

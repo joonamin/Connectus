@@ -15,5 +15,5 @@ import java.util.List;
 @org.springframework.cloud.openfeign.FeignClient(name = "post-service")
 public interface PostClient{
     @PostMapping("/post/insert")
-    List<Long> createPost(@Valid CreatePostRequest request);
+    List<Long> createPost(@RequestBody CreatePostRequest request);
 }

@@ -40,7 +40,7 @@ public class DetailPostService implements DetailPostUseCase {
 
 	@Override
 	public DetailPostResponse detailByLocation(Long postId, CoordinateRequestDto userLocation) throws GlobalException, BusinessException {
-		CoordinateRequestDto postLocation = detailPostPort.postPositionByPostId(postId);
+		CoordinateRequestDto postLocation = detailPostPort.postSpotByPostId(postId);
 		try {
 			if(postId == null) {
 				throw new ParameterNotFoundException("postId");

@@ -6,15 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import social.connectus.walk.domain.model.entity.Walk;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class CreateWalkResponse {
     private long walkId;
-    public static CreateWalkResponse from(Walk walk){
-        return CreateWalkResponse.builder()
-                .walkId(walk.getId())
-                .build();
-    }
+    private List<AchievementResponse> completedAchievement;
 }
