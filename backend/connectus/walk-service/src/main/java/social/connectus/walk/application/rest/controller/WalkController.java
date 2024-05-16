@@ -96,7 +96,7 @@ public class WalkController {
     }
 
     @Operation(summary = "위치 기준 주변 산책 기록 조회")
-    @GetMapping("/detail-position")
+    @PostMapping("/detail-position")
     public ResponseEntity<GetWalkSliceResponse> getWalksByPosition(@RequestBody GetWalksByPositionRequest request){
         Slice<Walk> walkSlice = walkUseCase.getWalksByPosition(GetWalksByPositionCommand.from(request));
         List<GetWalkResponse> walkList = walkSlice.getContent().stream()
