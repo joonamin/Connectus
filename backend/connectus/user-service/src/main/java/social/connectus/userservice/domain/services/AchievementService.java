@@ -35,9 +35,8 @@ public class AchievementService implements AchievementUseCase {
 	@Override
 	public RefreshAchievementResponse refreshAchievement(Long userId, RefreshAchievementRequest request) {
 		UserToRefreshAchievementCommand userData = achievementPort.refreshAchievement(userId);
-
 		RefreshAchievementToUserCommand sumData = RefreshAchievementToUserCommand.from(userData, request);
-		List<Achievement> accomplishedAchievement = new ArrayList<>();
+		List<Achievement> accomplishedAchievement = new ArrayList<>();  // 700 post , walk + 1
 
 		for (Achievement achievement : Achievement.values()) {
 			int progress = achievement.getField().getGetter().apply(sumData);
@@ -46,9 +45,10 @@ public class AchievementService implements AchievementUseCase {
 			if (progress >= goal)
 				accomplishedAchievement.add(achievement);
 		}
+		List<Achievement> achievementList= userData.getAccomplishedAchievement(); // 500 post, walk
+		accomplishedAchievement.removeAll(achievementList);
 		sumData.setAccomplishedAchievement(accomplishedAchievement);
 		achievementPort.updateAchievementData(userId, sumData);
-		accomplishedAchievement.removeAll(userData.getAccomplishedAchievement());
 
 		return new RefreshAchievementResponse(accomplishedAchievement.stream().map(AchievementResponse::from).toList());
 	}
