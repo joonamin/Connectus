@@ -213,6 +213,7 @@ pipeline {
                         verbose: true,
                         transfers: [
                             sshTransfer(
+                              execCommand:
                                 // TODO : docker-compose 로 변경 필요
                                 // execCommand: 'docker compose up -d'
                                 '
