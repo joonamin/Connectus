@@ -1,14 +1,21 @@
 package social.connectus.location.infrastructure.milvus;
 
 import com.alibaba.fastjson.JSONObject;
+import io.milvus.grpc.MutationResult;
 import io.milvus.v2.client.MilvusClientV2;
 import io.milvus.v2.service.vector.request.InsertReq;
 import io.milvus.v2.service.vector.request.QueryReq;
+import io.milvus.v2.service.vector.request.SearchReq;
 import io.milvus.v2.service.vector.response.InsertResp;
 import io.milvus.v2.service.vector.response.QueryResp;
+import io.milvus.v2.service.vector.response.SearchResp;
+import io.milvus.v2.service.vector.response.UpsertResp;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections.iterators.SingletonListIterator;
 import org.springframework.stereotype.Component;
+import social.connectus.location.application.rest.request.SpotDto;
 import social.connectus.location.common.config.MilvusConfig;
+import social.connectus.location.domain.command.CreateSpotCommand;
 import social.connectus.location.domain.ports.outbound.MilvusPort;
 
 import java.time.LocalDateTime;
@@ -54,11 +61,70 @@ public class MilvusAdapter implements MilvusPort {
     }
 
     @Override
+    public List<Long> insertAll(CreateSpotCommand command){
+        // client 값 호출
+        MilvusClientV2 client = milvusConfig.createMilvusClient();
+
+        // 데이터 생성
+        List<JSONObject> insertData = new ArrayList<>();
+        for(SpotDto spotDto: command.getSpotList()){
+            JSONObject spot = new JSONObject();
+
+            // 2차원 float을 요구하는 spot
+            List<List<Double>> latlng2d = new ArrayList<>();
+            List<Float> latlng = new ArrayList<>();
+            latlng.add(spotDto.getLatitude().floatValue());
+            latlng.add(spotDto.getLongitude().floatValue());
+//            latlng2d.add(latlng);
+
+            spot.put("spot", latlng);
+            spot.put("type", spotDto.getType().toString());
+            spot.put("domain_id", spotDto.getDomainId());
+            spot.put("latitude", spotDto.getLatitude().floatValue());
+            spot.put("longitude", spotDto.getLongitude().floatValue());
+            spot.put("created_at", LocalDateTime.now().toString());
+            spot.put("updated_at", LocalDateTime.now().toString());
+            insertData.add(spot);
+        }
+        // 삽입 요청
+        InsertReq insertReq = InsertReq.builder()
+                .collectionName(milvusConfig.getCollectionName())
+                .data(insertData)
+                .build();
+        InsertResp insertResp = client.insert(insertReq);
+
+        List<Long> result = new ArrayList<>();
+        result.add(insertResp.getInsertCnt());
+        return result;
+    }
+
+    @Override
     public QueryResp select(double longitude, double latitude) {
 
         MilvusClientV2 client = milvusConfig.createMilvusClient();
         // 조회 요청
         String filter = "spot_id != " + -1;
+
+        List<List<Float>> searchsearch = new ArrayList<>();
+        List<Float> searchData = new ArrayList<>();
+        searchData.add((float)longitude + 1.0f);
+        searchData.add((float)latitude + 1.5f);
+        searchsearch.add(searchData);
+
+        Map<String,Object> searchParams = new HashMap<>();
+        searchParams.put("metric_type ", "L2");
+        searchParams.put("radius", 3.0f);
+        searchParams.put("range_filter ", 5.0f);
+
+
+        SearchReq request = SearchReq.builder()
+                .collectionName("spot")
+                .searchParams(searchParams)
+                .data(searchsearch)
+                .topK(16384)
+                .build();
+        SearchResp resp = client.search(request);
+        System.out.println(resp.getSearchResults());
 
         // 조회 요청 생성
         QueryReq queryReq = QueryReq.builder()

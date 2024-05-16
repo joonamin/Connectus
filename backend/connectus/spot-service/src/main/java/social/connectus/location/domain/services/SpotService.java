@@ -7,16 +7,14 @@ import org.springframework.stereotype.Service;
 import social.connectus.location.application.rest.response.FindNearbyElementResponse;
 import social.connectus.location.common.type.Ping;
 import social.connectus.location.common.type.PingType;
+import social.connectus.location.domain.command.CreateSpotCommand;
 import social.connectus.location.domain.command.FindNearbyElementCommand;
 import social.connectus.location.domain.ports.inbound.SpotUseCase;
 import social.connectus.location.domain.ports.outbound.MilvusPort;
-import social.connectus.location.domain.ports.outbound.SpotPort;
 
-import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -56,5 +54,10 @@ public class SpotService implements SpotUseCase {
         return FindNearbyElementResponse.builder()
                 .nearby(nearby)
                 .build();
+    }
+
+    @Override
+    public List<Long> createSpot(CreateSpotCommand command){
+        return milvusPort.insertAll(command);
     }
 }
