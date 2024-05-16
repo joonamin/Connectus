@@ -70,4 +70,9 @@ public class SpotService implements SpotUseCase {
     public List<SpotDto> getSpot(GetSpotCommand command) {
         return milvusPort.getSpotList(command);
     }
+
+    @Override
+    public List<Long> updateSpot(CreateSpotCommand command) {
+        return milvusPort.updateSpotList(command);
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import social.connectus.application.rest.request.CreateFeedRequestDto;
 import social.connectus.application.rest.request.PostRequestDto;
+import social.connectus.application.rest.request.SpotDto;
 import social.connectus.domain.model.RDBMS.Post;
 import social.connectus.domain.ports.outbound.CreatePostPort;
 import social.connectus.domain.service.command.InsertPostCommand;
@@ -29,15 +30,16 @@ public class CreatePostAdapter implements CreatePostPort {
 	private final SpotServiceClient positionServiceClient;
 	@Override
 	public List<Long> createPost(CreateFeedRequestDto createFeedRequestDto) {
-		List<PostSpotCommand> postPositionList = new ArrayList<>();
+		PostSpotCommand postPositionList = new PostSpotCommand();
+		postPositionList.setSpotList(new ArrayList<>());
 		List<Long> postIdList = new ArrayList<>();
 		for(PostRequestDto requestDto : createFeedRequestDto.getPostList()) {
 			Post post = Post.from(requestDto);
 			postRepository.save(post);
 			postIdList.add(post.getId());
-			postPositionList.add(PostSpotCommand.from(post,requestDto));
+			postPositionList.getSpotList().add(SpotDto.from(post,requestDto));
 		}
-//		positionServiceClient.insertPostSpot(postPositionList);
+		positionServiceClient.insertPostSpot(postPositionList);
 		return postIdList;
 	}
 }

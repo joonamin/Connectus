@@ -1,6 +1,7 @@
 package social.connectus.domain.ports.outbound;
 
 import social.connectus.application.rest.request.CoordinateRequestDto;
+import social.connectus.application.rest.request.GetPostSpotRequest;
 import social.connectus.application.rest.response.DetailPostResponse;
 import social.connectus.application.rest.response.OpenedPostResponse;
 import social.connectus.common.exception.BusinessException;
@@ -10,7 +11,7 @@ public interface DetailPostPort {
 	DetailPostResponse detailPost(Long postId) throws BusinessException;
 	void updateOpenedPost(Long userId, Long postId);
 	OpenedPostResponse openedPostByUserId(Long userId);
-	CoordinateRequestDto postSpotByPostId(Long postId);
+//	CoordinateRequestDto postSpotByPostId(GetPostSpotRequest request);
 
 	String healthCheck();
 }
