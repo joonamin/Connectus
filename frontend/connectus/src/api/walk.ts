@@ -83,14 +83,9 @@ const createRoute = async (body: createRoutetype) => {
 
   try {
     console.log('요청은 가니?');
-    const {data} = await axios({
-      method: 'POST',
-      url: 'https://api.connectus.social/walk',
-      // data: {...body, image: formData},
-      data: formData,
+    const {data} = await axiosInstance.post('walk', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        Authorization: `eyJhbGciOiJIUzUxMiJ9.eyJwYXlsb2FkIjp7ImVtYWlsIjoiZ21zMjQ1QG5hdmVyLmNvbSIsImlzc3VlZEF0IjoiTWF5IDE2LCAyMDI0LCA2OjI0OjU4IEFNIiwiaXNzdWVyIjoidXNlci1zZXJ2aWNlIiwidXNlcklkIjo3fSwiaXNzIjoidXNlci1zZXJ2aWNlIiwiaWF0IjoxNzE1ODQwNjk4LCJleHAiOjE3MTU5NDA2OTh9._vmtWZ_wCfx9vLxgMdlb04AkYG_oFoUhwEmW8viwKhoDu02DeJBgghAcjB9XVH762uWtg2X6XgjdtEv_eGN8vQ`,
       },
     });
     console.log(data);
