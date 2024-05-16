@@ -23,12 +23,18 @@ import useAuthStore from '@/store/useAuthStore';
 import {queryKeys} from '@/constants';
 import {comment} from '@/types';
 import queryClient from '@/api/queryClient';
+import {StackScreenProps} from '@react-navigation/stack';
+import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
+
+type FeedDetailScreenProps = StackScreenProps<FeedStackParamList, 'FeedDetail'>;
 
 /**
  * @todo feedHomeScreen에서 해당 스크린에 대한 데이터를 전달받아 like, comment의 수를 받아와야하고
  * 이미지 및 상세 content내용을 받아와야합니다
  */
-export default function FeedDetailScreen() {
+export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
+  const {feedId} = route.params;
+
   const {
     isVisible: isMoveModalVisible,
     show: moveModalShow,
@@ -46,7 +52,7 @@ export default function FeedDetailScreen() {
   };
 
   const {data, isLoading, isError} = useQuery({
-    queryFn: () => getPostDetail(9, {userId: 1, distance: 5}),
+    queryFn: () => getPostDetail(feedId, user?.userId as number, 5),
     queryKey: [queryKeys.GET_FEED_DETAIL],
   });
 
@@ -58,7 +64,7 @@ export default function FeedDetailScreen() {
    */
   const body = {content: comment, authorId: user?.userId as number};
   const postComment = useMutation({
-    mutationFn: () => createPostComment(9, body),
+    mutationFn: () => createPostComment(feedId, body),
     onSuccess: () => {
       console.log('요청 성공');
       queryClient.invalidateQueries({queryKey: [queryKeys.GET_FEED_DETAIL]});
@@ -71,7 +77,7 @@ export default function FeedDetailScreen() {
 
   const postLikeBody: Parameters<typeof postFeedLike>[0] = {
     userId: user?.userId as number,
-    domainId: 9,
+    domainId: feedId,
     type: 'POST',
   };
   /**

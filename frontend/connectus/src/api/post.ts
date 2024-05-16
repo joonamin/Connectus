@@ -20,9 +20,6 @@ interface getPostDetailBody {
   userId: number;
   distance: number;
 }
-interface AxiosResponse<T> {
-  data: T;
-}
 
 /**
  * 방명록의 상세정보를 요청하는 axios 요청입니다.
@@ -32,16 +29,16 @@ interface AxiosResponse<T> {
  */
 const getPostDetail = async (
   postId: number,
-  params: getPostDetailBody,
-): Promise<AxiosResponse<postDetail> | Error> => {
+  userId: number,
+  distance: number,
+) => {
   try {
     const {data} = await axiosInstance.get(
-      `/post/${postId}?userId=${params.userId}&distance=${params.distance}`,
+      `/post/${postId}?userId=${userId}&distance=${distance}`,
     );
     return data;
   } catch (error) {
     console.log(error);
-    return error;
   }
 };
 

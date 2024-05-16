@@ -7,7 +7,7 @@ import {fonts} from '@/constants';
 
 export type FeedStackParamList = {
   FeedHome: undefined;
-  FeedDetail: undefined;
+  FeedDetail: {feedId: number};
 };
 
 const Stack = createStackNavigator<FeedStackParamList>();

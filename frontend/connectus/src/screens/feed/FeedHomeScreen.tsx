@@ -19,6 +19,8 @@ import {getFeedList} from '@/api/post';
 import Geolocation from '@react-native-community/geolocation';
 import {LatLng} from 'react-native-maps';
 import {queryKeys} from '@/constants';
+import {getNearWalkRecord} from '@/api/walk';
+import MainText from '@/components/text/MainText';
 
 export default function FeedHomeScreen() {
   const carouselWidth = Dimensions.get('window').width;
@@ -35,22 +37,41 @@ export default function FeedHomeScreen() {
     setSelectFeed(id);
   };
 
-  const {data, hasNextPage, isFetchingNextPage, fetchNextPage, refetch} =
-    useInfiniteQuery({
-      queryFn: ({pageParam}) =>
-        getFeedList(
-          currentPos?.latitude as number,
-          currentPos?.longitude as number,
-          pageParam,
-        ),
-      queryKey: [queryKeys.GET_FEED_LIST],
-      initialPageParam: 0,
-      getNextPageParam: (lastPage, allPages) => {
-        console.log('last page', lastPage);
-        const lastPost = lastPage[lastPage.length - 1];
-        return lastPost ? allPages.length + 1 : undefined;
-      },
-    });
+  // const {data, hasNextPage, isFetchingNextPage, fetchNextPage, refetch} =
+  //   useInfiniteQuery({
+  //     queryFn: ({pageParam}) =>
+  //       getFeedList(
+  //         currentPos?.latitude as number,
+  //         currentPos?.longitude as number,
+  //         pageParam,
+  //       ),
+  //     queryKey: [queryKeys.GET_FEED_LIST],
+  //     initialPageParam: 0,
+  //     getNextPageParam: (lastPage, allPages) => {
+  //       console.log('last page', lastPage);
+  //       const lastPost = lastPage[lastPage.length - 1];
+  //       return lastPost ? allPages.length + 1 : undefined;
+  //     },
+  //   });
+
+  const {
+    data,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    refetch,
+  } = useInfiniteQuery({
+    queryFn: ({pageParam}) => getNearWalkRecord(pageParam),
+    queryKey: [queryKeys.GET_ROUTE_LIST],
+    initialPageParam: 0,
+    getNextPageParam: lastPage => {
+      if (lastPage.hasNext) {
+        return lastPage.pageNum + 1;
+      }
+      return undefined;
+    },
+  });
 
   // 스크롤을 위로 당겼을 때, refetch 진행
   const handleRefresh = async () => {
@@ -66,19 +87,11 @@ export default function FeedHomeScreen() {
     }
   };
 
-  console.log('악', data);
-
   const {
     isVisible: isMoveModalVisible,
     show: moveModalShow,
     hide: moveModalHide,
   } = useModal();
-
-  const dummyData = [
-    {isLiked: 42, likeNumber: 12, commentNumber: 22},
-    {isLiked: 12, likeNumber: 82, commentNumber: 12},
-    {isLiked: 22, likeNumber: 42, commentNumber: 12},
-  ];
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -104,34 +117,34 @@ export default function FeedHomeScreen() {
   return (
     <SafeAreaView>
       <FlatList
-        data={dummyData}
+        data={data?.pages.flatMap(page => page.walksList)}
         refreshing={isRefreshing}
         onRefresh={handleRefresh}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.5}
         scrollIndicatorInsets={{right: 1}}
-        renderItem={({item}) => (
-          <View style={{marginBottom: 30}}>
-            <Carousel
-              width={carouselWidth}
-              height={carouselWidth + 80}
-              mode="parallax"
-              panGestureHandlerProps={{
-                activeOffsetX: [-10, 10],
-              }}
-              data={[1, 2, 3]}
-              renderItem={({index}) => (
-                <FeedPreview
-                  isVisible={true}
-                  isLiked={false}
-                  likeNumber={12}
-                  commentNumber={53}
-                  show={moveModalShow}
-                />
-              )}
-            />
-          </View>
-        )}>
+        renderItem={({item}) => {
+          return (
+            <View style={{marginBottom: 30}}>
+              <Carousel
+                width={carouselWidth}
+                height={carouselWidth + 80}
+                mode="parallax"
+                autoFillData={false}
+                panGestureHandlerProps={{
+                  activeOffsetX: [-10, 10],
+                }}
+                data={item.postList}
+                renderItem={({item, index}) => {
+                  console.log('================================');
+                  console.log('item', item);
+                  console.log('================================');
+                  return <FeedPreview feedId={item} />;
+                }}
+              />
+            </View>
+          );
+        }}>
         {/* <Carousel
           width={carouselWidth}
           mode="parallax"
