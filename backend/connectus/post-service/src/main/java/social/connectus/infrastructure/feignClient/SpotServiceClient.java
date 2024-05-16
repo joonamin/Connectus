@@ -17,6 +17,6 @@ public interface SpotServiceClient {
 	@GetMapping("/spot-service/{locationId}/coordinate")
 	CoordinateRequestDto getPostSpot(@PathVariable("postId") Long postId);
 
-	@PostMapping("/spot-service/insert")
+	@PostMapping("/spot/insert")
 	void insertPostSpot(@RequestBody List<PostSpotCommand> postSpotCommand);
 }
