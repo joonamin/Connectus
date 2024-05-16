@@ -29,7 +29,7 @@ pipeline {
                 dir('./backend/connectus') {
                     sh 'chmod +x gradlew'
                     sh './gradlew clean'
-                    sh './gradlew build' 
+                    sh './gradlew bootjar' 
                 }
             }
             post {
@@ -216,7 +216,7 @@ pipeline {
                               execCommand:
                                 // TODO : docker-compose 로 변경 필요
                                 // execCommand: 'docker compose up -d'
-                                '
+                                "
                                 docker rm -f $(docker ps -qa);
                                 docker rmi $(docker images -q);
 
@@ -229,7 +229,7 @@ pipeline {
                                 sudo docker build ./walk -t jinjoo0402/connectus_walk:latest;
                                 sudo docker build ./user -t jinjoo0402/connectus_user:latest;
                                 sudo docker build ./likes -t jinjoo0402/connectus_likes:latest;
-                                '
+                                "
                                 ),
                         ]
                     )
