@@ -11,7 +11,7 @@ pipeline {
   stages {
     stage('Checkout Application Git Branch') {
         steps {
-            git credentialsId: 'GITLAB_USUR_TOKEN',
+            git credentialsId: 'GITLAB_USER_TOKEN',
                 url: 'https://lab.ssafy.com/jinjoo021/connect-cicd-test.git',
                 branch: 'feat/jenkins'
         }
