@@ -3,6 +3,7 @@ package social.connectus.infrastructure.adapter;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import social.connectus.common.type.Type;
@@ -14,17 +15,20 @@ import social.connectus.infrastructure.databases.LikeRepository;
 @RequiredArgsConstructor
 public class LikeAdapter implements LikePort {
 	private final LikeRepository likeRepository;
+
+	@Transactional
 	@Override
 	public String insertLike(Long domainId, Long userId, Type type) {
 		Optional<Likes> isPresentLikes = likeRepository.findByDomainIdAndType(domainId, type);
 		if(isPresentLikes.isPresent()) {
 			Likes likes = isPresentLikes.get();
 			likeRepository.delete(likes);
+			return "delete likes";
 		}
 		else {
 			likeRepository.save(Likes.of(userId, domainId, type));
+			return "save likes";
 		}
-		return "save complete";
 	}
 
 	@Override
