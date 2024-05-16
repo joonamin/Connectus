@@ -1,11 +1,14 @@
 package social.connectus.location.infrastructure.milvus;
 
 import com.alibaba.fastjson.JSONObject;
+import io.milvus.client.MilvusClient;
+import io.milvus.client.MilvusServiceClient;
 import io.milvus.grpc.MutationResult;
 import io.milvus.v2.client.MilvusClientV2;
 import io.milvus.v2.service.vector.request.InsertReq;
 import io.milvus.v2.service.vector.request.QueryReq;
 import io.milvus.v2.service.vector.request.SearchReq;
+import io.milvus.v2.service.vector.request.UpsertReq;
 import io.milvus.v2.service.vector.response.InsertResp;
 import io.milvus.v2.service.vector.response.QueryResp;
 import io.milvus.v2.service.vector.response.SearchResp;
@@ -67,6 +70,7 @@ public class MilvusAdapter implements MilvusPort {
     public List<Long> insertAll(CreateSpotCommand command){
         // client 값 호출
         MilvusClientV2 client = milvusConfig.createMilvusClient();
+        MilvusServiceClient
 
         // 데이터 생성
         List<JSONObject> insertData = new ArrayList<>();
@@ -98,6 +102,10 @@ public class MilvusAdapter implements MilvusPort {
 
         List<Long> result = new ArrayList<>();
         result.add(insertResp.getInsertCnt());
+
+
+        MutationResult result1 = client.upsert(UpsertReq);
+
         return result;
     }
 
@@ -173,6 +181,7 @@ public class MilvusAdapter implements MilvusPort {
             Long domainId = (Long) queryResult.getEntity().get("domain_id");
             String createdAt = (String) queryResult.getEntity().get("created_at");
             String updatedAt = (String) queryResult.getEntity().get("updated_at");
+
 
             SpotDto spotDto = SpotDto.builder()
                     .spotId(spotId)
