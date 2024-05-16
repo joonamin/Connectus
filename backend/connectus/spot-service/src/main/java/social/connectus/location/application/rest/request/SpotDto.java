@@ -9,8 +9,9 @@ import social.connectus.location.common.type.PingType;
 @AllArgsConstructor
 @Builder
 public class SpotDto {
-    private Double longitude;
-    private Double latitude;
+    private Long spotId;
+    private Float longitude;
+    private Float latitude;
     private PingType type;
     private Long domainId;
 }

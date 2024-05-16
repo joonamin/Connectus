@@ -15,7 +15,10 @@ import org.apache.commons.collections.iterators.SingletonListIterator;
 import org.springframework.stereotype.Component;
 import social.connectus.location.application.rest.request.SpotDto;
 import social.connectus.location.common.config.MilvusConfig;
+import social.connectus.location.common.type.PingType;
 import social.connectus.location.domain.command.CreateSpotCommand;
+import social.connectus.location.domain.command.GetSpotCommand;
+import social.connectus.location.domain.model.Spot;
 import social.connectus.location.domain.ports.outbound.MilvusPort;
 
 import java.time.LocalDateTime;
@@ -135,5 +138,52 @@ public class MilvusAdapter implements MilvusPort {
                 .build();
 
         return client.query(queryReq);
+    }
+
+    @Override
+    public List<SpotDto> getSpotList(GetSpotCommand command) {
+
+        MilvusClientV2 client = milvusConfig.createMilvusClient();
+        // 조회 요청
+        String filter = "spot_id != " + -1;
+
+//        SearchReq request = SearchReq.builder()
+//                .collectionName("spot")
+//                .topK(16384)
+//                .build();
+//        SearchResp resp = client.search(request);
+//        System.out.println(resp.getSearchResults());
+
+        // 조회 요청 생성
+        QueryReq queryReq = QueryReq.builder()
+                .collectionName(milvusConfig.getCollectionName())
+                .filter(filter)
+                .outputFields(Arrays.asList("spot_id", "spot", "latitude", "longitude", "type", "domain_id", "created_at", "updated_at"))
+                .limit(20)
+                .build();
+        QueryResp result = client.query(queryReq);
+        List<QueryResp.QueryResult> queryResultList = result.getQueryResults();
+        List<SpotDto> response = new ArrayList<>();
+        for(QueryResp.QueryResult queryResult : queryResultList){
+            Long spotId = (Long) queryResult.getEntity().get("spot_id");
+//            List<Float> spot = (List<Float>) queryResult.getEntity().get("spot");
+            Float latitude = (Float) queryResult.getEntity().get("latitude");
+            Float longitude = (Float) queryResult.getEntity().get("longitude");
+            String type = (String) queryResult.getEntity().get("type");
+            Long domainId = (Long) queryResult.getEntity().get("domain_id");
+            String createdAt = (String) queryResult.getEntity().get("created_at");
+            String updatedAt = (String) queryResult.getEntity().get("updated_at");
+
+            SpotDto spotDto = SpotDto.builder()
+                    .spotId(spotId)
+                    .domainId(domainId)
+                    .latitude(latitude)
+                    .longitude(longitude)
+                    .type(PingType.valueOf(type))
+                    .build();
+            response.add(spotDto);
+        }
+
+        return response;
     }
 }
