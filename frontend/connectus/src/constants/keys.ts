@@ -9,6 +9,7 @@ const queryKeys = {
   POST_FEED_COMMENT: 'postFeedComment',
   GET_ROUTE_LIST: 'getRouteList',
   GET_ROUTE_DETAIL: 'getRouteDetail',
+  GET_WALKS_BY_USER: 'getWalksByUser',
 } as const;
 
 export {queryKeys};

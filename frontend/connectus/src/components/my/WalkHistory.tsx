@@ -4,8 +4,15 @@ import {
   WalkHistoryYearContext,
 } from '@/contexts/WalkHistoryContext';
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, ViewProps} from 'react-native';
 import MonthlyWalkHistory from '@/components/my/MonthlyWalkHistory';
+import {useQuery} from '@tanstack/react-query';
+import {queryKeys} from '@/constants';
+import useAuthStore from '@/store/useAuthStore';
+import {getUserRoute} from '@/api/walk';
+import {groupBy} from '@/utils/arrays';
+import MainContainer from '../containers/MainContainer';
+import LightText from '../text/LightText';
 
 /**
  * {@link WalkHistory}를 생성할 시 전달하는 인자를 지정합니다
@@ -22,6 +29,17 @@ export interface WalkHistoryProps {
    */
   onWalkSelected?: (walkId: number) => void;
 }
+
+/**
+ * Query 사용 중 표시되는 페이지 영역을 지정합니다
+ *
+ * @returns Status
+ */
+const Status = ({children, ...props}: ViewProps) => (
+  <MainContainer style={styles.statusPage} {...props}>
+    {children}
+  </MainContainer>
+);
 
 /**
  * 외출 기록을 표시합니다
@@ -84,6 +102,45 @@ export default function WalkHistory({
     showSummary = true;
   }
 
+  // 데이터 얻어오기
+  const {user} = useAuthStore();
+  const {isPending, isError, data} = useQuery({
+    queryKey: [queryKeys.GET_WALKS_BY_USER],
+    queryFn: () => getUserRoute(user?.userId as number),
+  });
+
+  // 산책 기록 query 관련 상황 대비
+  if (isPending) {
+    return (
+      <Status>
+        <LightText>산책 기록을 불러오는 중입니다</LightText>
+      </Status>
+    );
+  } else if (isError) {
+    return (
+      <Status>
+        <LightText>산책 기록을 불러오는 데 실패했습니다</LightText>
+      </Status>
+    );
+  }
+
+  // 산책 기록 존재 여부 확인
+  if (data.walks.length === 0) {
+    return (
+      <Status>
+        <LightText>산책 기록이 없습니다</LightText>
+      </Status>
+    );
+  }
+
+  // 데이터 정리하기
+  const groups = groupBy(
+    typeof data?.walks !== 'undefined' ? data.walks : [],
+    walk =>
+      `${walk.updatedAt.getFullYear()}-` +
+      `${walk.updatedAt.getMonth() + 1}`.padStart(2, '0'),
+  );
+
   return (
     <View style={styles.page}>
       <OnWalkSelectedContext.Provider
@@ -111,5 +168,8 @@ const styles = StyleSheet.create({
   page: {
     paddingTop: 15,
     gap: 30,
+  },
+  statusPage: {
+    alignItems: 'center',
   },
 });
