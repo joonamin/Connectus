@@ -91,9 +91,4 @@ public class UserAdapter implements UserPort {
 	public String getUserNickname(Long userId) {
 		return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")).getNickname();
 	}
-
-	@Override
-	public String getUserNickname(Long userId) {
-		return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")).getNickname();
-	}
 }
