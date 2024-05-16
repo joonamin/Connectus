@@ -209,7 +209,7 @@ pipeline {
                 continueOnError: false, failOnError: true,
                 publishers: [
                     sshPublisherDesc(
-                        configName: 'DEPLOY_SERVER',
+                        configName: 'DEPLOY_TEST_SERVER',
                         verbose: true,
                         transfers: [
                             sshTransfer(
