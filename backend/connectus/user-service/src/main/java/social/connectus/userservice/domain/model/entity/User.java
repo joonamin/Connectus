@@ -41,7 +41,7 @@ public class User {
 
 	private LocalDate birthday;
 
-	private Integer point;
+	private int point;
 
 	@ElementCollection
 	private List<Long> postHistory; // 읽었던 방명록 리스트
@@ -54,8 +54,8 @@ public class User {
 	@ElementCollection
 	private List<Achievement> accomplishedAchievements; // 성취한 업적 리스트 아이디
 
-	private Integer walkCount;
-	private Integer postCount;
+	private int walkCount;
+	private int postCount;
 
 	@Getter
 	@AllArgsConstructor
