@@ -14,6 +14,7 @@ import social.connectus.location.application.rest.request.CreateSpotRequest;
 import social.connectus.location.application.rest.request.FindNearbyElementRequest;
 import social.connectus.location.application.rest.request.GetSpotRequest;
 import social.connectus.location.application.rest.request.SpotDto;
+import social.connectus.location.application.rest.response.CreateSpotResponse;
 import social.connectus.location.application.rest.response.FindNearbyElementResponse;
 import social.connectus.location.application.rest.response.GetSpotResponse;
 import social.connectus.location.common.config.MilvusConfig;
@@ -47,9 +48,10 @@ public class SpotController {
     }
 
     @PostMapping("/insert")
-    public List<Long> createSpot(@RequestBody CreateSpotRequest request){
+    public ResponseEntity<CreateSpotResponse> createSpot(@RequestBody CreateSpotRequest request){
         CreateSpotCommand command = CreateSpotCommand.from(request);
-        return spotUseCase.createSpot(command);
+        List<Long> list = spotUseCase.createSpot(command);
+        return ResponseEntity.ok(CreateSpotResponse.builder().spotIdList(list).build());
     }
 
     @PostMapping("/get")
