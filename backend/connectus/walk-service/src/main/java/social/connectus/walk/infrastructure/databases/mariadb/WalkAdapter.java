@@ -92,8 +92,6 @@ public class WalkAdapter implements WalkPort {
     public Walk createWalk(Walk walk) {
         if(walk.getRoute() != null)
             createRoute(walk.getRoute(), walk);
-        if(walk.getCompletedAchievement() != null)
-            createAchievement(walk.getCompletedAchievement(), walk);
         walkRepository.save(walk);
         return walk;
     }
@@ -107,11 +105,6 @@ public class WalkAdapter implements WalkPort {
     @Override
     public void createRoute(List<Route> routes, Walk walk){
         routes.forEach(route -> route.setWalk(walk));
-    }
-
-    @Override
-    public void createAchievement(List<CompletedAchievement> completedAchievements, Walk walk){
-        completedAchievements.forEach(achievement -> achievement.setWalk(walk));
     }
 
     @Override
