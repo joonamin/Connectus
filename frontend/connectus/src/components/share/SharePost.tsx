@@ -57,10 +57,10 @@ export default function SharePost({
    */
   const like = useMutation({
     mutationFn: () => routeLike(walkId, user?.userId as number),
-    onSuccess: () => {
-      console.log('요청 성공');
-      queryClient.invalidateQueries({queryKey: [queryKeys.GET_ROUTE_LIST]});
-    },
+    // onSuccess: () => {
+    //   console.log('요청 성공');
+    //   queryClient.invalidateQueries({queryKey: [queryKeys.GET_ROUTE_LIST]});
+    // },
     onError: () => {
       console.log('에러');
     },
