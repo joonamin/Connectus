@@ -4,7 +4,6 @@ import {axiosInstance} from './axios';
 import {postType} from '@/types';
 import {Image, Platform} from 'react-native';
 import axios from 'axios';
-import RNFetchBlob from 'rn-fetch-blob';
 
 /**
  * 산책 공유 페이지에서 경로를 좋아요를 할 때 호출할 api입니다.
