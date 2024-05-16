@@ -10,7 +10,7 @@ public interface DetailPostPort {
 	DetailPostResponse detailPost(Long postId) throws BusinessException;
 	void updateOpenedPost(Long userId, Long postId);
 	OpenedPostResponse openedPostByUserId(Long userId);
-	CoordinateRequestDto postPositionByPostId(Long postId);
+	CoordinateRequestDto postSpotByPostId(Long postId);
 
 	String healthCheck();
 }

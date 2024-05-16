@@ -13,7 +13,6 @@ public class GetWalksByPositionRequest {
     private double latitude;
     private double longitude;
     private double kmRadius;
-    private long userId;
     private int pageNumber;
     private int pageSize;
 }

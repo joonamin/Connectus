@@ -8,6 +8,6 @@ import social.connectus.application.rest.request.CreatePostRequest;
 import social.connectus.domain.service.command.InsertPostCommand;
 
 public interface CreatePostPort {
-	List<Long> createPost(Long walkId, List<InsertPostCommand> postCommandList);
+	List<Long> createPost(CreateFeedRequestDto createFeedRequestDto);
 
 }

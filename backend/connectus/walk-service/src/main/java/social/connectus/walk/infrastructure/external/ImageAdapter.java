@@ -15,13 +15,12 @@ import java.io.IOException;
 public class ImageAdapter implements ImagePort {
     private final AmazonS3 amazonS3;
 
-    @Value("{spring.cloud.aws.s3.bucket}")
+    @Value("${spring.cloud.aws.s3.bucket}")
     private String bucket;
 
     @Override
     public String uploadImage(MultipartFile image) throws IOException {
         String originalFileName = image.getOriginalFilename();
-
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(image.getSize());
         metadata.setContentType(image.getContentType());
