@@ -1,6 +1,7 @@
 package social.connectus.location.infrastructure.milvus;
 
 import com.alibaba.fastjson.JSONObject;
+import io.milvus.grpc.MutationResult;
 import io.milvus.v2.client.MilvusClientV2;
 import io.milvus.v2.service.vector.request.InsertReq;
 import io.milvus.v2.service.vector.request.QueryReq;
@@ -8,6 +9,7 @@ import io.milvus.v2.service.vector.request.SearchReq;
 import io.milvus.v2.service.vector.response.InsertResp;
 import io.milvus.v2.service.vector.response.QueryResp;
 import io.milvus.v2.service.vector.response.SearchResp;
+import io.milvus.v2.service.vector.response.UpsertResp;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections.iterators.SingletonListIterator;
 import org.springframework.stereotype.Component;
@@ -68,18 +70,18 @@ public class MilvusAdapter implements MilvusPort {
         for(SpotDto spotDto: command.getSpotList()){
             JSONObject spot = new JSONObject();
 
-            //
+            // 2차원 float을 요구하는 spot
             List<List<Double>> latlng2d = new ArrayList<>();
-            List<Double> latlng = new ArrayList<>();
-            latlng.add(spotDto.getLatitude());
-            latlng.add(spotDto.getLongitude());
-            latlng2d.add(latlng);
+            List<Float> latlng = new ArrayList<>();
+            latlng.add(spotDto.getLatitude().floatValue());
+            latlng.add(spotDto.getLongitude().floatValue());
+//            latlng2d.add(latlng);
 
-            spot.put("spot", latlng2d);
-            spot.put("type", spotDto.getType());
+            spot.put("spot", latlng);
+            spot.put("type", spotDto.getType().toString());
             spot.put("domain_id", spotDto.getDomainId());
-            spot.put("latitude", spotDto.getLatitude());
-            spot.put("longitude", spotDto.getLongitude());
+            spot.put("latitude", spotDto.getLatitude().floatValue());
+            spot.put("longitude", spotDto.getLongitude().floatValue());
             spot.put("created_at", LocalDateTime.now().toString());
             spot.put("updated_at", LocalDateTime.now().toString());
             insertData.add(spot);
