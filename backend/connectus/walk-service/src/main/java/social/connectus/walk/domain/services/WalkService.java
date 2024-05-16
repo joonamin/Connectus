@@ -8,6 +8,7 @@ import social.connectus.walk.application.rest.response.AchievementResponse;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.common.customannotations.UseCase;
 import social.connectus.walk.common.exception.AlreadyExistsDataException;
+import social.connectus.walk.common.utils.SliceResponse;
 import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.VO.PostVO;
 import social.connectus.walk.domain.model.entity.Post;
@@ -125,7 +126,7 @@ public class WalkService implements WalkUseCase {
     }
 
     @Override
-    public Slice<Long> getWalkIdsByPosition(GetWalksByPositionCommand command) {
+    public SliceResponse<Long> getWalkIdsByPosition(GetWalksByPositionCommand command) {
         return walkPort.getWalkIdsByPosition(command);
     }
 

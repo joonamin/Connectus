@@ -3,6 +3,7 @@ package social.connectus.walk.domain.ports.inbound;
 import org.springframework.data.domain.Slice;
 import social.connectus.walk.application.rest.response.AchievementResponse;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
+import social.connectus.walk.common.utils.SliceResponse;
 import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.entity.Walk;
 
@@ -24,7 +25,7 @@ public interface WalkUseCase {
 
     void routeProtect(RouteProtectCommand command);
 
-    Slice<Long> getWalkIdsByPosition(GetWalksByPositionCommand command);
+    SliceResponse<Long> getWalkIdsByPosition(GetWalksByPositionCommand command);
 
     double getDistance(double latStart, double lonStart, double latEnd, double lonEnd);
 
