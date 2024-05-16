@@ -30,6 +30,7 @@ import com.social.eventservice.application.rest.response.PingsDetailsResponse;
 import com.social.eventservice.common.type.Position;
 import com.social.eventservice.domain.port.inbound.EventUseCase;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,7 +42,7 @@ public class EventController {
 
 	private final EventUseCase eventUseCase;
 
-	@PostMapping(value = ""/*, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}*/)
+	@PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	public ResponseEntity<Void> makeEvent(@ModelAttribute MakeEventRequest request) throws IOException {
 		eventUseCase.makeEvent(request);
 		return ResponseEntity.accepted().build();
@@ -57,14 +58,12 @@ public class EventController {
 		return ResponseEntity.ok(eventUseCase.spreadPings(request.getUserId(), request.getEventId()));
 	}
 
-	// TODO: data bind
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(List.class, "positions", new PropertyEditorSupport() {
 			@Override
 			public void setAsText(String text) throws IllegalArgumentException {
 				ObjectMapper objectMapper = new ObjectMapper();
-				log.info("@@@@@@ text: {} ", text);
 				try {
 
 					List<Position> positions = objectMapper.readValue(text, new TypeReference<List<Position>>() {
