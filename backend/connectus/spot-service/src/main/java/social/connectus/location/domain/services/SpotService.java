@@ -1,6 +1,8 @@
 package social.connectus.location.domain.services;
 
-import io.milvus.v2.service.vector.response.QueryResp;
+import io.milvus.grpc.QueryResults;
+import io.milvus.param.R;
+import io.milvus.response.QueryResultsWrapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,14 +32,15 @@ public class SpotService implements SpotUseCase {
 
     @Override
     public FindNearbyElementResponse findNearbyElement(FindNearbyElementCommand command) {
-        QueryResp resp = milvusPort.select(command.getLongitude(), command.getLatitude());
-        System.out.println(resp);
+        R<QueryResults> resp = milvusPort.select(command.getLongitude(), command.getLatitude());
+//        System.out.println(resp);
 
-        List<QueryResp.QueryResult> results = resp.getQueryResults();
+        QueryResultsWrapper wrapper = new QueryResultsWrapper(resp.getData());
+        List<QueryResultsWrapper.RowRecord> results = wrapper.getRowRecords();
 
         ArrayList<Ping> nearby = new ArrayList<>();
-        for (QueryResp.QueryResult queryResult : results) {
-            Map<String, Object> row = queryResult.getEntity();
+        for (QueryResultsWrapper.RowRecord queryResult : results) {
+            Map<String, Object> row = queryResult.getFieldValues();
 
             List<Float> coordinate = (List<Float>) row.get("spot");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
