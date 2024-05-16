@@ -1,6 +1,7 @@
 // axios 요청으로 받아올 데이터에 대한 타입을 정의한 파일입니다.
 
 import {Image} from 'react-native-image-crop-picker';
+import {LatLng} from 'react-native-maps';
 
 interface comment {
   commentId: number;
@@ -45,4 +46,21 @@ interface spotListType {
   distance: null | number;
 }
 
-export type {postDetail, comment, postType, spotType, spotListType};
+interface Walk {
+  walkId: number;
+  userId: number;
+  title: string;
+  route: LatLng[];
+  walkTime: number;
+  walkDistance: number;
+  likeUsers: number[];
+  postList: number[];
+  completedAchievement: string[];
+  participateEvent: number;
+  trackingUsers: number[];
+  imageUrl: string;
+  updatedAt: Date;
+  public: boolean;
+}
+
+export type {postDetail, comment, postType, spotType, spotListType, Walk};
