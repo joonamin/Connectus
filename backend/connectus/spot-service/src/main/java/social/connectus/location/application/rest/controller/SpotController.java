@@ -1,10 +1,7 @@
 package social.connectus.location.application.rest.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import social.connectus.location.application.rest.request.FindNearbyElementRequest;
 import social.connectus.location.application.rest.response.FindNearbyElementResponse;
 import social.connectus.location.domain.command.FindNearbyElementCommand;
@@ -24,7 +21,7 @@ public class SpotController {
 
 
     @PostMapping("/findNearby")
-    public FindNearbyElementResponse findNearbyElement(FindNearbyElementRequest request) {
+    public FindNearbyElementResponse findNearbyElement(@RequestBody FindNearbyElementRequest request) {
         FindNearbyElementCommand command = new FindNearbyElementCommand(request.getLongitude(), request.getLongitude());
         return spotUseCase.findNearbyElement(command);
     }
