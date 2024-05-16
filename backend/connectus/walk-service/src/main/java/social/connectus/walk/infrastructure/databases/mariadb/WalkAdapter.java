@@ -9,6 +9,7 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
 import social.connectus.walk.common.constants.WalkConstants;
 import social.connectus.walk.common.exception.ResourceNotFoundException;
+import social.connectus.walk.common.utils.SliceResponse;
 import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.VO.Position;
 import social.connectus.walk.domain.model.entity.*;
@@ -57,7 +58,7 @@ public class WalkAdapter implements WalkPort {
     }
 
     @Override
-    public Slice<Long> getWalkIdsByPosition(GetWalksByPositionCommand command) {
+    public SliceResponse<Long> getWalkIdsByPosition(GetWalksByPositionCommand command) {
         Position userPosition = Position.builder()
                 .latitude(command.getLatitude())
                 .longitude(command.getLongitude())
@@ -65,7 +66,7 @@ public class WalkAdapter implements WalkPort {
         double kmRadius = command.getKmRadius();
         PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize());
         Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
-        return new SliceImpl<>(routeList.getContent().stream().map(route -> route.getWalk().getId()).toList(), pageRequest, routeList.hasNext());
+        return new SliceResponse<>(routeList.getContent().stream().map(Route::getId).toList(),routeList.hasNext(),routeList.getNumber());
     }
 
     @Override

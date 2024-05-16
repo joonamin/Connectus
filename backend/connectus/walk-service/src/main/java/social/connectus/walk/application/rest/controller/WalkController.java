@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import social.connectus.walk.application.rest.request.*;
 import social.connectus.walk.application.rest.response.*;
+import social.connectus.walk.common.utils.SliceResponse;
 import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.entity.Route;
 import social.connectus.walk.domain.model.entity.Walk;
@@ -89,9 +90,9 @@ public class WalkController {
     }
 
     @Operation(summary = "위치 기준 주변 산책 기록 id 조회")
-    @GetMapping("/position")
-    public ResponseEntity<Slice<Long>> getWalkIdsByPosition(@RequestBody GetWalksByPositionRequest request){
-        Slice<Long> walkIdSlice = walkUseCase.getWalkIdsByPosition(GetWalksByPositionCommand.from(request));
+    @PostMapping("/position")
+    public ResponseEntity<SliceResponse<Long>> getWalkIdsByPosition(@RequestBody GetWalksByPositionRequest request){
+        SliceResponse<Long> walkIdSlice = walkUseCase.getWalkIdsByPosition(GetWalksByPositionCommand.from(request));
         return ResponseEntity.ok(walkIdSlice);
     }
 
