@@ -5,12 +5,14 @@ import {postType} from '@/types';
 import {Image, Platform} from 'react-native';
 import axios from 'axios';
 import Geolocation from '@react-native-community/geolocation';
+import {dateToString, getCurrentTimeAsStringWithMS} from '@/utils';
 
 /**
  * 산책 공유 페이지에서 경로를 좋아요를 할 때 호출할 api입니다.
  */
 const routeLike = async (walkId: number, userId: number) => {
-  const body = {userId, domainId: walkId, type: 'ROUTE'};
+  const body = {userId: userId, domainId: walkId, type: 'ROUTE'};
+  console.log('route like', body);
   try {
     const {data} = await axiosInstance.post('/likes/insert', body);
     return data;
@@ -35,14 +37,16 @@ type createRoutetype = {
 
 /**
  * 산책을 작성할때 (마지막에 산책 완료를 하면서 저장버튼 터치 시)호출할 api입니다
+ * @todo 파일 이름 추가 필요
  */
 const createRoute = async (body: createRoutetype) => {
   console.log('creat body : ', body);
+  const now = getCurrentTimeAsStringWithMS();
   const formData = new FormData();
   formData.append('image', {
     uri: body.image,
     type: 'image/jpeg',
-    name: 'test.jpg',
+    name: `Route${now}.jpg`,
   });
   formData.append('title', body.title);
   formData.append('userId', body.userId);
@@ -50,15 +54,21 @@ const createRoute = async (body: createRoutetype) => {
   formData.append('walkDistance', body.walkDistance);
 
   body.postList.forEach((post, index) => {
+    console.log(post);
     if (Platform.OS === 'android') {
       post.image.path.replace('file://', '');
     }
     formData.append(`postList[${index}].content`, post.content);
     formData.append(`postList[${index}].authorId`, post.authorId);
+    formData.append(`postList[${index}].latitude`, post.postLocation.latitude);
+    formData.append(
+      `postList[${index}].longitude`,
+      post.postLocation.longitude,
+    );
     formData.append(`postList[${index}].image`, {
       uri: post.image.path,
       type: 'image/jpeg',
-      name: 'test.jpg',
+      name: `feed${now}${index}.jpg`,
     });
   });
 
@@ -67,8 +77,9 @@ const createRoute = async (body: createRoutetype) => {
     formData.append(`route[${index}].longitude`, position.longitude);
   });
 
-  formData.append('completeAchivement[0].achievementId', 1);
-  formData.append('completeAchivement[0].isSuccess', true);
+  // formData.append('completeAchivement[0].achievementId', 1);
+  // formData.append('completeAchivement[0].isSuccess', true);
+  formData.append('isPublic', true);
 
   try {
     console.log('요청은 가니?');
@@ -171,15 +182,15 @@ const getNearWalkRecord = async (
     pageNumber: pageNumber,
     pageSize: 3,
   };
-  console.log(body);
-  console.log(userPos);
+  console.log('body', body);
+  console.log('userPos', userPos);
 
   try {
     const {data} = await axiosInstance.post('/walk/detail-position', body);
     console.log(data);
     return data;
   } catch (error) {
-    console.log(error);
+    console.log('flat List', error);
   }
 };
 

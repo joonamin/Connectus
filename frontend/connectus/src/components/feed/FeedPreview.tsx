@@ -6,7 +6,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -16,12 +16,14 @@ import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
 import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
 import MainText from '../text/MainText';
 import colors from '@/constants/colors';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {getPostDetail, postFeedLike} from '@/api/post';
+import useAuthStore from '@/store/useAuthStore';
+import {queryKeys} from '@/constants';
+import queryClient from '@/api/queryClient';
 
 type feedPreviewProps = {
-  isLiked: boolean;
-  isVisible?: boolean;
-  commentNumber: number;
-  likeNumber: number;
+  feedId: number;
   show?: () => void;
 };
 
@@ -30,25 +32,49 @@ type Navigation = CompositeNavigationProp<
   BottomTabNavigationProp<BottomTabParamList>
 >;
 
-export default function FeedPreview({
-  isLiked,
-  isVisible = false,
-  commentNumber,
-  likeNumber,
-  show,
-}: feedPreviewProps) {
-  const [viewIsLiked, setViewIsLiked] = useState(isLiked);
+export default function FeedPreview({feedId, show}: feedPreviewProps) {
+  // const [viewIsLiked, setViewIsLiked] = useState(isLiked);
   const navigation = useNavigation<Navigation>();
-  const handlePressLikeButton = () => {
-    setViewIsLiked(!viewIsLiked);
+  const {user} = useAuthStore();
+
+  const {data, isLoading} = useQuery({
+    queryFn: () => getPostDetail(feedId, user?.userId as number, 1000),
+    queryKey: [queryKeys.GET_FEED_DETAIL, feedId],
+  });
+
+  const postLikeBody: Parameters<typeof postFeedLike>[0] = {
+    userId: user?.userId as number,
+    domainId: feedId,
+    type: 'POST',
   };
+
+  const postLike = useMutation({
+    mutationFn: () => postFeedLike(postLikeBody),
+    onSuccess: () => {
+      console.log('요청 성공');
+      queryClient.invalidateQueries({queryKey: [queryKeys.GET_FEED_DETAIL]});
+    },
+    onError: () => {
+      console.log('에러');
+    },
+  });
 
   /**
    * @todo 라우터 params 설정하기
    */
   const handlePressPressFeedDetail = () => {
-    navigation.navigate('FeedDetail', {feedId: 9, distance: 5});
+    navigation.navigate('FeedDetail', {feedId: feedId});
   };
+
+  const handleLike = () => {
+    postLike.mutate();
+  };
+
+  if (isLoading) {
+    return <Text>로딩중입니다</Text>;
+  }
+
+  console.log('데ㅐ데데데데데이터', feedId, data);
 
   return (
     <>
@@ -61,8 +87,8 @@ export default function FeedPreview({
             />
           </View>
           <View style={styles.feedInfoContainer}>
-            <MainText>{'userName'}</MainText>
-            <Text style={styles.postDate}>{'2024-04-29'}</Text>
+            <MainText>{data.authorName}</MainText>
+            <Text style={styles.postDate}>{data.updatedAt}</Text>
           </View>
           <Pressable style={styles.moveButton}>
             <Text style={styles.moveButtonText} onPress={show}>
@@ -74,24 +100,28 @@ export default function FeedPreview({
           <Image
             style={styles.feedImage}
             source={{
-              uri: 'https://e106-connectus.s3.ap-northeast-2.amazonaws.com/test.jpg',
+              uri: data.imageUrl,
             }}
           />
         </View>
         <View style={styles.feedIndicator}>
-          {viewIsLiked ? (
-            <Pressable onPress={handlePressLikeButton}>
+          {data.like ? (
+            <Pressable onPress={handleLike}>
               <Ionicons name="heart" size={32} color={'red'} />
             </Pressable>
           ) : (
-            <Pressable onPress={handlePressLikeButton}>
+            <Pressable onPress={handleLike}>
               <Ionicons name="heart-outline" size={32} color={'white'} />
             </Pressable>
           )}
-          <Text style={styles.feedIndicatorText}>좋아요 {likeNumber}개</Text>
-          <Text style={styles.feedIndicatorText}>댓글 {commentNumber}개</Text>
+          <Text style={styles.feedIndicatorText}>
+            좋아요 {data.likeCount}개
+          </Text>
+          <Text style={styles.feedIndicatorText}>
+            댓글 {data.commentCount}개
+          </Text>
         </View>
-        {isVisible ? (
+        {data.inRange ? (
           <Pressable
             style={styles.lockButton}
             onPress={handlePressPressFeedDetail}>
