@@ -38,7 +38,11 @@ export default function FeedHomeScreen() {
   const {data, hasNextPage, isFetchingNextPage, fetchNextPage, refetch} =
     useInfiniteQuery({
       queryFn: ({pageParam}) =>
-        getFeedList(currentPos?.latitude, currentPos?.longitude, pageParam),
+        getFeedList(
+          currentPos?.latitude as number,
+          currentPos?.longitude as number,
+          pageParam,
+        ),
       queryKey: [queryKeys.GET_FEED_LIST],
       initialPageParam: 0,
       getNextPageParam: (lastPage, allPages) => {
