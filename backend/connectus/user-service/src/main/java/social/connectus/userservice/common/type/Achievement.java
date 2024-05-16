@@ -20,6 +20,7 @@ public enum Achievement {
 	POST_2(RefreshAchievementToUserCommand.Field.POST_COUNT, 10, "열정적인 필자", "방명록 10개를 작성하세요.", "", 10),
 	POST_3(RefreshAchievementToUserCommand.Field.POST_COUNT, 30, "경험있는 이야기꾼", "방명록 30개를 작성하세요.", "", 30);
 
+	// EVENT_1();
 	private final RefreshAchievementToUserCommand.Field field;
 	private final float goal;
 	private final String title;

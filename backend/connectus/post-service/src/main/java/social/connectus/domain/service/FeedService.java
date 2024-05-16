@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 
 import lombok.RequiredArgsConstructor;
 import social.connectus.application.rest.request.CoordinateRequestDto;
+import social.connectus.application.rest.request.GetWalksByPositionRequest;
 import social.connectus.application.rest.response.FeedResponse;
 import social.connectus.common.annotation.UseCase;
 import social.connectus.common.exception.GlobalException;
@@ -27,14 +28,15 @@ public class FeedService implements FeedUseCase {
 	private final FeedPort feedPort;
 	private final WalkServiceClient walkServiceClient;
 	@Override
-	public SliceResponse<FeedResponse> feedMain(CoordinateRequestDto userPosition, int pageNum, Long userId) {
-		Slice<Long> walkIdList =
-			walkServiceClient.getFeedList(userPosition, pageNum, 5 , userId, 1.0);
+	public SliceResponse<FeedResponse> feedMain(Double longitude, Double latitude, int pageNum, Long userId) {
+		CoordinateRequestDto userPosition = new CoordinateRequestDto(longitude, latitude);
+		SliceResponse<Long> walkIdList =
+			walkServiceClient.getFeedList(GetWalksByPositionRequest.from(userPosition,pageNum,5,userId,1.0));
 
-		List<FeedResponse> feedList = feedPort.feedMain(walkIdList.getContent());
+		List<FeedResponse> feedList = feedPort.feedMain(walkIdList.getContents());
 
 		return new SliceResponse<>(
-			feedList,walkIdList.hasNext(),pageNum);
+			feedList,walkIdList.isHasNext(),pageNum);
 	}
 
 	@Override

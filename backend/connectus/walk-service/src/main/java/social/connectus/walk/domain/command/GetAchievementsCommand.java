@@ -11,14 +11,6 @@ import social.connectus.walk.application.rest.request.GetAchievementsRequest;
 @AllArgsConstructor
 @Builder
 public class GetAchievementsCommand {
-    private Long userId;
-    private String jsonOfClientData;
-
-    public static GetAchievementsCommand from(GetAchievementsRequest request){
-        return GetAchievementsCommand.builder()
-                .userId(request.getUserId())
-                .jsonOfClientData(request.getJsonOfClientData())
-                .build();
-
-    }
+    private Integer postCount;
+    private Long participateEvent;
 }

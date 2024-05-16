@@ -37,8 +37,8 @@ public class Walk extends BaseEntity{
     @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
     private Set<LikeUser> likeUsers;
 
-    @OneToMany(mappedBy = "walk", cascade = CascadeType.ALL)
-    private Set<CompletedAchievement> completedAchievement;
+    @ElementCollection
+    private List<String> achievementCode;
 
     private Long participateEvent;
 
@@ -48,5 +48,7 @@ public class Walk extends BaseEntity{
     @ColumnDefault("false")
     @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private boolean isPublic;
+
+    private String imageUrl;
 
 }

@@ -4,17 +4,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import social.connectus.walk.application.rest.request.CreatePostRequest;
 import social.connectus.walk.application.rest.request.PostRequestForWalk;
+import social.connectus.walk.application.rest.response.AchievementResponse;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
 import social.connectus.walk.common.customannotations.UseCase;
 import social.connectus.walk.common.exception.AlreadyExistsDataException;
+import social.connectus.walk.common.utils.SliceResponse;
 import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.VO.PostVO;
 import social.connectus.walk.domain.model.entity.Post;
 import social.connectus.walk.domain.model.entity.Walk;
 import social.connectus.walk.domain.ports.inbound.WalkUseCase;
 import social.connectus.walk.domain.ports.outbound.FeignPort;
+import social.connectus.walk.domain.ports.outbound.ImagePort;
 import social.connectus.walk.domain.ports.outbound.WalkPort;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +27,8 @@ import java.util.List;
 public class WalkService implements WalkUseCase {
 
     private final WalkPort walkPort;
+    private final ImagePort imagePort;
     private final FeignPort feignPort;
-
-    @Override
-    public String feignHealthCheck() {
-        return feignPort.feignHealthCheck();
-    }
 
     @Override
     public Walk getWalkById(long walkId){
@@ -41,38 +41,78 @@ public class WalkService implements WalkUseCase {
     }
 
     @Override
-    public CreateWalkResponse createWalk(CreateWalkCommand command) {
+    public CreateWalkResponse createWalk(CreateWalkCommand command) throws IOException {
         /*
         TODO: 업적 갱신 요청 보내기
          */
+        String imageUrl = null;
+        if(command.getImage() != null)
+            imageUrl = imagePort.uploadImage(command.getImage());
 
-        Walk walk = walkPort.createWalk(command);
+        Walk walk = Walk.builder()
+                .userId(command.getUserId())
+                .title(command.getTitle())
+                .route(command.getRoute())
+                .walkDistance(command.getWalkDistance())
+                .walkTime(command.getWalkTime())
+                .participateEvent(command.getParticipateEvent())
+                .isPublic(command.isPublic())
+                .imageUrl(imageUrl)
+                .build();
+
+        // 달성한 업적 갱신 및 조회
+        GetAchievementsCommand getAchievementsCommand = GetAchievementsCommand.builder()
+                .postCount(command.getPostList().size())
+                .participateEvent(command.getParticipateEvent())
+                .build();
+        List<AchievementResponse> achievementResponseList = feignPort.getAchievementsByWalk(walk.getUserId(), getAchievementsCommand);
+        if(achievementResponseList != null && !achievementResponseList.isEmpty()){
+            // 달성한 업적이 없으면 pass
+            // 달성한 업적이 있으면 walk.setAchievementCodeList(List<String>)
+            List<String> achievementCodeList = achievementResponseList.stream().map(AchievementResponse::getAchievementCode).toList();
+            walk.setAchievementCode(achievementCodeList);
+        }
+        // 이후 sql문 확인
+
+        walkPort.createWalk(walk);
         long walkId = walk.getId();
 
-        List<PostVO> postVOList = new ArrayList<>();
-        for(PostRequestForWalk postReq : command.getPostList()){
-            PostVO postVO = PostVO.builder()
-                    .content(postReq.getContent())
-                    .image(postReq.getImage())
-                    .authorId(postReq.getAuthorId())
-                    .walkId(walkId)
-                    .build();
-            postVOList.add(postVO);
-        }
-        List<Long> postIdList = feignPort.createPost(CreatePostRequest.builder()
+        if(command.getPostList() != null) {
+            List<PostVO> postVOList = new ArrayList<>();
+            for (PostRequestForWalk postReq : command.getPostList()) {
+                String postImageUrl = null;
+                if (postReq.getImage() != null)
+                    postImageUrl = imagePort.uploadImage(postReq.getImage());
+                PostVO postVO = PostVO.builder()
+                        .content(postReq.getContent())
+                        .imageUrl(postImageUrl)
+                        .authorId(postReq.getAuthorId())
                         .walkId(walkId)
-                        .postList(postVOList)
-                .build());
-        List<Post> postList = new ArrayList<>();
-        for(Long postId : postIdList){
-            Post post = new Post(postId);
-            postList.add(post);
+                        .longitude(postReq.getLongitude())
+                        .latitude(postReq.getLatitude())
+                        .build();
+                postVOList.add(postVO);
+            }
+
+            List<Long> postIdList = feignPort.createPost(CreatePostRequest.builder()
+                    .walkId(walkId)
+                    .postList(postVOList)
+                    .build());
+            List<Post> postList = new ArrayList<>();
+            for (Long postId : postIdList) {
+                Post post = new Post(postId);
+                postList.add(post);
+            }
+            walk.setPostList(postList);
+
+            walkPort.createPostList(postList, walk);
         }
-        walk.setPostList(postList);
 
-        walkPort.createPostList(postList, walk);
 
-        return CreateWalkResponse.from(walk);
+        return CreateWalkResponse.builder()
+                        .walkId(walkId)
+                        .completedAchievement(achievementResponseList)
+                        .build();
     }
 
     public void routeLike(RouteLikeCommand command){
@@ -111,8 +151,8 @@ public class WalkService implements WalkUseCase {
     }
 
     @Override
-    public Slice<Long> getWalksByPosition(GetWalksByPositionCommand command) {
-        return walkPort.getWalksByPosition(command);
+    public SliceResponse<Long> getWalkIdsByPosition(GetWalksByPositionCommand command) {
+        return walkPort.getWalkIdsByPosition(command);
     }
 
     @Override
@@ -128,7 +168,12 @@ public class WalkService implements WalkUseCase {
     }
 
     @Override
-    public List<Long> getAchievementsByWalk(GetAchievementsCommand command) {
-        return feignPort.getAchievementsByWalk(command);
+    public List<AchievementResponse> getAchievementsByWalk(Long userId, GetAchievementsCommand command) {
+        return feignPort.getAchievementsByWalk(userId, command);
+    }
+
+    @Override
+    public Slice<Walk> getWalksByPosition(GetWalksByPositionCommand command) {
+        return walkPort.getWalksByPosition(command);
     }
 }
