@@ -10,7 +10,8 @@ import social.connectus.domain.ports.inbound.CreatePostUseCase;
 import social.connectus.domain.ports.outbound.CreatePostPort;
 import lombok.RequiredArgsConstructor;
 import social.connectus.domain.ports.outbound.ImagePort;
-
+import social.connectus.domain.service.command.InsertPostCommand;
+import social.connectus.domain.service.command.PostPositionCommand;
 @UseCase
 @RequiredArgsConstructor
 public class CreatePostService implements CreatePostUseCase {

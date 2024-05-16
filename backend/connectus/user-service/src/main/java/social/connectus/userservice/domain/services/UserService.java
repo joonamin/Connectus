@@ -3,7 +3,6 @@ package social.connectus.userservice.domain.services;
 import java.util.Date;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -64,8 +63,8 @@ public class UserService implements UserUseCase {
 	}
 
 	@Override
-	public String getUserName(Long userId) {
-		return userPort.getUserName(userId);
+	public String getUserNickname(Long userId) {
+		return userPort.getUserNickname(userId);
 	}
 
 	@Override

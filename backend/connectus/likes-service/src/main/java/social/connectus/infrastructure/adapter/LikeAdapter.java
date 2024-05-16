@@ -1,5 +1,7 @@
 package social.connectus.infrastructure.adapter;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -14,7 +16,14 @@ public class LikeAdapter implements LikePort {
 	private final LikeRepository likeRepository;
 	@Override
 	public String insertLike(Long domainId, Long userId, Type type) {
-		likeRepository.save(Likes.of(userId,domainId,type));
+		Optional<Likes> isPresentLikes = likeRepository.findByDomainIdAndType(domainId, type);
+		if(isPresentLikes.isPresent()) {
+			Likes likes = isPresentLikes.get();
+			likeRepository.delete(likes);
+		}
+		else {
+			likeRepository.save(Likes.of(userId, domainId, type));
+		}
 		return "save complete";
 	}
 
