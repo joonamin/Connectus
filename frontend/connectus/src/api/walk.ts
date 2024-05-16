@@ -1,9 +1,8 @@
 // 산책에서 사용할 api들을 정리한 파일입니다
 import {LatLng} from 'react-native-maps';
 import {axiosInstance} from './axios';
-import {postType} from '@/types';
+import {Walk, postType} from '@/types';
 import {Image, Platform} from 'react-native';
-import axios from 'axios';
 import Geolocation from '@react-native-community/geolocation';
 import {getCurrentTimeAsStringWithMS} from '@/utils';
 
@@ -105,12 +104,40 @@ const getRouteDetail = async (walkId: number) => {
 };
 
 /**
+ * {@link getUserRoute}에서 반환하는 자료형입니다
+ */
+export type GetUserRouteResponse = {
+  /**
+   * 산책 목록
+   */
+  walks: Walk[];
+};
+
+/**
  * 작성자를 기준으로 산책 기록을 상세하게 조회합니다.
  * @param userId 해당 유저의 아이디를 받아옵니다.
  * @returns
  */
-const getUserRoute = async (userId: string) => {
-  const {data} = await axiosInstance.get(`walk/user/${userId}`);
+const getUserRoute: (
+  userId: number,
+) => Promise<GetUserRouteResponse> = async userId => {
+  const {data} = await axiosInstance.get(`walk/user/${userId}`, {
+    // 요청 수신 시 updatedAt을 Date 객체로 변환
+    transformResponse: (response: string) => {
+      const responseData: {
+        walks: (Omit<GetUserRouteResponse['walks'], 'updatedAt'> & {
+          updatedAt: string;
+        })[];
+      } = JSON.parse(response);
+
+      return {
+        walks: responseData.walks.map(walk => ({
+          ...walk,
+          updatedAt: new Date(walk.updatedAt),
+        })),
+      };
+    },
+  });
   return data;
 };
 
