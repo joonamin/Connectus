@@ -11,6 +11,7 @@ import com.social.eventservice.common.type.Spot;
 import com.social.eventservice.common.utils.converter.MapperUtil;
 import com.social.eventservice.common.utils.converter.command.meta.MakeEventCommandMetadata;
 import com.social.eventservice.domain.dto.MakeEventCommand;
+import com.social.eventservice.domain.model.Event;
 import com.social.eventservice.domain.port.inbound.EventUseCase;
 import com.social.eventservice.domain.port.outbound.EventPort;
 import com.social.eventservice.domain.port.outbound.ImagePort;
@@ -34,9 +35,11 @@ public class EventService implements EventUseCase {
 		String imageUrl = imagePort.uploadImage(request.getImage());
 		MakeEventCommandMetadata meta = MakeEventCommandMetadata.of(spotList, imageUrl);
 		MakeEventCommand command = mapperUtil.requestToCommand(request, meta);
-		eventPort.makeEvent(command);
-
+		Event event = eventPort.makeEvent(command);
 		// 각각의 spot에 domainId를 업데이트 해준다.
+		spotList.forEach(spot -> {
+			spotPort.initEventId(spot.getId(), event.getId());
+		});
 	}
 
 	@Override

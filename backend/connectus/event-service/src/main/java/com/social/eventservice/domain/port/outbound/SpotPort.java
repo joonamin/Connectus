@@ -15,5 +15,5 @@ public interface SpotPort {
 	List<Spot> saveAllPositions(List<Position> positions) throws SavePositionException;
 	Optional<Spot> getSpotById(Long id);
 
-	void initEventId(Long eventId);
+	void initEventId(Long spotId, Long eventId);
 }
