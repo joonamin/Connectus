@@ -217,18 +217,18 @@ pipeline {
                                 // TODO : docker-compose 로 변경 필요
                                 // execCommand: 'docker compose up -d'
                                 '
-                                docker rm -f $(docker ps -qa)
-                                docker rmi $(docker images -q)
+                                docker rm -f $(docker ps -qa);
+                                docker rmi $(docker images -q);
 
-                                sudo docker build ./apigateway -t jinjoo0402/connectus_apigateway:latest
-                                sudo docker build ./discovery -t jinjoo0402/connectus_discovery:latest
-                                sudo docker build ./post -t jinjoo0402/connectus_post:latest
-                                sudo docker build ./gather -t jinjoo0402/connectus_gather:latest
-                                sudo docker build ./spot -t jinjoo0402/connectus_spot:latest
-                                sudo docker build ./event -t jinjoo0402/connectus_event:latest
-                                sudo docker build ./walk -t jinjoo0402/connectus_walk:latest
-                                sudo docker build ./user -t jinjoo0402/connectus_user:latest
-                                sudo docker build ./likes -t jinjoo0402/connectus_likes:latest
+                                sudo docker build ./apigateway -t jinjoo0402/connectus_apigateway:latest;
+                                sudo docker build ./discovery -t jinjoo0402/connectus_discovery:latest;
+                                sudo docker build ./post -t jinjoo0402/connectus_post:latest;
+                                sudo docker build ./gather -t jinjoo0402/connectus_gather:latest;
+                                sudo docker build ./spot -t jinjoo0402/connectus_spot:latest;
+                                sudo docker build ./event -t jinjoo0402/connectus_event:latest;
+                                sudo docker build ./walk -t jinjoo0402/connectus_walk:latest;
+                                sudo docker build ./user -t jinjoo0402/connectus_user:latest;
+                                sudo docker build ./likes -t jinjoo0402/connectus_likes:latest;
                                 '
                                 ),
                         ]
