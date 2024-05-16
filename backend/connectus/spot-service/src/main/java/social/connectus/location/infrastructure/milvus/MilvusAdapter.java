@@ -4,6 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import io.milvus.client.MilvusClient;
 import io.milvus.client.MilvusServiceClient;
 import io.milvus.grpc.MutationResult;
+import io.milvus.param.R;
+import io.milvus.param.dml.InsertParam;
+import io.milvus.param.highlevel.dml.GetIdsParam;
+import io.milvus.param.highlevel.dml.response.GetResponse;
+import io.milvus.response.QueryResultsWrapper;
 import io.milvus.v2.client.MilvusClientV2;
 import io.milvus.v2.service.vector.request.InsertReq;
 import io.milvus.v2.service.vector.request.QueryReq;
@@ -36,7 +41,7 @@ public class MilvusAdapter implements MilvusPort {
     @Override
     public InsertResp insert(double longitude, double latitude, Long spotId, Long type, Long domainId) {
         // client 값 호출
-        MilvusClientV2 client = milvusConfig.createMilvusClient();
+//        MilvusClientV2 client = milvusConfig.createMilvusClient();
 
         // 데이터 생성
         Random ran = new Random();
@@ -61,7 +66,7 @@ public class MilvusAdapter implements MilvusPort {
                 .collectionName(milvusConfig.getCollectionName())
                 .data(Collections.singletonList(pingInfo))
                 .build();
-        InsertResp insertResp = client.insert(insertReq);
+//        InsertResp insertResp = client.insert(insertReq);
         // TODO: 예외처리 必
         return null;
     }
@@ -69,8 +74,7 @@ public class MilvusAdapter implements MilvusPort {
     @Override
     public List<Long> insertAll(CreateSpotCommand command){
         // client 값 호출
-        MilvusClientV2 client = milvusConfig.createMilvusClient();
-        MilvusServiceClient
+        MilvusClient client = milvusConfig.createMilvusClient();
 
         // 데이터 생성
         List<JSONObject> insertData = new ArrayList<>();
@@ -94,17 +98,17 @@ public class MilvusAdapter implements MilvusPort {
             insertData.add(spot);
         }
         // 삽입 요청
-        InsertReq insertReq = InsertReq.builder()
-                .collectionName(milvusConfig.getCollectionName())
-                .data(insertData)
+        InsertParam insertReq = InsertParam .newBuilder()
+                .withCollectionName(milvusConfig.getCollectionName())
+                .withRows(insertData)
                 .build();
-        InsertResp insertResp = client.insert(insertReq);
+        R<MutationResult> mutationResp = client.insert(insertReq);
+        MutationResult mutationResult = mutationResp.getData();
+        if (mutationResp.getStatus() != R.Status.Success.getCode()) {
+            System.out.println(mutationResp.getMessage());
+        }
 
-        List<Long> result = new ArrayList<>();
-        result.add(insertResp.getInsertCnt());
-
-
-        MutationResult result1 = client.upsert(UpsertReq);
+        List<Long> result = mutationResult.getIDs().getIntId().getDataList().stream().toList();
 
         return result;
     }
@@ -112,7 +116,8 @@ public class MilvusAdapter implements MilvusPort {
     @Override
     public QueryResp select(double longitude, double latitude) {
 
-        MilvusClientV2 client = milvusConfig.createMilvusClient();
+//        MilvusClientV2 client = milvusConfig.createMilvusClient();
+        MilvusClientV2 client = null;
         // 조회 요청
         String filter = "spot_id != " + -1;
 
@@ -151,37 +156,38 @@ public class MilvusAdapter implements MilvusPort {
     @Override
     public List<SpotDto> getSpotList(GetSpotCommand command) {
 
-        MilvusClientV2 client = milvusConfig.createMilvusClient();
+        MilvusClient  client = milvusConfig.createMilvusClient();
         // 조회 요청
         String filter = "spot_id != " + -1;
 
-//        SearchReq request = SearchReq.builder()
-//                .collectionName("spot")
-//                .topK(16384)
-//                .build();
-//        SearchResp resp = client.search(request);
-//        System.out.println(resp.getSearchResults());
-
         // 조회 요청 생성
-        QueryReq queryReq = QueryReq.builder()
-                .collectionName(milvusConfig.getCollectionName())
-                .filter(filter)
-                .outputFields(Arrays.asList("spot_id", "spot", "latitude", "longitude", "type", "domain_id", "created_at", "updated_at"))
-                .limit(20)
-                .build();
-        QueryResp result = client.query(queryReq);
-        List<QueryResp.QueryResult> queryResultList = result.getQueryResults();
-        List<SpotDto> response = new ArrayList<>();
-        for(QueryResp.QueryResult queryResult : queryResultList){
-            Long spotId = (Long) queryResult.getEntity().get("spot_id");
-//            List<Float> spot = (List<Float>) queryResult.getEntity().get("spot");
-            Float latitude = (Float) queryResult.getEntity().get("latitude");
-            Float longitude = (Float) queryResult.getEntity().get("longitude");
-            String type = (String) queryResult.getEntity().get("type");
-            Long domainId = (Long) queryResult.getEntity().get("domain_id");
-            String createdAt = (String) queryResult.getEntity().get("created_at");
-            String updatedAt = (String) queryResult.getEntity().get("updated_at");
+//        QueryReq queryReq = QueryReq.builder()
+//                .collectionName(milvusConfig.getCollectionName())
+//                .filter(filter)
+//                .outputFields(Arrays.asList("spot_id", "spot", "latitude", "longitude", "type", "domain_id", "created_at", "updated_at"))
+//                .limit(20)
+//                .build();
+//        QueryResp result = client.query(queryReq);
 
+        GetIdsParam param = GetIdsParam.newBuilder()
+                .withCollectionName(milvusConfig.getCollectionName())
+                .withPrimaryIds(command.getSpotIdList())
+                .withOutputFields(Arrays.asList("spot_id", "spot", "latitude", "longitude", "type", "domain_id", "created_at", "updated_at"))
+                .build();
+
+        R<GetResponse> result = client.get(param);
+//        List<QueryResp.QueryResult> queryResultList = null;
+//        List<QueryResp.QueryResult> queryResultList = result.getQueryResults();
+        List<SpotDto> response = new ArrayList<>();
+        for(QueryResultsWrapper.RowRecord rowRecord : result.getData().getRowRecords()){
+            Long spotId = (Long) rowRecord.get("spot_id");
+//            List<Float> spot = (List<Float>) rowRecord.get("spot");
+            Float latitude = (Float) rowRecord.get("latitude");
+            Float longitude = (Float) rowRecord.get("longitude");
+            String type = (String) rowRecord.get("type");
+            Long domainId = (Long) rowRecord.get("domain_id");
+            String createdAt = (String) rowRecord.get("created_at");
+            String updatedAt = (String) rowRecord.get("updated_at");
 
             SpotDto spotDto = SpotDto.builder()
                     .spotId(spotId)
