@@ -52,6 +52,6 @@ public class SpotController {
         DescribeCollectionResp  result = client.describeCollection(DescribeCollectionReq.builder()
                 .collectionName("spot")
                 .build());
-        return null;
+        return result;
     }
 }
