@@ -1,5 +1,7 @@
 package social.connectus.userservice.domain.application.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import social.connectus.userservice.domain.application.request.RefreshAchievemen
 import social.connectus.userservice.domain.application.request.UserLoginRequest;
 import social.connectus.userservice.domain.application.request.UserLogoutRequest;
 import social.connectus.userservice.domain.application.request.UserRegisterRequest;
+import social.connectus.userservice.domain.application.response.AchievementResponse;
 import social.connectus.userservice.domain.application.response.CompletedAchievementListResponse;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
 import social.connectus.userservice.domain.application.response.LogoutUserResponse;
@@ -77,9 +80,9 @@ public class UserController {
 	// endWalk 때 statistics를 갱신하기 위한 controller 이번 refresh를 통해 새로 완료한 업적을 출력
 	@Operation(summary = "endWalk 때 statistics를 갱신하기 위한 controller 이번 refresh를 통해 새로 완료한 업적을 출력")
 	@PostMapping("/refresh-achievement")
-	public ResponseEntity<RefreshAchievementResponse> refreshAchievement(Long userId,
+	public ResponseEntity<List<AchievementResponse>> refreshAchievement(Long userId,
 		@RequestBody RefreshAchievementRequest statistics) {
-		return ResponseEntity.ok(achievementUseCase.refreshAchievement(userId, statistics));
+		return ResponseEntity.ok(achievementUseCase.refreshAchievement(userId, statistics).getCompletedAchievementInThisRequest());
 	}
 
 	@Operation(summary = "내 산책 기록 조회")
