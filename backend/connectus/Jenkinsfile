@@ -13,7 +13,7 @@ pipeline {
         steps {
             git credentialsId: 'GITLAB_USUR_TOKEN',
                 url: 'https://lab.ssafy.com/jinjoo021/connect-cicd-test.git',
-                branch: 'backend'
+                branch: 'feat/jenkins'
         }
         post {
                 failure {
