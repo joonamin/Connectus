@@ -26,5 +26,5 @@ public interface SpotServiceClient {
 	Optional<Spot> getSpotById(@PathVariable(value = "id") Long id) throws NotFoundException;
 
 	@PutMapping("/spot/{spotId}")
-	void updateEventId(@PathVariable Long spotId, @RequestParam Long domainId, @RequestParam String type);
+	void updateDomain(@PathVariable Long spotId, @RequestParam Long domainId, @RequestParam String type);
 }

@@ -15,4 +15,6 @@ public interface MilvusPort {
     List<Long> insertAll(CreateSpotCommand command);
 
     QueryResp select(double longitude, double latitude);
+
+    // TODO: 여기에 id에 따른 update 기능을 하는 인터페이스를 정의해주세요!
 }

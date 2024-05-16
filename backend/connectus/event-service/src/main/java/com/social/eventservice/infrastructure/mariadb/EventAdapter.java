@@ -33,7 +33,7 @@ public class EventAdapter implements EventPort {
 
 	@Override
 	@Transactional
-	public void makeEvent(MakeEventCommand request) {
+	public Event makeEvent(MakeEventCommand request) {
 		List<Long> spotIdList = request.getSpotList().stream().map(Spot::getId).toList();
 		Event event = Event.builder()
 			.reward(request.getReward())
@@ -43,7 +43,7 @@ public class EventAdapter implements EventPort {
 			.title(request.getTitle())
 			.description(request.getDescription())
 			.spotIdList(spotIdList).build();
-		eventRepository.save(event);
+		return eventRepository.save(event);
 	}
 
 	@Override

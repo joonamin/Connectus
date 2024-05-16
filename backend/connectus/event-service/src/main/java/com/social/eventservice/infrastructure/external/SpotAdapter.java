@@ -30,8 +30,8 @@ public class SpotAdapter implements SpotPort {
 	}
 
 	@Override
-	public void initEventId(Long eventId) {
-
+	public void initEventId(Long spotId, Long eventId) {
+		spotServiceClient.updateDomain(spotId, eventId, "event");
 	}
 
 }
