@@ -27,6 +27,7 @@ public class EventService implements EventUseCase {
 	private final ImagePort imagePort;
 	private final MapperUtil mapperUtil;
 
+	// todo: feign client 요청이 하나라도 실패할 경우, SAGA 패턴을 적용하여 롤백 이벤트 발행후에 처리
 	@Override
 	public void makeEvent(MakeEventRequest request) throws IOException {
 		List<Spot> spotList = spotPort.saveAllPositions(request.getPositions());
@@ -34,6 +35,8 @@ public class EventService implements EventUseCase {
 		MakeEventCommandMetadata meta = MakeEventCommandMetadata.of(spotList, imageUrl);
 		MakeEventCommand command = mapperUtil.requestToCommand(request, meta);
 		eventPort.makeEvent(command);
+
+		// 각각의 spot에 domainId를 업데이트 해준다.
 	}
 
 	@Override
