@@ -8,10 +8,12 @@ import io.milvus.v2.service.vector.request.SearchReq;
 import io.milvus.v2.service.vector.response.InsertResp;
 import io.milvus.v2.service.vector.response.QueryResp;
 import io.milvus.v2.service.vector.response.SearchResp;
-import io.milvus.v2.utils.VectorUtils;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections.iterators.SingletonListIterator;
 import org.springframework.stereotype.Component;
+import social.connectus.location.application.rest.request.SpotDto;
 import social.connectus.location.common.config.MilvusConfig;
+import social.connectus.location.domain.command.CreateSpotCommand;
 import social.connectus.location.domain.ports.outbound.MilvusPort;
 
 import java.time.LocalDateTime;
@@ -54,6 +56,44 @@ public class MilvusAdapter implements MilvusPort {
         InsertResp insertResp = client.insert(insertReq);
         // TODO: 예외처리 必
         return null;
+    }
+
+    @Override
+    public List<Long> insertAll(CreateSpotCommand command){
+        // client 값 호출
+        MilvusClientV2 client = milvusConfig.createMilvusClient();
+
+        // 데이터 생성
+        List<JSONObject> insertData = new ArrayList<>();
+        for(SpotDto spotDto: command.getSpotList()){
+            JSONObject spot = new JSONObject();
+
+            //
+            List<List<Double>> latlng2d = new ArrayList<>();
+            List<Double> latlng = new ArrayList<>();
+            latlng.add(spotDto.getLatitude());
+            latlng.add(spotDto.getLongitude());
+            latlng2d.add(latlng);
+
+            spot.put("spot", latlng2d);
+            spot.put("type", spotDto.getType());
+            spot.put("domain_id", spotDto.getDomainId());
+            spot.put("latitude", spotDto.getLatitude());
+            spot.put("longitude", spotDto.getLongitude());
+            spot.put("created_at", LocalDateTime.now().toString());
+            spot.put("updated_at", LocalDateTime.now().toString());
+            insertData.add(spot);
+        }
+        // 삽입 요청
+        InsertReq insertReq = InsertReq.builder()
+                .collectionName(milvusConfig.getCollectionName())
+                .data(insertData)
+                .build();
+        InsertResp insertResp = client.insert(insertReq);
+
+        List<Long> result = new ArrayList<>();
+        result.add(insertResp.getInsertCnt());
+        return result;
     }
 
     @Override
