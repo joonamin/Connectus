@@ -12,7 +12,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.domain.application.request.MyPreferencePostRequest;
 import social.connectus.userservice.domain.application.request.MyPreferenceRouteRequest;
 import social.connectus.userservice.domain.application.request.MyWalkRequest;
@@ -88,7 +87,6 @@ public class UserController {
 		return ResponseEntity.ok(walkUseCase.getMyWalk(MyWalkCommand.from(request)));
 	}
 
-
 	@Operation(summary = "내가 좋아한 경로 조회")
 	@GetMapping("/route/like")
 	public ResponseEntity<MyPreferenceRouteResponse> getMyPreferenceRoute(MyPreferenceRouteRequest request) {
@@ -116,6 +114,11 @@ public class UserController {
 
 	@GetMapping("/{userId}/get-author-name")
 	public ResponseEntity<String> getAuthorName(@PathVariable("userId") Long userId) {
-		return ResponseEntity.ok(userUseCase.getUserName(userId));
+		return ResponseEntity.ok(userUseCase.getUserNickname(userId));
+	}
+
+	@GetMapping("/{userId}/nickname")
+	public ResponseEntity<String> getUserNickname(@PathVariable("userId") Long userId) {
+		return ResponseEntity.ok(userUseCase.getUserNickname(userId));
 	}
 }
