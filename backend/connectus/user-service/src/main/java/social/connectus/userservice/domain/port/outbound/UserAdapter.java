@@ -74,10 +74,19 @@ public class UserAdapter implements UserPort {
 	}
 
 	@Override
-	public void updateOpenedPosts(Long userId, Long postId) {
+	public void updateOpenedPost(Long userId, Long postId) {
 		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists"));
 		List<Long> openedPosts = user.getPostHistory();
 		openedPosts.add(postId);
+		user.updateOpenedPosts(openedPosts);
+		userRepository.save(user);
+	}
+
+	@Override
+	public void updateOpenedPosts(Long userId, List<Long> postIdList) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists"));
+		List<Long> openedPosts = user.getPostHistory();
+		openedPosts.addAll(postIdList);
 		user.updateOpenedPosts(openedPosts);
 		userRepository.save(user);
 	}
