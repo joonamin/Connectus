@@ -1,14 +1,18 @@
 package social.connectus.location.domain.services;
 
-import io.milvus.v2.service.vector.response.QueryResp;
+import io.milvus.grpc.QueryResults;
+import io.milvus.param.R;
+import io.milvus.response.QueryResultsWrapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import social.connectus.location.application.rest.request.SpotDto;
 import social.connectus.location.application.rest.response.FindNearbyElementResponse;
 import social.connectus.location.common.type.Ping;
 import social.connectus.location.common.type.PingType;
 import social.connectus.location.domain.command.CreateSpotCommand;
 import social.connectus.location.domain.command.FindNearbyElementCommand;
+import social.connectus.location.domain.command.GetSpotCommand;
 import social.connectus.location.domain.ports.inbound.SpotUseCase;
 import social.connectus.location.domain.ports.outbound.MilvusPort;
 
@@ -28,17 +32,18 @@ public class SpotService implements SpotUseCase {
 
     @Override
     public FindNearbyElementResponse findNearbyElement(FindNearbyElementCommand command) {
-        QueryResp resp = milvusPort.select(command.getLongitude(), command.getLatitude());
-        System.out.println(resp);
+        R<QueryResults> resp = milvusPort.select(command.getLongitude(), command.getLatitude());
+//        System.out.println(resp);
 
-        List<QueryResp.QueryResult> results = resp.getQueryResults();
+        QueryResultsWrapper wrapper = new QueryResultsWrapper(resp.getData());
+        List<QueryResultsWrapper.RowRecord> results = wrapper.getRowRecords();
 
         ArrayList<Ping> nearby = new ArrayList<>();
-        for (QueryResp.QueryResult queryResult : results) {
-            Map<String, Object> row = queryResult.getEntity();
+        for (QueryResultsWrapper.RowRecord queryResult : results) {
+            Map<String, Object> row = queryResult.getFieldValues();
 
             List<Float> coordinate = (List<Float>) row.get("spot");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SX");
 
             Ping ping = Ping.builder()
                     .id((Long) row.get("spot_id"))
@@ -46,8 +51,10 @@ public class SpotService implements SpotUseCase {
                     .longitude(coordinate.get(0))
                     .latitude(coordinate.get(1))
                     .type(PingType.valueOf((String) row.get("type")))
-                    .cretedAt(LocalDateTime.parse((String) row.get("created_at"), formatter))
-                    .updatedAt(LocalDateTime.parse((String) row.get("updated_at"), formatter))
+//                    .cretedAt(LocalDateTime.parse((String) row.get("created_at"), formatter))
+                    .cretedAt(LocalDateTime.parse((String)row.get("created_at")))
+//                    .updatedAt(LocalDateTime.parse((String) row.get("updated_at"), formatter))
+                    .updatedAt(LocalDateTime.parse((String)row.get("updated_at")))
                     .build();
             nearby.add(ping);
         }
@@ -59,5 +66,15 @@ public class SpotService implements SpotUseCase {
     @Override
     public List<Long> createSpot(CreateSpotCommand command){
         return milvusPort.insertAll(command);
+    }
+
+    @Override
+    public List<SpotDto> getSpot(GetSpotCommand command) {
+        return milvusPort.getSpotList(command);
+    }
+
+    @Override
+    public List<Long> updateSpot(CreateSpotCommand command) {
+        return milvusPort.updateSpotList(command);
     }
 }
