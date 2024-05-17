@@ -157,19 +157,7 @@ export default function ShareHomeScreen() {
           onEndReachedThreshold={0.5}
           scrollIndicatorInsets={{right: 1}}
           renderItem={({item}) => (
-            <SharePost
-              walkId={item.walkId}
-              title={item.title}
-              route={item.route}
-              walkTime={item.walkTime}
-              walkDistance={item.walkDistance}
-              likeUsers={item.likeUsers}
-              postList={item.postList}
-              trackingUsers={item.trackingUsers}
-              imageUrl={item.imageUrl}
-              updatedAt={item.updatedAt}
-              modalOpen={handleModalOpen}
-            />
+            <SharePost walkId={item.walkId} modalOpen={handleModalOpen} />
           )}
         />
         <Pressable
