@@ -8,6 +8,7 @@ import social.connectus.application.rest.response.DetailPostResponse;
 import social.connectus.common.annotation.UseCase;
 import social.connectus.common.exception.BusinessException;
 import social.connectus.common.exception.GlobalException;
+import social.connectus.common.exception.NotFoundException;
 import social.connectus.common.exception.ParameterNotFoundException;
 import social.connectus.domain.ports.inbound.DetailPostUseCase;
 import social.connectus.domain.ports.outbound.DetailPostPort;
@@ -19,7 +20,7 @@ public class DetailPostService implements DetailPostUseCase {
 	private final int R = 20;
 	@Override
 	public DetailPostResponse detailByUserExperience(Long postId, Long userId) throws GlobalException,
-		BusinessException {
+			BusinessException, NotFoundException {
 		try {
 			if(postId == null) {
 				throw new ParameterNotFoundException("authorId");
@@ -58,7 +59,7 @@ public class DetailPostService implements DetailPostUseCase {
 
 	@Override
 	public DetailPostResponse detailByPostId(Long postId, Long userId, Double distance) throws
-		GlobalException, BusinessException {
+			GlobalException, BusinessException, NotFoundException {
 		List<Long> openedPostListByUserId = detailPostPort.openedPostByUserId(userId).getOpenedPostList();
 		try{
 			if(openedPostListByUserId == null ){
@@ -75,7 +76,10 @@ public class DetailPostService implements DetailPostUseCase {
 					return detailPostPort.samplePost(postId);
 			}
 			}
-		}catch (Exception e) {
+		}catch (NotFoundException e){
+			throw new NotFoundException(e.getMessage());
+		}
+		catch (Exception e) {
 			throw new GlobalException("DetailPostService : " + e.getMessage());
 		}
 	}
