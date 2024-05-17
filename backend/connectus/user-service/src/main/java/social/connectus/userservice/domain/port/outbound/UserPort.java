@@ -1,5 +1,7 @@
 package social.connectus.userservice.domain.port.outbound;
 
+import java.util.List;
+
 import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.model.entity.User;
@@ -15,7 +17,8 @@ public interface UserPort {
 
 	void logoutUser(UserLogoutCommand command);
 
-	void updateOpenedPosts(Long userId, Long postId);
+	void updateOpenedPost(Long userId, Long postId);
+	void updateOpenedPosts(Long userId, List<Long> postIdList);
 	OpenedPostResponse getOpenedPost(Long userId);
 	String getUserNickname(Long userId);
 }

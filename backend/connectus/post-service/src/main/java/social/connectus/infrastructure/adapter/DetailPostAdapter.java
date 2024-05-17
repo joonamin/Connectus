@@ -71,7 +71,7 @@ public class DetailPostAdapter implements DetailPostPort {
 
 	@Override
 	public CoordinateRequestDto postSpotByPostId(Long postId) {
-		return spotServiceClient.getPostSpot(postId);
+		return spotServiceClient.getPostSpot(postId,"POST");
 	}
 
 	@Override
