@@ -1,8 +1,10 @@
 package social.connectus.location.domain.services;
 
 import io.milvus.grpc.QueryResults;
+import io.milvus.grpc.SearchResults;
 import io.milvus.param.R;
 import io.milvus.response.QueryResultsWrapper;
+import io.milvus.response.SearchResultsWrapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,7 @@ public class SpotService implements SpotUseCase {
 
     @Override
     public FindNearbyElementResponse findNearbyElement(FindNearbyElementCommand command) {
+        final long RADIUS = 2;
         R<QueryResults> resp = milvusPort.select(command.getLongitude(), command.getLatitude());
 //        System.out.println(resp);
 
@@ -45,19 +48,20 @@ public class SpotService implements SpotUseCase {
 
             List<Float> coordinate = (List<Float>) row.get("spot");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SX");
-
-            Ping ping = Ping.builder()
-                    .id((Long) row.get("spot_id"))
-                    .domainId((Long) row.get("domain_id"))
-                    .longitude(coordinate.get(0))
-                    .latitude(coordinate.get(1))
-                    .type(PingType.valueOf((String) row.get("type")))
-//                    .cretedAt(LocalDateTime.parse((String) row.get("created_at"), formatter))
-                    .cretedAt(LocalDateTime.parse((String)row.get("created_at")))
-//                    .updatedAt(LocalDateTime.parse((String) row.get("updated_at"), formatter))
-                    .updatedAt(LocalDateTime.parse((String)row.get("updated_at")))
-                    .build();
-            nearby.add(ping);
+            if(getDistance(command.getLatitude(), command.getLongitude(), coordinate.get(0), coordinate.get(1)) <= RADIUS) {
+                Ping ping = Ping.builder()
+                        .id((Long) row.get("spot_id"))
+                        .domainId((Long) row.get("domain_id"))
+                        .longitude(coordinate.get(0))
+                        .latitude(coordinate.get(1))
+                        .type(PingType.valueOf((String) row.get("type")))
+                        //                    .cretedAt(LocalDateTime.parse((String) row.get("created_at"), formatter))
+                        .cretedAt(LocalDateTime.parse((String) row.get("created_at")))
+                        //                    .updatedAt(LocalDateTime.parse((String) row.get("updated_at"), formatter))
+                        .updatedAt(LocalDateTime.parse((String) row.get("updated_at")))
+                        .build();
+                nearby.add(ping);
+            }
         }
         return FindNearbyElementResponse.builder()
                 .nearby(nearby)
@@ -77,5 +81,16 @@ public class SpotService implements SpotUseCase {
     @Override
     public List<Long> updateSpot(CreateSpotCommand command) {
         return milvusPort.updateSpotList(command);
+    }
+
+    private double getDistance(double latStart, double lonStart, double latEnd, double lonEnd) {
+        final double KM_PER_LAT = 111.2D;
+        final double KM_PER_LON = 89.85D;
+        final double ROUND_TO_3 = 1000D;
+
+        double latDistance = Math.abs(latEnd - latStart) * KM_PER_LAT;
+        double lonDistance = Math.abs(lonEnd - lonStart) * KM_PER_LON;
+
+        return Math.round(Math.sqrt(Math.pow(latDistance,2)+Math.pow(lonDistance,2)) * ROUND_TO_3) / ROUND_TO_3;
     }
 }

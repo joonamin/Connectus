@@ -2,7 +2,9 @@ package social.connectus.gatherservice.domain.services;
 
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import social.connectus.gatherservice.application.rest.request.GetSpotRequest;
 import social.connectus.gatherservice.application.rest.request.JoinGatherRequest;
+import social.connectus.gatherservice.application.rest.request.SpotDto;
 import social.connectus.gatherservice.application.rest.request.WantJoinGatherRequest;
 import social.connectus.gatherservice.application.rest.response.CreateGatherResponse;
 import social.connectus.gatherservice.application.rest.response.GetGatherResponse;
@@ -16,12 +18,16 @@ import social.connectus.gatherservice.domain.command.WantJoinGatherCommand;
 import social.connectus.gatherservice.domain.model.Gather;
 import social.connectus.gatherservice.domain.ports.inbound.GatherUseCase;
 import social.connectus.gatherservice.domain.ports.outbound.GatherPort;
+import social.connectus.gatherservice.infrastructure.external.SpotPort;
+
+import java.util.Arrays;
 
 @AllArgsConstructor
 @UseCase
 public class GatherService implements GatherUseCase {
 
     private final GatherPort gatherPort;
+    private final SpotPort spotPort;
     private final ModelMapper modelMapper;
     @Override
     public void closeGather(CloseGatherCommand command) throws ResourceNotFoundException, ClosedGatherException, InvalidHostIdException {
@@ -47,9 +53,14 @@ public class GatherService implements GatherUseCase {
     @Override
     public GetGatherResponse getGather(long gatherId) throws ResourceNotFoundException {
         Gather gather = gatherPort.getGatherById(gatherId);
-        // TODO: 가능하면 위치 자체를 반환하도록 변경
-        // 위치 서비스에 spotId로 요청하기
-        return modelMapper.map(gather, GetGatherResponse.class);
+        GetGatherResponse response = modelMapper.map(gather, GetGatherResponse.class);
+        SpotDto spot = spotPort.getSpot(GetSpotRequest.builder()
+                        .spotIdList(Arrays.asList(gather.getSpotId()))
+                        .build())
+                .getSpotList().get(0);
+        response.setLatitude(spot.getLatitude());
+        response.setLongitude(spot.getLongitude());
+        return response;
     }
 
     @Override
