@@ -17,9 +17,7 @@ import Dialog from '@/components/containers/Dialog';
 /**
  * 유저의 지난 산책 기록들을 선택해서 공유할 수 있는 스크린입니다.
  */
-export default function ShareRecordScreen({
-  navigation,
-}: StackScreenProps<ShareStackParamList, 'ShareRecord'>) {
+export default function ShareRecordScreen() {
   // 선택 시 설정 될 산책 ID
   const [walkId, setWalkId] = useState<number | undefined>();
 
