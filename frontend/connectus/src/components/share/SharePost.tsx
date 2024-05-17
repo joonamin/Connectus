@@ -6,28 +6,20 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import colors from '@/constants/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MainText from '../text/MainText';
 import {LatLng} from 'react-native-maps';
-import {routeLike} from '@/api/walk';
+import {getRouteDetail, routeLike} from '@/api/walk';
 import useAuthStore from '@/store/useAuthStore';
 import queryClient from '@/api/queryClient';
 import {queryKeys} from '@/constants';
-import {useMutation} from '@tanstack/react-query';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {dateTimeToString} from '@/utils';
 
 type Props = {
   walkId: number;
-  title: string;
-  route?: LatLng[];
-  walkTime?: number;
-  walkDistance?: number;
-  likeUsers?: number[];
-  postList?: number[];
-  trackingUsers?: number[];
-  imageUrl?: string;
-  updatedAt: string;
   modalOpen: (route: LatLng[], walkId: number) => void;
 };
 
@@ -35,21 +27,15 @@ type Props = {
  * share 스크린에서 무한스크롤을 통해 렌더링할 컴포넌트입니다.
  * @todo 추후 기록이 어떻게 전달되는지에 따라서 안쪽의 state를 수정해야합니다
  */
-export default function SharePost({
-  walkId,
-  title,
-  route,
-  walkTime,
-  walkDistance,
-  likeUsers,
-  postList,
-  updatedAt,
-  trackingUsers,
-  imageUrl,
-  modalOpen,
-}: Props) {
+export default function SharePost({walkId, modalOpen}: Props) {
   const [viewIsLiked, setViewIsLiked] = useState(false);
+  const [trigger, setTrigger] = useState(0);
   const {user} = useAuthStore();
+
+  const {data, isLoading} = useQuery({
+    queryFn: () => getRouteDetail(walkId),
+    queryKey: [queryKeys.GET_ROUTE_DETAIL, walkId],
+  });
 
   /**
    * 라우트를 좋아요할 때 사용할 mutation함수
@@ -57,21 +43,37 @@ export default function SharePost({
    */
   const like = useMutation({
     mutationFn: () => routeLike(walkId, user?.userId as number),
-    // onSuccess: () => {
-    //   console.log('요청 성공');
-    //   queryClient.invalidateQueries({queryKey: [queryKeys.GET_ROUTE_LIST]});
-    // },
+    onSuccess: () => {
+      console.log('요청 성공');
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.GET_ROUTE_DETAIL, walkId],
+      });
+      setViewIsLiked(true);
+    },
     onError: () => {
       console.log('에러');
     },
   });
+
+  useEffect(() => {
+    if (data?.likeUsers?.includes(user?.userId as number)) {
+      setViewIsLiked(true);
+    } else {
+      setViewIsLiked(false);
+    }
+  }, []);
 
   /**
    * @todo route like 인수 변경
    */
   const handlePressLikeButton = () => {
     like.mutate();
+    setTrigger(prev => (prev += 1));
   };
+
+  if (isLoading) {
+    return <></>;
+  }
 
   return (
     <>
@@ -84,19 +86,21 @@ export default function SharePost({
             />
           </View>
           <View style={styles.shareInfoContainer}>
-            <MainText>{title}</MainText>
-            <Text style={styles.postDate}>{updatedAt}</Text>
+            <MainText>{data.title}</MainText>
+            <Text style={styles.postDate}>
+              {dateTimeToString(data.updatedAt)}
+            </Text>
           </View>
           <Pressable
             style={styles.moveButton}
             onPress={() => {
-              modalOpen(route as LatLng[], walkId);
+              modalOpen(data.route as LatLng[], walkId);
             }}>
             <Text style={styles.moveButtonText}>따라걷기</Text>
           </Pressable>
         </View>
         <View style={styles.shareImageContainer}>
-          <Image style={styles.shareImage} source={{uri: imageUrl}} />
+          <Image style={styles.shareImage} source={{uri: data.imageUrl}} />
         </View>
         <View style={styles.shareIndicator}>
           {viewIsLiked ? (
@@ -109,10 +113,10 @@ export default function SharePost({
             </Pressable>
           )}
           <Text style={styles.shareIndicatorText}>
-            좋아요 {likeUsers?.length}개
+            좋아요 {data.likeUsers?.length}개
           </Text>
           <Text style={styles.shareIndicatorText}>
-            같이 걸은 사람 {trackingUsers?.length}명
+            같이 걸은 사람 {data.trackingUsers?.length}명
           </Text>
         </View>
       </View>
