@@ -31,6 +31,7 @@ import social.connectus.userservice.domain.application.response.MyPreferenceRout
 import social.connectus.userservice.domain.application.response.MyWalkResponse;
 import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.application.response.RefreshAchievementResponse;
+import social.connectus.userservice.domain.application.response.UserResponseForPost;
 import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
 import social.connectus.userservice.domain.port.inbound.PostUseCase;
 import social.connectus.userservice.domain.port.inbound.UserUseCase;
@@ -122,14 +123,9 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/{userId}/get-author-name")
-	public ResponseEntity<String> getAuthorName(@PathVariable("userId") Long userId) {
-		return ResponseEntity.ok(userUseCase.getUserNickname(userId));
-	}
-
-	@GetMapping("/{userId}/nickname")
-	public ResponseEntity<String> getUserNickname(@PathVariable("userId") Long userId) {
-		return ResponseEntity.ok(userUseCase.getUserNickname(userId));
+	@GetMapping("/{userId}/get-author-info")
+	public ResponseEntity<UserResponseForPost> getUserForPost(@PathVariable("userId") Long userId) {
+		return ResponseEntity.ok(userUseCase.getUserResponseForPost(userId));
 	}
 
 	@PostMapping("/{userId}/update-avatar")

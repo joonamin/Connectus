@@ -8,6 +8,7 @@ import social.connectus.userservice.common.exception.FailedToRegisterUserExcepti
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
 import social.connectus.userservice.domain.application.response.LogoutUserResponse;
 import social.connectus.userservice.domain.application.response.OpenedPostResponse;
+import social.connectus.userservice.domain.application.response.UserResponseForPost;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
@@ -26,7 +27,7 @@ public interface UserUseCase {
 	void updateOpenedPost(Long userId, Long postId);
 	void updateOpenedPosts(Long userId, List<Long> postIdList);
 	OpenedPostResponse getOpenedPost(Long userId);
-	String getUserNickname(Long userId);
+	UserResponseForPost getUserResponseForPost(Long userId);
 	LogoutUserResponse logout(UserLogoutCommand command) throws FailedToLogoutException;
 	String updateAvatar(Long userId, String imageUrl);
 }
