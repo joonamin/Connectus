@@ -24,6 +24,6 @@ public interface UserServiceClient {
 	@GetMapping("/user/health-check")
 	String healthCheck();
 
-	@GetMapping("/user/{userId}/get-author-name")
+	@GetMapping("/user/{userId}/get-author-info")
 	UserInfoResponse getUserInfo(@PathVariable("userId") Long userId);
 }
