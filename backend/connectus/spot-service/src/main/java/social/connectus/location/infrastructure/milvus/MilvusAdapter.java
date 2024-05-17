@@ -2,31 +2,27 @@ package social.connectus.location.infrastructure.milvus;
 
 import com.alibaba.fastjson.JSONObject;
 import io.milvus.client.MilvusClient;
-import io.milvus.client.MilvusServiceClient;
 import io.milvus.grpc.MutationResult;
+import io.milvus.grpc.QueryResults;
+import io.milvus.grpc.SearchResults;
+import io.milvus.param.MetricType;
 import io.milvus.param.R;
 import io.milvus.param.dml.InsertParam;
+import io.milvus.param.dml.QueryParam;
+import io.milvus.param.dml.SearchParam;
+import io.milvus.param.dml.UpsertParam;
 import io.milvus.param.highlevel.dml.GetIdsParam;
 import io.milvus.param.highlevel.dml.response.GetResponse;
 import io.milvus.response.QueryResultsWrapper;
-import io.milvus.v2.client.MilvusClientV2;
 import io.milvus.v2.service.vector.request.InsertReq;
-import io.milvus.v2.service.vector.request.QueryReq;
-import io.milvus.v2.service.vector.request.SearchReq;
-import io.milvus.v2.service.vector.request.UpsertReq;
 import io.milvus.v2.service.vector.response.InsertResp;
-import io.milvus.v2.service.vector.response.QueryResp;
-import io.milvus.v2.service.vector.response.SearchResp;
-import io.milvus.v2.service.vector.response.UpsertResp;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.collections.iterators.SingletonListIterator;
 import org.springframework.stereotype.Component;
 import social.connectus.location.application.rest.request.SpotDto;
 import social.connectus.location.common.config.MilvusConfig;
 import social.connectus.location.common.type.PingType;
 import social.connectus.location.domain.command.CreateSpotCommand;
 import social.connectus.location.domain.command.GetSpotCommand;
-import social.connectus.location.domain.model.Spot;
 import social.connectus.location.domain.ports.outbound.MilvusPort;
 
 import java.time.LocalDateTime;
@@ -41,7 +37,7 @@ public class MilvusAdapter implements MilvusPort {
     @Override
     public InsertResp insert(double longitude, double latitude, Long spotId, Long type, Long domainId) {
         // client 값 호출
-//        MilvusClientV2 client = milvusConfig.createMilvusClient();
+        MilvusClient client = milvusConfig.createMilvusClient();
 
         // 데이터 생성
         Random ran = new Random();
@@ -114,10 +110,9 @@ public class MilvusAdapter implements MilvusPort {
     }
 
     @Override
-    public QueryResp select(double longitude, double latitude) {
+    public R<QueryResults> select(double longitude, double latitude) {
 
-//        MilvusClientV2 client = milvusConfig.createMilvusClient();
-        MilvusClientV2 client = null;
+        MilvusClient client = milvusConfig.createMilvusClient();
         // 조회 요청
         String filter = "spot_id != " + -1;
 
@@ -133,21 +128,22 @@ public class MilvusAdapter implements MilvusPort {
         searchParams.put("range_filter ", 5.0f);
 
 
-        SearchReq request = SearchReq.builder()
-                .collectionName("spot")
-                .searchParams(searchParams)
-                .data(searchsearch)
-                .topK(16384)
+        SearchParam request = SearchParam.newBuilder()
+                .withCollectionName("spot")
+                .withMetricType(MetricType.L2)
+                .withParams("{\"radius\":3.0,\"range_filter\":5.0}")
+                .withFloatVectors(searchsearch)
+                .withVectorFieldName("spot")
+                .withTopK(16384)
                 .build();
-        SearchResp resp = client.search(request);
-        System.out.println(resp.getSearchResults());
+        R<SearchResults> resp = client.search(request);
+        System.out.println(resp.getMessage());
 
         // 조회 요청 생성
-        QueryReq queryReq = QueryReq.builder()
-                .collectionName(milvusConfig.getCollectionName())
-                .filter(filter)
-                .outputFields(Arrays.asList("spot_id", "spot", "latitude", "longitude", "type", "domain_id", "created_at", "updated_at"))
-                .limit(10)
+        QueryParam queryReq = QueryParam.newBuilder()
+                .withCollectionName(milvusConfig.getCollectionName())
+                .withExpr(filter)
+                .withOutFields(Arrays.asList("spot_id", "spot", "latitude", "longitude", "type", "domain_id", "created_at", "updated_at"))
                 .build();
 
         return client.query(queryReq);
@@ -200,5 +196,40 @@ public class MilvusAdapter implements MilvusPort {
         }
 
         return response;
+    }
+
+    @Override
+    public List<Long> updateSpotList(CreateSpotCommand command) {
+        // client 값 호출
+        MilvusClient client = milvusConfig.createMilvusClient();
+
+        // 데이터 생성
+        List<Long> spotIdList = new ArrayList<>();
+        List<Long> domainIdList = new ArrayList<>();
+        List<String> updateTimeList = new ArrayList<>();
+        for(SpotDto spotDto: command.getSpotList()){
+            spotIdList.add(spotDto.getSpotId());
+            domainIdList.add(spotDto.getDomainId());
+            updateTimeList.add(LocalDateTime.now().toString());
+        }
+
+        List<InsertParam.Field> fields = new ArrayList<>();
+        fields.add(new InsertParam.Field("spot_id", spotIdList));
+        fields.add(new InsertParam.Field("domain_id", domainIdList));
+        fields.add(new InsertParam.Field("updated_at", updateTimeList));
+        // 삽입 요청
+        UpsertParam insertReq = UpsertParam.newBuilder()
+                .withCollectionName(milvusConfig.getCollectionName())
+                .withFields(fields)
+                .build();
+        R<MutationResult> mutationResp = client.upsert(insertReq);
+        MutationResult mutationResult = mutationResp.getData();
+        if (mutationResp.getStatus() != R.Status.Success.getCode()) {
+            System.out.println(mutationResp.getMessage());
+        }
+
+        List<Long> result = mutationResult.getIDs().getIntId().getDataList().stream().toList();
+
+        return result;
     }
 }

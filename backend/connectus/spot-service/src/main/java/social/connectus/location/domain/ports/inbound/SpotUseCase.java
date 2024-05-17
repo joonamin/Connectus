@@ -1,7 +1,6 @@
 package social.connectus.location.domain.ports.inbound;
 
 import org.springframework.stereotype.Component;
-import social.connectus.location.application.rest.request.CreateSpotRequest;
 import social.connectus.location.application.rest.request.SpotDto;
 import social.connectus.location.application.rest.response.FindNearbyElementResponse;
 import social.connectus.location.common.customannotations.UseCase;
@@ -18,4 +17,6 @@ public interface SpotUseCase {
     List<Long> createSpot(CreateSpotCommand command);
 
     List<SpotDto> getSpot(GetSpotCommand command);
+
+    List<Long> updateSpot(CreateSpotCommand from);
 }
