@@ -12,7 +12,7 @@ pipeline {
         steps {
             git credentialsId: 'GITLAB_USER_TOKEN',
                 url: 'https://lab.ssafy.com/s10-final/S10P31E106.git',
-                branch: 'feat/jenkins'
+                branch: 'backend'
         }
         post {
                 failure {
