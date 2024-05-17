@@ -109,7 +109,7 @@ public class UserController {
 	}
 
 	@GetMapping("/{userId}/get-author-info")
-	public ResponseEntity<social.connectus.userservice.domain.application.response.UserResponseForPost> getUserForPost(@PathVariable("userId") Long userId) {
+	public ResponseEntity<UserResponseForPost> getUserForPost(@PathVariable("userId") Long userId) {
 		return ResponseEntity.ok(userUseCase.getUserResponseForPost(userId));
 	}
 

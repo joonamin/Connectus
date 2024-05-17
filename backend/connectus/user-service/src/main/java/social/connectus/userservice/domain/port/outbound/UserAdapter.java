@@ -112,7 +112,7 @@ public class UserAdapter implements UserPort {
 	}
 	@Override
 	public UserResponseForPost getUserResponseForPost(Long userId) {
-		return social.connectus.userservice.domain.application.response.UserResponseForPost.from(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")));
+		return UserResponseForPost.from(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")));
 	}
 
 	@Override
