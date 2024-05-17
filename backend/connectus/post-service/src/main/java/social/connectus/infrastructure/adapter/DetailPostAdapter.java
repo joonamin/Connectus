@@ -14,6 +14,7 @@ import social.connectus.application.rest.response.DetailPostResponse;
 import social.connectus.application.rest.response.OpenedPostResponse;
 import social.connectus.application.rest.response.UserInfoResponse;
 import social.connectus.common.exception.BusinessException;
+import social.connectus.common.exception.NotFoundException;
 import social.connectus.domain.model.RDBMS.Comment;
 import social.connectus.domain.model.RDBMS.Post;
 import social.connectus.domain.ports.outbound.DetailPostPort;
@@ -32,8 +33,8 @@ public class DetailPostAdapter implements DetailPostPort {
 	private final LikesServiceClient likesServiceClient;
 
 	@Override
-	public DetailPostResponse samplePost(Long postId) throws BusinessException {
-		Post post = postRepository.findById(postId).orElseThrow(()->new BusinessException("Post doesn't exists"));
+	public DetailPostResponse samplePost(Long postId) throws BusinessException, NotFoundException {
+		Post post = postRepository.findById(postId).orElseThrow(()->new NotFoundException("Post doesn't exists"));
 		int likeCount = likesServiceClient.getLikeCount(postId,"POST");
 		boolean isLike = likesServiceClient.isLike(postId,"POST");
 		UserInfoResponse authorInfo = userServiceClient.getUserInfo(post.getAuthorId());
@@ -44,8 +45,8 @@ public class DetailPostAdapter implements DetailPostPort {
 	}
 
 	@Override
-	public DetailPostResponse detailPost(Long postId) throws BusinessException {
-		Post post = postRepository.findById(postId).orElseThrow(()->new BusinessException("Post doesn't exists"));
+	public DetailPostResponse detailPost(Long postId) throws NotFoundException {
+		Post post = postRepository.findById(postId).orElseThrow(()-> new NotFoundException("Post doesn't exists"));
 		int likeCount = likesServiceClient.getLikeCount(postId,"POST");
 		boolean isLike = likesServiceClient.isLike(postId,"POST");
 		UserInfoResponse userInfoResponse = userServiceClient.getUserInfo(post.getAuthorId());

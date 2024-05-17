@@ -1,6 +1,5 @@
 package social.connectus.userservice.domain.port.outbound.command;
 
-import java.sql.Ref;
 import java.util.List;
 import java.util.function.Function;
 
@@ -9,8 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import social.connectus.userservice.common.type.Achievement;
-import social.connectus.userservice.domain.application.request.RefreshAchievementRequest;
-import social.connectus.userservice.domain.application.response.RefreshAchievementResponse;
+import social.connectus.userservice.application.request.RefreshAchievementRequest;
 
 @Getter
 @Setter

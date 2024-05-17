@@ -1,4 +1,4 @@
-package social.connectus.userservice.domain.application.controller;
+package social.connectus.userservice.application.controller;
 
 import java.util.List;
 
@@ -8,31 +8,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import social.connectus.userservice.domain.application.request.MyPreferencePostRequest;
-import social.connectus.userservice.domain.application.request.MyPreferenceRouteRequest;
-import social.connectus.userservice.domain.application.request.MyWalkRequest;
-import social.connectus.userservice.domain.application.request.RefreshAchievementRequest;
-import social.connectus.userservice.domain.application.request.UserLoginRequest;
-import social.connectus.userservice.domain.application.request.UserLogoutRequest;
-import social.connectus.userservice.domain.application.request.UserPositionRequest;
-import social.connectus.userservice.domain.application.request.UserRegisterRequest;
-import social.connectus.userservice.domain.application.response.AchievementResponse;
-import social.connectus.userservice.domain.application.response.CompletedAchievementListResponse;
-import social.connectus.userservice.domain.application.response.LoginUserResponse;
-import social.connectus.userservice.domain.application.response.LogoutUserResponse;
-import social.connectus.userservice.domain.application.response.MyPreferencePostResponse;
-import social.connectus.userservice.domain.application.response.MyPreferenceRouteResponse;
-import social.connectus.userservice.domain.application.response.MyWalkResponse;
-import social.connectus.userservice.domain.application.response.OpenedPostResponse;
-import social.connectus.userservice.domain.application.response.RefreshAchievementResponse;
-import social.connectus.userservice.domain.application.response.UserResponseForPost;
+import social.connectus.userservice.application.request.*;
+import social.connectus.userservice.application.response.*;
+import social.connectus.userservice.domain.command.PointChangeCommand;
 import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
 import social.connectus.userservice.domain.port.inbound.PostUseCase;
 import social.connectus.userservice.domain.port.inbound.UserUseCase;
@@ -135,8 +119,18 @@ public class UserController {
 	}
 
 	@PostMapping("/insert-position")
-	public ResponseEntity<Void> insertUserPosition(@RequestBody UserPositionRequest request) {
+	public ResponseEntity<Void> insertUserPosition(@RequestBody social.connectus.userservice.domain.application.request.UserPositionRequest request) {
 		userUseCase.insertUserPosition(request);
 		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/increase-point")
+	public ResponseEntity<PointResponse> increasePoint(@RequestBody PointChangeRequest request) {
+		return ResponseEntity.ok(userUseCase.increasePoint(PointChangeCommand.from(request)));
+	}
+
+	@PostMapping("/decrease-point")
+	public ResponseEntity<PointResponse> decreasePoint(@RequestBody PointChangeRequest request) {
+		return ResponseEntity.ok(userUseCase.decreasePoint(PointChangeCommand.from(request)));
 	}
 }

@@ -1,4 +1,4 @@
-package social.connectus.userservice.domain.application.response;
+package social.connectus.userservice.application.response;
 
 import java.util.List;
 
