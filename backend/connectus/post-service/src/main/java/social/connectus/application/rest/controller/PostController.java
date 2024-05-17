@@ -95,8 +95,8 @@ public class PostController {
 
 	@GetMapping("/user-experience/{postId}")
 	public ResponseEntity<DetailPostResponse> detailPostByUserExperience(@PathVariable("postId") Long postId, Long userId ) throws
-		BusinessException,
-		GlobalException {
+			BusinessException,
+			GlobalException, NotFoundException {
 		DetailPostResponse response = detailPostUseCase.detailByUserExperience(postId,userId);
 		return ResponseEntity.ok().body(response);
 	}
@@ -123,8 +123,12 @@ public class PostController {
 	public ResponseEntity<DetailPostResponse> detailPostById(@PathVariable("postId") Long postId, @RequestParam("userId") Long userId, @RequestParam("distance") Double distance) throws
 		BusinessException,
 		GlobalException {
-		return ResponseEntity.ok().body(detailPostUseCase.detailByPostId(postId, userId, distance));
-	}
+        try {
+            return ResponseEntity.ok().body(detailPostUseCase.detailByPostId(postId, userId, distance));
+        } catch (NotFoundException e) {
+            return ResponseEntity.noContent().build();
+        }
+    }
 
 	@PostMapping("/{postId}/comment")
 	@Operation(
