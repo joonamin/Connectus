@@ -16,7 +16,8 @@ public class GetGatherResponse {
     private boolean isClosed;
     private String content;
     private long hostId;
-    private long spotId;
+    private double latitude;
+    private double longitude;
     private int maxJoiner;
     private Set<Long> candidateList;
     private Set<Long> joinerList;

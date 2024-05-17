@@ -3,10 +3,10 @@ package social.connectus.gatherservice.infrastructure.databases.mariadb;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import social.connectus.gatherservice.application.rest.request.CreateSpotRequest;
-import social.connectus.gatherservice.application.rest.request.UpdateSpotRequest;
+import social.connectus.gatherservice.application.rest.request.GetSpotRequest;
+import social.connectus.gatherservice.application.rest.request.SpotDto;
 import social.connectus.gatherservice.application.rest.response.CreateGatherResponse;
 import social.connectus.gatherservice.common.constants.GatherConstants;
 import social.connectus.gatherservice.common.exception.ResourceNotFoundException;
@@ -17,14 +17,18 @@ import social.connectus.gatherservice.domain.command.JoinGatherCommand;
 import social.connectus.gatherservice.domain.command.WantJoinGatherCommand;
 import social.connectus.gatherservice.domain.model.Gather;
 import social.connectus.gatherservice.domain.ports.outbound.GatherPort;
-import social.connectus.gatherservice.infrastructure.external.FeignPort;
+import social.connectus.gatherservice.infrastructure.external.SpotPort;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
 public class GatherAdapter implements GatherPort {
     private final ModelMapper modelMapper;
     private final GatherRepository gatherRepository;
-    private final FeignPort feignPort;
+    private final SpotPort spotPort;
 
     @Override
     public Gather getGatherById(long gatherId) {
@@ -56,26 +60,27 @@ public class GatherAdapter implements GatherPort {
     @Override
     @Transactional
     public CreateGatherResponse createGather(CreateGatherCommand command) {
-        // TODO: 모여라와 위치 연결 확인
-        long spotId = feignPort.CreateSpot(CreateSpotRequest.builder()
-                        .latitude(command.getLatitude())
-                        .longitude(command.getLongitude())
-                        .type(Type.GATHER)
-                        .build());
 
         Gather gather =  Gather.builder()
                 .hostId(command.getHostId())
                 .content(command.getContent())
-                .spotId(spotId)
                 .maxJoiner(command.getMaxJoiner())
                 .endTime(command.getEndTime())
                 .build();
         gatherRepository.save(gather);
-        
-        feignPort.UpdateSpot(UpdateSpotRequest.builder()
-                        .spotId(spotId)
-                        .domainId(gather.getId())
-                        .build());
+        // TODO: 모여라와 위치 연결 확인
+        SpotDto spot = SpotDto.builder()
+                .latitude(command.getLatitude())
+                .longitude(command.getLongitude())
+                .type(Type.GATHER)
+                .domainId(gather.getId())
+                .build();
+        long spotId = spotPort.createSpot(CreateSpotRequest.builder()
+                .spotList(Arrays.asList(spot))
+                .build())
+                .getSpotIdList().get(0);
+
+        gather.setSpotId(spotId);
         return CreateGatherResponse.from(gather);
     }
 
