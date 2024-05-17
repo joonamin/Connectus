@@ -75,8 +75,9 @@ public class DetailPostAdapter implements DetailPostPort {
 	@Override
 	public SpotDto postSpotBySpotId(Long spotId) {
 		List<Long> idList = Arrays.asList(spotId);
-		return spotServiceClient.getPostSpot(GetPostSpotRequest.builder().spotIdList(idList).build())
-				.getSpotList().get(0);
+		CoordinateRequestDto dto = spotServiceClient.getPostSpot(GetPostSpotRequest.builder().spotIdList(idList).build());
+		SpotDto spotDto = dto.getSpotList().get(0);
+		return spotDto;
 	}
 
 	@Override
