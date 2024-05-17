@@ -25,7 +25,7 @@ import {comment} from '@/types';
 import queryClient from '@/api/queryClient';
 import {StackScreenProps} from '@react-navigation/stack';
 import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
-import { dateTimeToString } from '@/utils';
+import {dateTimeToString} from '@/utils';
 
 type FeedDetailScreenProps = StackScreenProps<FeedStackParamList, 'FeedDetail'>;
 

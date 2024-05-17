@@ -51,7 +51,8 @@ import BottomSheetQuickStackNavigator from '@/navigations/stack/BottomSheetQuick
 import {useQuery} from '@tanstack/react-query';
 import {getNearMarker} from '@/api/spot';
 import mapStyle from '@/style/mapStyle';
-import {domainType} from '@/types';
+import {domainType, spotListType} from '@/types';
+import {queryKeys} from '@/constants';
 
 type Navigation = StackNavigationProp<MapStackParamList>;
 
@@ -77,6 +78,9 @@ export default function TestMapWalkScreen() {
   });
   // 초기 지도의 중앙 좌표값 및
   const [mapPos, setMapPos] = useState<LatLng>();
+
+  const [data, setData] = useState<spotListType>();
+  const [tempLoading, setTempLoading] = useState(false);
 
   const mapRef = useRef<Map | null>(null);
   const bottomSheetNav =
@@ -140,15 +144,12 @@ export default function TestMapWalkScreen() {
   };
 
   // 마커들을 3초마다 한번씩 요청할 query
-  const {data} = useQuery({
-    queryFn: () => getNearMarker(),
-    queryKey: ['test'],
-    refetchInterval: 3000,
-    retry: 10,
-    retryDelay: 400,
-  });
+  // const {data, isLoading} = useQuery({
+  //   queryFn: () => getNearMarker(),
+  //   queryKey: [queryKeys.GET_MARKER],
+  // });
 
-  console.log(data);
+  // console.log(data?.nearby[0]);
 
   const handleMenuPress = () => {
     bottomSheetNav.current &&
@@ -157,7 +158,11 @@ export default function TestMapWalkScreen() {
   };
 
   // 마커를 press시 바텀시트를 열고 타입별로 bottomsheet를 이동합니다
-  const handleMarkerPress = (type: domainType, domainId: number) => {
+  const handleMarkerPress = (
+    type: domainType,
+    domainId: number,
+    coordinate: LatLng,
+  ) => {
     setTrackingMode(false);
     setMapPos({
       latitude: coordinate.latitude,
@@ -223,6 +228,20 @@ export default function TestMapWalkScreen() {
     };
   }, []);
 
+  useEffect(() => {
+    const getData = async () => {
+      setTempLoading(true);
+      const temp = await getNearMarker();
+      setData(temp);
+      setTempLoading(false);
+    };
+    getData();
+  }, []);
+
+  if (tempLoading && !data) {
+    return <MainText>test</MainText>;
+  }
+  console.log(data);
   return (
     <>
       {mapPos && (
@@ -234,7 +253,6 @@ export default function TestMapWalkScreen() {
           showsUserLocation
           showsMyLocationButton={true}
           zoomEnabled={true}
-          customMapStyle={mapStyle}
           initialRegion={{...mapPos, ...mapDelta}}
           onUserLocationChange={event => {
             const {latitude, longitude} = event.nativeEvent.coordinate;
@@ -260,14 +278,29 @@ export default function TestMapWalkScreen() {
                 // 상세 좌표를 요청하는 코드
                 enableHighAccuracy: true,
                 distanceFilter: 0,
-                // interval: 3000,
-                // fastestInterval: 2000,
               },
             );
           }}
-          // region={trackingMode ? {...userLocation, ...mapDelta} : undefined}
-          // onRegionChangeComplete={onRegionChangeComplete}
           onRegionChange={onRegionChange}>
+          {data &&
+            data?.nearby.map((marker, index) => {
+              return (
+                <CustomMarker
+                  key={index}
+                  coordinate={{
+                    latitude: marker.latitude,
+                    longitude: marker.longitude,
+                  }}
+                  type={marker.type}
+                  onPress={() =>
+                    handleMarkerPress(marker.type, marker.domainId, {
+                      latitude: marker.latitude,
+                      longitude: marker.longitude,
+                    })
+                  }
+                />
+              );
+            })}
           <Polyline
             coordinates={trace}
             strokeWidth={8}
@@ -280,19 +313,6 @@ export default function TestMapWalkScreen() {
               strokeWidth={10}
             />
           )}
-          {data?.nearby.map((marker, index) => {
-            return (
-              <CustomMarker
-                key={index}
-                coordinate={{
-                  latitude: marker.latitude,
-                  longitude: marker.longitude,
-                }}
-                type={marker.type}
-                onPress={() => handleMarkerPress(marker.type, marker.domainId)}
-              />
-            );
-          })}
           <Circle
             center={{...userLocation}}
             radius={100}

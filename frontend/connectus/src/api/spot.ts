@@ -12,17 +12,22 @@ import {getPosition} from '@/utils';
  */
 const getNearMarker = async (): Promise<spotListType> => {
   const post = await getPosition();
+  // const body = {
+  //   latitude: post.coords.latitude,
+  //   longitude: post.coords.longitude,
+  // };
   const body = {
-    longitude: post.coords.longitude,
-    latitude: post.coords.latitude,
+    latitude: 35.09359333333333,
+    longitude: 128.85655833333334,
   };
+
   console.log('bodycheck', body);
   try {
     const {data} = await axiosInstance.post('/spot/findNearby', body);
     console.log('datacheck', data);
     return data;
   } catch (error) {
-    throw error;
+    return error;
   }
 };
 
