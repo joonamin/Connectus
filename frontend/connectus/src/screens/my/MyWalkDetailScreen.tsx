@@ -87,7 +87,7 @@ export default function MyWalkDetailScreen({route}: MyWalkDetailProps) {
           title: '지도 공유',
           url: base64,
           type: 'image/jpeg',
-          filename: 'map.jpg',
+          filename: 'map',
           failOnCancel: false,
         }),
       );
