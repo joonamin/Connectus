@@ -30,7 +30,7 @@ public class UserAdapter implements UserPort {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final SpotClient positionClient;
+	private final SpotClient spotClient;
 	@Override
 	@Transactional
 	public void registerUser(UserRegisterCommand command) {
@@ -99,14 +99,14 @@ public class UserAdapter implements UserPort {
 	}
 
 	@Override
+	public void insertUserPosition(List<UserPositionCommand> userPositionCommand) {
+		spotClient.insertPostPosition(userPositionCommand);
+	}
+	@Override
 	public UserResponseForPost getUserResponseForPost(Long userId) {
 		return UserResponseForPost.from(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")));
 	}
 
-	@Override
-	public void insertUserPosition(List<UserPositionCommand> userPositionCommand) {
-		positionClient.insertPostPosition(userPositionCommand);
-	}
 
 	@Override
 	public String updateAvatar(Long userId, String imageUrl) {
