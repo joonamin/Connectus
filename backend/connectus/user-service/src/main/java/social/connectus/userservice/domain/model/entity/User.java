@@ -76,4 +76,9 @@ public class User {
 	public void updateOpenedPosts(List<Long> openedPosts) {
 		this.postHistory = openedPosts;
 	}
+
+	public User changeUserPoint(int changeValue){
+		this.point += changeValue;
+		return this;
+	}
 }

@@ -1,7 +1,6 @@
 package social.connectus.userservice.domain.port.inbound;
 
-import social.connectus.userservice.domain.application.request.MyPreferencePostRequest;
-import social.connectus.userservice.domain.application.response.MyPreferencePostResponse;
+import social.connectus.userservice.application.response.MyPreferencePostResponse;
 import social.connectus.userservice.domain.port.inbound.command.MyPreferencePostCommand;
 
 public interface PostUseCase {

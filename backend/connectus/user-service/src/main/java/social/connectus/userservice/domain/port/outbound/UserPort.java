@@ -2,8 +2,10 @@ package social.connectus.userservice.domain.port.outbound;
 
 import java.util.List;
 
+import social.connectus.userservice.application.response.PointResponse;
 import social.connectus.userservice.common.exception.FailedToLoginException;
-import social.connectus.userservice.domain.application.response.OpenedPostResponse;
+import social.connectus.userservice.application.response.OpenedPostResponse;
+import social.connectus.userservice.domain.command.PointChangeCommand;
 import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
@@ -21,4 +23,8 @@ public interface UserPort {
 	void updateOpenedPosts(Long userId, List<Long> postIdList);
 	OpenedPostResponse getOpenedPost(Long userId);
 	String getUserNickname(Long userId);
+
+	PointResponse increasePoint(PointChangeCommand command);
+
+	PointResponse decreasePoint(PointChangeCommand command);
 }

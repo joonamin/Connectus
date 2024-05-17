@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import social.connectus.userservice.domain.application.request.MyPreferenceRouteRequest;
+import social.connectus.userservice.application.request.MyPreferenceRouteRequest;
 
 @Getter
 @Setter
