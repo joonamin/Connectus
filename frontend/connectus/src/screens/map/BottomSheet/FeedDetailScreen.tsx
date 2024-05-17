@@ -17,24 +17,54 @@ import MainText from '@/components/text/MainText';
 import colors from '@/constants/colors';
 import Comment from '@/components/feed/Comment';
 import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
-import {createPostComment} from '@/api/post';
+import {createPostComment, getPostDetail, postFeedLike} from '@/api/post';
+import {StackScreenProps} from '@react-navigation/stack';
+import {BottomSheetStackParamList} from '@/navigations/stack/BottomSheetQuickStackNavigator';
+import useAuthStore from '@/store/useAuthStore';
+import {useMutation, useQuery} from '@tanstack/react-query';
+import {queryKeys} from '@/constants';
+import {dateTimeToString} from '@/utils';
+import queryClient from '@/api/queryClient';
+
+type FeedDetailScreenProps = StackScreenProps<
+  BottomSheetStackParamList,
+  'Feed'
+>;
 
 /**
  * 바텀시트에서 사용할 Feed Detail Screen
  * @todo feedHomeScreen에서 해당 스크린에 대한 데이터를 전달받아 like, comment의 수를 받아와야하고
  * 이미지 및 상세 content내용을 받아와야합니다
  */
-export default function FeedDetailScreen() {
-  const [isFeedLiked, setIsFeedLiked] = useState(false);
+export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
   const [isUseKeyBoard, setIsUseKeyBoard] = useState(false);
   const [comment, setComment] = useState('');
-  // 스크린 확인을 위한 더미 데이터입니다
-  const likeNumber = 12;
-  const commentNumber = 42;
+  // 요청에 사용할 피드 아이디입니다.
+  const {feedId} = route.params;
+  // 요청에 사용할 유저 정보입니다.
+  const {user} = useAuthStore();
+
+  const {data} = useQuery({
+    queryFn: () => getPostDetail(feedId, user?.userId as number, 5),
+    queryKey: [queryKeys.GET_FEED_DETAIL, feedId],
+  });
+
+  const like = useMutation({
+    mutationFn: () =>
+      postFeedLike({
+        userId: user?.userId as number,
+        domainId: feedId,
+        type: 'POST',
+      }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.GET_FEED_DETAIL, feedId],
+      }),
+  });
 
   // 좋아요 버튼을 눌렀을때 실행할 함수로 나중에 api연결이 필요합니다
   const handlePressLikeButton = () => {
-    setIsFeedLiked(!isFeedLiked);
+    like.mutate();
   };
 
   /**
@@ -42,7 +72,10 @@ export default function FeedDetailScreen() {
    * @todo 추후 postId, {content , authorId} 수정
    */
   const handleSubmitComment = async () => {
-    await createPostComment(2, {content: comment, authorId: 1});
+    await createPostComment(feedId, {
+      content: comment,
+      authorId: user?.userId as number,
+    });
     setComment('');
     Keyboard.dismiss();
   };
@@ -74,18 +107,17 @@ export default function FeedDetailScreen() {
                 />
               </View>
               <View style={styles.feedInfoContainer}>
-                <MainText>{'userName'}</MainText>
-                <Text style={styles.postDate}>{'2024-04-29'}</Text>
+                <MainText>{data?.authorId}</MainText>
+                <Text style={styles.postDate}>
+                  {dateTimeToString(data?.updatedAt as string)}
+                </Text>
               </View>
             </View>
             <View style={styles.feedImageContainer}>
-              <Image
-                style={styles.feedImage}
-                source={require('@/assets/test-feed-image.jpg')}
-              />
+              <Image style={styles.feedImage} source={{uri: data?.imageUrl}} />
             </View>
             <View style={styles.feedIndicator}>
-              {isFeedLiked ? (
+              {data?.like ? (
                 <Pressable onPress={handlePressLikeButton}>
                   <Ionicons name="heart" size={32} color={'red'} />
                 </Pressable>
@@ -95,19 +127,21 @@ export default function FeedDetailScreen() {
                 </Pressable>
               )}
               <Text style={styles.feedIndicatorText}>
-                좋아요 {likeNumber}개
+                좋아요 {data?.likeCount}개
               </Text>
               <Text style={styles.feedIndicatorText}>
-                댓글 {commentNumber}개
+                댓글 {data?.commentCount}개
               </Text>
             </View>
             <View style={styles.feedContentContainer}>
               <MainText>메인내용</MainText>
             </View>
             <View style={styles.commentListContainer}>
-              {/* <Comment />
-              <Comment />
-              <Comment /> */}
+              {
+                data?.commentList.map((comment, index) => return (
+                  <Comment key={index} params={comment}/>
+                ))
+              }
             </View>
             <View style={styles.defaultBottomPadding} />
             <View style={isUseKeyBoard ? styles.keyboardBottomPadding : null} />

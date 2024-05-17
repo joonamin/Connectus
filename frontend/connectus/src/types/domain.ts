@@ -31,14 +31,16 @@ interface postType {
   image: Image;
 }
 
+type domainType = 'GATHER' | 'POST' | 'USER' | 'EVENT';
+
 interface spotType {
   id: number;
   longitude: number;
   latitude: number;
-  type: String;
+  type: domainType;
   domainId: number;
-  cretedAt: String;
-  updatedAt: String;
+  cretedAt: string;
+  updatedAt: string;
 }
 
 interface spotListType {
@@ -63,4 +65,12 @@ interface Walk {
   public: boolean;
 }
 
-export type {postDetail, comment, postType, spotType, spotListType, Walk};
+export type {
+  postDetail,
+  comment,
+  postType,
+  spotType,
+  spotListType,
+  Walk,
+  domainType,
+};

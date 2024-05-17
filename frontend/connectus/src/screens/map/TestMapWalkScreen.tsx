@@ -51,39 +51,7 @@ import BottomSheetQuickStackNavigator from '@/navigations/stack/BottomSheetQuick
 import {useQuery} from '@tanstack/react-query';
 import {getNearMarker} from '@/api/spot';
 import mapStyle from '@/style/mapStyle';
-
-const DUMMY_POSITION = [
-  {
-    latitude: 35.09198080366587,
-    longitude: 128.85326819627983,
-  },
-  {
-    latitude: 35.09056972684619,
-    longitude: 128.85331301309265,
-  },
-  {
-    latitude: 35.09613483737488,
-    longitude: 128.8535979719482,
-  },
-];
-
-const DUMMY_GATHER = [
-  {
-    gatherId: 1,
-    latitude: 35.09064834938094,
-    longitude: 128.85494849796893,
-  },
-  {
-    gatherId: 1,
-    latitude: 35.09063223602116,
-    longitude: 128.85511808214923,
-  },
-  {
-    gatherId: 1,
-    latitude: 35.09060123205063,
-    longitude: 128.85478844604273,
-  },
-];
+import {domainType} from '@/types';
 
 type Navigation = StackNavigationProp<MapStackParamList>;
 
@@ -171,30 +139,16 @@ export default function TestMapWalkScreen() {
     }
   };
 
-  // userFocus해제시 화면에 고정시킬 좌표를 저장하기위해 실행하는 함수입니다
-  // const onRegionChangeComplete = async (region: Region, details: Details) => {
-  //   if (details.isGesture === true) {
-  //     setMapPos({
-  //       latitude: region.latitude,
-  //       longitude: region.longitude,
-  //     });
-  //     setMapDelta({
-  //       longitudeDelta: region.longitudeDelta,
-  //       latitudeDelta: region.latitudeDelta,
-  //     });
-  //     return;
-  //   }
-  // };
-
   // 마커들을 3초마다 한번씩 요청할 query
-  // const {data, isError} = useQuery({
-  //   refetchInterval: 3000,
-  //   queryFn: () => getNearMarker(),
-  //   queryKey: ['test'],
-  // });
+  const {data} = useQuery({
+    queryFn: () => getNearMarker(),
+    queryKey: ['test'],
+    refetchInterval: 3000,
+    retry: 10,
+    retryDelay: 400,
+  });
 
-  // console.log(data);
-  // console.log(isError);
+  console.log(data);
 
   const handleMenuPress = () => {
     bottomSheetNav.current &&
@@ -202,28 +156,27 @@ export default function TestMapWalkScreen() {
     handleBottomSheetOpen();
   };
 
-  // feed를 press시 바텀시트를 열고 Feed페이지로 이동합니다
-  const handleMarkerPress = (coordinate: LatLng) => {
+  // 마커를 press시 바텀시트를 열고 타입별로 bottomsheet를 이동합니다
+  const handleMarkerPress = (type: domainType, domainId: number) => {
     setTrackingMode(false);
     setMapPos({
       latitude: coordinate.latitude,
       longitude: coordinate.longitude,
     });
-    bottomSheetNav.current && bottomSheetNav.current.navigate('Feed');
-    handleBottomSheetOpen();
-  };
-
-  const handleClusterPress = () => {
-    setTrackingMode(false);
-    bottomSheetNav.current && bottomSheetNav.current.navigate('FeedList');
+    if (type === 'GATHER') {
+      bottomSheetNav.current &&
+        bottomSheetNav.current.navigate('Gather', {gatherId: domainId});
+    } else if (type === 'POST') {
+      bottomSheetNav.current &&
+        bottomSheetNav.current.navigate('Feed', {feedId: domainId});
+    }
     handleBottomSheetOpen();
   };
 
   // 모여라 press시 모여라 페이지로 이동합니다
   const handleGatherPress = (gatehrId: number) => {
     setTrackingMode(false);
-    bottomSheetNav.current &&
-      bottomSheetNav.current.navigate('Gather', {gatherId: gatehrId});
+
     handleBottomSheetOpen();
   };
 
@@ -327,27 +280,16 @@ export default function TestMapWalkScreen() {
               strokeWidth={10}
             />
           )}
-          {/* 게시글을 확인해줄 마커들 */}
-          {DUMMY_POSITION.map((data, index) => {
+          {data?.nearby.map((marker, index) => {
             return (
               <CustomMarker
                 key={index}
-                coordinate={data}
-                onPress={event =>
-                  handleMarkerPress(event.nativeEvent.coordinate)
-                }
-                type={2}
-              />
-            );
-          })}
-          {/* 모여라 좌표 */}
-          {DUMMY_GATHER.map((data, index) => {
-            return (
-              <CustomMarker
-                key={index}
-                coordinate={data}
-                onPress={() => handleGatherPress(data.gatherId)}
-                type={3}
+                coordinate={{
+                  latitude: marker.latitude,
+                  longitude: marker.longitude,
+                }}
+                type={marker.type}
+                onPress={() => handleMarkerPress(marker.type, marker.domainId)}
               />
             );
           })}

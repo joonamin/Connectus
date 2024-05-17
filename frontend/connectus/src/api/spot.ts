@@ -10,7 +10,7 @@ import {getPosition} from '@/utils';
  * 주변에 있는 마커들을 조회합니다.
  * @returns {spotListType}
  */
-const getNearMarker = async () => {
+const getNearMarker = async (): Promise<spotListType> => {
   const post = await getPosition();
   const body = {
     longitude: post.coords.longitude,
@@ -22,7 +22,7 @@ const getNearMarker = async () => {
     console.log('datacheck', data);
     return data;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 

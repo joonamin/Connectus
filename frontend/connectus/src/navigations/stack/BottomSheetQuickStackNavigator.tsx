@@ -17,7 +17,7 @@ export type BottomSheetStackParamList = {
   ChatList: undefined;
   MarkerList: undefined;
   FeedList: undefined;
-  Feed: undefined;
+  Feed: {feedId: number};
   Gather: {gatherId: number};
 };
 

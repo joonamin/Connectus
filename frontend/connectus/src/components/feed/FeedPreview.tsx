@@ -74,8 +74,6 @@ export default function FeedPreview({feedId, show}: feedPreviewProps) {
     return <Text>로딩중입니다</Text>;
   }
 
-  console.log('데ㅐ데데데데데이터', feedId, data);
-
   if (!data) {
     return <MainText>데이터가 없습니다</MainText>;
   }
