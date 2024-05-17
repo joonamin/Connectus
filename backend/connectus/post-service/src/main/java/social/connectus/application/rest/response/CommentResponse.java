@@ -29,7 +29,7 @@ public class CommentResponse {
 			.commentId(comment.getId())
 			.authorId(comment.getAuthorId())
 			.authorName(userInfoResponse.getAuthorNickName())
-			.authorAvatarImage(userInfoResponse.getAuthorNickName())
+			.authorAvatarImage(userInfoResponse.getAvatarImageUrl())
 			.content(comment.getContent())
 			.createdAt(comment.getCreatedAt())
 			.build();
