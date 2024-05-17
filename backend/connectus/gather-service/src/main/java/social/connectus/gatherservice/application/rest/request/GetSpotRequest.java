@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import social.connectus.gatherservice.common.type.Type;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdateSpotRequest {
-    private long spotId;
-    private long domainId;
-    // domainId는 위치 생성 후 도메인 생성 후에 전달한다.
+public class GetSpotRequest {
+    private List<Long> spotIdList;
 }
