@@ -9,12 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import social.connectus.userservice.application.response.PointResponse;
+import social.connectus.userservice.application.response.UserResponseForPost;
 import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
+import social.connectus.userservice.common.exception.FailedToChagePointException;
 import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
 import social.connectus.userservice.common.exception.NotFoundException;
-import social.connectus.userservice.domain.application.response.OpenedPostResponse;
-import social.connectus.userservice.domain.application.response.UserResponseForPost;
+import social.connectus.userservice.application.response.OpenedPostResponse;
+import social.connectus.userservice.domain.command.PointChangeCommand;
 import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.client.SpotClient;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
@@ -53,7 +56,6 @@ public class UserAdapter implements UserPort {
 			.phoneNumber(command.getPhoneNumber())
 			.walkCount(0)
 			.postCount(0)
-			.avatarImageUrl(command.getImageUrl())
 			.build();
 		userRepository.save(user);
 	}
@@ -100,12 +102,43 @@ public class UserAdapter implements UserPort {
 	}
 
 	@Override
+	public String getUserNickname(Long userId) {
+		return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")).getNickname();
+	}
+
+	@Override
 	public void insertUserPosition(List<UserPositionCommand> userPositionCommand) {
 		spotClient.insertPostPosition(userPositionCommand);
 	}
 	@Override
 	public UserResponseForPost getUserResponseForPost(Long userId) {
 		return UserResponseForPost.from(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")));
+	}
+
+	@Override
+	public PointResponse increasePoint(PointChangeCommand command) {
+		User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new NotFoundException("user doesn't exists"));
+		user.changeUserPoint(command.getChangeValue());
+		userRepository.save(user);
+		return PointResponse.builder()
+				.currentPoint(user.getPoint())
+				.userId(user.getUserId())
+				.build();
+	}
+
+	@Override
+	public PointResponse decreasePoint(PointChangeCommand command) {
+		User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new NotFoundException("user doesn't exists"));
+		if(user.getPoint() - command.getChangeValue() < 0)
+			throw new FailedToChagePointException("point cannot be less than zero.");
+		else {
+            user.changeUserPoint(command.getChangeValue() * -1);
+            userRepository.save(user);
+        }
+		return PointResponse.builder()
+				.currentPoint(user.getPoint())
+				.userId(user.getUserId())
+				.build();
 	}
 
 

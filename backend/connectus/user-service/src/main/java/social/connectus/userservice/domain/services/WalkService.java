@@ -4,10 +4,9 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.common.annotation.UseCase;
-import social.connectus.userservice.domain.application.response.MyPreferenceRouteResponse;
-import social.connectus.userservice.domain.application.response.MyWalkResponse;
-import social.connectus.userservice.domain.application.response.MyWalkResponse.WalkRecord;
-import social.connectus.userservice.domain.port.client.WalkClient;
+import social.connectus.userservice.application.response.MyPreferenceRouteResponse;
+import social.connectus.userservice.application.response.MyWalkResponse;
+import social.connectus.userservice.application.response.MyWalkResponse.WalkRecord;
 import social.connectus.userservice.domain.port.client.response.MyWalkRecordResponse;
 import social.connectus.userservice.domain.port.external.port.WalkPort;
 import social.connectus.userservice.domain.port.inbound.WalkUseCase;

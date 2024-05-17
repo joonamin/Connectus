@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import social.connectus.userservice.domain.application.request.MyWalkRequest;
+import social.connectus.userservice.application.request.MyWalkRequest;
 
 @Getter
 @NoArgsConstructor

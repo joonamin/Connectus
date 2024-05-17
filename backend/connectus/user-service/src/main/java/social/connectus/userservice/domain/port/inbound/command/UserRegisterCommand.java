@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import social.connectus.userservice.domain.application.request.UserRegisterRequest;
+import social.connectus.userservice.application.request.UserRegisterRequest;
 
 /**
  * 모든 검증이 완료된 신뢰할 수 있는 데이터 값들

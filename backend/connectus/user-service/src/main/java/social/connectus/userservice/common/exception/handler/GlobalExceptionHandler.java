@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import lombok.extern.slf4j.Slf4j;
+import social.connectus.userservice.common.exception.FailedToChagePointException;
 import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
 import social.connectus.userservice.common.exception.NotFoundException;
@@ -30,6 +31,12 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<String> handleFailedToRegisterUserException(FailedToRegisterUserException ex) {
 		log.error("FAILED TO REGISTER EXCEPTION ===> ", ex);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+	}
+
+	@ExceptionHandler(FailedToChagePointException.class)
+	public ResponseEntity<String> handleFailedToChagePointException(FailedToChagePointException ex) {
+		log.error("FAILED TO CHANGE POINT EXCEPTION ===> ", ex);
+		return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(ex.getMessage());
 	}
 
 }

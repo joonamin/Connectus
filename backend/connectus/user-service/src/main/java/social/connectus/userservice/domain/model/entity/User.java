@@ -79,6 +79,11 @@ public class User {
 		this.postHistory = openedPosts;
 	}
 
+	public User changeUserPoint(int changeValue){
+		this.point += changeValue;
+		return this;
+	}
+
 	public void updateAvatar(String avatarImageUrl) {
 		this.avatarImageUrl = avatarImageUrl;
 	}

@@ -1,4 +1,4 @@
-package social.connectus.userservice.domain.application.request;
+package social.connectus.userservice.application.request;
 
 import java.time.LocalDate;
 
