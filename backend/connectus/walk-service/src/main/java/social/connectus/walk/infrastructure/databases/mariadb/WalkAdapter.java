@@ -18,6 +18,7 @@ import social.connectus.walk.infrastructure.databases.mariadb.repository.LikeUse
 import social.connectus.walk.infrastructure.databases.mariadb.repository.RouteRepository;
 import social.connectus.walk.infrastructure.databases.mariadb.repository.WalkRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -66,7 +67,8 @@ public class WalkAdapter implements WalkPort {
         double kmRadius = command.getKmRadius();
         PageRequest pageRequest = PageRequest.of(command.getPageNumber(), command.getPageSize());
         Slice<Route> routeList = routeRepository.findSliceByPosition(userPosition.getLatitude(), userPosition.getLongitude(), kmRadius, 111.2D, 89.85D, pageRequest);
-        return new SliceResponse<>(routeList.getContent().stream().map(Route::getId).toList(),routeList.hasNext(),routeList.getNumber());
+        List<Walk> walkList = routeList.getContent().stream().map(Route::getWalk).toList();
+        return new SliceResponse<>(walkList.stream().map(Walk::getId).toList(),routeList.hasNext(),routeList.getNumber());
     }
 
     @Override

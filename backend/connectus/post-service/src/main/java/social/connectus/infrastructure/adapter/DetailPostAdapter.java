@@ -1,12 +1,14 @@
 package social.connectus.infrastructure.adapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
 import social.connectus.application.rest.request.CoordinateRequestDto;
 import social.connectus.application.rest.request.GetPostSpotRequest;
+import social.connectus.application.rest.request.SpotDto;
 import social.connectus.application.rest.response.CommentResponse;
 import social.connectus.application.rest.response.DetailPostResponse;
 import social.connectus.application.rest.response.OpenedPostResponse;
@@ -53,8 +55,8 @@ public class DetailPostAdapter implements DetailPostPort {
 			response.setAuthorName(commentAuthorName);
 			commentResponseList.add(response);
 		}
-
-		DetailPostResponse response = DetailPostResponse.detailPostFrom(post, commentResponseList,authorName);
+		SpotDto postSpot = postSpotBySpotId(post.getSpotId());
+		DetailPostResponse response = DetailPostResponse.detailPostFrom(post, commentResponseList,authorName, postSpot);
 		response.setLike(isLike);
 		response.setLikeCount(likeCount);
 		return response;
@@ -70,10 +72,12 @@ public class DetailPostAdapter implements DetailPostPort {
 		return userServiceClient.getOpenedPost(userId);
 	}
 
-//	@Override
-//	public CoordinateRequestDto postSpotByPostId(GetPostSpotRequest request) {
-//		return spotServiceClient.getPostSpot(request);
-//	}
+	@Override
+	public SpotDto postSpotBySpotId(Long spotId) {
+		List<Long> idList = Arrays.asList(spotId);
+		return spotServiceClient.getPostSpot(GetPostSpotRequest.builder().spotIdList(idList).build())
+				.getSpotList().get(0);
+	}
 
 	@Override
 	public String healthCheck() {

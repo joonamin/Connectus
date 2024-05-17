@@ -35,6 +35,8 @@ public class QPost extends EntityPathBase<Post> {
 
     public final StringPath imageUrl = createString("imageUrl");
 
+    public final NumberPath<Long> spotId = createNumber("spotId", Long.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
