@@ -14,6 +14,7 @@ import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
 import social.connectus.userservice.common.exception.NotFoundException;
 import social.connectus.userservice.domain.application.response.OpenedPostResponse;
+import social.connectus.userservice.domain.application.response.UserResponseForPost;
 import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
@@ -97,7 +98,7 @@ public class UserAdapter implements UserPort {
 	}
 
 	@Override
-	public String getUserNickname(Long userId) {
-		return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")).getNickname();
+	public UserResponseForPost getUserResponseForPost(Long userId) {
+		return UserResponseForPost.from(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")));
 	}
 }
