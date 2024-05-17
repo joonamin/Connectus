@@ -22,18 +22,20 @@ public class FeedResponse {
 	private Long walkId;
 	private Long authorId;
 	private String authorName;
+	private String authorAvatarImage;
 	List<DetailPostResponse> postList;
 
-	public static FeedResponse from(List<Post> postList, String authorName) {
+	public static FeedResponse from(List<Post> postList, UserInfoResponse userInfoResponse) {
 		Post postHead = postList.get(0);
 		List<DetailPostResponse> detailPostResponseList = new ArrayList<>();
 		for(Post post : postList) {
-			detailPostResponseList.add(DetailPostResponse.samplePostFrom(post,authorName));
+			detailPostResponseList.add(DetailPostResponse.samplePostFrom(post,userInfoResponse));
 		}
 		return FeedResponse.builder()
 			.walkId(postHead.getWalkId())
 			.authorId(postHead.getAuthorId())
-			.authorName(authorName)
+			.authorName(userInfoResponse.getAuthorNickName())
+			.authorAvatarImage(userInfoResponse.getAvatarImageUrl())
 			.postList(detailPostResponseList)
 			.build();
 	}
