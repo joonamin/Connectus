@@ -73,6 +73,7 @@ export default class RouteMap extends React.Component<RouteMapProps> {
 
     this.mapProps = {
       style: styles.map,
+      customMapStyle: mapStyle,
       scrollEnabled: false,
       zoomEnabled: false,
       provider: PROVIDER_GOOGLE,
