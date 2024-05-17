@@ -10,6 +10,7 @@ import io.milvus.param.R;
 import io.milvus.param.dml.InsertParam;
 import io.milvus.param.dml.QueryParam;
 import io.milvus.param.dml.SearchParam;
+import io.milvus.param.dml.UpsertParam;
 import io.milvus.param.highlevel.dml.GetIdsParam;
 import io.milvus.param.highlevel.dml.response.GetResponse;
 import io.milvus.response.QueryResultsWrapper;
@@ -195,5 +196,40 @@ public class MilvusAdapter implements MilvusPort {
         }
 
         return response;
+    }
+
+    @Override
+    public List<Long> updateSpotList(CreateSpotCommand command) {
+        // client 값 호출
+        MilvusClient client = milvusConfig.createMilvusClient();
+
+        // 데이터 생성
+        List<Long> spotIdList = new ArrayList<>();
+        List<Long> domainIdList = new ArrayList<>();
+        List<String> updateTimeList = new ArrayList<>();
+        for(SpotDto spotDto: command.getSpotList()){
+            spotIdList.add(spotDto.getSpotId());
+            domainIdList.add(spotDto.getDomainId());
+            updateTimeList.add(LocalDateTime.now().toString());
+        }
+
+        List<InsertParam.Field> fields = new ArrayList<>();
+        fields.add(new InsertParam.Field("spot_id", spotIdList));
+        fields.add(new InsertParam.Field("domain_id", domainIdList));
+        fields.add(new InsertParam.Field("updated_at", updateTimeList));
+        // 삽입 요청
+        UpsertParam insertReq = UpsertParam.newBuilder()
+                .withCollectionName(milvusConfig.getCollectionName())
+                .withFields(fields)
+                .build();
+        R<MutationResult> mutationResp = client.upsert(insertReq);
+        MutationResult mutationResult = mutationResp.getData();
+        if (mutationResp.getStatus() != R.Status.Success.getCode()) {
+            System.out.println(mutationResp.getMessage());
+        }
+
+        List<Long> result = mutationResult.getIDs().getIntId().getDataList().stream().toList();
+
+        return result;
     }
 }
