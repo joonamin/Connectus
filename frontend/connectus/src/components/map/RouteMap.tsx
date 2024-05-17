@@ -11,6 +11,7 @@ import MapView, {
 import StartMarker from '@/components/map/StartMarker';
 import FinishMarker from '@/components/map/FinishMarker';
 import {ViewProps} from 'react-native';
+import mapStyle from '@/style/mapStyle';
 
 /**
  * RouteMap을 생성할 시 전달할 인자를 지정합니다
@@ -74,9 +75,19 @@ export default class RouteMap extends React.Component<RouteMapProps> {
     this.mapProps = {
       style: styles.map,
       customMapStyle: mapStyle,
-      scrollEnabled: false,
       zoomEnabled: false,
+      zoomTapEnabled: false,
+      zoomControlEnabled: false,
       provider: PROVIDER_GOOGLE,
+      rotateEnabled: false,
+      scrollEnabled: false,
+      scrollDuringRotateOrZoomEnabled: false,
+      pitchEnabled: false,
+      toolbarEnabled: false,
+      loadingEnabled: true,
+      loadingIndicatorColor: colors.buttonBackground,
+      loadingBackgroundColor: colors.background,
+      moveOnMarkerPress: false,
       onMapReady: this.onMapReadyInternal.bind(this),
       children: (
         <>
