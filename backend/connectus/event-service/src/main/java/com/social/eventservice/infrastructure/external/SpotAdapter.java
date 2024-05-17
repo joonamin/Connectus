@@ -19,14 +19,20 @@ public class SpotAdapter implements SpotPort {
 
 	private final SpotServiceClient spotServiceClient;
 
+
 	@Override
-	public List<Spot> saveAllPositions(List<Position> positions) throws SavePositionException {
-		return spotServiceClient.saveAllPositions(positions);
+	public List<Long> saveAllPositions(List<Position> positions, Long eventId) throws SavePositionException {
+		return spotServiceClient.saveAllPositions(positions, eventId);
 	}
 
 	@Override
 	public Optional<Spot> getSpotById(Long id) {
 		return spotServiceClient.getSpotById(id);
+	}
+
+	@Override
+	public void initEventId(Long spotId, Long eventId) {
+		spotServiceClient.updateDomain(spotId, eventId, "event");
 	}
 
 }
