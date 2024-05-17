@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import social.connectus.application.rest.request.SpotDto;
 import social.connectus.domain.model.RDBMS.Comment;
 import social.connectus.domain.model.RDBMS.Post;
 import lombok.Builder;
@@ -29,8 +30,10 @@ public class DetailPostResponse {
 	private LocalDateTime updatedAt;
 	private boolean isLike;
 	private boolean inRange;
+	private double latitude;
+	private double longitude;
 
-	public static DetailPostResponse detailPostFrom(Post post, List<CommentResponse> commentList, String authorName) {
+	public static DetailPostResponse detailPostFrom(Post post, List<CommentResponse> commentList, String authorName, SpotDto postSpot) {
 		return DetailPostResponse.builder()
 			.postId(post.getId())
 			.authorId(post.getAuthorId())
@@ -41,6 +44,8 @@ public class DetailPostResponse {
 			.commentCount(commentList.size())
 			.updatedAt(post.getUpdatedAt())
 			.inRange(true)
+			.latitude(postSpot.getLatitude())
+			.longitude(postSpot.getLongitude())
 			.build();
 	}
 
