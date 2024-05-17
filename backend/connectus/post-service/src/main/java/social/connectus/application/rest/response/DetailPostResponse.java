@@ -24,6 +24,7 @@ public class DetailPostResponse {
 	private String content;
 	private Long authorId;
 	private String authorName;
+	private String authorAvatarImage;
 	private int likeCount;
 	private List<CommentResponse> commentList;
 	private int commentCount;
@@ -33,11 +34,12 @@ public class DetailPostResponse {
 	private double latitude;
 	private double longitude;
 
-	public static DetailPostResponse detailPostFrom(Post post, List<CommentResponse> commentList, String authorName, SpotDto postSpot) {
+	public static DetailPostResponse detailPostFrom(Post post, List<CommentResponse> commentList, UserInfoResponse authorInfo, SpotDto postSpot) {
 		return DetailPostResponse.builder()
 			.postId(post.getId())
 			.authorId(post.getAuthorId())
-			.authorName(authorName)
+			.authorName(authorInfo.getAuthorNickName())
+			.authorAvatarImage(authorInfo.getAvatarImageUrl())
 			.imageUrl(post.getImageUrl())
 			.content(post.getContent())
 			.commentList(commentList)
@@ -49,11 +51,12 @@ public class DetailPostResponse {
 			.build();
 	}
 
-	public static DetailPostResponse samplePostFrom(Post post, String authorName) {
+	public static DetailPostResponse samplePostFrom(Post post, UserInfoResponse authorInfo) {
 		return DetailPostResponse.builder()
 			.postId(post.getId())
 			.authorId(post.getAuthorId())
-			.authorName(authorName)
+			.authorName(authorInfo.getAuthorNickName())
+			.authorAvatarImage(authorInfo.getAvatarImageUrl())
 			.imageUrl(post.getImageUrl())
 			.commentCount(post.getCommentList().size())
 			.updatedAt(post.getUpdatedAt())
