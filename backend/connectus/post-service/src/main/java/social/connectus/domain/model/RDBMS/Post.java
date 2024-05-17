@@ -5,6 +5,7 @@ import java.util.List;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import social.connectus.application.rest.request.CreatePostRequest;
 import social.connectus.application.rest.request.PostRequestDto;
 import social.connectus.common.utils.BaseEntity;
@@ -23,6 +24,7 @@ import social.connectus.domain.service.command.InsertPostCommand;
 @Entity
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Post extends BaseEntity {
@@ -30,6 +32,7 @@ public class Post extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Long authorId;
+	private Long spotId;
 	private Long walkId;
 	private String imageUrl;
 	private String content;
