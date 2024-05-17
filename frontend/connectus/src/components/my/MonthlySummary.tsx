@@ -88,7 +88,11 @@ export default function MonthlySummary({
         icon={
           <MaterialCommunityIcons name="timer-outline" style={styles.icon} />
         }
-        value={hours + ':' + minutes}
+        value={
+          hours.toString().padStart(2, '0') +
+          ':' +
+          minutes.toString().padStart(2, '0')
+        }
         label="외출 시간"
       />
     </ListItem>
