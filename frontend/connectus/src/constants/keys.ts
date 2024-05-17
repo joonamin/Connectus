@@ -8,6 +8,7 @@ const queryKeys = {
   GET_FEED_DETAIL: 'getFeedDetail',
   POST_FEED_COMMENT: 'postFeedComment',
   GET_ROUTE_LIST: 'getRouteList',
+  GET_ROUTE_DETAIL: 'getRouteDetail',
 } as const;
 
 export {queryKeys};
