@@ -1,30 +1,19 @@
 package social.connectus.location.application.rest.controller;
 
-import io.milvus.client.MilvusClient;
-import io.milvus.v2.client.MilvusClientV2;
-import io.milvus.v2.service.collection.request.DescribeCollectionReq;
-import io.milvus.v2.service.collection.request.GetCollectionStatsReq;
-import io.milvus.v2.service.collection.response.DescribeCollectionResp;
-import io.milvus.v2.service.collection.response.GetCollectionStatsResp;
-import io.milvus.v2.service.vector.request.DeleteReq;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang.NullArgumentException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import social.connectus.location.application.rest.request.CreateSpotRequest;
-import social.connectus.location.application.rest.request.FindNearbyElementRequest;
-import social.connectus.location.application.rest.request.GetSpotRequest;
-import social.connectus.location.application.rest.request.SpotDto;
+import social.connectus.location.application.rest.request.*;
 import social.connectus.location.application.rest.response.CreateSpotResponse;
 import social.connectus.location.application.rest.response.FindNearbyElementResponse;
 import social.connectus.location.application.rest.response.GetSpotResponse;
-import social.connectus.location.common.config.MilvusConfig;
 import social.connectus.location.domain.command.CreateSpotCommand;
 import social.connectus.location.domain.command.FindNearbyElementCommand;
 import social.connectus.location.domain.command.GetSpotCommand;
 import social.connectus.location.domain.ports.inbound.SpotUseCase;
-import social.connectus.location.domain.ports.outbound.MilvusPort;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -47,6 +36,11 @@ public class SpotController {
 
     @PostMapping("/insert")
     public ResponseEntity<CreateSpotResponse> createSpot(@RequestBody CreateSpotRequest request){
+        for(SpotDto spot : request.getSpotList()){
+            if(spot.getLongitude()==null || spot.getLatitude()==null){
+                throw new NullArgumentException("Parameter doesn't allow Null.");
+            }
+        }
         CreateSpotCommand command = CreateSpotCommand.from(request);
         List<Long> list = spotUseCase.createSpot(command);
         return ResponseEntity.ok(CreateSpotResponse.builder().spotIdList(list).build());
@@ -58,5 +52,14 @@ public class SpotController {
                 .spotList(spotUseCase.getSpot(GetSpotCommand.from(request)))
                 .build();
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<String> updateSpotList(@RequestBody CreateSpotRequest request){
+        return ResponseEntity.ok("Not used API.");
+//        CreateSpotResponse response = CreateSpotResponse.builder()
+//                .spotIdList(spotUseCase.updateSpot(CreateSpotCommand.from(request)))
+//                .build();
+//        return ResponseEntity.ok(response);
     }
 }

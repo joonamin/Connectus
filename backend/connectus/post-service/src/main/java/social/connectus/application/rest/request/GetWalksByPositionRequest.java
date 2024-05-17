@@ -20,7 +20,7 @@ public class GetWalksByPositionRequest {
 	private int pageSize;
 
 	public static GetWalksByPositionRequest from(
-		CoordinateRequestDto userPosition, int pageNum, int pageSize, Long userId, Double kmRadius) {
+		SpotDto userPosition, int pageNum, int pageSize, Long userId, Double kmRadius) {
 		return GetWalksByPositionRequest.builder()
 			.userId(userId)
 			.latitude(userPosition.getLatitude())
