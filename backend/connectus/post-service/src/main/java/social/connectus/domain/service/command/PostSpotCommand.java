@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import social.connectus.application.rest.request.PostRequestDto;
+import social.connectus.application.rest.request.SpotDto;
 import social.connectus.domain.model.RDBMS.Post;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,17 +17,5 @@ import social.connectus.domain.model.RDBMS.Post;
 @NoArgsConstructor
 @Builder
 public class PostSpotCommand {
-	private Long domainId;
-	private Double longitude;
-	private Double latitude;
-	private String type;
-
-	public static PostSpotCommand from(Post post, PostRequestDto postRequestDto) {
-		return PostSpotCommand.builder()
-			.domainId(post.getId())
-			.longitude(postRequestDto.getLongitude())
-			.latitude(postRequestDto.getLatitude())
-			.type("POST")
-			.build();
-	}
+	private List<SpotDto> spotList;
 }

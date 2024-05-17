@@ -3,6 +3,7 @@ package social.connectus.userservice.domain.port.external.adapter;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.common.exception.NotFoundException;
