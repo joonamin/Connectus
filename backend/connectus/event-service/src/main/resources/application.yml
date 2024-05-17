@@ -22,8 +22,8 @@ spring:
       s3:
         bucket: e106-connectus
       credentials:
-        access-key: accessKey
-        secret-key: secretKey
+        access-key: AKIAUMBXWTXOEDLKEDYG
+        secret-key: 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
       region:
         static: ap-northeast-2
         auto: false
@@ -39,3 +39,6 @@ eureka:
 logging:
   level:
     org.springframework: TRACE
+
+external:
+  spot-service: http://localhost:8103/spot

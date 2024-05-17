@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import social.connectus.location.application.rest.request.SpotDto;
 import social.connectus.location.application.rest.response.FindNearbyElementResponse;
+import social.connectus.location.common.type.DomainType;
 import social.connectus.location.common.type.Ping;
 import social.connectus.location.common.type.PingType;
 import social.connectus.location.domain.command.CreateSpotCommand;
