@@ -116,36 +116,36 @@ public class MilvusAdapter implements MilvusPort {
         // 조회 요청
         String filter = "spot_id != " + -1;
 
-        List<List<Float>> searchsearch = new ArrayList<>();
-        List<Float> searchData = new ArrayList<>();
-        searchData.add((float)longitude + 1.0f);
-        searchData.add((float)latitude + 1.5f);
-        searchsearch.add(searchData);
+//        List<List<Float>> searchsearch = new ArrayList<>();
+//        List<Float> searchData = new ArrayList<>();
+//        searchData.add((float)longitude + 1.0f);
+//        searchData.add((float)latitude + 1.5f);
+//        searchsearch.add(searchData);
+//
+//        Map<String,Object> searchParams = new HashMap<>();
+//        searchParams.put("metric_type ", "L2");
+//        searchParams.put("radius", 3.0f);
+//        searchParams.put("range_filter ", 5.0f);
+//
+//
+//        SearchParam request = SearchParam.newBuilder()
+//                .withCollectionName("spot")
+//                .withMetricType(MetricType.L2)
+//                .withParams("{\"radius\":3.0,\"range_filter\":1.0}")
+//                .withFloatVectors(searchsearch)
+//                .withVectorFieldName("spot")
+//                .withTopK(16384)
+//                .build();
+//        R<SearchResults> resp = client.search(request);
+//        return resp;
+//        System.out.println(resp.getMessage());
 
-        Map<String,Object> searchParams = new HashMap<>();
-        searchParams.put("metric_type ", "L2");
-        searchParams.put("radius", 3.0f);
-        searchParams.put("range_filter ", 5.0f);
-
-
-        SearchParam request = SearchParam.newBuilder()
-                .withCollectionName("spot")
-                .withMetricType(MetricType.L2)
-                .withParams("{\"radius\":3.0,\"range_filter\":5.0}")
-                .withFloatVectors(searchsearch)
-                .withVectorFieldName("spot")
-                .withTopK(16384)
-                .build();
-        R<SearchResults> resp = client.search(request);
-        System.out.println(resp.getMessage());
-
-        // 조회 요청 생성
+//         조회 요청 생성
         QueryParam queryReq = QueryParam.newBuilder()
                 .withCollectionName(milvusConfig.getCollectionName())
                 .withExpr(filter)
                 .withOutFields(Arrays.asList("spot_id", "spot", "latitude", "longitude", "type", "domain_id", "created_at", "updated_at"))
                 .build();
-
         return client.query(queryReq);
     }
 

@@ -30,7 +30,7 @@ public class SpotController {
 
     @PostMapping("/findNearby")
     public FindNearbyElementResponse findNearbyElement(@RequestBody FindNearbyElementRequest request) {
-        FindNearbyElementCommand command = new FindNearbyElementCommand(request.getLongitude(), request.getLongitude());
+        FindNearbyElementCommand command = new FindNearbyElementCommand(request.getLatitude(),request.getLongitude());
         return spotUseCase.findNearbyElement(command);
     }
 

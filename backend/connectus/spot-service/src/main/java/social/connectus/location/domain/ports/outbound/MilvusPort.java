@@ -1,6 +1,7 @@
 package social.connectus.location.domain.ports.outbound;
 
 import io.milvus.grpc.QueryResults;
+import io.milvus.grpc.SearchResults;
 import io.milvus.param.R;
 import io.milvus.v2.service.vector.response.InsertResp;
 import org.springframework.stereotype.Component;
