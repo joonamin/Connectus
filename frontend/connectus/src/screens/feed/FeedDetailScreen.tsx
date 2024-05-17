@@ -25,6 +25,7 @@ import {comment} from '@/types';
 import queryClient from '@/api/queryClient';
 import {StackScreenProps} from '@react-navigation/stack';
 import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
+import { dateTimeToString } from '@/utils';
 
 type FeedDetailScreenProps = StackScreenProps<FeedStackParamList, 'FeedDetail'>;
 
@@ -138,7 +139,9 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
             </View>
             <View style={styles.feedInfoContainer}>
               <MainText>{data.authorName}</MainText>
-              <Text style={styles.postDate}>{'2024-04-29'}</Text>
+              <Text style={styles.postDate}>
+                {dateTimeToString(data.updatedAt)}
+              </Text>
             </View>
             <Pressable style={styles.moveButton}>
               <Text style={styles.moveButtonText} onPress={moveModalShow}>
