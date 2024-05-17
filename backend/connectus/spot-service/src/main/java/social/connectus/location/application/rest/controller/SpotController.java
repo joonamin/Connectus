@@ -56,9 +56,4 @@ public class SpotController {
         return result;
     }
 
-    @PutMapping("/{spotId}")
-    void updateDomain(@PathVariable Long spotId, @RequestParam Long domainId, @RequestParam String type) {
-        DomainType domainType = DomainType.valueOf(type);
-        spotUseCase.updateDomain(spotId, domainType, domainId);
-    }
 }

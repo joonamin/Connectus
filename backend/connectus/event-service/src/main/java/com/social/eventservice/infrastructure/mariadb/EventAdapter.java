@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import com.social.eventservice.application.rest.response.EventDetailsResponse;
 import com.social.eventservice.common.exception.NotFoundException;
 import com.social.eventservice.application.rest.response.PingsDetailsResponse;
 import com.social.eventservice.common.type.Spot;
+import com.social.eventservice.domain.dto.InitSpotInfoCommand;
 import com.social.eventservice.domain.dto.MakeEventCommand;
 import com.social.eventservice.domain.model.Event;
 import com.social.eventservice.domain.port.outbound.EventAcheivementPort;
@@ -34,7 +36,7 @@ public class EventAdapter implements EventPort {
 	@Override
 	@Transactional
 	public Event makeEvent(MakeEventCommand request) {
-		List<Long> spotIdList = request.getSpotList().stream().map(Spot::getId).toList();
+		// List<Long> spotIdList = request.getSpotList().stream().map(Spot::getId).toList();
 		Event event = Event.builder()
 			.reward(request.getReward())
 			.isFinished(false)
@@ -42,7 +44,7 @@ public class EventAdapter implements EventPort {
 			.hostId(request.getUserId())
 			.title(request.getTitle())
 			.description(request.getDescription())
-			.spotIdList(spotIdList).build();
+			/*.spotIdList(spotIdList)*/.build();
 		return eventRepository.save(event);
 	}
 
@@ -72,6 +74,15 @@ public class EventAdapter implements EventPort {
 
 		return unclearedPingIds.stream()
 			.map(mapper).toList();
+	}
+
+	@Override
+	@Transactional
+	public Event initSpotInfo(Long eventId, InitSpotInfoCommand command) {
+		Event event = eventRepository.findById(eventId)
+			.orElseThrow(() -> new NotFoundException("not found event!!!"));
+		event.setSpotIdList(command.getSpotIdList());
+		return eventRepository.saveAndFlush(event);
 	}
 
 }

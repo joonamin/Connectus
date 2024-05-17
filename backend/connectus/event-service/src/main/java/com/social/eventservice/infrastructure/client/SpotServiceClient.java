@@ -19,12 +19,12 @@ import com.social.eventservice.common.type.Spot;
 // FeignClient 끼리는 api gateway를 경유하지 않고 직접 요청을 보낸다.
 @FeignClient(name = "spot-service", url = "${external.spot-service}")
 public interface SpotServiceClient {
-	@PostMapping("/spot")
-	List<Spot> saveAllPositions(@RequestBody List<Position> positions) throws SavePositionException;
+	@PostMapping("/")
+	List<Long> saveAllPositions(@RequestBody List<Position> positions, @RequestParam Long eventId) throws SavePositionException;
 
-	@GetMapping("/spot/{id}")
+	@GetMapping("/{id}")
 	Optional<Spot> getSpotById(@PathVariable(value = "id") Long id) throws NotFoundException;
 
-	@PutMapping("/spot/{spotId}")
+	@PutMapping("/{spotId}")
 	void updateDomain(@PathVariable Long spotId, @RequestParam Long domainId, @RequestParam String type);
 }
