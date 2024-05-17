@@ -5,4 +5,4 @@ ADD ${JAR_FILE} /likes-service.jar
 
 EXPOSE 8108
 
-ENTRYPOINT ["java","-jar" "/likes-service.jar"]
+ENTRYPOINT ["java","-jar", "/likes-service.jar"]
