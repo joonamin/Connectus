@@ -68,7 +68,9 @@ public class User {
 	public void updateAchievement(RefreshAchievementToUserCommand command) {
 		this.postCount = command.getPostCount();
 		this.walkCount = command.getWalkCount();
-		this.accomplishedAchievements = command.getAccomplishedAchievement();
+		for(Achievement achievement : command.getAccomplishedAchievement()) {
+			accomplishedAchievements.add(achievement);
+		};
 	}
 
 	public void updateOpenedPosts(List<Long> openedPosts) {

@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import social.connectus.walk.domain.ports.outbound.ImagePort;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -21,12 +22,12 @@ public class ImageAdapter implements ImagePort {
     @Override
     public String uploadImage(MultipartFile image) throws IOException {
         String originalFileName = image.getOriginalFilename();
+        String fileName = UUID.randomUUID() + originalFileName;
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(image.getSize());
-        metadata.setContentType(image.getContentType());
 
-        amazonS3.putObject(bucket, originalFileName, image.getInputStream(),metadata);
-        return amazonS3.getUrl(bucket, originalFileName).toString();
+        amazonS3.putObject(bucket, fileName, image.getInputStream(),metadata);
+        return amazonS3.getUrl(bucket, fileName).toString();
     }
 
 }
