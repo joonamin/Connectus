@@ -126,7 +126,7 @@ public class PostController {
         try {
             return ResponseEntity.ok().body(detailPostUseCase.detailByPostId(postId, userId, distance));
         } catch (NotFoundException e) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.notFound().build();
         }
     }
 
