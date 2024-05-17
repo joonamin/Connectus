@@ -110,9 +110,15 @@ public class UserController {
 		return ResponseEntity.ok(userUseCase.getOpenedPost(userId));
 	}
 
+	@PostMapping("/{userId}/openedPost")
+	public ResponseEntity<Void> updateOpenedPost(@PathVariable Long userId, @RequestBody Long postId) {
+		userUseCase.updateOpenedPost(userId, postId);
+		return ResponseEntity.ok().build();
+	}
+
 	@PostMapping("/{userId}/openedPosts")
-	public ResponseEntity<Void> updateOpenedPosts(@PathVariable Long userId, @RequestBody Long postId) {
-		userUseCase.updateOpenedPosts(userId, postId);
+	public ResponseEntity<Void> updateOpenedPosts(@PathVariable Long userId, @RequestBody List<Long> postIdList) {
+		userUseCase.updateOpenedPosts(userId, postIdList);
 		return ResponseEntity.ok().build();
 	}
 
