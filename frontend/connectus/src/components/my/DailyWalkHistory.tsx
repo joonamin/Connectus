@@ -33,9 +33,11 @@ export default function DailyWalkHistory({day, data}: DailyWalkHistoryProps) {
       <MainText style={styles.dateHeading}>
         {month}월 {day}일
       </MainText>
-      {data.map(walk => (
-        <WalkHistoryThumbnail key={walk.walkId} data={walk} />
-      ))}
+      {data
+        .sort((lhs, rhs) => rhs.updatedAt.getTime() - lhs.updatedAt.getTime())
+        .map(walk => (
+          <WalkHistoryThumbnail key={walk.walkId} data={walk} />
+        ))}
     </>
   );
 }
