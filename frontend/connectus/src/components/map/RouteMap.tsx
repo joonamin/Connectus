@@ -99,7 +99,7 @@ export default class RouteMap extends React.Component<RouteMapProps> {
     this.map.current?.fitToCoordinates(this.routes, {
       animated: false,
       edgePadding: {
-        top: 50,
+        top: 90,
         bottom: 30,
         left: 30,
         right: 30,
