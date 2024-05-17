@@ -13,11 +13,10 @@ import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
 import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
 import social.connectus.userservice.common.exception.NotFoundException;
-import social.connectus.userservice.domain.application.request.UserPositionRequest;
 import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.application.response.UserResponseForPost;
 import social.connectus.userservice.domain.model.entity.User;
-import social.connectus.userservice.domain.port.client.PositionClient;
+import social.connectus.userservice.domain.port.client.SpotClient;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserPositionCommand;
@@ -31,7 +30,7 @@ public class UserAdapter implements UserPort {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final PositionClient positionClient;
+	private final SpotClient positionClient;
 	@Override
 	@Transactional
 	public void registerUser(UserRegisterCommand command) {
