@@ -15,7 +15,7 @@ public class UserResponseForPost {
 	public static UserResponseForPost from(User user) {
 		return UserResponseForPost.builder()
 			.authorNickName(user.getNickname())
-			.avatarImageUrl(user.getProfileImageUrl())
+			.avatarImageUrl(user.getAvatarImageUrl())
 			.build();
 	}
 }
