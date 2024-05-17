@@ -89,13 +89,13 @@ export default function MyWalkDetailScreen({route}: MyWalkDetailProps) {
 
   if (isPending) {
     return (
-      <MainContainer>
+      <MainContainer style={styles.pendingPage}>
         <LightText>산책 정보를 불러오는 중입니다</LightText>
       </MainContainer>
     );
   } else if (isError) {
     return (
-      <MainContainer>
+      <MainContainer style={styles.pendingPage}>
         <LightText>산책 정보를 불러오는 데 실패했습니다</LightText>
       </MainContainer>
     );
@@ -144,6 +144,9 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     gap: 30,
     alignItems: 'stretch',
+  },
+  pendingPage: {
+    alignItems: 'center',
   },
   title: {
     textAlign: 'center',
