@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
-import social.connectus.userservice.domain.application.response.MyPreferenceRouteResponse;
+import social.connectus.userservice.application.response.MyPreferenceRouteResponse;
 import social.connectus.userservice.domain.port.client.AchievementClient;
 import social.connectus.userservice.domain.port.client.WalkClient;
 import social.connectus.userservice.domain.port.client.response.AchievementResponse;

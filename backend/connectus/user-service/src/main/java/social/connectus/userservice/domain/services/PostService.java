@@ -4,7 +4,7 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.common.annotation.UseCase;
-import social.connectus.userservice.domain.application.response.MyPreferencePostResponse;
+import social.connectus.userservice.application.response.MyPreferencePostResponse;
 import social.connectus.userservice.domain.port.client.response.PostRecord;
 import social.connectus.userservice.domain.port.inbound.PostUseCase;
 import social.connectus.userservice.domain.port.inbound.command.MyPreferencePostCommand;

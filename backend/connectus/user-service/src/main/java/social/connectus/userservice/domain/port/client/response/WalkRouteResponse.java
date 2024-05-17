@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import social.connectus.userservice.domain.application.response.MyPreferenceRouteResponse;
+import social.connectus.userservice.application.response.MyPreferenceRouteResponse;
 
 @Getter
 @Setter
