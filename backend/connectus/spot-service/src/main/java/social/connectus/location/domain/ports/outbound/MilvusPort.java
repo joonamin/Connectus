@@ -20,4 +20,6 @@ public interface MilvusPort {
     R<QueryResults> select(double longitude, double latitude);
 
     List<SpotDto> getSpotList(GetSpotCommand command);
+
+    List<Long> updateSpotList(CreateSpotCommand command);
 }
