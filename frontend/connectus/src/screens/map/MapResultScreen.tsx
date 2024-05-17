@@ -1,4 +1,5 @@
 import {
+  Modal,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -18,13 +19,15 @@ import RecordedPost from '@/components/map/RecordedPost';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 import {convertSecondsToTime, formatTime} from '@/utils';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import RouteMap from '@/components/map/RouteMap';
 import {useMutation} from '@tanstack/react-query';
 import {createRoute} from '@/api/walk';
 import useAuthStore from '@/store/useAuthStore';
 import {LatLng} from 'react-native-maps';
 import usePostStore from '@/store/usePostStore';
+import useModal from '@/hooks/useModal';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
 
 const DUMMY_ACHIEVE = [
   {
@@ -32,6 +35,8 @@ const DUMMY_ACHIEVE = [
     description: '영욱님이 인정한 폭탄 돌리기의 폭탄 역할',
   },
 ];
+
+type Navigation = StackNavigationProp<MapStackParamList>;
 
 type ScreenProps = StackScreenProps<MapStackParamList>;
 
@@ -44,8 +49,12 @@ export default function MapResultScreen({route}: ScreenProps) {
   const indicateTime = formatTime(hours, minutes, seconds);
   const map = useRef<RouteMap | null>(null);
   const {user} = useAuthStore();
-  const {posts, setDeletePost} = usePostStore();
+  const {posts, setDeletePost, clearPost} = usePostStore();
   const [routeImage, setRouteImg] = useState<any>();
+
+  const navigation = useNavigation<Navigation>();
+
+  const {isVisible, show, hide} = useModal();
 
   // const [routeImg, setRouteImg] = useState();
 
@@ -75,10 +84,21 @@ export default function MapResultScreen({route}: ScreenProps) {
         postList: posts,
         image: routeImage,
       }),
+    onSettled: () => show(),
   });
 
   const handleEndWalk = () => {
     endWalk.mutate();
+  };
+
+  const handleCheckOkayResult = () => {
+    hide();
+    clearPost();
+    navigation.navigate('MapHome');
+  };
+
+  const handleCheckErrorResult = () => {
+    hide();
   };
 
   if (!route.params) {
@@ -115,6 +135,35 @@ export default function MapResultScreen({route}: ScreenProps) {
           </Pressable>
         </View>
       </ScrollView>
+      <Modal visible={isVisible} transparent={true} animationType="slide">
+        <SafeAreaView style={styles.modalBackground}>
+          <View style={styles.confirmModal}>
+            {isVisible && endWalk.isPending && (
+              <MainText>산책 등록 요청을 보내는 중입니다</MainText>
+            )}
+            {isVisible && endWalk.isSuccess && (
+              <>
+                <MainText>산책 등록이 완료되었습니다.</MainText>
+                <Pressable
+                  onPress={handleCheckOkayResult}
+                  style={styles.confirimButton}>
+                  <MainText>학인</MainText>
+                </Pressable>
+              </>
+            )}
+            {isVisible && endWalk.isError && (
+              <>
+                <MainText>산책 등록이 실패했습니다.</MainText>
+                <Pressable
+                  onPress={handleCheckErrorResult}
+                  style={styles.confirimButton}>
+                  <MainText>학인</MainText>
+                </Pressable>
+              </>
+            )}
+          </View>
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -158,5 +207,26 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 15,
     backgroundColor: colors.primaryColorBlue,
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  confirmModal: {
+    width: '90%',
+    height: 200,
+    backgroundColor: colors.buttonBackground,
+    borderRadius: 15,
+    gap: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  confirimButton: {
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    backgroundColor: colors.background,
   },
 });

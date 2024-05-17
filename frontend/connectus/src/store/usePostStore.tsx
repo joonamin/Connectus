@@ -14,6 +14,7 @@ interface PostStore {
   posts: PostType[];
   setAddPost: (post: PostType) => void;
   setDeletePost: (index: number) => void;
+  clearPost: () => void;
 }
 
 /**
@@ -34,6 +35,9 @@ const usePostStore = create<PostStore>(set => ({
       newPosts.splice(index, 1);
       return {...state, posts: newPosts};
     });
+  },
+  clearPost: () => {
+    return {posts: []};
   },
 }));
 
