@@ -130,7 +130,13 @@ export default function MapResultScreen({route}: ScreenProps) {
               textAlign="center"
             />
           </View>
-          <Pressable style={styles.submitButton} onPress={handleEndWalk}>
+          <Pressable
+            style={[
+              styles.submitButton,
+              endWalk.isPending ? styles.disabled : null,
+            ]}
+            disabled={endWalk.isPending}
+            onPress={handleEndWalk}>
             <MainText>산책 종료하기</MainText>
           </Pressable>
         </View>
@@ -228,5 +234,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     backgroundColor: colors.background,
+  },
+  disabled: {
+    backgroundColor: colors.buttonBackground,
   },
 });

@@ -1,10 +1,11 @@
+import {domainType} from '@/types';
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {LatLng, MyMapMarkerProps, Marker} from 'react-native-maps';
 
 interface CustomMarkerProps extends MyMapMarkerProps {
   coordinate?: LatLng;
-  type: number;
+  type: domainType;
 }
 
 /**
@@ -23,19 +24,19 @@ export default function CustomMarker({
   const markerView = (
     <View style={styles.container}>
       {/* 타입별로 이미지를 다르게합니다 */}
-      {type === 1 && (
+      {type === 'EVENT' && (
         <Image
           style={styles.image}
           source={require('@/assets/markers/eventMarker.png')}
         />
       )}
-      {type === 2 && (
+      {type === 'POST' && (
         <Image
           style={styles.image}
           source={require('@/assets/markers/feedMarker.png')}
         />
       )}
-      {type === 3 && (
+      {type === 'GATHER' && (
         <Image
           style={styles.image}
           source={require('@/assets/markers/gatherMarker.png')}
@@ -57,7 +58,7 @@ export default function CustomMarker({
 const styles = StyleSheet.create({
   container: {
     width: 70,
-    height: 70,
+    aspectRatio: '414/500',
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',

@@ -31,14 +31,14 @@ const getPostDetail = async (
   postId: number,
   userId: number,
   distance: number,
-) => {
+): Promise<postDetail> => {
   try {
     const {data} = await axiosInstance.get(
       `/post/${postId}?userId=${userId}&distance=${distance}`,
     );
     return data;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
@@ -104,6 +104,7 @@ type postFeedLikeParmas = {
   domainId: number;
   type: 'POST' | 'ROUTE';
 };
+
 const postFeedLike = async (body: postFeedLikeParmas) => {
   const {data} = await axiosInstance.post('/likes/insert', body);
   return data;
