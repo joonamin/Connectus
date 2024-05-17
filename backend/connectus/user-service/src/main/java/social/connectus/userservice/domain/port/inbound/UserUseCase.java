@@ -2,15 +2,11 @@ package social.connectus.userservice.domain.port.inbound;
 
 import java.util.List;
 
-import social.connectus.userservice.application.response.PointResponse;
+import social.connectus.userservice.application.response.*;
 import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.common.exception.FailedToLogoutException;
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
-import social.connectus.userservice.application.response.LoginUserResponse;
-import social.connectus.userservice.application.response.LogoutUserResponse;
-import social.connectus.userservice.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.command.PointChangeCommand;
-import social.connectus.userservice.domain.application.response.UserResponseForPost;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
