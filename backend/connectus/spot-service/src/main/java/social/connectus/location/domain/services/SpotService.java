@@ -62,8 +62,4 @@ public class SpotService implements SpotUseCase {
         return milvusPort.insertAll(command);
     }
 
-    @Override
-    public void updateDomain(Long spotId, DomainType domainType, Long domainId) {
-        // todo: 이거 업데이트 해주세요
-    }
 }

@@ -16,7 +16,7 @@ public class EventFeignService implements EventFeignUseCase {
 	private final EventFeignPort eventFeignPort;
 
 	@Override
-	public List<Spot> saveAllPositions(List<Position> positions) {
-		return eventFeignPort.saveAllPositions(positions);
+	public List<Long> saveAllPositions(List<Position> positions, Long eventId) {
+		return eventFeignPort.saveAllPositions(positions, eventId);
 	}
 }

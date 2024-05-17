@@ -3,6 +3,8 @@ package com.social.eventservice.domain.services;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.social.eventservice.application.rest.request.MakeEventRequest;
 import com.social.eventservice.application.rest.response.EventDetailsResponse;
 import com.social.eventservice.application.rest.response.PingsDetailsResponse;
@@ -10,6 +12,7 @@ import com.social.eventservice.common.annotation.UseCase;
 import com.social.eventservice.common.type.Spot;
 import com.social.eventservice.common.utils.converter.MapperUtil;
 import com.social.eventservice.common.utils.converter.command.meta.MakeEventCommandMetadata;
+import com.social.eventservice.domain.dto.InitSpotInfoCommand;
 import com.social.eventservice.domain.dto.MakeEventCommand;
 import com.social.eventservice.domain.model.Event;
 import com.social.eventservice.domain.port.inbound.EventUseCase;
@@ -30,16 +33,20 @@ public class EventService implements EventUseCase {
 
 	// todo: feign client 요청이 하나라도 실패할 경우, SAGA 패턴을 적용하여 롤백 이벤트 발행후에 처리
 	@Override
+	@Transactional
 	public void makeEvent(MakeEventRequest request) throws IOException {
-		List<Spot> spotList = spotPort.saveAllPositions(request.getPositions());
 		String imageUrl = imagePort.uploadImage(request.getImage());
-		MakeEventCommandMetadata meta = MakeEventCommandMetadata.of(spotList, imageUrl);
-		MakeEventCommand command = mapperUtil.requestToCommand(request, meta);
+
+		MakeEventCommand command = mapperUtil.requestToCommand(request);
+		command.setImageUrl(imageUrl);
+
 		Event event = eventPort.makeEvent(command);
-		// 각각의 spot에 domainId를 업데이트 해준다.
-		spotList.forEach(spot -> {
-			spotPort.initEventId(spot.getId(), event.getId());
-		});
+		List<Long> spotIdList = spotPort.saveAllPositions(request.getPositions(), event.getId());
+		// 이벤트를 먼저 만들고, 해당 eventId를 이용하여 spotId를 저장한다.
+		// 이 후, event의 spotIdList를 저장한다.
+		event.setSpotIdList(spotIdList);
+		eventPort.initSpotInfo(event.getId(), InitSpotInfoCommand.builder()
+			.spotIdList(spotIdList).build());
 	}
 
 	@Override

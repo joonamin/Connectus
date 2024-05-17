@@ -15,6 +15,4 @@ import java.util.List;
 public interface SpotUseCase {
     FindNearbyElementResponse findNearbyElement(FindNearbyElementCommand command);
     List<Long> createSpot(CreateSpotCommand command);
-
-    void updateDomain(Long spotId, DomainType domainType, Long domainId);
 }
