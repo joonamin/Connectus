@@ -21,6 +21,7 @@ import social.connectus.userservice.domain.application.request.MyWalkRequest;
 import social.connectus.userservice.domain.application.request.RefreshAchievementRequest;
 import social.connectus.userservice.domain.application.request.UserLoginRequest;
 import social.connectus.userservice.domain.application.request.UserLogoutRequest;
+import social.connectus.userservice.domain.application.request.UserPositionRequest;
 import social.connectus.userservice.domain.application.request.UserRegisterRequest;
 import social.connectus.userservice.domain.application.response.AchievementResponse;
 import social.connectus.userservice.domain.application.response.CompletedAchievementListResponse;
@@ -31,6 +32,7 @@ import social.connectus.userservice.domain.application.response.MyPreferenceRout
 import social.connectus.userservice.domain.application.response.MyWalkResponse;
 import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.application.response.RefreshAchievementResponse;
+import social.connectus.userservice.domain.application.response.UserResponseForPost;
 import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
 import social.connectus.userservice.domain.port.inbound.PostUseCase;
 import social.connectus.userservice.domain.port.inbound.UserUseCase;
@@ -122,13 +124,19 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/{userId}/get-author-name")
-	public ResponseEntity<String> getAuthorName(@PathVariable("userId") Long userId) {
-		return ResponseEntity.ok(userUseCase.getUserNickname(userId));
+	@GetMapping("/{userId}/get-author-info")
+	public ResponseEntity<UserResponseForPost> getUserForPost(@PathVariable("userId") Long userId) {
+		return ResponseEntity.ok(userUseCase.getUserResponseForPost(userId));
 	}
 
-	@GetMapping("/{userId}/nickname")
-	public ResponseEntity<String> getUserNickname(@PathVariable("userId") Long userId) {
-		return ResponseEntity.ok(userUseCase.getUserNickname(userId));
+	@PostMapping("/{userId}/update-avatar")
+	public ResponseEntity<String> updateAvatar(@PathVariable("userId") Long userId, @RequestBody String imageUrl) {
+		return ResponseEntity.ok(userUseCase.updateAvatar(userId, imageUrl));
+	}
+
+	@PostMapping("/insert-position")
+	public ResponseEntity<Void> insertUserPosition(@RequestBody UserPositionRequest request) {
+		userUseCase.insertUserPosition(request);
+		return ResponseEntity.ok().build();
 	}
 }
