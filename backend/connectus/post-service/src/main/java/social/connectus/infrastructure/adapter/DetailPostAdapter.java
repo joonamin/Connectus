@@ -9,6 +9,7 @@ import social.connectus.application.rest.request.CoordinateRequestDto;
 import social.connectus.application.rest.response.CommentResponse;
 import social.connectus.application.rest.response.DetailPostResponse;
 import social.connectus.application.rest.response.OpenedPostResponse;
+import social.connectus.application.rest.response.UserInfoResponse;
 import social.connectus.common.exception.BusinessException;
 import social.connectus.domain.model.RDBMS.Comment;
 import social.connectus.domain.model.RDBMS.Post;
@@ -32,8 +33,8 @@ public class DetailPostAdapter implements DetailPostPort {
 		Post post = postRepository.findById(postId).orElseThrow(()->new BusinessException("Post doesn't exists"));
 		int likeCount = likesServiceClient.getLikeCount(postId,"POST");
 		boolean isLike = likesServiceClient.isLike(postId,"POST");
-		String authorName = userServiceClient.getAuthorName(post.getAuthorId());
-		DetailPostResponse response = DetailPostResponse.samplePostFrom(post,authorName);
+		UserInfoResponse authorInfo = userServiceClient.getUserInfo(post.getAuthorId());
+		DetailPostResponse response = DetailPostResponse.samplePostFrom(post,authorInfo);
 		response.setLikeCount(likeCount);
 		response.setLike(isLike);
 		return response;
@@ -44,16 +45,15 @@ public class DetailPostAdapter implements DetailPostPort {
 		Post post = postRepository.findById(postId).orElseThrow(()->new BusinessException("Post doesn't exists"));
 		int likeCount = likesServiceClient.getLikeCount(postId,"POST");
 		boolean isLike = likesServiceClient.isLike(postId,"POST");
-		String authorName = userServiceClient.getAuthorName(post.getAuthorId());
+		UserInfoResponse userInfoResponse = userServiceClient.getUserInfo(post.getAuthorId());
 		List<CommentResponse> commentResponseList = new ArrayList<>();
 		for(Comment comment : post.getCommentList()) {
-			String commentAuthorName = userServiceClient.getAuthorName(comment.getAuthorId());
-			CommentResponse response = CommentResponse.from(comment);
-			response.setAuthorName(commentAuthorName);
+			UserInfoResponse commentAuthorInfo = userServiceClient.getUserInfo(comment.getAuthorId());
+			CommentResponse response = CommentResponse.from(comment,commentAuthorInfo);
 			commentResponseList.add(response);
 		}
 
-		DetailPostResponse response = DetailPostResponse.detailPostFrom(post, commentResponseList,authorName);
+		DetailPostResponse response = DetailPostResponse.detailPostFrom(post, commentResponseList,userInfoResponse);
 		response.setLike(isLike);
 		response.setLikeCount(likeCount);
 		return response;

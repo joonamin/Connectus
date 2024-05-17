@@ -18,6 +18,7 @@ import social.connectus.userservice.common.utils.JwtProvider;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
 import social.connectus.userservice.domain.application.response.LogoutUserResponse;
 import social.connectus.userservice.domain.application.response.OpenedPostResponse;
+import social.connectus.userservice.domain.application.response.UserResponseForPost;
 import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.inbound.UserUseCase;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
@@ -67,8 +68,8 @@ public class UserService implements UserUseCase {
 	}
 
 	@Override
-	public String getUserNickname(Long userId) {
-		return userPort.getUserNickname(userId);
+	public UserResponseForPost getUserResponseForPost(Long userId) {
+		return userPort.getUserResponseForPost(userId);
 	}
 
 	@Override
