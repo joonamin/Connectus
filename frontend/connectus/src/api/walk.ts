@@ -154,7 +154,7 @@ const getCompletedAchievement = async () => {
  */
 const shareRoute = async (walkId: number, userId: number) => {
   const body = {walkId, userId};
-  const {data} = await axiosInstance.patch('/walk/route-share', body);
+  const {data} = await axiosInstance.patch<string>('/walk/route-share', body);
   return data;
 };
 
