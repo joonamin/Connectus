@@ -15,11 +15,13 @@ import React, {useRef} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import RouteMap from '@/components/map/RouteMap';
-import routes from '@/assets/sample-route.json';
 import CustomButton from '@/components/buttons/CustomButton';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LightText from '@/components/text/LightText';
 import Share from 'react-native-share';
+import {useQuery} from '@tanstack/react-query';
+import {queryKeys} from '@/constants';
+import {getRouteDetail} from '@/api/walk';
 
 export type Navigation = CompositeNavigationProp<
   StackNavigationProp<MyStackParamList>,
@@ -41,32 +43,22 @@ export type MyWalkDetailProps = StackScreenProps<
  */
 export default function MyWalkDetailScreen({route}: MyWalkDetailProps) {
   const navigation = useNavigation<Navigation>();
+  const map = useRef<RouteMap | null>(null);
 
   // parameter로 산책 ID 받아오기
   const {walkId} = route.params;
-  console.debug(walkId);
 
-  // 테스트 데이터
-  const data = {
-    title: '산책 나가버릴거야',
-    distance: 1.83,
-    elapsed: 5742,
-    achievements: [
-      {
-        title: '우리팀 폭탄',
-        description: '영욱님이 인정한 폭탄 돌리기의 폭탄 역할',
-      },
-      {
-        title: '스택 오버플로우',
-        description: '실망 스택이 쌓이다 못해 넘쳐버렸어요!',
-      },
-    ],
-  };
+  // 산책 정보 불러오기
+  const {isPending, isError, data} = useQuery({
+    queryKey: [queryKeys.GET_ROUTE_DETAIL],
+    queryFn: () => getRouteDetail(walkId),
+  });
 
   // 소요 시간 문자열화
-  const hours = Math.floor(data.elapsed / 3600);
-  const minutes = Math.floor((data.elapsed - hours * 3600) / 60);
-  const seconds = data.elapsed - hours * 3600 - minutes * 60;
+  const duration = data?.walkTime ? data.walkTime : 0;
+  const hours = Math.floor(duration / 3600);
+  const minutes = Math.floor((duration - hours * 3600) / 60);
+  const seconds = duration - hours * 3600 - minutes * 60;
   const elapsed =
     (hours < 10 ? '0' + hours : hours) +
     ':' +
@@ -75,7 +67,6 @@ export default function MyWalkDetailScreen({route}: MyWalkDetailProps) {
     (seconds < 10 ? '0' + seconds : seconds);
 
   // 지도 이미지 공유
-  const map = useRef<RouteMap | null>(null);
   const onMapShare = async () => {
     try {
       const base64 = await map.current?.takeSnapshot({
@@ -96,6 +87,20 @@ export default function MyWalkDetailScreen({route}: MyWalkDetailProps) {
     }
   };
 
+  if (isPending) {
+    return (
+      <MainContainer>
+        <LightText>산책 정보를 불러오는 중입니다</LightText>
+      </MainContainer>
+    );
+  } else if (isError) {
+    return (
+      <MainContainer>
+        <LightText>산책 정보를 불러오는 데 실패했습니다</LightText>
+      </MainContainer>
+    );
+  }
+
   return (
     <ScrollView>
       <MainContainer style={styles.page}>
@@ -107,7 +112,7 @@ export default function MyWalkDetailScreen({route}: MyWalkDetailProps) {
         </HeadingText>
 
         <View style={styles.mapContainer}>
-          <RouteMap routes={routes} ref={map} />
+          <RouteMap routes={data.route} ref={map} />
           <CustomButton
             backgroundColor="transparent"
             containerStyle={styles.shareButtonContainer}
@@ -118,8 +123,8 @@ export default function MyWalkDetailScreen({route}: MyWalkDetailProps) {
           </CustomButton>
         </View>
 
-        <WalkResult time={elapsed} distance={data.distance} />
-        <Achievement achievs={data.achievements} />
+        <WalkResult time={elapsed} distance={data.walkDistance} />
+        {/* <Achievement achievs={data.achievements} /> */}
         <EventResult />
         <RecordedPost />
         <CustomTextButton
