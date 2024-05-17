@@ -24,18 +24,21 @@ export default function CustomMarker({
     <View style={styles.container}>
       {/* 타입별로 이미지를 다르게합니다 */}
       {type === 1 && (
-        <Image style={styles.image} source={require('@/assets/star.png')} />
+        <Image
+          style={styles.image}
+          source={require('@/assets/markers/eventMarker.png')}
+        />
       )}
       {type === 2 && (
         <Image
           style={styles.image}
-          source={require('@/assets/feedImage.png')}
+          source={require('@/assets/markers/feedMarker.png')}
         />
       )}
       {type === 3 && (
         <Image
           style={styles.image}
-          source={require('@/assets/gatherMarker.png')}
+          source={require('@/assets/markers/gatherMarker.png')}
           resizeMode="cover"
         />
       )}

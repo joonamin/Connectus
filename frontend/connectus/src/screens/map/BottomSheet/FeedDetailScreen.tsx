@@ -105,9 +105,9 @@ export default function FeedDetailScreen() {
               <MainText>메인내용</MainText>
             </View>
             <View style={styles.commentListContainer}>
+              {/* <Comment />
               <Comment />
-              <Comment />
-              <Comment />
+              <Comment /> */}
             </View>
             <View style={styles.defaultBottomPadding} />
             <View style={isUseKeyBoard ? styles.keyboardBottomPadding : null} />

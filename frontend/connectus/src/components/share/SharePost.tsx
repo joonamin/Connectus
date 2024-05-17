@@ -61,7 +61,7 @@ export default function SharePost({walkId, modalOpen}: Props) {
     } else {
       setViewIsLiked(false);
     }
-  }, []);
+  }, [isLoading]);
 
   /**
    * @todo route like 인수 변경

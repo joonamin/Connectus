@@ -123,29 +123,6 @@ export default function ShareHomeScreen() {
     fetchNextPage();
   };
 
-  // const getPosition = function () {
-  //   return new Promise(function (resolve, reject) {
-  //     Geolocation.getCurrentPosition(resolve, reject, {
-  //       enableHighAccuracy: true,
-  //       distanceFilter: 0,
-  //     });
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   const setLocation = async () => {
-  //     setPosLoading(true);
-  //     const pos = await getPosition();
-  //     setCurrentPos({longitude: pos.longitude, latitude: pos.latitude});
-  //     setPosLoading(false);
-  //   };
-  //   setLocation();
-  // }, []);
-
-  if (isFetching) {
-    return <Text>로딩중입니다.</Text>;
-  }
-
   return (
     <>
       <SafeAreaView style={styles.mainContainer}>

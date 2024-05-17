@@ -76,6 +76,10 @@ export default function FeedPreview({feedId, show}: feedPreviewProps) {
 
   console.log('데ㅐ데데데데데이터', feedId, data);
 
+  if (!data) {
+    return <MainText>데이터가 없습니다</MainText>;
+  }
+
   return (
     <>
       <View style={styles.feedContainer}>
@@ -97,12 +101,15 @@ export default function FeedPreview({feedId, show}: feedPreviewProps) {
           </Pressable>
         </View>
         <View style={styles.feedImageContainer}>
-          <Image
-            style={styles.feedImage}
-            source={{
-              uri: data.imageUrl,
-            }}
-          />
+          {data.imageUrl && (
+            <Image
+              style={styles.feedImage}
+              source={{
+                uri: data.imageUrl,
+              }}
+            />
+          )}
+          {!data.imageUrl && <MainText>사진이 존재하지 않습니다</MainText>}
         </View>
         <View style={styles.feedIndicator}>
           {data.like ? (
