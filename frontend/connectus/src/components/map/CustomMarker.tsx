@@ -35,7 +35,8 @@ export default function CustomMarker({
       {type === 3 && (
         <Image
           style={styles.image}
-          source={require('@/assets/gatherImage.png')}
+          source={require('@/assets/gatherMarker.png')}
+          resizeMode="cover"
         />
       )}
     </View>
@@ -51,7 +52,13 @@ export default function CustomMarker({
 }
 
 const styles = StyleSheet.create({
-  container: {width: 55, height: 55},
+  container: {
+    width: 70,
+    height: 70,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   image: {
     width: '100%',
     height: '100%',
