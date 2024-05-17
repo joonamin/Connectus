@@ -13,11 +13,14 @@ import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
 import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
 import social.connectus.userservice.common.exception.NotFoundException;
+import social.connectus.userservice.domain.application.request.UserPositionRequest;
 import social.connectus.userservice.domain.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.application.response.UserResponseForPost;
 import social.connectus.userservice.domain.model.entity.User;
+import social.connectus.userservice.domain.port.client.PositionClient;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
+import social.connectus.userservice.domain.port.inbound.command.UserPositionCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
 import social.connectus.userservice.domain.port.outbound.repository.UserRepository;
 
@@ -28,7 +31,7 @@ public class UserAdapter implements UserPort {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-
+	private final PositionClient positionClient;
 	@Override
 	@Transactional
 	public void registerUser(UserRegisterCommand command) {
@@ -102,9 +105,15 @@ public class UserAdapter implements UserPort {
 	}
 
 	@Override
+	public void insertUserPosition(List<UserPositionCommand> userPositionCommand) {
+		positionClient.insertPostPosition(userPositionCommand);
+	}
+
+	@Override
 	public String updateAvatar(Long userId, String imageUrl) {
 		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists"));
 		user.updateAvatar(imageUrl);
 		return "avatar update!";
 	}
+
 }
