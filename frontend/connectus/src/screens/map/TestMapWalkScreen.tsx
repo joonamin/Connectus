@@ -48,6 +48,9 @@ import Geolocation from '@react-native-community/geolocation';
 import useRouteStore from '@/store/useRouteStore';
 import useModal from '@/hooks/useModal';
 import BottomSheetQuickStackNavigator from '@/navigations/stack/BottomSheetQuickStackNavigator';
+import {useQuery} from '@tanstack/react-query';
+import {getNearMarker} from '@/api/spot';
+import mapStyle from '@/style/mapStyle';
 
 const DUMMY_POSITION = [
   {
@@ -183,6 +186,16 @@ export default function TestMapWalkScreen() {
   //   }
   // };
 
+  // 마커들을 3초마다 한번씩 요청할 query
+  // const {data, isError} = useQuery({
+  //   refetchInterval: 3000,
+  //   queryFn: () => getNearMarker(),
+  //   queryKey: ['test'],
+  // });
+
+  // console.log(data);
+  // console.log(isError);
+
   const handleMenuPress = () => {
     bottomSheetNav.current &&
       bottomSheetNav.current.reset({routes: [{name: 'Home'}]});
@@ -268,6 +281,7 @@ export default function TestMapWalkScreen() {
           showsUserLocation
           showsMyLocationButton={true}
           zoomEnabled={true}
+          customMapStyle={mapStyle}
           initialRegion={{...mapPos, ...mapDelta}}
           onUserLocationChange={event => {
             const {latitude, longitude} = event.nativeEvent.coordinate;

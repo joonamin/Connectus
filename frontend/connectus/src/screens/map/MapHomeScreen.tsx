@@ -16,6 +16,7 @@ import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
 import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
 import colors from '@/constants/colors';
 import Geolocation from '@react-native-community/geolocation';
+import mapStyle from '@/style/mapStyle';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
@@ -65,6 +66,7 @@ export default function MapHomeScreen() {
           showsUserLocation
           followsUserLocation
           showsMyLocationButton={true}
+          customMapStyle={mapStyle}
           initialRegion={{
             ...initPos,
             latitudeDelta: 0.012,
