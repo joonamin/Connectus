@@ -2,17 +2,23 @@ package social.connectus.infrastructure.adapter;
 
 import org.springframework.stereotype.Component;
 
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import social.connectus.application.rest.response.FollowPostResponse;
+import social.connectus.domain.model.RDBMS.Post;
 import social.connectus.domain.ports.outbound.FollowPostPort;
+import social.connectus.infrastructure.databases.mariadb.repository.PostRepository;
 import social.connectus.infrastructure.feignClient.LocationServiceClient;
+import social.connectus.infrastructure.feignClient.SpotServiceClient;
 
 @Component
 @RequiredArgsConstructor
 public class FollowPostAdapter implements FollowPostPort {
-	private final LocationServiceClient locationServiceClient;
+	private final SpotServiceClient spotServiceClient;
+	private final PostRepository postRepository;
 	@Override
 	public FollowPostResponse followPost(Long postId) {
-		return locationServiceClient.getPostLocation(postId,"POST");
+		Post post = postRepository.findById(postId).orElseThrow(()->new NotFoundException("user not exists"));
+		return FollowPostResponse.from(spotServiceClient.getPostSpot(post.getSpotId(),"POST"),postId);
 	}
 }
