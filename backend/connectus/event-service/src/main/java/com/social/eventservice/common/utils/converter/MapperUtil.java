@@ -22,4 +22,8 @@ public class MapperUtil {
 		result.setImageUrl(additional.getImageUrl());
 		return result;
 	}
+
+	public MakeEventCommand requestToCommand(MakeEventRequest request) {
+		return modelMapper.map(request, MakeEventCommand.class);
+	}
 }
