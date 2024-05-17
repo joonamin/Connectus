@@ -1,6 +1,7 @@
 package social.connectus.location.application.rest.controller;
 
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang.NullArgumentException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,11 @@ public class SpotController {
 
     @PostMapping("/insert")
     public ResponseEntity<CreateSpotResponse> createSpot(@RequestBody CreateSpotRequest request){
+        for(SpotDto spot : request.getSpotList()){
+            if(spot.getLongitude()==null || spot.getLatitude()==null){
+                throw new NullArgumentException("Parameter doesn't allow Null.");
+            }
+        }
         CreateSpotCommand command = CreateSpotCommand.from(request);
         List<Long> list = spotUseCase.createSpot(command);
         return ResponseEntity.ok(CreateSpotResponse.builder().spotIdList(list).build());
