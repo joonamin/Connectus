@@ -1,5 +1,7 @@
 package social.connectus.userservice.domain.services;
 
+import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +9,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import social.connectus.userservice.application.response.PointResponse;
+import social.connectus.userservice.application.response.*;
 import social.connectus.userservice.common.annotation.UseCase;
 import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
 import social.connectus.userservice.common.exception.FailedToLoginException;
@@ -16,14 +18,16 @@ import social.connectus.userservice.common.exception.FailedToRegisterUserExcepti
 import social.connectus.userservice.common.type.JwtPayload;
 import social.connectus.userservice.common.type.JwtPropertiesProvider;
 import social.connectus.userservice.common.utils.JwtProvider;
+import social.connectus.userservice.domain.command.PointChangeCommand;
+import social.connectus.userservice.domain.application.request.UserPositionRequest;
 import social.connectus.userservice.application.response.LoginUserResponse;
 import social.connectus.userservice.application.response.LogoutUserResponse;
 import social.connectus.userservice.application.response.OpenedPostResponse;
-import social.connectus.userservice.domain.command.PointChangeCommand;
 import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.inbound.UserUseCase;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
+import social.connectus.userservice.domain.port.inbound.command.UserPositionCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
 import social.connectus.userservice.domain.port.outbound.UserPort;
 
@@ -69,8 +73,8 @@ public class UserService implements UserUseCase {
 	}
 
 	@Override
-	public String getUserNickname(Long userId) {
-		return userPort.getUserNickname(userId);
+	public UserResponseForPost getUserResponseForPost(Long userId) {
+		return userPort.getUserResponseForPost(userId);
 	}
 
 	@Override
@@ -87,5 +91,17 @@ public class UserService implements UserUseCase {
 	@Override
 	public PointResponse decreasePoint(PointChangeCommand command) {
 		return userPort.decreasePoint(command);
+	}
+
+	@Override
+	public String updateAvatar(Long userId, String imageUrl) {
+		return userPort.updateAvatar(userId, imageUrl);
+	}
+
+	@Override
+	public void insertUserPosition(UserPositionRequest request) {
+		List<UserPositionCommand> userPosition = new ArrayList<>();
+		userPosition.add(UserPositionCommand.from(request));
+		userPort.insertUserPosition(userPosition);
 	}
 }

@@ -6,9 +6,12 @@ import social.connectus.userservice.application.response.PointResponse;
 import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.command.PointChangeCommand;
+import social.connectus.userservice.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
+import social.connectus.userservice.domain.port.inbound.command.UserPositionCommand;
+import social.connectus.userservice.domain.port.inbound.command.UserPositionCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
 
 public interface UserPort {
@@ -27,4 +30,7 @@ public interface UserPort {
 	PointResponse increasePoint(PointChangeCommand command);
 
 	PointResponse decreasePoint(PointChangeCommand command);
+	String updateAvatar(Long userId, String imageUrl);
+	social.connectus.userservice.domain.application.response.UserResponseForPost getUserResponseForPost(Long userId);
+	void insertUserPosition(List<UserPositionCommand> userPositionCommand);
 }

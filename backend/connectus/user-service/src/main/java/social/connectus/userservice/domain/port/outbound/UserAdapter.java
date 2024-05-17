@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import social.connectus.userservice.application.response.PointResponse;
+import social.connectus.userservice.application.response.UserResponseForPost;
 import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
 import social.connectus.userservice.common.exception.FailedToChagePointException;
 import social.connectus.userservice.common.exception.FailedToLoginException;
@@ -18,8 +19,10 @@ import social.connectus.userservice.common.exception.NotFoundException;
 import social.connectus.userservice.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.command.PointChangeCommand;
 import social.connectus.userservice.domain.model.entity.User;
+import social.connectus.userservice.domain.port.client.SpotClient;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
+import social.connectus.userservice.domain.port.inbound.command.UserPositionCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
 import social.connectus.userservice.domain.port.outbound.repository.UserRepository;
 
@@ -30,7 +33,7 @@ public class UserAdapter implements UserPort {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-
+	private final SpotClient spotClient;
 	@Override
 	@Transactional
 	public void registerUser(UserRegisterCommand command) {
@@ -47,7 +50,6 @@ public class UserAdapter implements UserPort {
 			.accomplishedAchievements(Collections.EMPTY_LIST)
 			.chatRoomIds(Collections.EMPTY_LIST)
 			.postHistory(Collections.EMPTY_LIST)
-			.profileImageUrl("default")
 			.birthday(command.getBirthday())
 			.password(encryptedPassword)
 			.nickname(command.getNickname())
@@ -105,6 +107,15 @@ public class UserAdapter implements UserPort {
 	}
 
 	@Override
+	public void insertUserPosition(List<UserPositionCommand> userPositionCommand) {
+		spotClient.insertPostPosition(userPositionCommand);
+	}
+	@Override
+	public UserResponseForPost getUserResponseForPost(Long userId) {
+		return social.connectus.userservice.domain.application.response.UserResponseForPost.from(userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")));
+	}
+
+	@Override
 	public PointResponse increasePoint(PointChangeCommand command) {
 		User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new NotFoundException("user doesn't exists"));
 		user.changeUserPoint(command.getChangeValue());
@@ -120,12 +131,22 @@ public class UserAdapter implements UserPort {
 		User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new NotFoundException("user doesn't exists"));
 		if(user.getPoint() - command.getChangeValue() < 0)
 			throw new FailedToChagePointException("point cannot be less than zero.");
-		else
-			user.changeUserPoint(command.getChangeValue() * -1);
-			userRepository.save(user);
+		else {
+            user.changeUserPoint(command.getChangeValue() * -1);
+            userRepository.save(user);
+        }
 		return PointResponse.builder()
 				.currentPoint(user.getPoint())
 				.userId(user.getUserId())
 				.build();
 	}
+
+
+	@Override
+	public String updateAvatar(Long userId, String imageUrl) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists"));
+		user.updateAvatar(imageUrl);
+		return "avatar update!";
+	}
+
 }

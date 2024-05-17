@@ -67,7 +67,7 @@ public class UserController {
 	@Operation(summary = "endWalk 때 statistics를 갱신하기 위한 controller 이번 refresh를 통해 새로 완료한 업적을 출력")
 	@PostMapping("/refresh-achievement")
 	public ResponseEntity<List<AchievementResponse>> refreshAchievement(Long userId,
-																		@RequestBody RefreshAchievementRequest statistics) {
+		@RequestBody RefreshAchievementRequest statistics) {
 		return ResponseEntity.ok(achievementUseCase.refreshAchievement(userId, statistics).getCompletedAchievementInThisRequest());
 	}
 
@@ -108,14 +108,20 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/{userId}/get-author-name")
-	public ResponseEntity<String> getAuthorName(@PathVariable("userId") Long userId) {
-		return ResponseEntity.ok(userUseCase.getUserNickname(userId));
+	@GetMapping("/{userId}/get-author-info")
+	public ResponseEntity<social.connectus.userservice.domain.application.response.UserResponseForPost> getUserForPost(@PathVariable("userId") Long userId) {
+		return ResponseEntity.ok(userUseCase.getUserResponseForPost(userId));
 	}
 
-	@GetMapping("/{userId}/nickname")
-	public ResponseEntity<String> getUserNickname(@PathVariable("userId") Long userId) {
-		return ResponseEntity.ok(userUseCase.getUserNickname(userId));
+	@PostMapping("/{userId}/update-avatar")
+	public ResponseEntity<String> updateAvatar(@PathVariable("userId") Long userId, @RequestBody String imageUrl) {
+		return ResponseEntity.ok(userUseCase.updateAvatar(userId, imageUrl));
+	}
+
+	@PostMapping("/insert-position")
+	public ResponseEntity<Void> insertUserPosition(@RequestBody social.connectus.userservice.domain.application.request.UserPositionRequest request) {
+		userUseCase.insertUserPosition(request);
+		return ResponseEntity.ok().build();
 	}
 
 	@PostMapping("/increase-point")

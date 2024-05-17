@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import social.connectus.application.rest.response.OpenedPostResponse;
+import social.connectus.application.rest.response.UserInfoResponse;
 
 @FeignClient(name = "user-service")
 public interface UserServiceClient {
@@ -23,6 +24,6 @@ public interface UserServiceClient {
 	@GetMapping("/user/health-check")
 	String healthCheck();
 
-	@GetMapping("/user/{userId}/get-author-name")
-	String getAuthorName(@PathVariable("userId") Long userId);
+	@GetMapping("/user/{userId}/get-author-info")
+	UserInfoResponse getUserInfo(@PathVariable("userId") Long userId);
 }
