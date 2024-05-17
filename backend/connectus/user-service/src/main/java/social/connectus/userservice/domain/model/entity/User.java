@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Function;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -46,7 +47,8 @@ public class User {
 	@ElementCollection
 	private List<Long> postHistory; // 읽었던 방명록 리스트
 
-	private String profileImageUrl;
+	@Column(columnDefinition = "varchar(10000) DEFAULT 'https://e106-connectus.s3.ap-northeast-2.amazonaws.com/avatar/character_1.png'")
+	private String avatarImageUrl;
 
 	@ElementCollection
 	private List<Long> chatRoomIds; // 참여하고 있는 채팅방 아이디
@@ -75,5 +77,9 @@ public class User {
 
 	public void updateOpenedPosts(List<Long> openedPosts) {
 		this.postHistory = openedPosts;
+	}
+
+	public void updateAvatar(String avatarImageUrl) {
+		this.avatarImageUrl = avatarImageUrl;
 	}
 }

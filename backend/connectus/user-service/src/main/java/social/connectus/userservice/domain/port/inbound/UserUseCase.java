@@ -28,4 +28,5 @@ public interface UserUseCase {
 	OpenedPostResponse getOpenedPost(Long userId);
 	String getUserNickname(Long userId);
 	LogoutUserResponse logout(UserLogoutCommand command) throws FailedToLogoutException;
+	String updateAvatar(Long userId, String imageUrl);
 }
