@@ -31,4 +31,13 @@ public class CustomExceptionHandler {
 		loggerException.error(ex);
 		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
+
+	@ExceptionHandler({NotFoundException.class})
+	public ResponseEntity notFoundExceptionHandler(NotFoundException ex, WebRequest request) {
+		// ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+		ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(false));
+
+		loggerException.error(ex);
+		return new ResponseEntity<>(errorDetails, HttpStatus.NO_CONTENT);
+	}
 }
