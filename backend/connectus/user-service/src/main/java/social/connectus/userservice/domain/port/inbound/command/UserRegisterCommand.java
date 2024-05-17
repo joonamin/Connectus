@@ -22,6 +22,7 @@ public class UserRegisterCommand {
 	private String nickname;
 	private String name;
 	private LocalDate birthday;
+	private String imageUrl;
 
 	public static UserRegisterCommand from(UserRegisterRequest request) {
 		// request -> command
@@ -33,6 +34,7 @@ public class UserRegisterCommand {
 			.nickname(request.getNickname())
 			.name(request.getName())
 			.birthday(request.getBirthday())
+			.imageUrl(request.getImageUrl())
 			.build();
 	}
 }

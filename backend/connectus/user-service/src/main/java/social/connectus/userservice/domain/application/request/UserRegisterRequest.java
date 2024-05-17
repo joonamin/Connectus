@@ -19,5 +19,5 @@ public class UserRegisterRequest {
 	private String nickname;
 	private String name;
 	private LocalDate birthday;
-
+	private String imageUrl;
 }
