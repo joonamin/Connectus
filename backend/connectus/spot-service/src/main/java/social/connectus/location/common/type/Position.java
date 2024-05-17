@@ -15,7 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 public class Position implements Serializable {
-	private double longitude;
-	private double latitude;
+	private float longitude;
+	private float latitude;
 }
 
