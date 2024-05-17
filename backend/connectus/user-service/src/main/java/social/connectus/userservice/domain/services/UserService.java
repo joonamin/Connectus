@@ -1,6 +1,7 @@
 package social.connectus.userservice.domain.services;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -53,10 +54,13 @@ public class UserService implements UserUseCase {
 	}
 
 	@Override
-	public void updateOpenedPosts(Long userId, Long postId) {
-		userPort.updateOpenedPosts(userId, postId);
+	public void updateOpenedPost(Long userId, Long postId) {
+		userPort.updateOpenedPost(userId, postId);
 	}
-
+	@Override
+	public void updateOpenedPosts(Long userId, List<Long> postIdList) {
+		userPort.updateOpenedPosts(userId,postIdList);
+	}
 	@Override
 	public OpenedPostResponse getOpenedPost(Long userId) {
 		return userPort.getOpenedPost(userId);
