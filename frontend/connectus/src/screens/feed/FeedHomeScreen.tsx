@@ -136,9 +136,9 @@ export default function FeedHomeScreen() {
                 }}
                 data={item.postList}
                 renderItem={({item, index}) => {
-                  console.log('================================');
-                  console.log('item', item);
-                  console.log('================================');
+                  // console.log('================================');
+                  // console.log('item', item);
+                  // console.log('================================');
                   return <FeedPreview feedId={item} />;
                 }}
               />
