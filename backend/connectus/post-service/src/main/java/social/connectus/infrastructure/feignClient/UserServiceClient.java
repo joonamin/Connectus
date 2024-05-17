@@ -1,5 +1,7 @@
 package social.connectus.infrastructure.feignClient;
 
+import java.util.List;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,8 +15,10 @@ public interface UserServiceClient {
 	@GetMapping("/user/{userId}/openedPosts")
 	OpenedPostResponse getOpenedPost(@PathVariable("userId") Long userId);
 
-	@PostMapping("/user/{userId}/openedPosts")
+	@PostMapping("/user/{userId}/openedPost")
 	void updateOpenedPost(@PathVariable("userId") Long userId, @RequestBody Long postId);
+	@PostMapping("/user/{userId}/openedPosts")
+	void updateOpenedPosts(@PathVariable("userId") Long userId, @RequestBody List<Long> postIdList);
 
 	@GetMapping("/user/health-check")
 	String healthCheck();
