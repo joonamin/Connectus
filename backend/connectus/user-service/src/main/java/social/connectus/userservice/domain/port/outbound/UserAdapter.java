@@ -53,6 +53,7 @@ public class UserAdapter implements UserPort {
 			.phoneNumber(command.getPhoneNumber())
 			.walkCount(0)
 			.postCount(0)
+			.avatarImageUrl(command.getImageUrl())
 			.build();
 		userRepository.save(user);
 	}
