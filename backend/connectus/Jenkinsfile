@@ -5,14 +5,13 @@ pipeline {
       gradle 'gradle_8.7'
     }
  environment {
-      dockerHubRegistry = 'jinjoo0402/s4_spring'
       DOCKERHUB_CREDENTIALS = credentials('DOCKER_HUB_TOKEN') 
   }
   stages {
     stage('Checkout Application Git Branch') {
         steps {
             git credentialsId: 'GITLAB_USER_TOKEN',
-                url: 'https://lab.ssafy.com/jinjoo021/connect-cicd-test.git',
+                url: 'https://lab.ssafy.com/s10-final/S10P31E106.git',
                 branch: 'feat/jenkins'
         }
         post {
@@ -209,7 +208,7 @@ pipeline {
                 continueOnError: false, failOnError: true,
                 publishers: [
                     sshPublisherDesc(
-                        configName: 'DEPLOY_TEST_SERVER',
+                        configName: 'DEPLOY_SERVER',
                         verbose: true,
                         transfers: [
                             sshTransfer(
