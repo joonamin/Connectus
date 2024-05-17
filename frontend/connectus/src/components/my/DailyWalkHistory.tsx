@@ -1,10 +1,9 @@
 import React, {useContext} from 'react';
-import WalkHistoryThumbnail, {
-  WalkHistoryThumbnailProps,
-} from '@/components/my/WalkHistoryThumbnail';
+import WalkHistoryThumbnail from '@/components/my/WalkHistoryThumbnail';
 import MainText from '@/components/text/MainText';
 import {StyleSheet} from 'react-native';
 import {WalkHistoryMonthContext} from '@/contexts/WalkHistoryContext';
+import {Walk} from '@/types';
 
 /**
  * DailyWalkHistory의 인자를 지정합니다
@@ -17,7 +16,7 @@ export interface DailyWalkHistoryProps {
   /**
    * 해당 날짜 내 산책 기록 목록
    */
-  list: WalkHistoryThumbnailProps[];
+  data: Walk[];
 }
 
 /**
@@ -25,7 +24,7 @@ export interface DailyWalkHistoryProps {
  *
  * @returns DailyWalkHistory
  */
-export default function DailyWalkHistory({day, list}: DailyWalkHistoryProps) {
+export default function DailyWalkHistory({day, data}: DailyWalkHistoryProps) {
   const month = useContext(WalkHistoryMonthContext);
 
   return (
@@ -34,8 +33,8 @@ export default function DailyWalkHistory({day, list}: DailyWalkHistoryProps) {
       <MainText style={styles.dateHeading}>
         {month}월 {day}일
       </MainText>
-      {list.map(item => (
-        <WalkHistoryThumbnail key={item.id} {...item} />
+      {data.map(walk => (
+        <WalkHistoryThumbnail key={walk.walkId} data={walk} />
       ))}
     </>
   );

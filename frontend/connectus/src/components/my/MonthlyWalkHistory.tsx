@@ -1,45 +1,30 @@
 import React, {useContext} from 'react';
-import DailyWalkHistory, {
-  DailyWalkHistoryProps,
-} from '@/components/my/DailyWalkHistory';
+import DailyWalkHistory from '@/components/my/DailyWalkHistory';
 import {StyleSheet, View} from 'react-native';
 import MainContainer from '@/components/containers/MainContainer';
 import HeadingText from '@/components/text/HeadingText';
-import MonthlySummary from '@/components/my/MonthlySummary';
+import MonthlySummary, {
+  MonthlySummaryProps,
+} from '@/components/my/MonthlySummary';
 import {
   WalkHistoryMonthContext,
   WalkHistoryYearContext,
 } from '@/contexts/WalkHistoryContext';
+import {Walk} from '@/types';
+import {groupBy} from '@/utils/arrays';
 
 /**
  * MonthlyWalkHistory의 인자를 지정합니다
  */
 export interface MonthlyWalkHistoryProps {
   /**
-   * 해당 월 산책 기록 요약 정보
+   * 월별 산책 데이터
    */
-  summary?: {
-    /**
-     * 산책 횟수
-     */
-    daysWalked: number;
-    /**
-     * 외출 거리
-     */
-    distance: number;
-    /**
-     * 외출 시간
-     */
-    timeSpent: number;
-  };
+  data: Walk[];
   /**
    * 월별 요약 정보 표시 여부를 지정합니다
    */
   showSummary?: boolean;
-  /**
-   * 해당 월 내 일별 산책 기록
-   */
-  list: DailyWalkHistoryProps[];
 }
 
 /**
@@ -48,12 +33,27 @@ export interface MonthlyWalkHistoryProps {
  * @returns MonthlyWalkHistory
  */
 export default function MonthlyWalkHistory({
-  summary,
+  data,
   showSummary,
-  list,
 }: MonthlyWalkHistoryProps) {
   const year = useContext(WalkHistoryYearContext);
   const month = useContext(WalkHistoryMonthContext);
+
+  // 요약 정보 계산
+  const summary: MonthlySummaryProps = {
+    daysWalked: data.length,
+    distance: 0,
+    timeSpent: 0,
+  };
+  data.forEach(walk => {
+    summary.distance += walk.walkDistance;
+    summary.timeSpent += walk.walkTime;
+  });
+
+  // 일별 데이터 그룹화
+  const groups = groupBy(data, walk =>
+    walk.updatedAt.getDate().toString(10).padStart(2, '0'),
+  );
 
   return (
     <View style={styles.month}>
@@ -64,22 +64,29 @@ export default function MonthlyWalkHistory({
         </HeadingText>
       </MainContainer>
       {/* 해당 월 요약 정보 */}
-      {typeof summary !== 'undefined' && showSummary ? (
+      {showSummary ? (
         <MainContainer style={styles.monthlyItem}>
-          <MonthlySummary
-            daysWalked={summary.daysWalked}
-            distance={summary.distance}
-            timeSpent={summary.timeSpent}
-          />
+          <MonthlySummary {...summary} />
         </MainContainer>
       ) : (
         <></>
       )}
       {/* 해당 월 산책 기록 */}
       <View style={styles.historyGrid}>
-        {list.map(item => (
-          <DailyWalkHistory key={item.day} {...item} />
-        ))}
+        {Object.keys(groups)
+          .sort()
+          .reverse()
+          .map(day => (
+            <DailyWalkHistory
+              key={day}
+              day={
+                day.charAt(0) === '0'
+                  ? Number.parseInt(day.substring(1), 10)
+                  : Number.parseInt(day, 10)
+              }
+              data={groups[day]}
+            />
+          ))}
       </View>
     </View>
   );
