@@ -101,13 +101,13 @@ public class PostController {
 		return ResponseEntity.ok().body(response);
 	}
 
-	@GetMapping("/around/{postId}")
-	public ResponseEntity<DetailPostResponse> detailPostByLocation(@PathVariable("postId") Long postId, CoordinateRequestDto coordinate) throws
-		BusinessException,
-		GlobalException {
-		DetailPostResponse response = detailPostUseCase.detailByLocation(postId,coordinate);
-		return ResponseEntity.ok().body(response);
-	}
+//	@GetMapping("/around/{postId}")
+//	public ResponseEntity<DetailPostResponse> detailPostByLocation(@PathVariable("postId") Long postId, CoordinateRequestDto coordinate) throws
+//		BusinessException,
+//		GlobalException {
+//		DetailPostResponse response = detailPostUseCase.detailByLocation(postId,coordinate);
+//		return ResponseEntity.ok().body(response);
+//	}
 
 	@GetMapping("/{postId}")
 	@Operation(
