@@ -21,6 +21,7 @@ import social.connectus.userservice.domain.application.request.MyWalkRequest;
 import social.connectus.userservice.domain.application.request.RefreshAchievementRequest;
 import social.connectus.userservice.domain.application.request.UserLoginRequest;
 import social.connectus.userservice.domain.application.request.UserLogoutRequest;
+import social.connectus.userservice.domain.application.request.UserPositionRequest;
 import social.connectus.userservice.domain.application.request.UserRegisterRequest;
 import social.connectus.userservice.domain.application.response.AchievementResponse;
 import social.connectus.userservice.domain.application.response.CompletedAchievementListResponse;
@@ -131,5 +132,11 @@ public class UserController {
 	@PostMapping("/{userId}/update-avatar")
 	public ResponseEntity<String> updateAvatar(@PathVariable("userId") Long userId, @RequestBody String imageUrl) {
 		return ResponseEntity.ok(userUseCase.updateAvatar(userId, imageUrl));
+	}
+
+	@PostMapping("/insert-position")
+	public ResponseEntity<Void> insertUserPosition(@RequestBody UserPositionRequest request) {
+		userUseCase.insertUserPosition(request);
+		return ResponseEntity.ok().build();
 	}
 }

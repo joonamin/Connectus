@@ -5,6 +5,7 @@ import java.util.List;
 import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.common.exception.FailedToLogoutException;
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
+import social.connectus.userservice.domain.application.request.UserPositionRequest;
 import social.connectus.userservice.domain.application.response.LoginUserResponse;
 import social.connectus.userservice.domain.application.response.LogoutUserResponse;
 import social.connectus.userservice.domain.application.response.OpenedPostResponse;
@@ -30,4 +31,5 @@ public interface UserUseCase {
 	UserResponseForPost getUserResponseForPost(Long userId);
 	LogoutUserResponse logout(UserLogoutCommand command) throws FailedToLogoutException;
 	String updateAvatar(Long userId, String imageUrl);
+	void insertUserPosition(UserPositionRequest request);
 }
