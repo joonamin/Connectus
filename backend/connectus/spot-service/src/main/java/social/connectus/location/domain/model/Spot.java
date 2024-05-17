@@ -20,10 +20,10 @@ public class Spot extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Double longitude;
+    private Float longitude;
 
     @Column(nullable = false)
-    private Double latitude;
+    private Float latitude;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
