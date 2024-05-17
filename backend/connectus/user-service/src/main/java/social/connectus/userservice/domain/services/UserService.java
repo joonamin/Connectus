@@ -76,4 +76,9 @@ public class UserService implements UserUseCase {
 	public LogoutUserResponse logout(UserLogoutCommand command) throws FailedToLogoutException {
 		return null;
 	}
+
+	@Override
+	public String updateAvatar(Long userId, String imageUrl) {
+		return userPort.updateAvatar(userId, imageUrl);
+	}
 }

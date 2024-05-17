@@ -21,4 +21,5 @@ public interface UserPort {
 	void updateOpenedPosts(Long userId, List<Long> postIdList);
 	OpenedPostResponse getOpenedPost(Long userId);
 	String getUserNickname(Long userId);
+	String updateAvatar(Long userId, String imageUrl);
 }

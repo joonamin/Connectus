@@ -131,4 +131,9 @@ public class UserController {
 	public ResponseEntity<String> getUserNickname(@PathVariable("userId") Long userId) {
 		return ResponseEntity.ok(userUseCase.getUserNickname(userId));
 	}
+
+	@PostMapping("/{userId}/update-avatar")
+	public ResponseEntity<String> updateAvatar(@PathVariable("userId") Long userId, @RequestBody String imageUrl) {
+		return ResponseEntity.ok(userUseCase.updateAvatar(userId, imageUrl));
+	}
 }

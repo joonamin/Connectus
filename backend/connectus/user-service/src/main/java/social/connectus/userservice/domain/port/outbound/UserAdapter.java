@@ -44,7 +44,6 @@ public class UserAdapter implements UserPort {
 			.accomplishedAchievements(Collections.EMPTY_LIST)
 			.chatRoomIds(Collections.EMPTY_LIST)
 			.postHistory(Collections.EMPTY_LIST)
-			.profileImageUrl("default")
 			.birthday(command.getBirthday())
 			.password(encryptedPassword)
 			.nickname(command.getNickname())
@@ -99,5 +98,12 @@ public class UserAdapter implements UserPort {
 	@Override
 	public String getUserNickname(Long userId) {
 		return userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists")).getNickname();
+	}
+
+	@Override
+	public String updateAvatar(Long userId, String imageUrl) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists"));
+		user.updateAvatar(imageUrl);
+		return "avatar update!";
 	}
 }
