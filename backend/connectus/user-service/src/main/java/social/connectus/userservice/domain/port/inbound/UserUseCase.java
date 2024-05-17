@@ -10,6 +10,7 @@ import social.connectus.userservice.application.response.LoginUserResponse;
 import social.connectus.userservice.application.response.LogoutUserResponse;
 import social.connectus.userservice.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.command.PointChangeCommand;
+import social.connectus.userservice.domain.application.response.UserResponseForPost;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
@@ -28,10 +29,12 @@ public interface UserUseCase {
 	void updateOpenedPost(Long userId, Long postId);
 	void updateOpenedPosts(Long userId, List<Long> postIdList);
 	OpenedPostResponse getOpenedPost(Long userId);
-	String getUserNickname(Long userId);
+	UserResponseForPost getUserResponseForPost(Long userId);
 	LogoutUserResponse logout(UserLogoutCommand command) throws FailedToLogoutException;
 
 	PointResponse increasePoint(PointChangeCommand from);
 
 	PointResponse decreasePoint(PointChangeCommand from);
+	String updateAvatar(Long userId, String imageUrl);
+	void insertUserPosition(social.connectus.userservice.domain.application.request.UserPositionRequest request);
 }

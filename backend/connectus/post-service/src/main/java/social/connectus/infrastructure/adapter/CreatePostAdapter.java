@@ -45,7 +45,6 @@ public class CreatePostAdapter implements CreatePostPort {
 			postList.get(i).setSpotId(spotIdList.get(i));
 		}
 		postRepository.saveAll(postList);
-
 		return postIdList;
 	}
 }
