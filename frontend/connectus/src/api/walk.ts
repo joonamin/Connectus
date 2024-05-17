@@ -95,11 +95,16 @@ const createRoute = async (body: createRoutetype) => {
 };
 
 /**
+ * {@link getRoute}에서 반환하는 자료형입니다
+ */
+export type GetRouteResponse = Walk;
+
+/**
  *
  * @param walkId {number} 조회할 산책의 id값을 param으로 전달합니다.
  */
 const getRouteDetail = async (walkId: number) => {
-  const {data} = await axiosInstance.get(`/walk/${walkId}`);
+  const {data} = await axiosInstance.get<GetRouteResponse>(`/walk/${walkId}`);
   return data;
 };
 
