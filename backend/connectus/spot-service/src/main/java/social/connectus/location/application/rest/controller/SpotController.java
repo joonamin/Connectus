@@ -35,11 +35,11 @@ public class SpotController {
 		return "It's working on spot-service!";
 	}
 
-	@PostMapping("/findNearby")
-	public FindNearbyElementResponse findNearbyElement(@RequestBody FindNearbyElementRequest request) {
-		FindNearbyElementCommand command = new FindNearbyElementCommand(request.getLongitude(), request.getLongitude());
-		return spotUseCase.findNearbyElement(command);
-	}
+    @PostMapping("/findNearby")
+    public FindNearbyElementResponse findNearbyElement(@RequestBody FindNearbyElementRequest request) {
+        FindNearbyElementCommand command = new FindNearbyElementCommand(request.getLatitude(),request.getLongitude());
+        return spotUseCase.findNearbyElement(command);
+    }
 
 	@PostMapping("/insert")
 	public ResponseEntity<CreateSpotResponse> createSpot(@RequestBody CreateSpotRequest request) {

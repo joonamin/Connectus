@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class FindNearbyElementCommand {
-    private final double longitude;
+public class FindNearbyElementCommand {;
     private final double latitude;
+    private final double longitude;
 }
