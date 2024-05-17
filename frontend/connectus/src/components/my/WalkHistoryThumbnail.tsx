@@ -3,15 +3,16 @@ import CustomButton from '@/components/buttons/CustomButton';
 import {Image, StyleSheet} from 'react-native';
 import colors from '@/constants/colors';
 import {OnWalkSelectedContext} from '@/contexts/WalkHistoryContext';
+import {Walk} from '@/types';
 
 /**
  * WalkHistoryThumbnail의 인자를 지정합니다
  */
 export interface WalkHistoryThumbnailProps {
   /**
-   * 산책 기록 ID
+   * 산책 데이터
    */
-  id: number;
+  data: Walk;
 }
 
 /**
@@ -19,7 +20,9 @@ export interface WalkHistoryThumbnailProps {
  *
  * @returns WalkHistoryThumbnail
  */
-export default function WalkHistoryThumbnail({id}: WalkHistoryThumbnailProps) {
+export default function WalkHistoryThumbnail({
+  data,
+}: WalkHistoryThumbnailProps) {
   const onWalkSelected = useContext(OnWalkSelectedContext);
 
   return (
@@ -29,10 +32,10 @@ export default function WalkHistoryThumbnail({id}: WalkHistoryThumbnailProps) {
       backgroundColor="transparent"
       onPress={() => {
         if (typeof onWalkSelected !== 'undefined') {
-          onWalkSelected(id);
+          onWalkSelected(data.walkId);
         }
       }}>
-      <Image style={styles.historyItemImage} source={defaultImage} />
+      <Image style={styles.historyItemImage} source={{uri: data.imageUrl}} />
     </CustomButton>
   );
 }
@@ -59,8 +62,3 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
 });
-
-/**
- * 기본 이미지
- */
-const defaultImage = require('@/assets/map.png');
