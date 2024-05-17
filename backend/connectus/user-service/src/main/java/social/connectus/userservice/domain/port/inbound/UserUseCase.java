@@ -1,5 +1,7 @@
 package social.connectus.userservice.domain.port.inbound;
 
+import java.util.List;
+
 import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.common.exception.FailedToLogoutException;
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
@@ -21,7 +23,8 @@ public interface UserUseCase {
 	// 2. 로그인
 	LoginUserResponse login(UserLoginCommand command) throws FailedToLoginException;
 
-	void updateOpenedPosts(Long userId, Long postId);
+	void updateOpenedPost(Long userId, Long postId);
+	void updateOpenedPosts(Long userId, List<Long> postIdList);
 	OpenedPostResponse getOpenedPost(Long userId);
 	String getUserNickname(Long userId);
 	LogoutUserResponse logout(UserLogoutCommand command) throws FailedToLogoutException;
