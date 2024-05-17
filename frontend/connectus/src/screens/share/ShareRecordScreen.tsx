@@ -1,10 +1,6 @@
-import {Modal, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import WalkHistory, {WalkHistoryProps} from '@/components/my/WalkHistory';
-import {StackScreenProps} from '@react-navigation/stack';
-import {ShareStackParamList} from '@/navigations/stack/ShareStackNavigator';
-import MainContainer from '@/components/containers/MainContainer';
-import {defaultColors} from '@/constants/colors';
 import PrimaryButton, {
   PrimaryButtonText,
 } from '@/components/buttons/PrimaryButton';
