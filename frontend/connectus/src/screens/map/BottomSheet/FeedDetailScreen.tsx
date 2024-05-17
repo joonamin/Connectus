@@ -44,7 +44,7 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
   // 요청에 사용할 유저 정보입니다.
   const {user} = useAuthStore();
 
-  const {data} = useQuery({
+  const {data, isLoading} = useQuery({
     queryFn: () => getPostDetail(feedId, user?.userId as number, 5),
     queryKey: [queryKeys.GET_FEED_DETAIL, feedId],
   });
@@ -94,6 +94,10 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
     };
   }, []);
 
+  if (isLoading) {
+    return <MainText>게시글을 로드중입니다</MainText>;
+  }
+
   return (
     <>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -107,7 +111,7 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
                 />
               </View>
               <View style={styles.feedInfoContainer}>
-                <MainText>{data?.authorId}</MainText>
+                <MainText>{data?.authorName}</MainText>
                 <Text style={styles.postDate}>
                   {dateTimeToString(data?.updatedAt as string)}
                 </Text>
@@ -137,11 +141,9 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
               <MainText>메인내용</MainText>
             </View>
             <View style={styles.commentListContainer}>
-              {
-                data?.commentList.map((comment, index) => return (
-                  <Comment key={index} params={comment}/>
-                ))
-              }
+              {data?.commentList.map((comment, index) => {
+                return <Comment key={index} params={comment} />;
+              })}
             </View>
             <View style={styles.defaultBottomPadding} />
             <View style={isUseKeyBoard ? styles.keyboardBottomPadding : null} />

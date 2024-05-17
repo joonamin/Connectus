@@ -28,12 +28,14 @@ export default function CustomMarker({
         <Image
           style={styles.image}
           source={require('@/assets/markers/eventMarker.png')}
+          resizeMode="cover"
         />
       )}
       {type === 'POST' && (
         <Image
           style={styles.image}
           source={require('@/assets/markers/feedMarker.png')}
+          resizeMode="cover"
         />
       )}
       {type === 'GATHER' && (
@@ -57,7 +59,7 @@ export default function CustomMarker({
 
 const styles = StyleSheet.create({
   container: {
-    width: 70,
+    width: 100,
     aspectRatio: '414/500',
     borderRadius: 50,
     justifyContent: 'center',

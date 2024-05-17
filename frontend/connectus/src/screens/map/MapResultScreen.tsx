@@ -14,7 +14,7 @@ import WalkResult from '@/components/map/WalkResult';
 import Achievement from '@/components/map/Achievement';
 import EventResult from '@/components/map/EventResult';
 import colors from '@/constants/colors';
-import {fonts} from '@/constants';
+import {fonts, queryKeys} from '@/constants';
 import RecordedPost from '@/components/map/RecordedPost';
 import {BottomTabScreenProps} from '@react-navigation/bottom-tabs';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
@@ -28,6 +28,7 @@ import {LatLng} from 'react-native-maps';
 import usePostStore from '@/store/usePostStore';
 import useModal from '@/hooks/useModal';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
+import queryClient from '@/api/queryClient';
 
 const DUMMY_ACHIEVE = [
   {
@@ -84,6 +85,10 @@ export default function MapResultScreen({route}: ScreenProps) {
         postList: posts,
         image: routeImage,
       }),
+    onSuccess: () => {
+      console.log('요청 성공');
+      queryClient.invalidateQueries({queryKey: [queryKeys.GET_ROUTE_LIST]});
+    },
     onSettled: () => show(),
   });
 
