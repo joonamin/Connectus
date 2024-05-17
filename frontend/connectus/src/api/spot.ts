@@ -16,11 +16,14 @@ const getNearMarker = async () => {
     longitude: post.coords.longitude,
     latitude: post.coords.latitude,
   };
-  const {data} = await axiosInstance.post<spotListType>(
-    '/spot/findNearby',
-    body,
-  );
-  return data;
+  console.log('bodycheck', body);
+  try {
+    const {data} = await axiosInstance.post('/spot/findNearby', body);
+    console.log('datacheck', data);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const getDetailSpotList = async (spotIdList: number[]) => {
