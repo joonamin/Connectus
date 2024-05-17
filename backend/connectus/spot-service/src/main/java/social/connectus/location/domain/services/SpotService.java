@@ -43,7 +43,7 @@ public class SpotService implements SpotUseCase {
             Map<String, Object> row = queryResult.getFieldValues();
 
             List<Float> coordinate = (List<Float>) row.get("spot");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SX");
 
             Ping ping = Ping.builder()
                     .id((Long) row.get("spot_id"))
@@ -51,8 +51,10 @@ public class SpotService implements SpotUseCase {
                     .longitude(coordinate.get(0))
                     .latitude(coordinate.get(1))
                     .type(PingType.valueOf((String) row.get("type")))
-                    .cretedAt(LocalDateTime.parse((String) row.get("created_at"), formatter))
-                    .updatedAt(LocalDateTime.parse((String) row.get("updated_at"), formatter))
+//                    .cretedAt(LocalDateTime.parse((String) row.get("created_at"), formatter))
+                    .cretedAt(LocalDateTime.parse((String)row.get("created_at")))
+//                    .updatedAt(LocalDateTime.parse((String) row.get("updated_at"), formatter))
+                    .updatedAt(LocalDateTime.parse((String)row.get("updated_at")))
                     .build();
             nearby.add(ping);
         }
