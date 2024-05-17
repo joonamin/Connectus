@@ -5,16 +5,16 @@ import {postType} from '@/types';
 import {Image, Platform} from 'react-native';
 import axios from 'axios';
 import Geolocation from '@react-native-community/geolocation';
-import {dateToString, getCurrentTimeAsStringWithMS} from '@/utils';
+import {getCurrentTimeAsStringWithMS} from '@/utils';
 
 /**
  * 산책 공유 페이지에서 경로를 좋아요를 할 때 호출할 api입니다.
  */
 const routeLike = async (walkId: number, userId: number) => {
-  const body = {userId: userId, domainId: walkId, type: 'ROUTE'};
+  const body = {userId: userId, walkId: walkId};
   console.log('route like', body);
   try {
-    const {data} = await axiosInstance.post('/likes/insert', body);
+    const {data} = await axiosInstance.put('/walk/route-like', body);
     return data;
   } catch (error) {
     console.log(error);
