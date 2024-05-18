@@ -9,10 +9,7 @@ import org.springframework.stereotype.Component;
 import social.connectus.application.rest.request.CoordinateRequestDto;
 import social.connectus.application.rest.request.GetPostSpotRequest;
 import social.connectus.application.rest.request.SpotDto;
-import social.connectus.application.rest.response.CommentResponse;
-import social.connectus.application.rest.response.DetailPostResponse;
-import social.connectus.application.rest.response.OpenedPostResponse;
-import social.connectus.application.rest.response.UserInfoResponse;
+import social.connectus.application.rest.response.*;
 import social.connectus.common.exception.BusinessException;
 import social.connectus.common.exception.NotFoundException;
 import social.connectus.domain.model.RDBMS.Comment;
@@ -85,5 +82,17 @@ public class DetailPostAdapter implements DetailPostPort {
 	@Override
 	public String healthCheck() {
 		return userServiceClient.healthCheck();
+	}
+
+	@Override
+	public GetPostSpotResponse getPostSpotById(Long postId) throws NotFoundException {
+		Post post = postRepository.findById(postId).orElseThrow(()-> new NotFoundException("Post doesn't exists"));
+		CoordinateRequestDto resp = spotServiceClient.getPostSpot(GetPostSpotRequest.builder().spotIdList(Arrays.asList(post.getSpotId())).build());
+		SpotDto spotDto = resp.getSpotList().get(0);
+		return GetPostSpotResponse.builder()
+				.latitude(spotDto.getLatitude())
+				.longitude(spotDto.getLongitude())
+				.postId(post.getId())
+				.build();
 	}
 }
