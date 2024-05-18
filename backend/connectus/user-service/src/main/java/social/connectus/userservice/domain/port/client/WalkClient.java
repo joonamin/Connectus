@@ -23,4 +23,7 @@ public interface WalkClient {
 	// 특정 산책 기록에 대한 Route 정보를 가져온다.
 	@GetMapping("/walk/{id}")
 	List<WalkRouteResponse> getWalkRoute(@PathVariable Long walkId);
+
+	@GetMapping("/route-like-list/{userId}")
+	List<Long> getRouteLikeList(@PathVariable Long userId);
 }

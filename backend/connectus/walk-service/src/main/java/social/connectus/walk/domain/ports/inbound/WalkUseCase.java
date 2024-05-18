@@ -32,4 +32,6 @@ public interface WalkUseCase {
     List<AchievementResponse> getAchievementsByWalk(Long userId, GetAchievementsCommand command);
 
     Slice<Walk> getWalksByPosition(GetWalksByPositionCommand from);
+
+    List<Long> getRouteLikeList(Long userId);
 }

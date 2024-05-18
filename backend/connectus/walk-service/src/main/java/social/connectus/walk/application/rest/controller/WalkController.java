@@ -68,6 +68,11 @@ public class WalkController {
         return ResponseEntity.ok("Like is successfully registered.");
     }
 
+    @GetMapping("/route-like-list/{userId}")
+    public ResponseEntity<List<Long>> routeLikeList(@PathVariable Long userId) {
+        return ResponseEntity.ok(walkUseCase.getRouteLikeList(userId));
+    }
+
     @Operation(summary = "산책 기록 공유")
     @PatchMapping("/route-share")
     public ResponseEntity<String> routeShare(@RequestBody RouteShareRequest request){

@@ -2,6 +2,7 @@ package social.connectus.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import social.connectus.application.rest.request.OpenPostRequest;
+
 import social.connectus.application.rest.response.PointResponse;
 import social.connectus.common.annotation.UseCase;
 import social.connectus.common.exception.GlobalException;

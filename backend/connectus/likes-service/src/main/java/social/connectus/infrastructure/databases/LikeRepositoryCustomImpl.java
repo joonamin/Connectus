@@ -4,6 +4,8 @@ import org.springframework.stereotype.Repository;
 
 import static social.connectus.domain.model.QLikes.*;
 
+import java.util.List;
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -31,5 +33,13 @@ public class LikeRepositoryCustomImpl implements LikeRepositoryCustom {
 			.where(likes.domainId.eq(domainId).and(likes.type.eq(type)).and(likes.userId.eq(userId)))
 			.fetchOne();
 		return fetchFirst != null;
+	}
+
+	@Override
+	public List<Long> findAllByUserId(Long userId) {
+		return jpaQueryFactory.select(likes.domainId)
+			.from(likes)
+			.where(likes.userId.eq(userId))
+			.fetch();
 	}
 }

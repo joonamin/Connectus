@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Function;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -47,7 +49,7 @@ public class User {
 	@ElementCollection
 	private List<Long> postHistory; // 읽었던 방명록 리스트
 
-	@Column(columnDefinition = "varchar(10000) DEFAULT 'https://e106-connectus.s3.ap-northeast-2.amazonaws.com/avatar/character_1.png'")
+	@Column(columnDefinition = "varchar(10000)")
 	private String avatarImageUrl;
 
 	@ElementCollection
