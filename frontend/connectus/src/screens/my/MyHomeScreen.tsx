@@ -6,22 +6,14 @@ import IconItemButton from '@/components/containers/IconItemButton';
 import ProfileOverview from '@/components/my/ProfileOverview';
 import LightText from '@/components/text/LightText';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {StackScreenProps} from '@react-navigation/stack';
 import {MyStackParamList} from '@/navigations/stack/MyStackNavigator';
-import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
-import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
 import useAuthStore from '@/store/useAuthStore';
 import {defaultColors} from '@/constants/colors';
 
-type Navigation = CompositeNavigationProp<
-  StackNavigationProp<MyStackParamList>,
-  BottomTabNavigationProp<BottomTabParamList>
->;
-
-export default function MyHomeScreen() {
-  const navigation = useNavigation<Navigation>();
-
+export default function MyHomeScreen({
+  navigation,
+}: StackScreenProps<MyStackParamList>) {
   const gotoAchievements = () => {
     navigation.navigate('MyAchievements');
   };
