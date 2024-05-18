@@ -11,5 +11,5 @@ public interface LikesServiceClient {
 	int getLikeCount(@PathVariable("postId") Long postId, @RequestParam("typeString") String typeString);
 
 	@GetMapping("/likes/{postId}/is-like")
-	boolean isLike(@PathVariable("postId") Long postId, @RequestParam("typeString") String typeString);
+	boolean isLike(@PathVariable("postId") Long postId, @RequestParam("userId") Long userId, @RequestParam("typeString") String typeString);
 }

@@ -85,6 +85,10 @@ public class User {
 		return this;
 	}
 
+	public void usePoint(int point) {
+		this.point -= point;
+	}
+
 	public void updateAvatar(String avatarImageUrl) {
 		this.avatarImageUrl = avatarImageUrl;
 	}

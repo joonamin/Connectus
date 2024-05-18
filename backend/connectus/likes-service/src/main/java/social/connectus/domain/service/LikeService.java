@@ -50,7 +50,7 @@ public class LikeService implements LikeUseCase {
 	}
 
 	@Override
-	public boolean isLike(Long domainId, Type type) {
-		return likePort.isLike(domainId, type);
+	public boolean isLike(Long postId, Long userId, Type type) {
+		return likePort.isLike(postId, userId, type);
 	}
 }

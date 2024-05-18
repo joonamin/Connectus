@@ -1,4 +1,4 @@
-package social.connectus.userservice.application.request;
+package social.connectus.application.rest.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserPositionRequest {
-	Long userId;
-	Double latitude;
-	Double longitude;
+public class PointResponse {
+	private Long userId;
+	private int currentPoint;
 }
