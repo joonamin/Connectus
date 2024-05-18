@@ -14,6 +14,7 @@ import social.connectus.location.common.type.DomainType;
 import social.connectus.location.common.type.Ping;
 import social.connectus.location.common.type.PingType;
 import social.connectus.location.domain.command.CreateSpotCommand;
+import social.connectus.location.domain.command.DeleteSpotCommand;
 import social.connectus.location.domain.command.FindNearbyElementCommand;
 import social.connectus.location.domain.command.GetSpotCommand;
 import social.connectus.location.domain.ports.inbound.SpotUseCase;
@@ -81,6 +82,11 @@ public class SpotService implements SpotUseCase {
     @Override
     public List<Long> updateSpot(CreateSpotCommand command) {
         return milvusPort.updateSpotList(command);
+    }
+
+    @Override
+    public List<Long> deleteSpot(DeleteSpotCommand command) {
+        return milvusPort.deleteSpotList(command);
     }
 
     private double getDistance(double latStart, double lonStart, double latEnd, double lonEnd) {

@@ -11,14 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
-import social.connectus.location.application.rest.request.CreateSpotRequest;
-import social.connectus.location.application.rest.request.FindNearbyElementRequest;
-import social.connectus.location.application.rest.request.GetSpotRequest;
-import social.connectus.location.application.rest.request.SpotDto;
+import social.connectus.location.application.rest.request.*;
 import social.connectus.location.application.rest.response.CreateSpotResponse;
 import social.connectus.location.application.rest.response.FindNearbyElementResponse;
 import social.connectus.location.application.rest.response.GetSpotResponse;
 import social.connectus.location.domain.command.CreateSpotCommand;
+import social.connectus.location.domain.command.DeleteSpotCommand;
 import social.connectus.location.domain.command.FindNearbyElementCommand;
 import social.connectus.location.domain.command.GetSpotCommand;
 import social.connectus.location.domain.ports.inbound.SpotUseCase;
@@ -62,12 +60,19 @@ public class SpotController {
 	}
 
 	@PostMapping("/update")
-	public ResponseEntity<String> updateSpotList(@RequestBody CreateSpotRequest request) {
-		return ResponseEntity.ok("Not used API.");
-		//        CreateSpotResponse response = CreateSpotResponse.builder()
-		//                .spotIdList(spotUseCase.updateSpot(CreateSpotCommand.from(request)))
-		//                .build();
-		//        return ResponseEntity.ok(response);
+	public ResponseEntity<CreateSpotResponse> updateSpotList(@RequestBody CreateSpotRequest request) {
+		CreateSpotResponse response = CreateSpotResponse.builder()
+				.spotIdList(spotUseCase.updateSpot(CreateSpotCommand.from(request)))
+				.build();
+		return ResponseEntity.ok(response);
+	}
+
+	@PostMapping("/delete")
+	public ResponseEntity<CreateSpotResponse> deleteSpotList(@RequestBody DeleteSpotRequest request) {
+		CreateSpotResponse response = CreateSpotResponse.builder()
+				.spotIdList(spotUseCase.deleteSpot(DeleteSpotCommand.from(request)))
+				.build();
+		return ResponseEntity.ok(response);
 	}
 
 }

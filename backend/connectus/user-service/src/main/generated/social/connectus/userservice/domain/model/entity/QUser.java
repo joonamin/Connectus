@@ -44,6 +44,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<Long, NumberPath<Long>> postHistory = this.<Long, NumberPath<Long>>createList("postHistory", Long.class, NumberPath.class, PathInits.DIRECT2);
 
+    public final NumberPath<Long> spotId = createNumber("spotId", Long.class);
+
     public final NumberPath<Long> userId = createNumber("userId", Long.class);
 
     public final NumberPath<Integer> walkCount = createNumber("walkCount", Integer.class);

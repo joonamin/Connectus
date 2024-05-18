@@ -42,6 +42,8 @@ public class User {
 
 	private String name;
 
+	private Long spotId;
+
 	private LocalDate birthday;
 
 	private int point;
@@ -84,6 +86,11 @@ public class User {
 
 	public User changeUserPoint(int changeValue){
 		this.point += changeValue;
+		return this;
+	}
+
+	public User changeSpotId(Long SpotId){
+		this.spotId = SpotId;
 		return this;
 	}
 
