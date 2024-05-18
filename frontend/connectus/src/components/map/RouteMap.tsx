@@ -25,6 +25,10 @@ export interface RouteMapProps extends ViewProps {
    * 지도가 준비되었을 시 실행되는 callback을 지정합니다
    */
   onMapReady?: () => void;
+  /**
+   * 지도가 모든 타일을 렌더링한 후 호출되는 callback을 지정합니다
+   */
+  onMapLoaded?: MapViewProps['onMapLoaded'];
 }
 
 /**
@@ -89,6 +93,7 @@ export default class RouteMap extends React.Component<RouteMapProps> {
       loadingBackgroundColor: colors.background,
       moveOnMarkerPress: false,
       onMapReady: this.onMapReadyInternal.bind(this),
+      onMapLoaded: props.onMapLoaded,
       children: (
         <>
           <StartMarker coordinate={this.routes[0]} />
