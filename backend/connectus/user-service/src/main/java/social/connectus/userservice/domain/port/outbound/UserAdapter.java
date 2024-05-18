@@ -164,8 +164,7 @@ public class UserAdapter implements UserPort {
 	@Override
 	public LikeResponse getMyLikeList(Long userId) {
 		List<Long> myLikeList = likesClient.getUsersPreferencePost(userId);
-		List<MyLikePost> myLikePostList = new ArrayList<>();
-		myLikePostList = postClient.getMyLikeList(myLikeList);
+		List<MyLikePost> myLikePostList = postClient.getMyLikeList(myLikeList);
 		List<MyLikeWalk> myLikeWalkList = walkClient.getMyLikeWalk(userId);
 		return new LikeResponse(myLikePostList,myLikeWalkList);
 	}

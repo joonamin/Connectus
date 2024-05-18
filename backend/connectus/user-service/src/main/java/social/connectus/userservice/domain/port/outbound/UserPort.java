@@ -4,11 +4,8 @@ import java.util.List;
 
 import social.connectus.userservice.application.request.CreateUserPositionRequest;
 import social.connectus.userservice.application.request.InsertPostRequest;
-<<<<<<< HEAD
 import social.connectus.userservice.application.response.LikeResponse;
-=======
 import social.connectus.userservice.application.response.ChangePositionResponse;
->>>>>>> backend
 import social.connectus.userservice.application.response.PointResponse;
 import social.connectus.userservice.application.response.UserInfoResponse;
 import social.connectus.userservice.common.exception.FailedToLoginException;
