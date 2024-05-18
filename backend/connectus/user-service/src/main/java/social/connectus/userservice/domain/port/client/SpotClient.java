@@ -10,5 +10,5 @@ import social.connectus.userservice.domain.port.inbound.command.UserPositionComm
 @FeignClient(name = "spot-service")
 public interface SpotClient {
 	@PostMapping("/spot/insert")
-	void insertPostPosition(@RequestBody List<UserPositionCommand> postPositionCommand);
+	void insertPostPosition(@RequestBody UserPositionCommand postPositionCommand);
 }
