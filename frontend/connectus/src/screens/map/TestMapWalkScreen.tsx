@@ -49,10 +49,12 @@ import useRouteStore from '@/store/useRouteStore';
 import useModal from '@/hooks/useModal';
 import BottomSheetQuickStackNavigator from '@/navigations/stack/BottomSheetQuickStackNavigator';
 import {useQuery} from '@tanstack/react-query';
-import {getNearMarker} from '@/api/spot';
+import {deleteSaveUserPos, getNearMarker, updateSaveUserPos} from '@/api/spot';
 import mapStyle from '@/style/mapStyle';
 import {domainType, spotListType} from '@/types';
 import {queryKeys} from '@/constants';
+import useLookUpPost from '@/store/useLookUpPost';
+import useAuthStore from '@/store/useAuthStore';
 
 type Navigation = StackNavigationProp<MapStackParamList>;
 
@@ -69,6 +71,8 @@ export default function TestMapWalkScreen() {
   const [distance, setDistance] = useState(0);
   // 유저의 위치좌표가 담겨있습니다
   const {userLocation} = useUserLocation();
+  const {lookUpFeed} = useLookUpPost();
+
   // 경로 공유 페이지에서 선택한 route의 존재여부 확인
   const {route} = useRouteStore();
   // 초기 지도의 확대값 설정 및, drag이벤트로 관리할 delta값
@@ -93,6 +97,8 @@ export default function TestMapWalkScreen() {
 
   // 산책 종료 확인을 위한 모달을 열고닫는 state
   const {isVisible, show, hide} = useModal();
+
+  const {user} = useAuthStore();
 
   //  바텀시트를 열고닫을 코드
   const handleBottomSheetOpen = () => bottomSheetRef.current?.expand();
@@ -126,7 +132,8 @@ export default function TestMapWalkScreen() {
   /**
    * 모달 창을 닫고 결과페이지로 이동합니다.
    */
-  const handleWalkDone = () => {
+  const handleWalkDone = async () => {
+    await deleteSaveUserPos(user.userId as number);
     hide();
     navigation.pop();
     navigation.navigate('MapResult', {
@@ -143,10 +150,16 @@ export default function TestMapWalkScreen() {
     }
   };
 
-  // 마커들을 3초마다 한번씩 요청할 query
+  // 마커들을 5초마다 한번씩 요청할 query
   const {data, isLoading} = useQuery({
     queryFn: () => getNearMarker(),
     queryKey: [queryKeys.GET_MARKER],
+    refetchInterval: 5000,
+  });
+
+  const {data: updateUser} = useQuery({
+    queryFn: () => updateSaveUserPos(user?.userId as number),
+    queryKey: [queryKeys.UPDATE_USER_POS],
     refetchInterval: 5000,
   });
 
@@ -172,7 +185,10 @@ export default function TestMapWalkScreen() {
         bottomSheetNav.current.navigate('Gather', {gatherId: domainId});
     } else if (type === 'POST') {
       bottomSheetNav.current &&
-        bottomSheetNav.current.navigate('Feed', {feedId: domainId});
+        bottomSheetNav.current.navigate('Feed', {
+          feedId: domainId,
+          coordinate: coordinate,
+        });
     }
     handleBottomSheetOpen();
   };
@@ -281,6 +297,8 @@ export default function TestMapWalkScreen() {
                     latitude: marker.latitude,
                     longitude: marker.longitude,
                   }}
+                  markerId={marker.domainId}
+                  lookUpFeed={lookUpFeed}
                   type={marker.type}
                   onPress={() =>
                     handleMarkerPress(marker.type, marker.domainId, {
