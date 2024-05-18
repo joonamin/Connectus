@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {MapMarkerProps, Marker} from 'react-native-maps';
 
@@ -8,12 +8,17 @@ import {MapMarkerProps, Marker} from 'react-native-maps';
  * @returns FinishMarker
  */
 export default function FinishMarker({...props}: MapMarkerProps) {
+  const [initialRender, setInitialRender] = useState<boolean>(true);
+
   return (
-    <Marker identifier="finish" tracksViewChanges={false} {...props}>
+    <Marker identifier="finish" tracksViewChanges={initialRender} {...props}>
       <View style={styles.container}>
         <Image
           style={styles.image}
           source={require('@/assets/markers/ping_finish.png')}
+          onLoad={() => {
+            setInitialRender(false);
+          }}
         />
       </View>
     </Marker>
