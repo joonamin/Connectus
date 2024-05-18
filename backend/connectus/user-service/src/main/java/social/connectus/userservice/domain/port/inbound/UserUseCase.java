@@ -38,4 +38,5 @@ public interface UserUseCase {
 	PointResponse insertPostHistory(InsertPostRequest request);
 	void insertUserPosition(UserPositionRequest request);
 	UserInfoResponse getUserInfo(Long userId);
+	LikeResponse getMyLikeList(Long userId);
 }
