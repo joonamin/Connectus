@@ -153,10 +153,15 @@ public class UserAdapter implements UserPort {
 	public String insertPostHistory(InsertPostRequest request) {
 		User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("user doesn't exists"));
 		int hasPoint = user.getPoint();
-		if(hasPoint >= 5) {
+		System.out.println(hasPoint);
+		if(hasPoint <= 1) {
 			return "not enough point";
 		}
-		user.getPostHistory().add(request.getPostId());
+
+		List<Long> openedPostList = user.getPostHistory();
+		openedPostList.add(request.getPostId());
+		user.usePoint(1);
+		user.updateOpenedPosts(openedPostList);
 		userRepository.save(user);
 		return "save completed";
 	}
