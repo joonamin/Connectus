@@ -1,5 +1,6 @@
 package social.connectus.userservice.domain.port.outbound;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import social.connectus.userservice.application.request.CreateUserPositionRequest;
 import social.connectus.userservice.application.request.InsertPostRequest;
+import social.connectus.userservice.application.response.ChangePositionResponse;
 import social.connectus.userservice.application.response.LikeResponse;
 import social.connectus.userservice.application.response.OpenedPostResponse;
 import social.connectus.userservice.application.response.PointResponse;
@@ -26,10 +29,10 @@ import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.client.LikesClient;
 import social.connectus.userservice.domain.port.client.PostClient;
 import social.connectus.userservice.domain.port.client.SpotClient;
+import social.connectus.userservice.domain.port.inbound.command.*;
 import social.connectus.userservice.domain.port.client.WalkClient;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
-import social.connectus.userservice.domain.port.inbound.command.UserPositionCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
 import social.connectus.userservice.domain.port.outbound.repository.UserRepository;
 
@@ -41,9 +44,6 @@ public class UserAdapter implements UserPort {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final SpotClient spotClient;
-	private final LikesClient likesClient;
-	private final PostClient postClient;
-	private final WalkClient walkClient;
 	@Override
 	@Transactional
 	public void registerUser(UserRegisterCommand command) {
@@ -51,13 +51,13 @@ public class UserAdapter implements UserPort {
 		if (userRepository.findByEmail(command.getEmail()).isPresent()) {
 			throw new FailedToRegisterUserException("이미 회원가입이 된 유저입니다");
 		}
+
 		String encryptedPassword = passwordEncoder.encode(command.getPassword());
 		User user = User.builder()
 			.name(command.getName())
 			.email(command.getEmail())
 			.point(0)
 			.accomplishedAchievements(Collections.EMPTY_LIST)
-			.avatarImageUrl(command.getImageUrl())
 			.chatRoomIds(Collections.EMPTY_LIST)
 			.postHistory(Collections.EMPTY_LIST)
 			.birthday(command.getBirthday())
@@ -117,8 +117,36 @@ public class UserAdapter implements UserPort {
 	}
 
 	@Override
-	public void insertUserPosition(UserPositionCommand userPositionCommand) {
-		spotClient.insertPostPosition(userPositionCommand);
+	public ChangePositionResponse insertUserPosition(CreateUserPositionRequest request) {
+		User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("user doesn't exists"));
+		if(user.getSpotId()!=null){
+			throw new RuntimeException("User already has spot.");
+		}
+		SpotIdListDto dto = spotClient.insertUserPosition(CreateUserPositionCommand.from(request));
+		ChangePositionResponse resp = ChangePositionResponse.from(dto);
+		user.changeSpotId(resp.getSpotId());
+		userRepository.save(user);
+		return resp;
+	}
+
+	@Override
+	public ChangePositionResponse updateUserPosition(CreateUserPositionRequest request) {
+		User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("user doesn't exists"));
+		SpotIdListDto dto = spotClient.updateUserPosition(UpdateUserPositionCommand.from(request, user.getSpotId()));
+		ChangePositionResponse resp = ChangePositionResponse.from(dto);
+		user.changeSpotId(resp.getSpotId());
+		userRepository.save(user);
+		return resp;
+	}
+
+	@Override
+	public void deleteUserPosition(Long userId) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists"));
+		spotClient.deleteUserPosition(SpotIdListDto.builder()
+						.spotIdList(Arrays.asList(user.getSpotId()))
+				.build());
+		user.changeSpotId(null);
+		userRepository.save(user);
 	}
 
 	@Override
@@ -169,6 +197,7 @@ public class UserAdapter implements UserPort {
 	public String insertPostHistory(InsertPostRequest request) {
 		User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("user doesn't exists"));
 		int hasPoint = user.getPoint();
+		System.out.println(hasPoint);
 		if(hasPoint <= 1) {
 			return "not enough point";
 		}
