@@ -1,5 +1,6 @@
 package social.connectus.userservice.domain.port.outbound;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import social.connectus.userservice.application.request.InsertPostRequest;
 import social.connectus.userservice.application.response.LikeResponse;
+import social.connectus.userservice.application.response.MyLikePost;
+import social.connectus.userservice.application.response.MyLikeWalk;
 import social.connectus.userservice.application.response.OpenedPostResponse;
 import social.connectus.userservice.application.response.PointResponse;
 import social.connectus.userservice.application.response.PostResponse;
@@ -125,6 +128,17 @@ public class UserAdapter implements UserPort {
 	public UserInfoResponse getUserInfo(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("user doesn't exists"));
 		return UserInfoResponse.from(user);
+	}
+
+	@Override
+	public LikeResponse getMyLikeList(Long userId) {
+		List<Long> myLikeList = likesClient.getUsersPreferencePost(userId);
+		List<MyLikePost> myLikePostList = new ArrayList<>();
+		if(myLikeList.size() != 0) {
+			myLikePostList = postClient.getMyLikeList(myLikeList);
+		}
+		List<MyLikeWalk> myLikeWalkList = walkClient.getMyLikeWalk(userId);
+		return new LikeResponse(myLikePostList,myLikeWalkList);
 	}
 
 	@Override

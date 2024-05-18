@@ -69,7 +69,7 @@ public class WalkController {
     }
 
     @GetMapping("/route-like-list/{userId}")
-    public ResponseEntity<List<Long>> routeLikeList(@PathVariable Long userId) {
+    public ResponseEntity<List<MyLikeWalkResponse>> routeLikeList(@PathVariable Long userId) {
         return ResponseEntity.ok(walkUseCase.getRouteLikeList(userId));
     }
 

@@ -147,4 +147,9 @@ public class UserController {
 	public ResponseEntity<UserInfoResponse> getUserInfo(@PathVariable Long userId) {
 		return ResponseEntity.ok(userUseCase.getUserInfo(userId));
 	}
+
+	@GetMapping("/likes/{userId}")
+	public ResponseEntity<LikeResponse> getMyLikeList(@PathVariable Long userId) {
+		return ResponseEntity.ok(userUseCase.getMyLikeList(userId));
+	}
 }
