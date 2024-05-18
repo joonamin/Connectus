@@ -10,8 +10,10 @@ import social.connectus.userservice.application.request.RefreshAchievementReques
 import social.connectus.userservice.application.response.AchievementResponse;
 import social.connectus.userservice.application.response.CompletedAchievementListResponse;
 import social.connectus.userservice.application.response.RefreshAchievementResponse;
+import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.external.port.AchievementPort;
 import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
+import social.connectus.userservice.domain.port.outbound.UserPort;
 import social.connectus.userservice.domain.port.outbound.command.RefreshAchievementToUserCommand;
 import social.connectus.userservice.domain.port.outbound.command.UserToRefreshAchievementCommand;
 

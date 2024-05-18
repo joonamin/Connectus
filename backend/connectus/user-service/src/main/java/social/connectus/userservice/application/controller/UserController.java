@@ -136,4 +136,9 @@ public class UserController {
 	public ResponseEntity<PointResponse> decreasePoint(@RequestBody PointChangeRequest request) {
 		return ResponseEntity.ok(userUseCase.decreasePoint(PointChangeCommand.from(request)));
 	}
+
+	@PostMapping("/insert/post-history")
+	public ResponseEntity<PointResponse> insertPostHistory(@RequestBody InsertPostRequest request) {
+		return ResponseEntity.ok(userUseCase.insertPostHistory(request));
+	}
 }
