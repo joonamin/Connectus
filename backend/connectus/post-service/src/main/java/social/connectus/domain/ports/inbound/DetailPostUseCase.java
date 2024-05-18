@@ -4,6 +4,7 @@ import java.util.List;
 
 import social.connectus.application.rest.request.CoordinateRequestDto;
 import social.connectus.application.rest.response.DetailPostResponse;
+import social.connectus.application.rest.response.GetPostSpotResponse;
 import social.connectus.common.exception.BusinessException;
 import social.connectus.common.exception.GlobalException;
 import social.connectus.common.exception.NotFoundException;
@@ -16,4 +17,6 @@ public interface DetailPostUseCase {
 			BusinessException, NotFoundException;
 
 	String healthCheck();
+
+    GetPostSpotResponse getPostSpotByPostId(Long postId) throws NotFoundException;
 }
