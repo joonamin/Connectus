@@ -59,7 +59,7 @@ export default function CustomMarker({
 
 const styles = StyleSheet.create({
   container: {
-    width: 100,
+    width: 50,
     aspectRatio: '414/500',
     borderRadius: 50,
     justifyContent: 'center',

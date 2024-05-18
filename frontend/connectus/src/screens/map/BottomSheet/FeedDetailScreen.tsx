@@ -49,6 +49,8 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
     queryKey: [queryKeys.GET_FEED_DETAIL, feedId],
   });
 
+  console.log(data);
+
   const like = useMutation({
     mutationFn: () =>
       postFeedLike({
@@ -62,6 +64,20 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
       }),
   });
 
+  const addComment = useMutation({
+    mutationFn: () =>
+      createPostComment(feedId, {
+        content: comment,
+        authorId: user?.userId as number,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.GET_FEED_DETAIL, feedId],
+      });
+      setComment('');
+    },
+  });
+
   // 좋아요 버튼을 눌렀을때 실행할 함수로 나중에 api연결이 필요합니다
   const handlePressLikeButton = () => {
     like.mutate();
@@ -72,11 +88,8 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
    * @todo 추후 postId, {content , authorId} 수정
    */
   const handleSubmitComment = async () => {
-    await createPostComment(feedId, {
-      content: comment,
-      authorId: user?.userId as number,
-    });
-    setComment('');
+    addComment.mutate();
+    // setComment('');
     Keyboard.dismiss();
   };
 
@@ -141,9 +154,10 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
               <MainText>메인내용</MainText>
             </View>
             <View style={styles.commentListContainer}>
-              {data?.commentList.map((comment, index) => {
-                return <Comment key={index} params={comment} />;
-              })}
+              {data?.commentList &&
+                data?.commentList.map((comment, index) => {
+                  return <Comment key={index} params={comment} />;
+                })}
             </View>
             <View style={styles.defaultBottomPadding} />
             <View style={isUseKeyBoard ? styles.keyboardBottomPadding : null} />

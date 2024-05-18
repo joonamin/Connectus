@@ -79,8 +79,8 @@ export default function TestMapWalkScreen() {
   // 초기 지도의 중앙 좌표값 및
   const [mapPos, setMapPos] = useState<LatLng>();
 
-  const [data, setData] = useState<spotListType>();
-  const [tempLoading, setTempLoading] = useState(false);
+  // const [data, setData] = useState<spotListType>();
+  // const [tempLoading, setTempLoading] = useState(false);
 
   const mapRef = useRef<Map | null>(null);
   const bottomSheetNav =
@@ -144,12 +144,11 @@ export default function TestMapWalkScreen() {
   };
 
   // 마커들을 3초마다 한번씩 요청할 query
-  // const {data, isLoading} = useQuery({
-  //   queryFn: () => getNearMarker(),
-  //   queryKey: [queryKeys.GET_MARKER],
-  // });
-
-  // console.log(data?.nearby[0]);
+  const {data, isLoading} = useQuery({
+    queryFn: () => getNearMarker(),
+    queryKey: [queryKeys.GET_MARKER],
+    refetchInterval: 5000,
+  });
 
   const handleMenuPress = () => {
     bottomSheetNav.current &&
@@ -238,10 +237,10 @@ export default function TestMapWalkScreen() {
     getData();
   }, []);
 
-  if (tempLoading && !data) {
-    return <MainText>test</MainText>;
+  if (isLoading) {
+    return <MainText>초기 데이터를 로드중입니다.</MainText>;
   }
-  console.log(data);
+  // console.log(data);
   return (
     <>
       {mapPos && (
@@ -252,6 +251,7 @@ export default function TestMapWalkScreen() {
           provider={PROVIDER_GOOGLE}
           showsUserLocation
           showsMyLocationButton={true}
+          customMapStyle={mapStyle}
           zoomEnabled={true}
           initialRegion={{...mapPos, ...mapDelta}}
           onUserLocationChange={event => {
