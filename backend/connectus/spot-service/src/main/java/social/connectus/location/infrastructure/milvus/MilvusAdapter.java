@@ -4,24 +4,24 @@ import com.alibaba.fastjson.JSONObject;
 import io.milvus.client.MilvusClient;
 import io.milvus.grpc.MutationResult;
 import io.milvus.grpc.QueryResults;
-import io.milvus.grpc.SearchResults;
-import io.milvus.param.MetricType;
 import io.milvus.param.R;
 import io.milvus.param.dml.InsertParam;
 import io.milvus.param.dml.QueryParam;
-import io.milvus.param.dml.SearchParam;
-import io.milvus.param.dml.UpsertParam;
+import io.milvus.param.highlevel.dml.DeleteIdsParam;
 import io.milvus.param.highlevel.dml.GetIdsParam;
+import io.milvus.param.highlevel.dml.response.DeleteResponse;
 import io.milvus.param.highlevel.dml.response.GetResponse;
 import io.milvus.response.QueryResultsWrapper;
 import io.milvus.v2.service.vector.request.InsertReq;
 import io.milvus.v2.service.vector.response.InsertResp;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang.NullArgumentException;
 import org.springframework.stereotype.Component;
 import social.connectus.location.application.rest.request.SpotDto;
 import social.connectus.location.common.config.MilvusConfig;
 import social.connectus.location.common.type.PingType;
 import social.connectus.location.domain.command.CreateSpotCommand;
+import social.connectus.location.domain.command.DeleteSpotCommand;
 import social.connectus.location.domain.command.GetSpotCommand;
 import social.connectus.location.domain.ports.outbound.MilvusPort;
 
@@ -83,6 +83,13 @@ public class MilvusAdapter implements MilvusPort {
             latlng.add(spotDto.getLatitude().floatValue());
             latlng.add(spotDto.getLongitude().floatValue());
 //            latlng2d.add(latlng);
+
+            if(spotDto.getLatitude() == null
+            || spotDto.getLongitude() == null
+            || spotDto.getType() == null
+            || spotDto.getDomainId() == null){
+                throw new RuntimeException("Null parameter doesn't expected.");
+            }
 
             spot.put("spot", latlng);
             spot.put("type", spotDto.getType().toString());
@@ -198,38 +205,36 @@ public class MilvusAdapter implements MilvusPort {
         return response;
     }
 
+
     @Override
-    public List<Long> updateSpotList(CreateSpotCommand command) {
+    public List<Long> deleteSpotList(DeleteSpotCommand command) {
         // client 값 호출
         MilvusClient client = milvusConfig.createMilvusClient();
 
-        // 데이터 생성
-        List<Long> spotIdList = new ArrayList<>();
-        List<Long> domainIdList = new ArrayList<>();
-        List<String> updateTimeList = new ArrayList<>();
-        for(SpotDto spotDto: command.getSpotList()){
-            spotIdList.add(spotDto.getSpotId());
-            domainIdList.add(spotDto.getDomainId());
-            updateTimeList.add(LocalDateTime.now().toString());
+        // 기존 데이터 삭제
+        List<Long> ids = command.getSpotIdList();
+        if(ids.stream().anyMatch(Objects::isNull)){
+            throw new RuntimeException("Null parameter doesn't expected.");
         }
-
-        List<InsertParam.Field> fields = new ArrayList<>();
-        fields.add(new InsertParam.Field("spot_id", spotIdList));
-        fields.add(new InsertParam.Field("domain_id", domainIdList));
-        fields.add(new InsertParam.Field("updated_at", updateTimeList));
-        // 삽입 요청
-        UpsertParam insertReq = UpsertParam.newBuilder()
+        DeleteIdsParam param = DeleteIdsParam.newBuilder()
                 .withCollectionName(milvusConfig.getCollectionName())
-                .withFields(fields)
+                .withPrimaryIds(ids)
                 .build();
-        R<MutationResult> mutationResp = client.upsert(insertReq);
-        MutationResult mutationResult = mutationResp.getData();
-        if (mutationResp.getStatus() != R.Status.Success.getCode()) {
-            System.out.println(mutationResp.getMessage());
+        R<DeleteResponse> response = client.delete(param);
+        if (response.getStatus() != R.Status.Success.getCode()) {
+            throw new RuntimeException("Cannot delete old spot!");
         }
 
-        List<Long> result = mutationResult.getIDs().getIntId().getDataList().stream().toList();
+        return (List<Long>) response.getData().getDeleteIds();
+    }
 
-        return result;
+    @Override
+    public List<Long> updateSpotList(CreateSpotCommand command) {
+        // 기존 데이터 삭제
+        deleteSpotList(DeleteSpotCommand.builder()
+                .spotIdList(command.getSpotList().stream().map(SpotDto::getSpotId).toList())
+                .build());
+        // 신규 데이터 입력
+        return insertAll(command);
     }
 }

@@ -6,6 +6,7 @@ import social.connectus.location.application.rest.response.FindNearbyElementResp
 import social.connectus.location.common.customannotations.UseCase;
 import social.connectus.location.common.type.DomainType;
 import social.connectus.location.domain.command.CreateSpotCommand;
+import social.connectus.location.domain.command.DeleteSpotCommand;
 import social.connectus.location.domain.command.FindNearbyElementCommand;
 import social.connectus.location.domain.command.GetSpotCommand;
 
@@ -19,5 +20,7 @@ public interface SpotUseCase {
 
     List<SpotDto> getSpot(GetSpotCommand command);
 
-    List<Long> updateSpot(CreateSpotCommand from);
+    List<Long> updateSpot(CreateSpotCommand command);
+
+    List<Long> deleteSpot(DeleteSpotCommand command);
 }

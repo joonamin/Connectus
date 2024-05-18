@@ -7,6 +7,7 @@ import io.milvus.v2.service.vector.response.InsertResp;
 import org.springframework.stereotype.Component;
 import social.connectus.location.application.rest.request.SpotDto;
 import social.connectus.location.domain.command.CreateSpotCommand;
+import social.connectus.location.domain.command.DeleteSpotCommand;
 import social.connectus.location.domain.command.GetSpotCommand;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public interface MilvusPort {
     R<QueryResults> select(double longitude, double latitude);
 
     List<SpotDto> getSpotList(GetSpotCommand command);
+
+    List<Long> deleteSpotList(DeleteSpotCommand command);
 
     List<Long> updateSpotList(CreateSpotCommand command);
 }
