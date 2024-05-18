@@ -130,20 +130,24 @@ const getUserRoute: (
   const {data} = await axiosInstance.get(`walk/user/${userId}`, {
     // 요청 수신 시 updatedAt을 Date 객체로 변환
     transformResponse: (response: string) => {
-      const responseData: {
-        walks: (Omit<GetUserRouteResponse['walks'], 'updatedAt'> & {
-          updatedAt: string;
-        })[];
-      } = JSON.parse(response);
+      try {
+        const responseData: {
+          walks: (Omit<GetUserRouteResponse['walks'], 'updatedAt'> & {
+            updatedAt: string;
+          })[];
+        } = JSON.parse(response);
 
-      return {
-        walks: responseData?.walks
-          ? responseData.walks.map(walk => ({
-              ...walk,
-              updatedAt: new Date(walk.updatedAt),
-            }))
-          : ([] as Walk[]),
-      };
+        return {
+          walks: responseData?.walks
+            ? responseData.walks.map(walk => ({
+                ...walk,
+                updatedAt: new Date(walk.updatedAt),
+              }))
+            : ([] as Walk[]),
+        };
+      } catch (_error: any) {
+        return {};
+      }
     },
   });
   return data;
