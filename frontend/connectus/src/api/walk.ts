@@ -137,10 +137,12 @@ const getUserRoute: (
       } = JSON.parse(response);
 
       return {
-        walks: responseData.walks.map(walk => ({
-          ...walk,
-          updatedAt: new Date(walk.updatedAt),
-        })),
+        walks: responseData?.walks
+          ? responseData.walks.map(walk => ({
+              ...walk,
+              updatedAt: new Date(walk.updatedAt),
+            }))
+          : ([] as Walk[]),
       };
     },
   });
