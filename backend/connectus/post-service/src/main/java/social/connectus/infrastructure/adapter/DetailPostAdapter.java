@@ -33,10 +33,10 @@ public class DetailPostAdapter implements DetailPostPort {
 	private final LikesServiceClient likesServiceClient;
 
 	@Override
-	public DetailPostResponse samplePost(Long postId) throws BusinessException, NotFoundException {
+	public DetailPostResponse samplePost(Long postId, Long userId) throws BusinessException, NotFoundException {
 		Post post = postRepository.findById(postId).orElseThrow(()->new NotFoundException("Post doesn't exists"));
 		int likeCount = likesServiceClient.getLikeCount(postId,"POST");
-		boolean isLike = likesServiceClient.isLike(postId,"POST");
+		boolean isLike = likesServiceClient.isLike(postId, userId,"POST");
 		UserInfoResponse authorInfo = userServiceClient.getUserInfo(post.getAuthorId());
 		DetailPostResponse response = DetailPostResponse.samplePostFrom(post,authorInfo);
 		response.setLikeCount(likeCount);
@@ -45,10 +45,10 @@ public class DetailPostAdapter implements DetailPostPort {
 	}
 
 	@Override
-	public DetailPostResponse detailPost(Long postId) throws NotFoundException {
+	public DetailPostResponse detailPost(Long postId, Long userId) throws NotFoundException {
 		Post post = postRepository.findById(postId).orElseThrow(()-> new NotFoundException("Post doesn't exists"));
 		int likeCount = likesServiceClient.getLikeCount(postId,"POST");
-		boolean isLike = likesServiceClient.isLike(postId,"POST");
+		boolean isLike = likesServiceClient.isLike(postId,userId,"POST");
 		UserInfoResponse userInfoResponse = userServiceClient.getUserInfo(post.getAuthorId());
 		List<CommentResponse> commentResponseList = new ArrayList<>();
 		for(Comment comment : post.getCommentList()) {

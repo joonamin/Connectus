@@ -37,7 +37,7 @@ public class LikeAdapter implements LikePort {
 	}
 
 	@Override
-	public boolean isLike(Long domainId, Type type) {
-		return likeRepository.existsByDomainId(domainId, type);
+	public boolean isLike(Long postId, Long userId, Type type) {
+		return likeRepository.existsByDomainId(postId, userId, type);
 	}
 }

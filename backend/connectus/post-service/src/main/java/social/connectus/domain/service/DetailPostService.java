@@ -36,7 +36,7 @@ public class DetailPostService implements DetailPostUseCase {
 			throw new GlobalException("DetailPostService : " + e.getMessage());
 		}
 
-		return detailPostPort.detailPost(postId);
+		return detailPostPort.detailPost(postId, userId);
 	}
 
 //	@Override
@@ -66,14 +66,14 @@ public class DetailPostService implements DetailPostUseCase {
 				throw new BusinessException("can't contact userService");
 			}
 			if(openedPostListByUserId.contains(postId)) {
-				return detailPostPort.detailPost(postId);
+				return detailPostPort.detailPost(postId, userId);
 			} else {
 				if(distance < 0.1) {
 					detailPostPort.updateOpenedPost(userId, postId);
-					return detailPostPort.detailPost(postId);
+					return detailPostPort.detailPost(postId, userId);
 				}
 				else {
-					return detailPostPort.samplePost(postId);
+					return detailPostPort.samplePost(postId, userId);
 			}
 			}
 		}catch (NotFoundException e){

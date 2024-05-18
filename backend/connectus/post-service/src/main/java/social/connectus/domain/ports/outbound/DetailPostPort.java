@@ -9,8 +9,8 @@ import social.connectus.common.exception.BusinessException;
 import social.connectus.common.exception.NotFoundException;
 
 public interface DetailPostPort {
-	DetailPostResponse samplePost(Long postId) throws BusinessException, NotFoundException;
-	DetailPostResponse detailPost(Long postId) throws BusinessException, NotFoundException;
+	DetailPostResponse samplePost(Long postId, Long userId) throws BusinessException, NotFoundException;
+	DetailPostResponse detailPost(Long postId, Long userId) throws BusinessException, NotFoundException;
 	void updateOpenedPost(Long userId, Long postId);
 	OpenedPostResponse openedPostByUserId(Long userId);
 
