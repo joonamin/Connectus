@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import social.connectus.userservice.application.request.InsertPostRequest;
 import social.connectus.userservice.application.response.*;
 import social.connectus.userservice.common.annotation.UseCase;
 import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
@@ -103,5 +104,10 @@ public class UserService implements UserUseCase {
 		List<UserPositionCommand> userPosition = new ArrayList<>();
 		userPosition.add(UserPositionCommand.from(request));
 		userPort.insertUserPosition(userPosition);
+	}
+
+	@Override
+	public String insertPostHistory(InsertPostRequest request) {
+		return userPort.insertPostHistory(request);
 	}
 }
