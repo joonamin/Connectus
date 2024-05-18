@@ -2,6 +2,7 @@ package social.connectus.userservice.domain.port.inbound;
 
 import java.util.List;
 
+import social.connectus.userservice.application.request.InsertPostRequest;
 import social.connectus.userservice.application.request.UserPositionRequest;
 import social.connectus.userservice.application.response.*;
 import social.connectus.userservice.common.exception.FailedToLoginException;
@@ -33,5 +34,6 @@ public interface UserUseCase {
 
 	PointResponse decreasePoint(PointChangeCommand from);
 	String updateAvatar(Long userId, String imageUrl);
+	PointResponse insertPostHistory(InsertPostRequest request);
 	void insertUserPosition(UserPositionRequest request);
 }

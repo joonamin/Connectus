@@ -72,7 +72,8 @@ public class User {
 		this.walkCount = command.getWalkCount();
 		for(Achievement achievement : command.getAccomplishedAchievement()) {
 			accomplishedAchievements.add(achievement);
-		};
+			this.point += achievement.getReward();
+		}
 	}
 
 	public void updateOpenedPosts(List<Long> openedPosts) {
@@ -82,6 +83,10 @@ public class User {
 	public User changeUserPoint(int changeValue){
 		this.point += changeValue;
 		return this;
+	}
+
+	public void usePoint(int point) {
+		this.point -= point;
 	}
 
 	public void updateAvatar(String avatarImageUrl) {

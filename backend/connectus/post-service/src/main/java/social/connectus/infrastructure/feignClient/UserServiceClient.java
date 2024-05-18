@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import social.connectus.application.rest.request.OpenPostRequest;
 import social.connectus.application.rest.response.OpenedPostResponse;
+import social.connectus.application.rest.response.PointResponse;
 import social.connectus.application.rest.response.UserInfoResponse;
 
 @FeignClient(name = "user-service")
@@ -26,4 +28,7 @@ public interface UserServiceClient {
 
 	@GetMapping("/user/{userId}/get-author-info")
 	UserInfoResponse getUserInfo(@PathVariable("userId") Long userId);
+
+	@PostMapping("/user/insert/post-history")
+	PointResponse insertOpenPost(@RequestBody OpenPostRequest request);
 }
