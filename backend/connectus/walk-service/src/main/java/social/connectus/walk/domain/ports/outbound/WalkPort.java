@@ -3,6 +3,7 @@ package social.connectus.walk.domain.ports.outbound;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Slice;
 
+import social.connectus.walk.application.rest.response.MyLikeWalkResponse;
 import social.connectus.walk.common.utils.SliceResponse;
 import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.entity.Post;
@@ -36,5 +37,5 @@ public interface WalkPort {
 
     Slice<Walk> getWalksByPosition(GetWalksByPositionCommand command);
 
-    List<Long> getRouteLikeList(Long userId);
+    List<MyLikeWalkResponse> getRouteLikeList(Long userId);
 }

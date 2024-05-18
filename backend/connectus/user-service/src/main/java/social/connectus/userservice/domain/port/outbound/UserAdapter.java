@@ -1,5 +1,6 @@
 package social.connectus.userservice.domain.port.outbound;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +15,8 @@ import social.connectus.userservice.application.request.CreateUserPositionReques
 import social.connectus.userservice.application.request.InsertPostRequest;
 import social.connectus.userservice.application.response.ChangePositionResponse;
 import social.connectus.userservice.application.response.LikeResponse;
+import social.connectus.userservice.application.response.MyLikePost;
+import social.connectus.userservice.application.response.MyLikeWalk;
 import social.connectus.userservice.application.response.OpenedPostResponse;
 import social.connectus.userservice.application.response.PointResponse;
 import social.connectus.userservice.application.response.PostResponse;
@@ -44,6 +47,9 @@ public class UserAdapter implements UserPort {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final SpotClient spotClient;
+	private final LikesClient likesClient;
+	private final PostClient postClient;
+	private final WalkClient walkClient;
 	@Override
 	@Transactional
 	public void registerUser(UserRegisterCommand command) {
@@ -153,6 +159,14 @@ public class UserAdapter implements UserPort {
 	public UserInfoResponse getUserInfo(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("user doesn't exists"));
 		return UserInfoResponse.from(user);
+	}
+
+	@Override
+	public LikeResponse getMyLikeList(Long userId) {
+		List<Long> myLikeList = likesClient.getUsersPreferencePost(userId);
+		List<MyLikePost> myLikePostList = postClient.getMyLikeList(myLikeList);
+		List<MyLikeWalk> myLikeWalkList = walkClient.getMyLikeWalk(userId);
+		return new LikeResponse(myLikePostList,myLikeWalkList);
 	}
 
 	@Override
