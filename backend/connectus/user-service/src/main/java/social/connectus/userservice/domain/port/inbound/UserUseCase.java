@@ -4,12 +4,13 @@ import java.util.List;
 
 import social.connectus.userservice.application.request.InsertPostRequest;
 
-import social.connectus.userservice.application.request.UserPositionRequest;
+import social.connectus.userservice.application.request.CreateUserPositionRequest;
 import social.connectus.userservice.application.response.*;
 import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.common.exception.FailedToLogoutException;
 import social.connectus.userservice.common.exception.FailedToRegisterUserException;
 import social.connectus.userservice.domain.command.PointChangeCommand;
+import social.connectus.userservice.domain.port.inbound.command.SpotIdListDto;
 import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
 import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
@@ -36,7 +37,11 @@ public interface UserUseCase {
 	PointResponse decreasePoint(PointChangeCommand from);
 	String updateAvatar(Long userId, String imageUrl);
 	PointResponse insertPostHistory(InsertPostRequest request);
-	void insertUserPosition(UserPositionRequest request);
+	ChangePositionResponse insertUserPosition(CreateUserPositionRequest request);
+
+	ChangePositionResponse updateUserPosition(CreateUserPositionRequest request);
+
+	void deleteUserPosition(Long userId);
 	UserInfoResponse getUserInfo(Long userId);
 	LikeResponse getMyLikeList(Long userId);
 }
