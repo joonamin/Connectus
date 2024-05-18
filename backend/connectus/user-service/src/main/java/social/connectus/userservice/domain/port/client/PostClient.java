@@ -13,4 +13,7 @@ public interface PostClient {
 
 	@GetMapping("/post/{userId}")
 	List<PostRecord> getUsersPreferencePost(@PathVariable Long userId);
+
+	@GetMapping("/post/list/{userId}")
+	List<Long> getUserListByUserId(@PathVariable Long userId);
 }

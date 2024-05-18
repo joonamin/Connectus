@@ -43,6 +43,8 @@ import social.connectus.domain.ports.inbound.FeedUseCase;
 import social.connectus.domain.ports.inbound.FollowPostUseCase;
 import social.connectus.domain.ports.inbound.MainPostUseCase;
 import social.connectus.domain.ports.inbound.OpenPostUseCase;
+import social.connectus.domain.ports.inbound.PostListUseCase;
+import social.connectus.domain.ports.outbound.PostListPort;
 
 @RestController
 @RequestMapping("/post")
@@ -55,6 +57,7 @@ public class PostController {
 	private final FeedUseCase feedUseCase;
 	private final FollowPostUseCase followPostUseCase;
 	private final OpenPostUseCase openPostUseCase;
+	private final PostListUseCase postListUseCase;
 
 	// insert의 경우, endWalk에서 이뤄지는 한 walk에 대한 postList를 받아옮
 	@PostMapping("/insert")
@@ -214,5 +217,10 @@ public class PostController {
 	@GetMapping("/health-check")
 	public ResponseEntity<String> test() {
 		return ResponseEntity.ok("Check Good!");
+	}
+
+	@GetMapping("/list/{userId}")
+	public ResponseEntity<List<Long>> getPostIdList(@PathVariable Long userId) {
+		return ResponseEntity.ok(postListUseCase.getPostIdList(userId));
 	}
 }

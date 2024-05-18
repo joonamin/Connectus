@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.application.request.*;
 import social.connectus.userservice.application.response.*;
@@ -140,5 +141,10 @@ public class UserController {
 	@PostMapping("/insert/post-history")
 	public ResponseEntity<PointResponse> insertPostHistory(@RequestBody InsertPostRequest request) {
 		return ResponseEntity.ok(userUseCase.insertPostHistory(request));
+	}
+
+	@GetMapping("/info/{userId}")
+	public ResponseEntity<UserInfoResponse> getUserInfo(@PathVariable Long userId) {
+		return ResponseEntity.ok(userUseCase.getUserInfo(userId));
 	}
 }

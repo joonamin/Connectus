@@ -1,5 +1,7 @@
 package social.connectus.application.rest.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import social.connectus.application.rest.request.LikeRequest;
+import social.connectus.application.rest.response.LikesResponse;
 import social.connectus.common.exception.GlobalException;
 import social.connectus.common.type.Type;
 import social.connectus.domain.ports.inbound.LikeUseCase;
@@ -77,5 +80,10 @@ public class LikesController {
 	public ResponseEntity<Boolean> isLike(@PathVariable Long postId, @RequestParam Long userId, @RequestParam String typeString){
 		Type type = Type.valueOf(typeString);
 		return ResponseEntity.ok(likeUseCase.isLike(postId, userId, type));
+	}
+
+	@GetMapping("/list/{userId}")
+	public ResponseEntity<List<Long>> getLikeList(@PathVariable Long userId) {
+		return ResponseEntity.ok(likeUseCase.getLikesList(userId));
 	}
 }

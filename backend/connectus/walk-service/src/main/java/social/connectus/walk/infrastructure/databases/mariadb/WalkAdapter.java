@@ -83,6 +83,11 @@ public class WalkAdapter implements WalkPort {
         return new SliceImpl<>(routeList.getContent().stream().map(Route::getWalk).toList(), pageRequest, routeList.hasNext());
     }
 
+    @Override
+    public List<Long> getRouteLikeList(Long userId) {
+        return likeUserRepository.findAllByUserId(userId);
+    }
+
     @Transactional
     @Override
     public void routeTrack(RouteTrackCommand command) {

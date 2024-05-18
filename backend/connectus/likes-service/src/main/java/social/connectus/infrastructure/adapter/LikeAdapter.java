@@ -1,11 +1,13 @@
 package social.connectus.infrastructure.adapter;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import social.connectus.application.rest.response.LikesResponse;
 import social.connectus.common.type.Type;
 import social.connectus.domain.model.Likes;
 import social.connectus.domain.ports.outbound.LikePort;
@@ -39,5 +41,10 @@ public class LikeAdapter implements LikePort {
 	@Override
 	public boolean isLike(Long postId, Long userId, Type type) {
 		return likeRepository.existsByDomainId(postId, userId, type);
+	}
+
+	@Override
+	public List<Long> getLikeList(Long userId) {
+		return likeRepository.findAllByUserId(userId);
 	}
 }
