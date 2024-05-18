@@ -1,5 +1,7 @@
 import {postDetail} from '@/types';
 import {axiosInstance} from './axios';
+import {getDistance, getPosition} from '@/utils';
+import {LatLng} from 'react-native-maps';
 /**
  *  id를 list형태로 서버에 전달해 feed의 상세정보를 요청하는 axios입니다.
  */
@@ -29,12 +31,48 @@ interface getPostDetailBody {
 const getPostDetail = async (
   postId: number,
   userId: number,
-  distance: number,
 ): Promise<postDetail> => {
+  const position = await getPostSpot(postId);
+  const postPos = {latitude: position.latitude, longitude: position.longitude};
+  const pos = await getPosition();
+
+  const userPos = {
+    latitude: pos.coords.latitude,
+    longitude: pos.coords.longitude,
+  };
+  const dis = getDistance(postPos, userPos);
+  try {
+    const {data} = await axiosInstance.get(
+      `/post/${postId}?userId=${userId}&distance=${dis}`,
+    );
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/**
+ * map에서 마커의 좌표를 받아와서 데이터를 반환합니다.
+ */
+const getMapPostDetail = async (
+  postId: number,
+  userId: number,
+  coordinate: LatLng,
+): Promise<postDetail> => {
+  const pos = await getPosition();
+
+  const userPos = {
+    latitude: pos.coords.latitude,
+    longitude: pos.coords.longitude,
+  };
+
+  const distance = getDistance(userPos, coordinate);
+  console.log('이건 거리다아아아앙', postId, userId, distance);
   try {
     const {data} = await axiosInstance.get(
       `/post/${postId}?userId=${userId}&distance=${distance}`,
     );
+    console.log(data);
     return data;
   } catch (error) {
     throw error;
@@ -109,6 +147,46 @@ const postFeedLike = async (body: postFeedLikeParmas) => {
   return data;
 };
 
+type getSpotType = {
+  postId: number;
+  latitude: number;
+  longitude: number;
+};
+
+const getPostSpot = async (postId: number): Promise<getSpotType> => {
+  try {
+    const {data} = await axiosInstance.get(`/post/${postId}/spot`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+type openPostResponse = {
+  userId: number;
+  currentPoint: number;
+};
+/**
+ * 포인트를 사용해서 피드리스트에서 방명록을 열람 가능한 상태로 바꿔줍니다.
+ */
+const openPost = async (
+  userId: number,
+  postId: number,
+): Promise<openPostResponse> => {
+  const body = {
+    userId,
+    postId,
+  };
+  try {
+    const {data} = await axiosInstance.post('/post/open', body);
+    console.log('open post data', data);
+    return data;
+  } catch (error) {
+    console.log('open post error', error);
+    throw error;
+  }
+};
+
 export {
   getPostDetailList,
   getPostDetail,
@@ -116,4 +194,7 @@ export {
   getFeedList,
   getFeedDetail,
   postFeedLike,
+  getMapPostDetail,
+  getPostSpot,
+  openPost,
 };

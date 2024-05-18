@@ -5,6 +5,8 @@ import {
   View,
   Image,
   Dimensions,
+  Modal,
+  SafeAreaView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
@@ -17,14 +19,17 @@ import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
 import MainText from '../text/MainText';
 import colors from '@/constants/colors';
 import {useMutation, useQuery} from '@tanstack/react-query';
-import {getPostDetail, postFeedLike} from '@/api/post';
+import {getPostDetail, getPostSpot, postFeedLike} from '@/api/post';
 import useAuthStore from '@/store/useAuthStore';
 import {queryKeys} from '@/constants';
 import queryClient from '@/api/queryClient';
+import {dateTimeToString} from '@/utils';
+import {modalType} from '@/screens/feed/FeedHomeScreen';
+import {LatLng} from 'react-native-maps';
 
 type feedPreviewProps = {
   feedId: number;
-  show?: () => void;
+  show: (modalType: modalType, position: LatLng, feedId: number) => void;
 };
 
 type Navigation = CompositeNavigationProp<
@@ -38,7 +43,7 @@ export default function FeedPreview({feedId, show}: feedPreviewProps) {
   const {user} = useAuthStore();
 
   const {data, isLoading} = useQuery({
-    queryFn: () => getPostDetail(feedId, user?.userId as number, 1000),
+    queryFn: () => getPostDetail(feedId, user?.userId as number),
     queryKey: [queryKeys.GET_FEED_DETAIL, feedId],
   });
 
@@ -47,6 +52,11 @@ export default function FeedPreview({feedId, show}: feedPreviewProps) {
     domainId: feedId,
     type: 'POST',
   };
+
+  const {data: postSpot} = useQuery({
+    queryFn: () => getPostSpot(feedId),
+    queryKey: [queryKeys.GET_MARKER_POSITION],
+  });
 
   const postLike = useMutation({
     mutationFn: () => postFeedLike(postLikeBody),
@@ -59,9 +69,6 @@ export default function FeedPreview({feedId, show}: feedPreviewProps) {
     },
   });
 
-  /**
-   * @todo 라우터 params 설정하기
-   */
   const handlePressPressFeedDetail = () => {
     navigation.navigate('FeedDetail', {feedId: feedId});
   };
@@ -90,12 +97,23 @@ export default function FeedPreview({feedId, show}: feedPreviewProps) {
           </View>
           <View style={styles.feedInfoContainer}>
             <MainText>{data.authorName}</MainText>
-            <Text style={styles.postDate}>{data.updatedAt}</Text>
-          </View>
-          <Pressable style={styles.moveButton}>
-            <Text style={styles.moveButtonText} onPress={show}>
-              보러가기
+            <Text style={styles.postDate}>
+              {dateTimeToString(data.updatedAt)}
             </Text>
+          </View>
+          <Pressable
+            style={styles.moveButton}
+            onPress={() =>
+              show(
+                'move',
+                {
+                  latitude: postSpot?.latitude as number,
+                  longitude: postSpot?.longitude as number,
+                },
+                feedId,
+              )
+            }>
+            <Text style={styles.moveButtonText}>보러가기</Text>
           </Pressable>
         </View>
         <View style={styles.feedImageContainer}>
@@ -136,7 +154,13 @@ export default function FeedPreview({feedId, show}: feedPreviewProps) {
         ) : (
           <Pressable
             style={styles.lockButton}
-            onPress={() => console.log('바로가기')}>
+            onPress={() =>
+              show(
+                'open',
+                {latitude: postSpot.latitde, longitude: postSpot.longitude},
+                feedId,
+              )
+            }>
             <MainText>포인트로 해금하기</MainText>
             <Ionicons name="lock-closed" size={24} />
           </Pressable>
@@ -213,5 +237,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.buttonBackground,
     flex: 1,
     justifyContent: 'flex-end',
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

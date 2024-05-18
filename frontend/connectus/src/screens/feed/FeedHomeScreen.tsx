@@ -15,17 +15,36 @@ import FeedPreview from '@/components/feed/FeedPreview';
 import colors from '@/constants/colors';
 import useModal from '@/hooks/useModal';
 import {useInfiniteQuery} from '@tanstack/react-query';
-import {getFeedList} from '@/api/post';
+import {getFeedList, openPost} from '@/api/post';
 import Geolocation from '@react-native-community/geolocation';
 import {LatLng} from 'react-native-maps';
 import {queryKeys} from '@/constants';
 import {getNearWalkRecord} from '@/api/walk';
 import MainText from '@/components/text/MainText';
 import queryClient from '@/api/queryClient';
+import useAuthStore from '@/store/useAuthStore';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
+import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
+import useLookUpPost from '@/store/useLookUpPost';
+import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
+
+/**
+ * 피드 메인 페이지에서 오픈할 modal의 타입입니다.
+ * open -> 해금용 모달
+ * move -> 확인하기용 모달
+ */
+export type modalType = 'open' | 'move';
+
+type Navigation = CompositeNavigationProp<
+  StackNavigationProp<FeedStackParamList>,
+  StackNavigationProp<MapStackParamList>
+>;
 
 export default function FeedHomeScreen() {
   const carouselWidth = Dimensions.get('window').width;
   const carouselHeight = Dimensions.get('window').height;
+  const navigation = useNavigation<Navigation>();
 
   // 보러가기 버튼을 눌럿을 때, update되어 이동 id를 modal에 전달해줄 state
   const [selectFeed, setSelectFeed] = useState<number | undefined>(undefined);
@@ -33,47 +52,35 @@ export default function FeedHomeScreen() {
   const [currentPos, setCurrentPos] = useState<LatLng>();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  // axios요청에 사용할 유저 정보
+  const {user} = useAuthStore();
+
+  // 모달에 사용할 state
+  const [selectModalType, setSelectModalType] = useState<modalType | null>(
+    null,
+  );
+  const [selectFeedId, setSelectFeedId] = useState<number>();
+  const [selectFeedPos, setSelectFeedPos] = useState<LatLng>();
+  const {setPosition} = useLookUpPost();
+
   // 보러가기 버튼 클릭시 실행할 update 함수 (조회수 증가함수 호출 필요)
   const handlePressViewButton = (id: number) => {
     setSelectFeed(id);
   };
 
-  // const {data, hasNextPage, isFetchingNextPage, fetchNextPage, refetch} =
-  //   useInfiniteQuery({
-  //     queryFn: ({pageParam}) =>
-  //       getFeedList(
-  //         currentPos?.latitude as number,
-  //         currentPos?.longitude as number,
-  //         pageParam,
-  //       ),
-  //     queryKey: [queryKeys.GET_FEED_LIST],
-  //     initialPageParam: 0,
-  //     getNextPageParam: (lastPage, allPages) => {
-  //       console.log('last page', lastPage);
-  //       const lastPost = lastPage[lastPage.length - 1];
-  //       return lastPost ? allPages.length + 1 : undefined;
-  //     },
-  //   });
-
-  const {
-    data,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage,
-    fetchNextPage,
-    refetch,
-  } = useInfiniteQuery({
-    queryFn: ({pageParam}) => getNearWalkRecord(pageParam),
-    queryKey: [queryKeys.GET_ROUTE_LIST],
-    initialPageParam: 0,
-    refetchInterval: 3000,
-    getNextPageParam: lastPage => {
-      if (lastPage.hasNext) {
-        return lastPage.pageNum + 1;
-      }
-      return undefined;
-    },
-  });
+  const {data, hasNextPage, isFetchingNextPage, fetchNextPage, refetch} =
+    useInfiniteQuery({
+      queryFn: ({pageParam}) => getNearWalkRecord(pageParam),
+      queryKey: [queryKeys.GET_ROUTE_LIST],
+      initialPageParam: 0,
+      refetchInterval: 3000,
+      getNextPageParam: lastPage => {
+        if (lastPage.hasNext) {
+          return lastPage.pageNum + 1;
+        }
+        return undefined;
+      },
+    });
 
   // 스크롤을 위로 당겼을 때, refetch 진행
   const handleRefresh = async () => {
@@ -93,6 +100,39 @@ export default function FeedHomeScreen() {
     show: moveModalShow,
     hide: moveModalHide,
   } = useModal();
+
+  const handleOpenModal = (
+    modalType: modalType,
+    position: LatLng,
+    feedId: number,
+  ) => {
+    setSelectModalType(modalType);
+    setSelectFeedPos(position);
+    setSelectFeedId(feedId);
+    moveModalShow();
+  };
+
+  /**
+   * 포인트로 해금하기 버튼을 눌럿을 때, 실행시킬 함수
+   * 요청 성공 후, 디테일 페이지로 이동 후 데이터를 피드 디테일에 관한 데이터를 요청합니다.
+   */
+  const handleOpenFeed = () => {
+    if (user) {
+      openPost(user.userId, selectFeedId as number).then(
+        navigation.navigate('FeedDetail', {feedId: selectFeedId}),
+      );
+    }
+  };
+
+  /**
+   * 보러가기 버튼을 눌럿을 때, 해당 마커를 하이라이팅 하고, 특별한 마커로 변환!
+   */
+  const handleLookUpFeed = () => {
+    if (selectFeedPos) {
+      setPosition(selectFeedId as number);
+      navigation.navigate('MapHome');
+    }
+  };
 
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -140,7 +180,7 @@ export default function FeedHomeScreen() {
                   // console.log('================================');
                   // console.log('item', item);
                   // console.log('================================');
-                  return <FeedPreview feedId={item} />;
+                  return <FeedPreview feedId={item} show={handleOpenModal} />;
                 }}
               />
             </View>
@@ -165,19 +205,42 @@ export default function FeedHomeScreen() {
         transparent={true}
         animationType="slide">
         <SafeAreaView style={styles.modalBackground} onTouchEnd={moveModalHide}>
-          <View style={styles.confirmModal}>
-            <Text style={styles.confirmText}>
-              해당 방명록의 위치를 확인하시겠습니까?
-            </Text>
-            <View style={styles.confirmButtonContainer}>
-              <Pressable style={styles.confirimButton}>
-                <Text style={styles.buttonText}>보러가기</Text>
-              </Pressable>
-              <Pressable style={styles.confirimButton} onPress={moveModalHide}>
-                <Text style={styles.buttonText}>취소</Text>
-              </Pressable>
+          {selectModalType === 'move' && (
+            <View style={styles.confirmModal}>
+              <Text style={styles.confirmText}>
+                해당 방명록의 위치를 확인하시겠습니까?
+              </Text>
+              <View style={styles.confirmButtonContainer}>
+                <Pressable
+                  style={styles.confirimButton}
+                  onPress={handleLookUpFeed}>
+                  <Text style={styles.buttonText}>보러가기</Text>
+                </Pressable>
+                <Pressable
+                  style={styles.confirimButton}
+                  onPress={moveModalHide}>
+                  <Text style={styles.buttonText}>취소</Text>
+                </Pressable>
+              </View>
             </View>
-          </View>
+          )}
+          {selectModalType === 'open' && (
+            <View style={styles.confirmModal}>
+              <Text style={styles.confirmText}>포인트로 방명록 보기</Text>
+              <View style={styles.confirmButtonContainer}>
+                <Pressable
+                  style={styles.confirimButton}
+                  onPress={handleOpenFeed}>
+                  <Text style={styles.buttonText}>보기</Text>
+                </Pressable>
+                <Pressable
+                  style={styles.confirimButton}
+                  onPress={moveModalHide}>
+                  <Text style={styles.buttonText}>취소</Text>
+                </Pressable>
+              </View>
+            </View>
+          )}
         </SafeAreaView>
       </Modal>
     </SafeAreaView>
@@ -191,6 +254,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   confirmModal: {
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 20,
     padding: 35,
     gap: 10,
