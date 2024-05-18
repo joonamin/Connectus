@@ -151,7 +151,7 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
               </Text>
             </View>
             <View style={styles.feedContentContainer}>
-              <MainText>메인내용</MainText>
+              <MainText>{data?.content}</MainText>
             </View>
             <View style={styles.commentListContainer}>
               {data?.commentList &&

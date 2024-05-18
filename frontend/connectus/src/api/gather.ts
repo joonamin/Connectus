@@ -54,7 +54,6 @@ const gatherDetail = async (gatherId: number) => {
     console.log(data);
     return data;
   } catch (error) {
-    console.log(error.status);
     return error;
   }
 };

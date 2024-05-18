@@ -1,8 +1,8 @@
 import {
-  Alert,
   Keyboard,
+  Modal,
   Pressable,
-  ScrollView,
+  SafeAreaView,
   StyleSheet,
   TextInput,
   View,
@@ -20,13 +20,18 @@ import HeadCountInput from '@/components/map/HeadCountInput';
 import {NativeViewGestureHandler} from 'react-native-gesture-handler';
 import {getSubmitDate} from '@/utils/date';
 import {gatherStart} from '@/api/gather';
-import {getMinuteDifference} from '@/utils';
 import Geolocation from '@react-native-community/geolocation';
 import {LatLng} from 'react-native-maps';
 import useAuthStore from '@/store/useAuthStore';
+import useModal from '@/hooks/useModal';
+import {NavigationProp, useNavigation} from '@react-navigation/native';
+import {BottomSheetStackParamList} from '@/navigations/stack/BottomSheetQuickStackNavigator';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 // 유저가 설정 가능한 시간
 const GATHERTIME = [5, 10, 15, 20, 30];
+
+type Navigate = StackNavigationProp<BottomSheetStackParamList>;
 
 /**
  * 모여라 모집 스크린입니다.
@@ -40,7 +45,11 @@ export default function CreateGatherScreen() {
   const [content, setContent] = useState<string>('');
   const [gatherPos, getGatherPos] = useState<LatLng>();
   const {user} = useAuthStore();
-  console.log(user?.userId);
+  // 모달 관련 state
+  const {isVisible, show, hide} = useModal();
+  // 모집 종료 후 메인으로 이동할때 쓸 네비게이터
+  const navigation = useNavigation<Navigate>();
+
   // 모집 시, 전달해줄 LatLng 데이터를 가져오는 과정
   useEffect(() => {
     Geolocation.getCurrentPosition(
@@ -67,6 +76,14 @@ export default function CreateGatherScreen() {
   };
 
   /**
+   * 모집 완료 후 메인으로 돌아갈 함수
+   */
+  const handlePressConfirm = () => {
+    hide();
+    navigation.navigate('Home');
+  };
+
+  /**
    * 멤버의 수를 입력받고 6을 초과할 시, 0으로 되돌리고 유저에게 알림을 내보냅니다
    * @param member 필요한 멤버의 수를 입력받습니다
    */
@@ -85,14 +102,14 @@ export default function CreateGatherScreen() {
   const handleGatherPress = async () => {
     if (gatherTime !== null && gatherPos && user) {
       const endTime = getSubmitDate(gatherTime);
-      gatherStart({
+      await gatherStart({
         hostId: user?.userId,
         content: content,
         maxJoiner: headCount,
         endTime: endTime,
         latitude: gatherPos?.latitude,
         longitude: gatherPos?.longitude,
-      });
+      }).then(() => show());
     }
   };
 
@@ -142,6 +159,22 @@ export default function CreateGatherScreen() {
         <Pressable style={styles.gatherButton} onPress={handleGatherPress}>
           <MainText>모여라 모집</MainText>
         </Pressable>
+        <>
+          <Modal visible={isVisible} transparent={true} animationType="slide">
+            <SafeAreaView style={styles.modalBackground}>
+              <View style={styles.confirmModal}>
+                <>
+                  <MainText>모여라 등록이 완료되었습니다.</MainText>
+                  <Pressable
+                    style={styles.confirimButton}
+                    onPress={handlePressConfirm}>
+                    <MainText>학인</MainText>
+                  </Pressable>
+                </>
+              </View>
+            </SafeAreaView>
+          </Modal>
+        </>
       </MainContainer>
     </TouchableWithoutFeedback>
   );
@@ -192,5 +225,26 @@ const styles = StyleSheet.create({
   },
   selected: {
     opacity: 0.7,
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  confirmModal: {
+    width: '90%',
+    height: 200,
+    backgroundColor: colors.buttonBackground,
+    borderRadius: 15,
+    gap: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  confirimButton: {
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    backgroundColor: colors.background,
   },
 });

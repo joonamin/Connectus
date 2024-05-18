@@ -36,23 +36,18 @@ export default function GatherScreen({route}: GatherScreenProps) {
    * 데이터를 요청할 useQuery
    * data에 정보들이 담겨있습니다.
    */
-  const {data, isLoading} = useQuery({
+  const {data, isLoading, isError} = useQuery({
     queryFn: () => gatherDetail(gatherId),
-    queryKey: [queryKeys.GET_GATHER],
+    queryKey: [queryKeys.GET_GATHER, 1],
   });
 
-  // axios 요청으로 받아온 hostid와 userId가 같다면 publisher로 설정합니다
-  // 추가로 제대로 작동하지 않을 시, 데이터 받아올때 문제가 있을 수 있으니, 아래 jsx return에서 수정을 해야합니다.
-  if (data?.hostId === user?.userId) {
-    setIsPublisher(true);
-  }
-
+  console.log(data);
   /**
    * 모여라의 id와 user의 id를 제공해 모여라를 close
    */
   const handleGatherClose = async () => {
     if (data) {
-      await gatherDone(data?.gatherId);
+      await gatherDone(gatherId);
     }
   };
 
@@ -95,6 +90,14 @@ export default function GatherScreen({route}: GatherScreenProps) {
     },
   );
 
+  useEffect(() => {
+    // axios 요청으로 받아온 hostid와 userId가 같다면 publisher로 설정합니다
+    // 추가로 제대로 작동하지 않을 시, 데이터 받아올때 문제가 있을 수 있으니, 아래 jsx return에서 수정을 해야합니다.
+    if (data?.hostId === user?.userId) {
+      setIsPublisher(true);
+    }
+  }, []);
+
   if (isLoading) {
     return (
       <MainContainer style={styles.mainContainer}>
@@ -103,6 +106,9 @@ export default function GatherScreen({route}: GatherScreenProps) {
     );
   }
 
+  if (isError) {
+    return <MainText>데이터가 없어요</MainText>;
+  }
   return (
     <MainContainer style={styles.mainContainer}>
       <View style={styles.topIndicator}>
