@@ -1,6 +1,6 @@
 import colors from '@/constants/colors';
 import React from 'react';
-import {Platform, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import MapView, {
   LatLng,
   MapViewProps,
