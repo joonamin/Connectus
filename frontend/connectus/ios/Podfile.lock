@@ -1342,7 +1342,7 @@ PODS:
   - RNSVG (15.2.0):
     - React-Core
   - SocketRocket (0.7.0)
-  - TOCropViewController (2.7.3)
+  - TOCropViewController (2.7.4)
   - Yoga (0.0.0)
 
 DEPENDENCIES:
@@ -1638,8 +1638,8 @@ SPEC CHECKSUMS:
   RNShare: 554a91f5cfbe4adac4cfe3654826ee8b299fe365
   RNSVG: 43b64ed39c14ce830d840903774154ca0c1f27ec
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
-  TOCropViewController: b9b2905938c0424f289ea2d9964993044913fac6
-  Yoga: 56f906bf6c11c931588191dde1229fd3e4e3d557
+  TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
+  Yoga: ff1d575b119f510a5de23c22a794872562078ccf
 
 PODFILE CHECKSUM: 5c06841213925c89f3d4b282bd539f63f41fff52
 
