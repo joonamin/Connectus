@@ -48,5 +48,4 @@ public class AchievementAdapter implements AchievementPort {
 	public List<AchievementResponse> getMyAchievements(Long userId) {
 		return achievementClient.getUserAchievements(userId);
 	}
-
 }

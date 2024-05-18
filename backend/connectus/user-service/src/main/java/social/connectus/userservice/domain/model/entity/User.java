@@ -72,7 +72,8 @@ public class User {
 		this.walkCount = command.getWalkCount();
 		for(Achievement achievement : command.getAccomplishedAchievement()) {
 			accomplishedAchievements.add(achievement);
-		};
+			this.point += achievement.getReward();
+		}
 	}
 
 	public void updateOpenedPosts(List<Long> openedPosts) {
