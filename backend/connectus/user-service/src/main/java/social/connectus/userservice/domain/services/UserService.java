@@ -1,7 +1,5 @@
 package social.connectus.userservice.domain.services;
 
-import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.application.request.InsertPostRequest;
-import social.connectus.userservice.application.request.UserPositionRequest;
+import social.connectus.userservice.application.request.CreateUserPositionRequest;
 import social.connectus.userservice.application.response.*;
 import social.connectus.userservice.common.annotation.UseCase;
 import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
@@ -26,10 +24,7 @@ import social.connectus.userservice.application.response.LogoutUserResponse;
 import social.connectus.userservice.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.model.entity.User;
 import social.connectus.userservice.domain.port.inbound.UserUseCase;
-import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
-import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
-import social.connectus.userservice.domain.port.inbound.command.UserPositionCommand;
-import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
+import social.connectus.userservice.domain.port.inbound.command.*;
 import social.connectus.userservice.domain.port.outbound.UserPort;
 
 @RequiredArgsConstructor
@@ -100,8 +95,18 @@ public class UserService implements UserUseCase {
 	}
 
 	@Override
-	public void insertUserPosition(UserPositionRequest request) {
-		userPort.insertUserPosition(UserPositionCommand.from(request));
+	public ChangePositionResponse insertUserPosition(CreateUserPositionRequest request) {
+		return userPort.insertUserPosition(request);
+	}
+
+	@Override
+	public ChangePositionResponse updateUserPosition(CreateUserPositionRequest request) {
+		return userPort.updateUserPosition(request);
+	}
+
+	@Override
+	public void deleteUserPosition(Long userId) {
+		userPort.deleteUserPosition(userId);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package social.connectus.userservice.application.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,7 @@ import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
 import social.connectus.userservice.domain.port.inbound.PostUseCase;
 import social.connectus.userservice.domain.port.inbound.UserUseCase;
 import social.connectus.userservice.domain.port.inbound.WalkUseCase;
-import social.connectus.userservice.domain.port.inbound.command.MyPreferencePostCommand;
-import social.connectus.userservice.domain.port.inbound.command.MyPreferenceRouteCommand;
-import social.connectus.userservice.domain.port.inbound.command.MyWalkCommand;
-import social.connectus.userservice.domain.port.inbound.command.UserLoginCommand;
-import social.connectus.userservice.domain.port.inbound.command.UserLogoutCommand;
-import social.connectus.userservice.domain.port.inbound.command.UserRegisterCommand;
+import social.connectus.userservice.domain.port.inbound.command.*;
 
 @RestController
 @RequestMapping("/user")
@@ -123,11 +119,22 @@ public class UserController {
 		return ResponseEntity.ok(userUseCase.updateAvatar(userId, imageUrl));
 	}
 
-	@PostMapping("/insert-position")
-	public ResponseEntity<String> insertUserPosition(@RequestBody UserPositionRequest request) {
-		userUseCase.insertUserPosition(request);
+	@PostMapping("/insert-spot")
+	public ResponseEntity<ChangePositionResponse> insertUserPosition(@RequestBody CreateUserPositionRequest request) {
+		return ResponseEntity.ok(userUseCase.insertUserPosition(request));
+	}
+
+	@PostMapping("/update-spot")
+	public ResponseEntity<ChangePositionResponse> updateUserPosition(@RequestBody CreateUserPositionRequest request) {
+		return ResponseEntity.ok(userUseCase.updateUserPosition(request));
+	}
+
+	@PostMapping("/delete-spot/{userId}")
+	public ResponseEntity<String> deleteUserPosition(@PathVariable Long userId) {
+		userUseCase.deleteUserPosition(userId);
 		return ResponseEntity.ok().body("Saved.");
 	}
+
 	@PostMapping("/increase-point")
 	public ResponseEntity<PointResponse> increasePoint(@RequestBody PointChangeRequest request) {
 		return ResponseEntity.ok(userUseCase.increasePoint(PointChangeCommand.from(request)));
