@@ -34,5 +34,5 @@ public interface UserUseCase {
 	PointResponse decreasePoint(PointChangeCommand from);
 	String updateAvatar(Long userId, String imageUrl);
 	void insertUserPosition(social.connectus.userservice.domain.application.request.UserPositionRequest request);
-	String insertPostHistory(InsertPostRequest request);
+	PointResponse insertPostHistory(InsertPostRequest request);
 }

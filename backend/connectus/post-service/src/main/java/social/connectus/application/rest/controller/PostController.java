@@ -31,6 +31,7 @@ import social.connectus.application.rest.response.DetailPostResponse;
 import social.connectus.application.rest.response.FeedResponse;
 import social.connectus.application.rest.response.FollowPostResponse;
 import social.connectus.application.rest.response.MainPostResponse;
+import social.connectus.application.rest.response.PointResponse;
 import social.connectus.common.exception.BusinessException;
 import social.connectus.common.exception.GlobalException;
 import social.connectus.common.exception.NotFoundException;
@@ -206,7 +207,7 @@ public class PostController {
 	}
 
 	@PostMapping("/open")
-	public ResponseEntity<String> openPost(@RequestBody OpenPostRequest request) throws GlobalException {
+	public ResponseEntity<PointResponse> openPost(@RequestBody OpenPostRequest request) throws GlobalException {
 		return ResponseEntity.ok(openPostUseCase.openPost(request));
 	}
 

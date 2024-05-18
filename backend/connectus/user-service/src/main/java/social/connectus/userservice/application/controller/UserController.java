@@ -135,7 +135,7 @@ public class UserController {
 	}
 
 	@PostMapping("/insert/post-history")
-	public ResponseEntity<String> insertPostHistory(@RequestBody InsertPostRequest request) {
+	public ResponseEntity<PointResponse> insertPostHistory(@RequestBody InsertPostRequest request) {
 		return ResponseEntity.ok(userUseCase.insertPostHistory(request));
 	}
 }
