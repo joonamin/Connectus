@@ -32,6 +32,6 @@ public interface UserPort {
 	PointResponse decreasePoint(PointChangeCommand command);
 	String updateAvatar(Long userId, String imageUrl);
 	UserResponseForPost getUserResponseForPost(Long userId);
-	void insertUserPosition(List<UserPositionCommand> userPositionCommand);
 	String insertPostHistory(InsertPostRequest request);
+	void insertUserPosition(UserPositionCommand userPositionCommand);
 }

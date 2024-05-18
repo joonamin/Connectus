@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.application.request.InsertPostRequest;
+import social.connectus.userservice.application.request.UserPositionRequest;
 import social.connectus.userservice.application.response.*;
 import social.connectus.userservice.common.annotation.UseCase;
 import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
@@ -20,7 +21,6 @@ import social.connectus.userservice.common.type.JwtPayload;
 import social.connectus.userservice.common.type.JwtPropertiesProvider;
 import social.connectus.userservice.common.utils.JwtProvider;
 import social.connectus.userservice.domain.command.PointChangeCommand;
-import social.connectus.userservice.domain.application.request.UserPositionRequest;
 import social.connectus.userservice.application.response.LoginUserResponse;
 import social.connectus.userservice.application.response.LogoutUserResponse;
 import social.connectus.userservice.application.response.OpenedPostResponse;
@@ -101,9 +101,7 @@ public class UserService implements UserUseCase {
 
 	@Override
 	public void insertUserPosition(UserPositionRequest request) {
-		List<UserPositionCommand> userPosition = new ArrayList<>();
-		userPosition.add(UserPositionCommand.from(request));
-		userPort.insertUserPosition(userPosition);
+		userPort.insertUserPosition(UserPositionCommand.from(request));
 	}
 
 	@Override

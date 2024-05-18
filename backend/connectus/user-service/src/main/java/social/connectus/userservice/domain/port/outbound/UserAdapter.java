@@ -108,7 +108,7 @@ public class UserAdapter implements UserPort {
 	}
 
 	@Override
-	public void insertUserPosition(List<UserPositionCommand> userPositionCommand) {
+	public void insertUserPosition(UserPositionCommand userPositionCommand) {
 		spotClient.insertPostPosition(userPositionCommand);
 	}
 	@Override
