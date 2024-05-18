@@ -1,6 +1,5 @@
 import {postDetail} from '@/types';
 import {axiosInstance} from './axios';
-
 /**
  *  id를 list형태로 서버에 전달해 feed의 상세정보를 요청하는 axios입니다.
  */
@@ -59,7 +58,7 @@ const createPostComment = async (
   body: createPostCommentParams,
 ): Promise<any> => {
   const {data} = await axiosInstance.post(`/post/${postId}/comment`, body);
-  console.log(data);
+  console.log(body);
   return data;
 };
 
