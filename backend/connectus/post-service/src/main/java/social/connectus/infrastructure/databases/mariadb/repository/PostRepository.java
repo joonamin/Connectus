@@ -9,5 +9,5 @@ import social.connectus.domain.model.RDBMS.Post;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryCustom {
-	List<Long> findAllByUserId(Long userId);
+	List<Post> findByAuthorId(Long authorId);
 }
