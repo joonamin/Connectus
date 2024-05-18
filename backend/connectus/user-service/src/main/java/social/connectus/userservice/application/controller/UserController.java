@@ -123,11 +123,10 @@ public class UserController {
 	}
 
 	@PostMapping("/insert-position")
-	public ResponseEntity<Void> insertUserPosition(@RequestBody social.connectus.userservice.domain.application.request.UserPositionRequest request) {
+	public ResponseEntity<String> insertUserPosition(@RequestBody UserPositionRequest request) {
 		userUseCase.insertUserPosition(request);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok().body("Saved.");
 	}
-
 	@PostMapping("/increase-point")
 	public ResponseEntity<PointResponse> increasePoint(@RequestBody PointChangeRequest request) {
 		return ResponseEntity.ok(userUseCase.increasePoint(PointChangeCommand.from(request)));
