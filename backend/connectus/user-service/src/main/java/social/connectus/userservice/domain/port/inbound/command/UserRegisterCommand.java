@@ -25,6 +25,10 @@ public class UserRegisterCommand {
 	private String imageUrl;
 
 	public static UserRegisterCommand from(UserRegisterRequest request) {
+		String imageUrl = request.getImageUrl();
+		if(imageUrl == null) {
+			imageUrl = "https://e106-connectus.s3.ap-northeast-2.amazonaws.com/avatar/character_1.png";
+		}
 		// request -> command
 		// todo: validate input value, encrypt user password
 		return UserRegisterCommand.builder()
@@ -34,7 +38,7 @@ public class UserRegisterCommand {
 			.nickname(request.getNickname())
 			.name(request.getName())
 			.birthday(request.getBirthday())
-			.imageUrl(request.getImageUrl())
+			.imageUrl(imageUrl)
 			.build();
 	}
 }
