@@ -91,7 +91,7 @@ const createRoute = async (body: createRoutetype) => {
     return data;
   } catch (error) {
     console.log(error);
-    return error;
+    throw error;
   }
 };
 

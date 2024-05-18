@@ -227,16 +227,6 @@ export default function TestMapWalkScreen() {
     };
   }, []);
 
-  useEffect(() => {
-    const getData = async () => {
-      setTempLoading(true);
-      const temp = await getNearMarker();
-      setData(temp);
-      setTempLoading(false);
-    };
-    getData();
-  }, []);
-
   if (isLoading) {
     return <MainText>초기 데이터를 로드중입니다.</MainText>;
   }
