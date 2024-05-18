@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import social.connectus.application.rest.request.CoordinateRequestDto;
 import social.connectus.application.rest.response.DetailPostResponse;
+import social.connectus.application.rest.response.GetPostSpotResponse;
 import social.connectus.common.annotation.UseCase;
 import social.connectus.common.exception.BusinessException;
 import social.connectus.common.exception.GlobalException;
@@ -87,6 +88,11 @@ public class DetailPostService implements DetailPostUseCase {
 	@Override
 	public String healthCheck() {
 		return detailPostPort.healthCheck();
+	}
+
+	@Override
+	public GetPostSpotResponse getPostSpotByPostId(Long postId) throws NotFoundException {
+		return detailPostPort.getPostSpotById(postId);
 	}
 
 
