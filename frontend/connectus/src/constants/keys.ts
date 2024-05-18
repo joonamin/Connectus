@@ -11,6 +11,8 @@ const queryKeys = {
   GET_ROUTE_DETAIL: 'getRouteDetail',
   GET_WALKS_BY_USER: 'getWalksByUser',
   GET_MARKER: 'getMarker',
+  GET_MARKER_POSITION: 'getMarkerPosition',
+  UPDATE_USER_POS: 'updateUserPos',
 } as const;
 
 export {queryKeys};

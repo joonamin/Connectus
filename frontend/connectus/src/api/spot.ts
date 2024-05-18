@@ -12,22 +12,16 @@ import {getPosition} from '@/utils';
  */
 const getNearMarker = async (): Promise<spotListType> => {
   const post = await getPosition();
-  // const body = {
-  //   latitude: post.coords.latitude,
-  //   longitude: post.coords.longitude,
-  // };
   const body = {
-    latitude: 35.09359333333333,
-    longitude: 128.85655833333334,
+    latitude: post.coords.latitude,
+    longitude: post.coords.longitude,
   };
-
-  // console.log('bodycheck', body);
+  console.log(body);
   try {
     const {data} = await axiosInstance.post('/spot/findNearby', body);
-    // console.log('datacheck', data);
     return data;
   } catch (error) {
-    return error;
+    throw error;
   }
 };
 
@@ -57,4 +51,44 @@ const setSpot = async (spotIdList: setSpotRequestType) => {
   return data;
 };
 
-export {getNearMarker, getDetailSpotList, setSpot};
+/**
+ * 산책 시작과 동시에 유저의 위치 정보를 저장합니다.
+ */
+const startSaveUserPos = async (userId: number) => {
+  const pos = await getPosition();
+  const body = {
+    userId: userId,
+    latitude: pos.coords.latitude,
+    longitude: pos.coords.longitude,
+  };
+  const {data} = await axiosInstance.post('/user/insert-spot', body);
+  return data;
+};
+
+/**
+ * 산책 종료 시 , 유저의 저장 정보를 삭제합니다
+ */
+const deleteSaveUserPos = async (userId: number) => {
+  const {data} = await axiosInstance.post(`/user/delete-spot/${userId}`);
+  return data;
+};
+
+const updateSaveUserPos = async (userId: number) => {
+  const pos = await getPosition();
+  const body = {
+    userId: userId,
+    latitude: pos.coords.latitude,
+    longitude: pos.coords.longitude,
+  };
+  const {data} = await axiosInstance.post('/user/update-spot', body);
+  return data;
+};
+
+export {
+  getNearMarker,
+  getDetailSpotList,
+  setSpot,
+  startSaveUserPos,
+  deleteSaveUserPos,
+  updateSaveUserPos,
+};

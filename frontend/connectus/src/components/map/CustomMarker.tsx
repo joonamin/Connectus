@@ -1,11 +1,14 @@
+import useLookUpPost from '@/store/useLookUpPost';
 import {domainType} from '@/types';
-import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, StyleSheet, View} from 'react-native';
 import {LatLng, MyMapMarkerProps, Marker} from 'react-native-maps';
 
 interface CustomMarkerProps extends MyMapMarkerProps {
   coordinate?: LatLng;
   type: domainType;
+  markerId: number;
+  lookUpFeed: number | null;
 }
 
 /**
@@ -19,6 +22,8 @@ interface CustomMarkerProps extends MyMapMarkerProps {
 export default function CustomMarker({
   coordinate,
   type,
+  markerId,
+  lookUpFeed,
   ...props
 }: CustomMarkerProps) {
   const markerView = (
@@ -34,7 +39,11 @@ export default function CustomMarker({
       {type === 'POST' && (
         <Image
           style={styles.image}
-          source={require('@/assets/markers/feedMarker.png')}
+          source={
+            markerId === lookUpFeed
+              ? require('@/assets/markers/goldfeedmarker.png')
+              : require('@/assets/markers/feedMarker.png')
+          }
           resizeMode="cover"
         />
       )}
@@ -42,6 +51,13 @@ export default function CustomMarker({
         <Image
           style={styles.image}
           source={require('@/assets/markers/gatherMarker.png')}
+          resizeMode="cover"
+        />
+      )}
+      {type === 'USER' && (
+        <Image
+          style={styles.image}
+          source={require('@/assets/giftImage.png')}
           resizeMode="cover"
         />
       )}
