@@ -9,11 +9,27 @@ import {MapMarkerProps, Marker} from 'react-native-maps';
  */
 export default function FinishMarker({...props}: MapMarkerProps) {
   return (
-    <Marker
-      identifier="finish"
-      tracksViewChanges={false}
-      image={require('@/assets/markers/ping_finish.png')}
-      {...props}
-    />
+    <Marker identifier="finish" tracksViewChanges={false} {...props}>
+      <View style={styles.container}>
+        <Image
+          style={styles.image}
+          source={require('@/assets/markers/ping_finish.png')}
+        />
+      </View>
+    </Marker>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: 70,
+    aspectRatio: '207 / 250',
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+});
