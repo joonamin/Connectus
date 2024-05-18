@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import social.connectus.userservice.application.request.InsertPostRequest;
 import social.connectus.userservice.application.response.PointResponse;
 import social.connectus.userservice.application.response.UserResponseForPost;
 import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
@@ -148,5 +149,15 @@ public class UserAdapter implements UserPort {
 		user.updateAvatar(imageUrl);
 		return "avatar update!";
 	}
-
+	@Override
+	public String insertPostHistory(InsertPostRequest request) {
+		User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("user doesn't exists"));
+		int hasPoint = user.getPoint();
+		if(hasPoint >= 5) {
+			return "not enough point";
+		}
+		user.getPostHistory().add(request.getPostId());
+		userRepository.save(user);
+		return "save completed";
+	}
 }

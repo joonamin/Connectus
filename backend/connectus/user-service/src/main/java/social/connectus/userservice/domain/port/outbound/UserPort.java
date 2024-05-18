@@ -2,6 +2,7 @@ package social.connectus.userservice.domain.port.outbound;
 
 import java.util.List;
 
+import social.connectus.userservice.application.request.InsertPostRequest;
 import social.connectus.userservice.application.response.PointResponse;
 import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.application.response.OpenedPostResponse;
@@ -32,4 +33,5 @@ public interface UserPort {
 	String updateAvatar(Long userId, String imageUrl);
 	UserResponseForPost getUserResponseForPost(Long userId);
 	void insertUserPosition(List<UserPositionCommand> userPositionCommand);
+	String insertPostHistory(InsertPostRequest request);
 }
