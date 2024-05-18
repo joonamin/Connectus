@@ -38,7 +38,7 @@ export default function GatherScreen({route}: GatherScreenProps) {
    */
   const {data, isLoading, isError} = useQuery({
     queryFn: () => gatherDetail(gatherId),
-    queryKey: [queryKeys.GET_GATHER, 1],
+    queryKey: [queryKeys.GET_GATHER, gatherId],
   });
 
   console.log(data);
@@ -119,7 +119,7 @@ export default function GatherScreen({route}: GatherScreenProps) {
           />
         </View>
         <View style={styles.userInfo}>
-          <Text style={styles.userName}>{'username'}</Text>
+          <Text style={styles.userName}>{data.hostId}</Text>
         </View>
       </View>
       <View style={styles.countContainer}>
