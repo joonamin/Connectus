@@ -20,27 +20,6 @@ type Navigation = CompositeNavigationProp<
 >;
 
 export default function MyHomeScreen() {
-  const styles = StyleSheet.create({
-    maincontainer: {
-      gap: 30,
-    },
-    detailButton: {
-      padding: 10,
-      alignSelf: 'baseline',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 5,
-    },
-    listGroup: {
-      padding: 0,
-      gap: 5,
-      alignContent: 'stretch',
-    },
-    logoutText: {
-      color: defaultColors.onErrorContainer,
-    },
-  });
-
   const navigation = useNavigation<Navigation>();
 
   const gotoAchievements = () => {
@@ -112,3 +91,24 @@ export default function MyHomeScreen() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  maincontainer: {
+    gap: 30,
+  },
+  detailButton: {
+    padding: 10,
+    alignSelf: 'baseline',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  listGroup: {
+    padding: 0,
+    gap: 5,
+    alignContent: 'stretch',
+  },
+  logoutText: {
+    color: defaultColors.onErrorContainer,
+  },
+});
