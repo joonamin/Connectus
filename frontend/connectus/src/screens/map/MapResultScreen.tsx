@@ -89,6 +89,9 @@ export default function MapResultScreen({route}: ScreenProps) {
       console.log('요청 성공');
       queryClient.invalidateQueries({queryKey: [queryKeys.GET_ROUTE_LIST]});
     },
+    onError: () => {
+      console.log('에러뜨는게 정상인데?');
+    },
     onSettled: () => show(),
   });
 

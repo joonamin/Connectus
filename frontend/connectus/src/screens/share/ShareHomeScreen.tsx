@@ -24,6 +24,7 @@ import {queryKeys} from '@/constants';
 import Geolocation from '@react-native-community/geolocation';
 import useMutateUpdateRoute from '@/api/queries/useMutateUpdateRoute';
 import useAuthStore from '@/store/useAuthStore';
+import queryClient from '@/api/queryClient';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<ShareStackParamList>,
@@ -110,9 +111,8 @@ export default function ShareHomeScreen() {
 
   // 스크롤을 위로 당겼을 때, refetch 진행
   const handleRefresh = async () => {
-    setIsRefreshing(true);
-    await refetch;
-    setIsRefreshing(false);
+    queryClient.resetQueries([queryKeys.GET_ROUTE_LIST]);
+    refetch();
   };
 
   // scroll을 아래로 했을때 실행할 함수.
