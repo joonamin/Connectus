@@ -19,7 +19,7 @@ public class LikeAdapter implements LikePort {
 	@Transactional
 	@Override
 	public String insertLike(Long domainId, Long userId, Type type) {
-		Optional<Likes> isPresentLikes = likeRepository.findByDomainIdAndType(domainId, type);
+		Optional<Likes> isPresentLikes = likeRepository.findByUserIdAndDomainIdAndType(userId, domainId, type);
 		if(isPresentLikes.isPresent()) {
 			Likes likes = isPresentLikes.get();
 			likeRepository.delete(likes);
