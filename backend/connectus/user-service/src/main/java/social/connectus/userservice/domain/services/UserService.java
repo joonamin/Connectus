@@ -107,7 +107,9 @@ public class UserService implements UserUseCase {
 	}
 
 	@Override
-	public String insertPostHistory(InsertPostRequest request) {
-		return userPort.insertPostHistory(request);
+	public PointResponse insertPostHistory(InsertPostRequest request) {
+		PointResponse result = userPort.decreasePoint(new PointChangeCommand(request.getUserId(), 1));
+		userPort.updateOpenedPost(request.getUserId(), request.getPostId());
+		return result;
 	}
 }

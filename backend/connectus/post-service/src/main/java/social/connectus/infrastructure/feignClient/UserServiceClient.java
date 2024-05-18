@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import social.connectus.application.rest.request.OpenPostRequest;
 import social.connectus.application.rest.response.OpenedPostResponse;
+import social.connectus.application.rest.response.PointResponse;
 import social.connectus.application.rest.response.UserInfoResponse;
 
 @FeignClient(name = "user-service")
@@ -29,5 +30,5 @@ public interface UserServiceClient {
 	UserInfoResponse getUserInfo(@PathVariable("userId") Long userId);
 
 	@PostMapping("/user/insert/post-history")
-	String insertOpenPost(@RequestBody OpenPostRequest request);
+	PointResponse insertOpenPost(@RequestBody OpenPostRequest request);
 }
