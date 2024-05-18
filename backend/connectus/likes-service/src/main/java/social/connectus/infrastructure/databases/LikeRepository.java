@@ -10,5 +10,5 @@ import social.connectus.domain.model.Likes;
 
 @Repository
 public interface LikeRepository extends JpaRepository<Likes, Long>, LikeRepositoryCustom {
-	Optional<Likes> findByDomainIdAndType(Long domainId, Type type);
+	Optional<Likes> findByUserIdAndDomainIdAndType(Long userId, Long domainId, Type type);
 }

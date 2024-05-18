@@ -63,10 +63,10 @@ public class LikesController {
 		return ResponseEntity.ok(likeUseCase.getLikeCount(domainId, type));
 	}
 
-	@GetMapping("/{domainId}/is-like")
+	@GetMapping("/{postId}/is-like")
 	@Operation(
 		summary = "좋아요 조회",
-		description = "domainId와 type에 해당하는 게시물에 유저의 좋아요 여부를 리턴합니다."
+		description = "userId와 type에 해당하는 게시물에 유저의 좋아요 여부를 리턴합니다."
 	)
 	@ApiResponses({
 		@ApiResponse(
@@ -74,8 +74,8 @@ public class LikesController {
 			description = "좋아요 여부 리턴"
 		)
 	})
-	public ResponseEntity<Boolean> isLike(@PathVariable Long domainId, @RequestParam String typeString){
+	public ResponseEntity<Boolean> isLike(@PathVariable Long postId, @RequestParam Long userId, @RequestParam String typeString){
 		Type type = Type.valueOf(typeString);
-		return ResponseEntity.ok(likeUseCase.isLike(domainId,type));
+		return ResponseEntity.ok(likeUseCase.isLike(postId, userId, type));
 	}
 }
