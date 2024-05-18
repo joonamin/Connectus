@@ -43,4 +43,5 @@ public interface UserUseCase {
 
 	void deleteUserPosition(Long userId);
 	UserInfoResponse getUserInfo(Long userId);
+	LikeResponse getMyLikeList(Long userId);
 }

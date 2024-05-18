@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Component;
+
+import social.connectus.walk.application.rest.response.MyLikeWalkResponse;
 import social.connectus.walk.common.constants.WalkConstants;
 import social.connectus.walk.common.exception.ResourceNotFoundException;
 import social.connectus.walk.common.utils.SliceResponse;
@@ -84,8 +86,14 @@ public class WalkAdapter implements WalkPort {
     }
 
     @Override
-    public List<Long> getRouteLikeList(Long userId) {
-        return likeUserRepository.findAllByUserId(userId);
+    public List<MyLikeWalkResponse> getRouteLikeList(Long userId) {
+        List<Walk> myLikeRoute =  likeUserRepository.findAllByUserId(userId);
+        List<MyLikeWalkResponse> response = new ArrayList<>();
+        for(Walk walk : myLikeRoute) {
+            Long likeCount = likeUserRepository.countByWalkId(walk.getId());
+            response.add(MyLikeWalkResponse.from(walk,likeCount));
+        }
+        return response;
     }
 
     @Transactional

@@ -4,6 +4,7 @@ import java.util.List;
 
 import social.connectus.userservice.application.request.CreateUserPositionRequest;
 import social.connectus.userservice.application.request.InsertPostRequest;
+import social.connectus.userservice.application.response.LikeResponse;
 import social.connectus.userservice.application.response.ChangePositionResponse;
 import social.connectus.userservice.application.response.PointResponse;
 import social.connectus.userservice.application.response.UserInfoResponse;
@@ -46,4 +47,5 @@ public interface UserPort {
 
 	void deleteUserPosition(Long userId);
 	UserInfoResponse getUserInfo(Long userId);
+	LikeResponse getMyLikeList(Long userId);
 }
