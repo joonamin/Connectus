@@ -21,10 +21,10 @@ const getNearMarker = async (): Promise<spotListType> => {
     longitude: 128.85655833333334,
   };
 
-  console.log('bodycheck', body);
+  // console.log('bodycheck', body);
   try {
     const {data} = await axiosInstance.post('/spot/findNearby', body);
-    console.log('datacheck', data);
+    // console.log('datacheck', data);
     return data;
   } catch (error) {
     return error;

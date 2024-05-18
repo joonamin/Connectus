@@ -90,7 +90,7 @@ const createRoute = async (body: createRoutetype) => {
     console.log(data);
     return data;
   } catch (error) {
-    console.log(error);
+    return error;
   }
 };
 
@@ -204,15 +204,16 @@ const getNearWalkRecord = async (
     pageNumber: pageNumber,
     pageSize: 3,
   };
-  console.log('body', body);
-  console.log('userPos', userPos);
+  // console.log('body', body);
+  // console.log('userPos', userPos);
 
   try {
     const {data} = await axiosInstance.post('/walk/detail-position', body);
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
-    console.log('flat List', error);
+    return error;
+    // console.log('flat List', error);
   }
 };
 
