@@ -42,13 +42,13 @@ public class UserAdapter implements UserPort {
 		if (userRepository.findByEmail(command.getEmail()).isPresent()) {
 			throw new FailedToRegisterUserException("이미 회원가입이 된 유저입니다");
 		}
-
 		String encryptedPassword = passwordEncoder.encode(command.getPassword());
 		User user = User.builder()
 			.name(command.getName())
 			.email(command.getEmail())
 			.point(0)
 			.accomplishedAchievements(Collections.EMPTY_LIST)
+			.avatarImageUrl(command.getImageUrl())
 			.chatRoomIds(Collections.EMPTY_LIST)
 			.postHistory(Collections.EMPTY_LIST)
 			.birthday(command.getBirthday())
@@ -153,7 +153,6 @@ public class UserAdapter implements UserPort {
 	public String insertPostHistory(InsertPostRequest request) {
 		User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("user doesn't exists"));
 		int hasPoint = user.getPoint();
-		System.out.println(hasPoint);
 		if(hasPoint <= 1) {
 			return "not enough point";
 		}
