@@ -118,7 +118,7 @@ export default function MapResultScreen({route}: ScreenProps) {
             routes={route.params?.walkRoute}
             ref={map}
             style={{alignSelf: 'stretch'}}
-            onMapReady={onMapReady}
+            onMapLoaded={onMapReady}
           />
           <WalkResult time={indicateTime} distance={route.params?.distance} />
           {/* <Achievement achievs={DUMMY_ACHIEVE} /> */}
