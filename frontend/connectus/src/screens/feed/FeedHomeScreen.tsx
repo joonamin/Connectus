@@ -21,6 +21,7 @@ import {LatLng} from 'react-native-maps';
 import {queryKeys} from '@/constants';
 import {getNearWalkRecord} from '@/api/walk';
 import MainText from '@/components/text/MainText';
+import queryClient from '@/api/queryClient';
 
 export default function FeedHomeScreen() {
   const carouselWidth = Dimensions.get('window').width;
@@ -65,6 +66,7 @@ export default function FeedHomeScreen() {
     queryFn: ({pageParam}) => getNearWalkRecord(pageParam),
     queryKey: [queryKeys.GET_ROUTE_LIST],
     initialPageParam: 0,
+    refetchInterval: 3000,
     getNextPageParam: lastPage => {
       if (lastPage.hasNext) {
         return lastPage.pageNum + 1;
@@ -75,9 +77,8 @@ export default function FeedHomeScreen() {
 
   // 스크롤을 위로 당겼을 때, refetch 진행
   const handleRefresh = async () => {
-    setIsRefreshing(true);
-    await refetch;
-    setIsRefreshing(false);
+    queryClient.resetQueries([queryKeys.GET_ROUTE_LIST]);
+    refetch();
   };
 
   // scroll을 아래로 했을때 실행할 함수.
