@@ -1,7 +1,5 @@
 package social.connectus.infrastructure.adapter;
 
-import java.awt.*;
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 

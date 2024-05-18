@@ -176,4 +176,9 @@ public class WalkService implements WalkUseCase {
     public Slice<Walk> getWalksByPosition(GetWalksByPositionCommand command) {
         return walkPort.getWalksByPosition(command);
     }
+
+    @Override
+    public List<Long> getRouteLikeList(Long userId) {
+        return walkPort.getRouteLikeList(userId);
+    }
 }
