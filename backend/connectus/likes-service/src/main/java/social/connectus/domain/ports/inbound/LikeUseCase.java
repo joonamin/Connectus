@@ -9,5 +9,5 @@ public interface LikeUseCase {
 
 	int getLikeCount(Long domainId, Type type) throws GlobalException;
 
-	boolean isLike(Long domainId, Type type);
+	boolean isLike(Long domainId, Long userId, Type type);
 }

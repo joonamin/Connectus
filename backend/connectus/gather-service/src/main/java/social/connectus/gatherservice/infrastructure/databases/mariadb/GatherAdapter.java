@@ -52,6 +52,7 @@ public class GatherAdapter implements GatherPort {
                 .maxJoiner(beforeUpdate.getMaxJoiner())
                 .candidateList(beforeUpdate.getCandidateList())
                 .joinerList(beforeUpdate.getJoinerList())
+                .spotId(beforeUpdate.getSpotId())
                 .build();
 
         gatherRepository.save(gather);
