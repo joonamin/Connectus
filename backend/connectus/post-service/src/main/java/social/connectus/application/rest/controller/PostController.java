@@ -26,12 +26,8 @@ import lombok.RequiredArgsConstructor;
 import social.connectus.application.rest.request.CoordinateRequestDto;
 import social.connectus.application.rest.request.CreateCommentRequestDto;
 import social.connectus.application.rest.request.CreateFeedRequestDto;
+import social.connectus.application.rest.response.*;
 import social.connectus.application.rest.request.OpenPostRequest;
-import social.connectus.application.rest.response.DetailPostResponse;
-import social.connectus.application.rest.response.FeedResponse;
-import social.connectus.application.rest.response.FollowPostResponse;
-import social.connectus.application.rest.response.MainPostResponse;
-import social.connectus.application.rest.response.PointResponse;
 import social.connectus.common.exception.BusinessException;
 import social.connectus.common.exception.GlobalException;
 import social.connectus.common.exception.NotFoundException;
@@ -134,6 +130,12 @@ public class PostController {
             return ResponseEntity.notFound().build();
         }
     }
+
+	@GetMapping("/{postId}/spot")
+	public ResponseEntity<GetPostSpotResponse> getPostSpot(@PathVariable("postId") Long postId) throws NotFoundException {
+		return ResponseEntity.ok(detailPostUseCase.getPostSpotByPostId(postId));
+	}
+
 
 	@PostMapping("/{postId}/comment")
 	@Operation(
