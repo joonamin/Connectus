@@ -1,7 +1,8 @@
 package social.connectus.domain.ports.outbound;
 
 import social.connectus.application.rest.request.OpenPostRequest;
+import social.connectus.application.rest.response.PointResponse;
 
 public interface OpenPostPort {
-	String insertOpenPost(OpenPostRequest request);
+	PointResponse insertOpenPost(OpenPostRequest request);
 }

@@ -25,10 +25,10 @@ public class LikeRepositoryCustomImpl implements LikeRepositoryCustom {
 	}
 
 	@Override
-	public boolean existsByDomainId(Long domainId, Type type) {
+	public boolean existsByDomainId(Long domainId, Long userId, Type type) {
 		Integer fetchFirst = jpaQueryFactory.selectOne()
 			.from(likes)
-			.where(likes.domainId.eq(domainId).and(likes.type.eq(type)))
+			.where(likes.domainId.eq(domainId).and(likes.type.eq(type)).and(likes.userId.eq(userId)))
 			.fetchOne();
 		return fetchFirst != null;
 	}
