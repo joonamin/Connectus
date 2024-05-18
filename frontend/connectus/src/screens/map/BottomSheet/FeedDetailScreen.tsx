@@ -17,13 +17,18 @@ import MainText from '@/components/text/MainText';
 import colors from '@/constants/colors';
 import Comment from '@/components/feed/Comment';
 import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
-import {createPostComment, getPostDetail, postFeedLike} from '@/api/post';
+import {
+  createPostComment,
+  getMapPostDetail,
+  getPostDetail,
+  postFeedLike,
+} from '@/api/post';
 import {StackScreenProps} from '@react-navigation/stack';
 import {BottomSheetStackParamList} from '@/navigations/stack/BottomSheetQuickStackNavigator';
 import useAuthStore from '@/store/useAuthStore';
 import {useMutation, useQuery} from '@tanstack/react-query';
 import {queryKeys} from '@/constants';
-import {dateTimeToString} from '@/utils';
+import {dateTimeToString, getPosition} from '@/utils';
 import queryClient from '@/api/queryClient';
 
 type FeedDetailScreenProps = StackScreenProps<
@@ -40,12 +45,12 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
   const [isUseKeyBoard, setIsUseKeyBoard] = useState(false);
   const [comment, setComment] = useState('');
   // 요청에 사용할 피드 아이디입니다.
-  const {feedId} = route.params;
+  const {feedId, coordinate} = route.params;
   // 요청에 사용할 유저 정보입니다.
   const {user} = useAuthStore();
 
   const {data, isLoading} = useQuery({
-    queryFn: () => getPostDetail(feedId, user?.userId as number, 5),
+    queryFn: () => getMapPostDetail(feedId, user?.userId as number, coordinate),
     queryKey: [queryKeys.GET_FEED_DETAIL, feedId],
   });
 
@@ -89,7 +94,6 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
    */
   const handleSubmitComment = async () => {
     addComment.mutate();
-    // setComment('');
     Keyboard.dismiss();
   };
 
@@ -150,6 +154,11 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
                 댓글 {data?.commentCount}개
               </Text>
             </View>
+            {!data?.inRange && (
+              <MainText>
+                세부 내용을 확인하시려면 조금더 가까이 다가가주세요
+              </MainText>
+            )}
             <View style={styles.feedContentContainer}>
               <MainText>{data?.content}</MainText>
             </View>

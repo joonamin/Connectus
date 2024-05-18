@@ -17,6 +17,8 @@ import {BottomTabParamList} from '@/navigations/Tabs/MapBottomTabsNavigator';
 import colors from '@/constants/colors';
 import Geolocation from '@react-native-community/geolocation';
 import mapStyle from '@/style/mapStyle';
+import {startSaveUserPos} from '@/api/spot';
+import useAuthStore from '@/store/useAuthStore';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
@@ -27,13 +29,19 @@ export default function MapHomeScreen() {
   const mapRef = useRef<MapView | null>(null);
   const navigation = useNavigation<Navigation>();
   const [initPos, setInitPos] = useState<LatLng>();
+  const [isStarting, setIsStarting] = useState<boolean>(false);
 
+  const {user} = useAuthStore();
   /**
    * 산책 시작 버튼 press시 이동할 screen을 잠시 test로 설정해뒀습니다.
    */
-  const handlePressStart = () => {
+  const handlePressStart = async () => {
     // navigation.navigate('MapWalk');
-    navigation.navigate('WalkTest');
+    setIsStarting(true);
+    await startSaveUserPos(user?.userId as number).then(() => {
+      setIsStarting(false);
+      navigation.navigate('WalkTest');
+    });
   };
 
   useEffect(() => {
@@ -77,8 +85,11 @@ export default function MapHomeScreen() {
       )}
 
       <View style={styles.buttonContainer}>
-        <Pressable style={styles.startButton} onPress={handlePressStart}>
-          <MainText>산책시작</MainText>
+        <Pressable
+          disabled={isStarting}
+          style={[styles.startButton, isStarting && styles.disabled]}
+          onPress={handlePressStart}>
+          <MainText>{isStarting ? '산책 준비중입니다' : '산책시작'}</MainText>
         </Pressable>
       </View>
     </SafeAreaView>
@@ -106,5 +117,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 15,
     borderRadius: 15,
+  },
+  disabled: {
+    backgroundColor: colors.buttonBackground,
   },
 });

@@ -9,6 +9,7 @@ import FeedListScreen from '@/screens/map/BottomSheet/FeedListScreen';
 import FeedDetailScreen from '@/screens/map/BottomSheet/FeedDetailScreen';
 import MarkerSelectScreen from '@/screens/map/BottomSheet/MarkerSelectScreen';
 import GatherScreen from '@/screens/map/BottomSheet/GatherScreen';
+import {LatLng} from 'react-native-maps';
 
 export type BottomSheetStackParamList = {
   Home: undefined;
@@ -17,7 +18,7 @@ export type BottomSheetStackParamList = {
   ChatList: undefined;
   MarkerList: undefined;
   FeedList: undefined;
-  Feed: {feedId: number};
+  Feed: {feedId: number; coordinate: LatLng};
   Gather: {gatherId: number};
 };
 

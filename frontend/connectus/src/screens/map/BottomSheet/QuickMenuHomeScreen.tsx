@@ -34,15 +34,16 @@ export default function QuickMenuHomeScreen() {
     navigation.navigate('GatherCreate');
   };
 
-  const handlePressChatList = () => {
-    navigation.navigate('ChatList');
-  };
+  // 아아 그는 좋은 채팅 기능이었습니다.
+  // const handlePressChatList = () => {
+  //   navigation.navigate('ChatList');
+  // };
 
   /**
    * 산책 종료시 저장되어 있던, 따라걷기 정보를 지웁니다.
    * 그 후, 산책 종료를 위한 Modal compoenent의 isVisible 속성을 true로 전환합니다.
    */
-  const handlePressQuit = () => {
+  const handlePressQuit = async () => {
     DeviceEventEmitter.emit('openBottomSheetModal');
     setDeleteRoute();
   };
