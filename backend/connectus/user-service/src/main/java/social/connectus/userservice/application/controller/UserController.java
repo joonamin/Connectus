@@ -57,6 +57,10 @@ public class UserController {
 		return ResponseEntity.ok(userUseCase.logout(UserLogoutCommand.from(userLogoutRequest)));
 	}
 
+//	@Operation(summary = "유저 정보 받기", deprecated = true)
+//	@GetMapping("/{userId}")
+//	public ResponseEntity<GetUserResponse> getUser(@PathVariable)
+
 	@Operation(summary = "특정 유저가 달성한 업적 조회")
 	@GetMapping("/completed-achievement/{userId}")
 	public ResponseEntity<CompletedAchievementListResponse> getUserCompletedAchievement(@PathVariable Long userId) {
