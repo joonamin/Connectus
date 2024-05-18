@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {MapMarkerProps, Marker} from 'react-native-maps';
 
@@ -8,12 +8,17 @@ import {MapMarkerProps, Marker} from 'react-native-maps';
  * @returns StartMarker
  */
 export default function StartMarker({...props}: MapMarkerProps) {
+  const [initialRender, setInitialRender] = useState<boolean>(true);
+
   return (
-    <Marker identifier="start" tracksViewChanges={false} {...props}>
+    <Marker identifier="start" tracksViewChanges={initialRender} {...props}>
       <View style={styles.container}>
         <Image
           style={styles.image}
           source={require('@/assets/markers/ping_start.png')}
+          onLoad={() => {
+            setInitialRender(false);
+          }}
         />
       </View>
     </Marker>
