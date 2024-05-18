@@ -35,4 +35,6 @@ public interface WalkPort {
     SliceResponse<Long> getWalkIdsByPosition(GetWalksByPositionCommand command);
 
     Slice<Walk> getWalksByPosition(GetWalksByPositionCommand command);
+
+    List<Long> getRouteLikeList(Long userId);
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import social.connectus.userservice.application.request.InsertPostRequest;
 import social.connectus.userservice.application.response.PointResponse;
+import social.connectus.userservice.application.response.UserInfoResponse;
 import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.application.response.OpenedPostResponse;
 import social.connectus.userservice.domain.command.PointChangeCommand;
@@ -34,4 +35,5 @@ public interface UserPort {
 	UserResponseForPost getUserResponseForPost(Long userId);
 	String insertPostHistory(InsertPostRequest request);
 	void insertUserPosition(UserPositionCommand userPositionCommand);
+	UserInfoResponse getUserInfo(Long userId);
 }

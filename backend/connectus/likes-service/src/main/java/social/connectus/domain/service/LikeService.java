@@ -1,9 +1,12 @@
 package social.connectus.domain.service;
 
+import java.util.List;
+
 import org.hibernate.procedure.ParameterMisuseException;
 
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import social.connectus.application.rest.response.LikesResponse;
 import social.connectus.common.annotation.UseCase;
 import social.connectus.common.exception.GlobalException;
 import social.connectus.common.type.Type;
@@ -52,5 +55,10 @@ public class LikeService implements LikeUseCase {
 	@Override
 	public boolean isLike(Long postId, Long userId, Type type) {
 		return likePort.isLike(postId, userId, type);
+	}
+
+	@Override
+	public List<Long> getLikesList(Long userId) {
+		return likePort.getLikeList(userId);
 	}
 }

@@ -37,4 +37,5 @@ public interface UserUseCase {
 	String updateAvatar(Long userId, String imageUrl);
 	PointResponse insertPostHistory(InsertPostRequest request);
 	void insertUserPosition(UserPositionRequest request);
+	UserInfoResponse getUserInfo(Long userId);
 }
