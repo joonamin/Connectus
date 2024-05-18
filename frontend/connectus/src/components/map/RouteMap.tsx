@@ -96,7 +96,7 @@ export default class RouteMap extends React.Component<RouteMapProps> {
           <Polyline
             coordinates={this.routes}
             strokeWidth={8}
-            strokeColor={colors.dividerColor}
+            strokeColor={colors.primaryColorBlue}
           />
         </>
       ),
