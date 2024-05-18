@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import social.connectus.application.rest.request.CoordinateRequestDto;
 import social.connectus.application.rest.request.CreateCommentRequestDto;
 import social.connectus.application.rest.request.CreateFeedRequestDto;
+import social.connectus.application.rest.request.OpenPostRequest;
 import social.connectus.application.rest.response.DetailPostResponse;
 import social.connectus.application.rest.response.FeedResponse;
 import social.connectus.application.rest.response.FollowPostResponse;
@@ -39,6 +41,7 @@ import social.connectus.domain.ports.inbound.DetailPostUseCase;
 import social.connectus.domain.ports.inbound.FeedUseCase;
 import social.connectus.domain.ports.inbound.FollowPostUseCase;
 import social.connectus.domain.ports.inbound.MainPostUseCase;
+import social.connectus.domain.ports.inbound.OpenPostUseCase;
 
 @RestController
 @RequestMapping("/post")
@@ -50,6 +53,7 @@ public class PostController {
 	private final MainPostUseCase mainPostUseCase;
 	private final FeedUseCase feedUseCase;
 	private final FollowPostUseCase followPostUseCase;
+	private final OpenPostUseCase openPostUseCase;
 
 	// insert의 경우, endWalk에서 이뤄지는 한 walk에 대한 postList를 받아옮
 	@PostMapping("/insert")
@@ -199,6 +203,11 @@ public class PostController {
 	@GetMapping("/follow/{postId}")
 	public ResponseEntity<FollowPostResponse> followPost(@PathVariable("postId") Long postId) throws GlobalException {
 		return ResponseEntity.ok(followPostUseCase.followPost(postId));
+	}
+
+	@PostMapping("/open")
+	public ResponseEntity<String> openPost(@RequestBody OpenPostRequest request) throws GlobalException {
+		return ResponseEntity.ok(openPostUseCase.openPost(request));
 	}
 
 	@GetMapping("/health-check")
