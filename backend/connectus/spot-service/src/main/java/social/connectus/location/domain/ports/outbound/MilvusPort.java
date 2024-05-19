@@ -26,4 +26,6 @@ public interface MilvusPort {
     List<Long> deleteSpotList(DeleteSpotCommand command);
 
     List<Long> updateSpotList(CreateSpotCommand command);
+
+    Boolean deleteAll();
 }

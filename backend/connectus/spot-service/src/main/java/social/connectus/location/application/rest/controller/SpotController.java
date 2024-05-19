@@ -2,6 +2,7 @@ package social.connectus.location.application.rest.controller;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.NullArgumentException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import social.connectus.location.domain.ports.inbound.SpotUseCase;
 @RestController
 @RequestMapping("/spot")
 @AllArgsConstructor
+@Slf4j
 public class SpotController {
 
 	private final SpotUseCase spotUseCase;
@@ -41,6 +43,7 @@ public class SpotController {
 
 	@PostMapping("/insert")
 	public ResponseEntity<CreateSpotResponse> createSpot(@RequestBody CreateSpotRequest request) {
+		log.debug("Log createSpot request : ", request.toString());
 		for (SpotDto spot : request.getSpotList()) {
 			if (spot.getLongitude() == null || spot.getLatitude() == null) {
 				throw new NullArgumentException("Parameter doesn't allow Null.");
@@ -61,6 +64,7 @@ public class SpotController {
 
 	@PostMapping("/update")
 	public ResponseEntity<CreateSpotResponse> updateSpotList(@RequestBody CreateSpotRequest request) {
+		log.debug("Log UpdateSpotList request : ", request.toString());
 		CreateSpotResponse response = CreateSpotResponse.builder()
 				.spotIdList(spotUseCase.updateSpot(CreateSpotCommand.from(request)))
 				.build();
@@ -69,10 +73,19 @@ public class SpotController {
 
 	@PostMapping("/delete")
 	public ResponseEntity<CreateSpotResponse> deleteSpotList(@RequestBody DeleteSpotRequest request) {
+		log.debug("Log DeleteSpotList request : ", request.toString());
 		CreateSpotResponse response = CreateSpotResponse.builder()
 				.spotIdList(spotUseCase.deleteSpot(DeleteSpotCommand.from(request)))
 				.build();
 		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping("/delete-all")
+	public ResponseEntity<String> deleteAllSpot(){
+		if(spotUseCase.deleteALl() == false){
+			return ResponseEntity.internalServerError().body("Delete Failed.");
+		}
+		return  ResponseEntity.ok("Delete Saved.");
 	}
 
 }

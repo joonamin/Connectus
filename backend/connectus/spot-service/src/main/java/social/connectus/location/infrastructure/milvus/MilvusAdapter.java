@@ -5,6 +5,7 @@ import io.milvus.client.MilvusClient;
 import io.milvus.grpc.MutationResult;
 import io.milvus.grpc.QueryResults;
 import io.milvus.param.R;
+import io.milvus.param.dml.DeleteParam;
 import io.milvus.param.dml.InsertParam;
 import io.milvus.param.dml.QueryParam;
 import io.milvus.param.highlevel.dml.DeleteIdsParam;
@@ -12,6 +13,7 @@ import io.milvus.param.highlevel.dml.GetIdsParam;
 import io.milvus.param.highlevel.dml.response.DeleteResponse;
 import io.milvus.param.highlevel.dml.response.GetResponse;
 import io.milvus.response.QueryResultsWrapper;
+import io.milvus.v2.service.vector.request.DeleteReq;
 import io.milvus.v2.service.vector.request.InsertReq;
 import io.milvus.v2.service.vector.response.InsertResp;
 import lombok.RequiredArgsConstructor;
@@ -212,10 +214,14 @@ public class MilvusAdapter implements MilvusPort {
         MilvusClient client = milvusConfig.createMilvusClient();
 
         // 기존 데이터 삭제
-        List<Long> ids = command.getSpotIdList();
-        if(ids.stream().anyMatch(Objects::isNull)){
-            throw new RuntimeException("Null parameter doesn't expected.");
-        }
+        List<Long> spotIdListDto = command.getSpotIdList();
+//        if(spotIdListDto.stream().anyMatch(Objects::isNull)){
+//            throw new RuntimeException("Null parameter doesn't expected.");
+//        }
+
+        List<Long> ids = spotIdListDto.stream().filter(id -> id!=null).toList();
+//        List<Long> ids = spotIdListDto;
+
         DeleteIdsParam param = DeleteIdsParam.newBuilder()
                 .withCollectionName(milvusConfig.getCollectionName())
                 .withPrimaryIds(ids)
@@ -236,5 +242,20 @@ public class MilvusAdapter implements MilvusPort {
                 .build());
         // 신규 데이터 입력
         return insertAll(command);
+    }
+
+    @Override
+    public Boolean deleteAll() {
+        MilvusClient client = milvusConfig.createMilvusClient();
+        R<MutationResult> response = client.delete(DeleteParam.newBuilder()
+                .withCollectionName("spot")
+                .withExpr("type == \"USER\"")
+                .build());
+
+        if (response.getStatus() != R.Status.Success.getCode()) {
+            return false;
+//            throw new RuntimeException("Cannot delete old spot!");
+        }
+        return true;
     }
 }
