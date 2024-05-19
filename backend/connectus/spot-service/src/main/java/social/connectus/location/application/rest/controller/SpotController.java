@@ -43,15 +43,20 @@ public class SpotController {
 
 	@PostMapping("/insert")
 	public ResponseEntity<CreateSpotResponse> createSpot(@RequestBody CreateSpotRequest request) {
-		log.debug("Log createSpot request : ", request.toString());
-		for (SpotDto spot : request.getSpotList()) {
-			if (spot.getLongitude() == null || spot.getLatitude() == null) {
-				throw new NullArgumentException("Parameter doesn't allow Null.");
+		try {
+			log.info("Log createSpot request : userId->"+request.getSpotList().get(0).getDomainId()+", latitude->"+request.getSpotList().get(0).getLatitude()
+					+", longitude->"+request.getSpotList().get(0).getLongitude());
+			for (SpotDto spot : request.getSpotList()) {
+				if (spot.getLongitude() == null || spot.getLatitude() == null) {
+					throw new NullArgumentException("Parameter doesn't allow Null.");
+				}
 			}
+			CreateSpotCommand command = CreateSpotCommand.from(request);
+			List<Long> list = spotUseCase.createSpot(command);
+			return ResponseEntity.ok(CreateSpotResponse.builder().spotIdList(list).build());
+		}catch (NullPointerException e){
+			return ResponseEntity.badRequest().build();
 		}
-		CreateSpotCommand command = CreateSpotCommand.from(request);
-		List<Long> list = spotUseCase.createSpot(command);
-		return ResponseEntity.ok(CreateSpotResponse.builder().spotIdList(list).build());
 	}
 
 	@PostMapping("/get")
@@ -64,7 +69,11 @@ public class SpotController {
 
 	@PostMapping("/update")
 	public ResponseEntity<CreateSpotResponse> updateSpotList(@RequestBody CreateSpotRequest request) {
-		log.debug("Log UpdateSpotList request : ", request.toString());
+		for (SpotDto spot : request.getSpotList()) {
+			if (spot.getLongitude() == null || spot.getLatitude() == null) {
+				throw new NullArgumentException("Parameter doesn't allow Null.");
+			}
+		}
 		CreateSpotResponse response = CreateSpotResponse.builder()
 				.spotIdList(spotUseCase.updateSpot(CreateSpotCommand.from(request)))
 				.build();
@@ -73,7 +82,11 @@ public class SpotController {
 
 	@PostMapping("/delete")
 	public ResponseEntity<CreateSpotResponse> deleteSpotList(@RequestBody DeleteSpotRequest request) {
-		log.debug("Log DeleteSpotList request : ", request.toString());
+		for (Long userId : request.getSpotIdList()) {
+			if (userId == null) {
+				throw new NullArgumentException("Parameter doesn't allow Null.");
+			}
+		}
 		CreateSpotResponse response = CreateSpotResponse.builder()
 				.spotIdList(spotUseCase.deleteSpot(DeleteSpotCommand.from(request)))
 				.build();
