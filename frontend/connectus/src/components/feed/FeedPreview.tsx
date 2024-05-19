@@ -47,16 +47,16 @@ export default function FeedPreview({feedId, show}: feedPreviewProps) {
     queryKey: [queryKeys.GET_FEED_DETAIL, feedId],
   });
 
+  const {data: postSpot} = useQuery({
+    queryFn: () => getPostSpot(feedId),
+    queryKey: [queryKeys.GET_MARKER_POSITION, feedId],
+  });
+
   const postLikeBody: Parameters<typeof postFeedLike>[0] = {
     userId: user?.userId as number,
     domainId: feedId,
     type: 'POST',
   };
-
-  const {data: postSpot} = useQuery({
-    queryFn: () => getPostSpot(feedId),
-    queryKey: [queryKeys.GET_MARKER_POSITION],
-  });
 
   const postLike = useMutation({
     mutationFn: () => postFeedLike(postLikeBody),
@@ -103,7 +103,8 @@ export default function FeedPreview({feedId, show}: feedPreviewProps) {
           </View>
           <Pressable
             style={styles.moveButton}
-            onPress={() =>
+            onPress={() => {
+              console.log(feedId);
               show(
                 'move',
                 {
@@ -111,8 +112,8 @@ export default function FeedPreview({feedId, show}: feedPreviewProps) {
                   longitude: postSpot?.longitude as number,
                 },
                 feedId,
-              )
-            }>
+              );
+            }}>
             <Text style={styles.moveButtonText}>보러가기</Text>
           </Pressable>
         </View>
@@ -154,13 +155,13 @@ export default function FeedPreview({feedId, show}: feedPreviewProps) {
         ) : (
           <Pressable
             style={styles.lockButton}
-            onPress={() =>
+            onPress={() => {
               show(
                 'open',
                 {latitude: postSpot.latitde, longitude: postSpot.longitude},
                 feedId,
-              )
-            }>
+              );
+            }}>
             <MainText>포인트로 해금하기</MainText>
             <Ionicons name="lock-closed" size={24} />
           </Pressable>
