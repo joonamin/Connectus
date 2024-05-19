@@ -82,6 +82,29 @@ interface Achievement {
   reward: number;
 }
 
+interface EventDetail {
+	id: number;
+	reward: number;
+	isFinished: boolean;
+	imageUrl: string;
+	hostId: number;
+	title: string;
+	description: string;
+	spotIdList: number[];
+}
+
+interface Event {
+  eventId: number;
+  reward: number;
+  isFinished: boolean;
+  imageUrl: string;
+  hostId: number;
+  title: string;
+  description: string;
+  spotIdList: number[];
+  onClearUserIdList: number[];
+}
+
 export type {
   postDetail,
   comment,
@@ -92,4 +115,6 @@ export type {
   domainType,
   UserInfo,
   Achievement,
+  EventDetail,
+  Event
 };
