@@ -23,4 +23,6 @@ public interface SpotUseCase {
     List<Long> updateSpot(CreateSpotCommand command);
 
     List<Long> deleteSpot(DeleteSpotCommand command);
+
+    Boolean deleteALl();
 }
