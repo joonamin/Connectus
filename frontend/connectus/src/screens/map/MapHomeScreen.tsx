@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import MapView from 'react-native-map-clustering';
-import {LatLng, PROVIDER_GOOGLE} from 'react-native-maps';
+import Map, {LatLng, PROVIDER_GOOGLE, Polyline} from 'react-native-maps';
 import useUserLocation from '../../hooks/useUserLocation';
 import MainText from '@/components/text/MainText';
 import {
@@ -34,6 +34,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import BottomSheetQuickStackNavigator from '@/navigations/stack/BottomSheetQuickStackNavigator';
 import {MapBottomSheetTabParamList} from '@/navigations/Tabs/MapBottomSheetNavigator';
 import {domainType} from '@/types';
+import useRouteStore from '@/store/useRouteStore';
 
 type Navigation = CompositeNavigationProp<
   StackNavigationProp<MapStackParamList>,
@@ -42,9 +43,9 @@ type Navigation = CompositeNavigationProp<
 
 export default function MapHomeScreen() {
   const {user} = useAuthStore();
-  const {lookUpFeed} = useLookUpPost();
+  const {lookUpFeed, lookUpFeedPos} = useLookUpPost();
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const mapRef = useRef<MapView | null>(null);
+  const mapRef = useRef<Map | null>(null);
   const navigation = useNavigation<Navigation>();
   const [initPos, setInitPos] = useState<LatLng>();
   const [isStarting, setIsStarting] = useState<boolean>(false);
@@ -52,6 +53,7 @@ export default function MapHomeScreen() {
   const [isBottomSheetOpen, setBottomSheetOpen] = useState<boolean>(false);
   const bottomSheetNav =
     useRef<NavigationContainerRef<MapBottomSheetTabParamList> | null>(null);
+  const {route} = useRouteStore();
 
   /**
    * 산책 시작 버튼 press시 이동할 screen을 잠시 test로 설정해뒀습니다.
@@ -119,6 +121,18 @@ export default function MapHomeScreen() {
     handleBottomSheetOpen();
   };
 
+  useEffect(() => {
+    if (lookUpFeed && lookUpFeedPos) {
+      console.log('===========');
+      console.log('movetest');
+      mapRef.current?.animateToRegion({
+        ...lookUpFeedPos,
+        latitudeDelta: 0.0001,
+        longitudeDelta: 0.0001,
+      });
+    }
+  }, [lookUpFeed, lookUpFeedPos]);
+
   return (
     <SafeAreaView style={{flex: 1}}>
       {initPos && (
@@ -130,6 +144,15 @@ export default function MapHomeScreen() {
           followsUserLocation
           showsMyLocationButton={true}
           customMapStyle={mapStyle}
+          onMapReady={() => {
+            if (lookUpFeed && lookUpFeedPos) {
+              mapRef.current?.animateToRegion({
+                ...lookUpFeedPos,
+                latitudeDelta: 0.0001,
+                longitudeDelta: 0.0001,
+              });
+            }
+          }}
           initialRegion={{
             ...initPos,
             latitudeDelta: 0.012,
@@ -156,6 +179,13 @@ export default function MapHomeScreen() {
                 />
               );
             })}
+          {route && (
+            <Polyline
+              coordinates={route}
+              strokeColor={colors.primaryColorPink}
+              strokeWidth={10}
+            />
+          )}
         </MapView>
       )}
       <BottomSheet

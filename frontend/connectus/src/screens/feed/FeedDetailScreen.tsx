@@ -23,11 +23,16 @@ import useAuthStore from '@/store/useAuthStore';
 import {queryKeys} from '@/constants';
 import {comment} from '@/types';
 import queryClient from '@/api/queryClient';
-import {StackScreenProps} from '@react-navigation/stack';
+import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
 import {dateTimeToString} from '@/utils';
+import useLookUpPost from '@/store/useLookUpPost';
+import {LatLng} from 'react-native-maps';
+import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
+import {useNavigation} from '@react-navigation/native';
 
 type FeedDetailScreenProps = StackScreenProps<FeedStackParamList, 'FeedDetail'>;
+type Navigation = StackNavigationProp<MapStackParamList>;
 
 /**
  * @todo feedHomeScreen에서 해당 스크린에 대한 데이터를 전달받아 like, comment의 수를 받아와야하고
@@ -35,7 +40,7 @@ type FeedDetailScreenProps = StackScreenProps<FeedStackParamList, 'FeedDetail'>;
  */
 export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
   const {feedId} = route.params;
-
+  const navigation = useNavigation<Navigation>();
   const {
     isVisible: isMoveModalVisible,
     show: moveModalShow,
@@ -45,6 +50,8 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
   const [isFeedLiked, setIsFeedLiked] = useState(false);
   const [isUseKeyBoard, setIsUseKeyBoard] = useState(false);
   const [comment, setComment] = useState('');
+  const {lookUpFeed, lookUpFeedPos, setId, setPos, clearPosition} =
+    useLookUpPost();
   const {user} = useAuthStore();
 
   // 좋아요 버튼을 눌렀을때 실행할 함수로 나중에 api연결이 필요합니다
@@ -53,9 +60,11 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
   };
 
   const {data, isLoading, isError} = useQuery({
-    queryFn: () => getPostDetail(feedId, user?.userId as number, 5),
-    queryKey: [queryKeys.GET_FEED_DETAIL],
+    queryFn: () => getPostDetail(feedId, user?.userId as number),
+    queryKey: [queryKeys.GET_FEED_DETAIL, feedId],
   });
+
+  console.log('피드 디테일 확인', data);
 
   /**
    * @todo postId 전달
@@ -75,6 +84,14 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
       Keyboard.dismiss();
     },
   });
+
+  const handleLookUpFeed = () => {
+    clearPosition();
+    setId(data.postId as number);
+    const pos: LatLng = {latitude: data.latitude, longitude: data.longitude};
+    setPos(pos as LatLng);
+    navigation.navigate('MapHome');
+  };
 
   const postLikeBody: Parameters<typeof postFeedLike>[0] = {
     userId: user?.userId as number,
@@ -147,7 +164,7 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
               </Text>
             </View>
             <Pressable style={styles.moveButton}>
-              <Text style={styles.moveButtonText} onPress={moveModalShow}>
+              <Text style={styles.moveButtonText} onPress={handleLookUpFeed}>
                 보러가기
               </Text>
             </Pressable>

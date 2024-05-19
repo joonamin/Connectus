@@ -54,7 +54,7 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
     queryKey: [queryKeys.GET_FEED_DETAIL, feedId],
   });
 
-  console.log(data);
+  console.log('feedDetail', data);
 
   const like = useMutation({
     mutationFn: () =>

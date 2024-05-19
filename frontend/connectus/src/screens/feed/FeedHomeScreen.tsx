@@ -62,7 +62,8 @@ export default function FeedHomeScreen() {
   );
   const [selectFeedId, setSelectFeedId] = useState<number>();
   const [selectFeedPos, setSelectFeedPos] = useState<LatLng>();
-  const {setPosition} = useLookUpPost();
+  // 선택된 마커(보러가기 누른 마커)
+  const {setId, setPos, clearPosition} = useLookUpPost();
 
   // 보러가기 버튼 클릭시 실행할 update 함수 (조회수 증가함수 호출 필요)
   const handlePressViewButton = (id: number) => {
@@ -136,10 +137,10 @@ export default function FeedHomeScreen() {
    * 보러가기 버튼을 눌럿을 때, 해당 마커를 하이라이팅 하고, 특별한 마커로 변환!
    */
   const handleLookUpFeed = () => {
-    if (selectFeedPos) {
-      setPosition(selectFeedId as number);
-      navigation.navigate('MapHome');
-    }
+    clearPosition();
+    setId(selectFeedId as number);
+    setPos(selectFeedPos as LatLng);
+    navigation.navigate('MapHome');
   };
 
   useEffect(() => {
