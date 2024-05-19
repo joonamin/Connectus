@@ -1,13 +1,10 @@
 import {axiosInstance} from '@/api/axios';
 import {getUserInfo} from '@/api/user';
 import {queryKeys} from '@/constants';
-import useLookUpPost from '@/store/useLookUpPost';
 import {domainType} from '@/types';
-import {useQuery} from '@tanstack/react-query';
 import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {LatLng, MyMapMarkerProps, Marker} from 'react-native-maps';
-import {setGestureState} from 'react-native-reanimated';
 
 interface CustomMarkerProps extends MyMapMarkerProps {
   coordinate?: LatLng;

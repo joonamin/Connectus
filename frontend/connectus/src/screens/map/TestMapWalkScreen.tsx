@@ -295,7 +295,7 @@ export default function TestMapWalkScreen() {
             data?.nearby.map((marker, index) => {
               return (
                 <CustomMarker
-                  key={index}
+                  key={`${marker.domainId}+${marker.type}+${marker.latitude}+${marker.longitude}`}
                   coordinate={{
                     latitude: marker.latitude,
                     longitude: marker.longitude,
