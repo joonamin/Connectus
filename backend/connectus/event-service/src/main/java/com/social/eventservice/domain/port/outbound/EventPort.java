@@ -15,4 +15,6 @@ public interface EventPort {
 	Event initSpotInfo(Long eventId, InitSpotInfoCommand command);
 
     List<Event> getOngoingEventList();
+
+	Event finishEvent(Long eventId);
 }

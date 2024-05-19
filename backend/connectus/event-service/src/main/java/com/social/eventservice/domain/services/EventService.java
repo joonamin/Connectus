@@ -64,4 +64,9 @@ public class EventService implements EventUseCase {
     public List<Event> getOngoingEventList() {
         return eventPort.getOngoingEventList();
     }
+
+	@Override
+	public Event finishEvent(Long eventId) {
+		return eventPort.finishEvent(eventId);
+	}
 }
