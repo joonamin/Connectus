@@ -1,6 +1,7 @@
 import {
   Dimensions,
   Image,
+  ImageBackground,
   Keyboard,
   Pressable,
   StyleSheet,
@@ -60,7 +61,7 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
   };
 
   const {data, isLoading, isError} = useQuery({
-    queryFn: () => getPostDetail(feedId, user?.userId as number),
+    queryFn: async () => getPostDetail(feedId, user?.userId as number),
     queryKey: [queryKeys.GET_FEED_DETAIL, feedId],
   });
 
@@ -170,7 +171,11 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
             </Pressable>
           </View>
           <View style={styles.feedImageContainer}>
-            <Image style={styles.feedImage} source={{uri: data.imageUrl}} />
+            <ImageBackground
+              style={styles.feedImage}
+              source={{uri: data.imageUrl}}
+              blurRadius={data.inRange ? 0 : 15}
+            />
           </View>
           {/* 좋아요 버튼 */}
           <View style={styles.feedIndicator}>
@@ -316,6 +321,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('screen').width - 30,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#ffffff80',
   },
   feedImage: {width: '100%', height: '100%'},
   feedIndicator: {

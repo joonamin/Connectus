@@ -7,6 +7,7 @@ import {
   Dimensions,
   Modal,
   SafeAreaView,
+  ImageBackground,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
@@ -119,7 +120,8 @@ export default function FeedPreview({feedId, show}: feedPreviewProps) {
         </View>
         <View style={styles.feedImageContainer}>
           {data.imageUrl && (
-            <Image
+            <ImageBackground
+              blurRadius={data.inRange ? 0 : 15}
               style={styles.feedImage}
               source={{
                 uri: data.imageUrl,
