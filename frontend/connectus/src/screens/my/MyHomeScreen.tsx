@@ -61,7 +61,7 @@ export default function MyHomeScreen({
               <IconItemButton
                 iconType="Ionicons"
                 iconName="trophy"
-                text="업적"
+                text="달성한 업적"
                 onPress={gotoAchievements}
               />
               <IconItemButton
