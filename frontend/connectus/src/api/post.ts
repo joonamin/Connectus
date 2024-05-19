@@ -156,6 +156,8 @@ type getSpotType = {
 const getPostSpot = async (postId: number): Promise<getSpotType> => {
   try {
     const {data} = await axiosInstance.get(`/post/${postId}/spot`);
+    console.log('postId: ', postId);
+    console.log('data: ', data);
     return data;
   } catch (error) {
     throw error;
