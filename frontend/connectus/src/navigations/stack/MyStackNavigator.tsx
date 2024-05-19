@@ -43,7 +43,7 @@ function MyStackNavigator() {
       <Stack.Screen
         name="MyWalkHistory"
         component={MyWalkHistoryScreen}
-        options={{title: '외출 기록'}}
+        options={{title: '산책 기록'}}
       />
       <Stack.Screen
         name="MyWalkDetail"
