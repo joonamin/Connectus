@@ -66,6 +66,7 @@ const avatarStyles = StyleSheet.create({
     borderColor: colors.white,
     borderWidth: 2,
     zIndex: 1,
+    resizeMode: 'contain',
   },
 });
 const styles = StyleSheet.create({
