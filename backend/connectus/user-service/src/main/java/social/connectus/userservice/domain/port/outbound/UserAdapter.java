@@ -127,7 +127,7 @@ public class UserAdapter implements UserPort {
 	public ChangePositionResponse insertUserPosition(CreateUserPositionRequest request) {
 		User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("user doesn't exists"));
 		if(user.getSpotId()!=null){
-			throw new RuntimeException("User already has spot.");
+			return null;
 		}
 		SpotIdListDto dto = spotClient.insertUserPosition(CreateUserPositionCommand.from(request));
 		ChangePositionResponse resp = ChangePositionResponse.from(dto);
@@ -139,8 +139,14 @@ public class UserAdapter implements UserPort {
 	@Override
 	public ChangePositionResponse updateUserPosition(CreateUserPositionRequest request) {
 		User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new NotFoundException("user doesn't exists"));
-		SpotIdListDto dto = spotClient.updateUserPosition(UpdateUserPositionCommand.from(request, user.getSpotId()));
-		ChangePositionResponse resp = ChangePositionResponse.from(dto);
+
+		if(user.getSpotId() == null){
+			throw new NotFoundException("user doesn't have spotId.");
+		}
+		UpdateUserPositionCommand command = UpdateUserPositionCommand.from(request, user.getSpotId());
+		ChangePositionResponse resp = null;
+		SpotIdListDto dto = spotClient.updateUserPosition(command);
+		resp = ChangePositionResponse.from(dto);
 		user.changeSpotId(resp.getSpotId());
 		userRepository.save(user);
 		return resp;
@@ -149,6 +155,9 @@ public class UserAdapter implements UserPort {
 	@Override
 	public void deleteUserPosition(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists"));
+		if(user.getSpotId() == null){
+			throw new NotFoundException("user doesn't have spotId.");
+		}
 		spotClient.deleteUserPosition(SpotIdListDto.builder()
 						.spotIdList(Arrays.asList(user.getSpotId()))
 				.build());
