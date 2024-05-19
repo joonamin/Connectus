@@ -163,7 +163,7 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
               <MainText>{data?.content}</MainText>
             </View>
             <View style={styles.commentListContainer}>
-              {data?.commentList &&
+              {data?.commentList !== undefined &&
                 data?.commentList.map((comment, index) => {
                   return <Comment key={index} params={comment} />;
                 })}

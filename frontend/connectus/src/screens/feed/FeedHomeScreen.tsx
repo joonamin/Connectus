@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Dimensions,
   FlatList,
@@ -14,13 +15,12 @@ import Carousel from 'react-native-reanimated-carousel';
 import FeedPreview from '@/components/feed/FeedPreview';
 import colors from '@/constants/colors';
 import useModal from '@/hooks/useModal';
-import {useInfiniteQuery} from '@tanstack/react-query';
-import {getFeedList, openPost} from '@/api/post';
+import {useInfiniteQuery, useQuery} from '@tanstack/react-query';
+import {openPost} from '@/api/post';
 import Geolocation from '@react-native-community/geolocation';
 import {LatLng} from 'react-native-maps';
 import {queryKeys} from '@/constants';
 import {getNearWalkRecord} from '@/api/walk';
-import MainText from '@/components/text/MainText';
 import queryClient from '@/api/queryClient';
 import useAuthStore from '@/store/useAuthStore';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -28,6 +28,7 @@ import {FeedStackParamList} from '@/navigations/stack/FeedStackNavigator';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import useLookUpPost from '@/store/useLookUpPost';
 import {MapStackParamList} from '@/navigations/stack/MapStackNavigator';
+import {getUserInfo} from '@/api/user';
 
 /**
  * 피드 메인 페이지에서 오픈할 modal의 타입입니다.
@@ -111,16 +112,23 @@ export default function FeedHomeScreen() {
     setSelectFeedId(feedId);
     moveModalShow();
   };
-
+  const {data: userData} = useQuery({
+    queryKey: [queryKeys.GET_USER_INFO, user?.userId],
+    queryFn: async ({queryKey}) => {
+      return (await getUserInfo(user?.userId)).data;
+    },
+  });
   /**
    * 포인트로 해금하기 버튼을 눌럿을 때, 실행시킬 함수
    * 요청 성공 후, 디테일 페이지로 이동 후 데이터를 피드 디테일에 관한 데이터를 요청합니다.
    */
   const handleOpenFeed = () => {
     if (user) {
-      openPost(user.userId, selectFeedId as number).then(
-        navigation.navigate('FeedDetail', {feedId: selectFeedId}),
-      );
+      openPost(user.userId, selectFeedId as number)
+        .then(() => navigation.navigate('FeedDetail', {feedId: selectFeedId}))
+        .catch(() => {
+          Alert.alert('포인트가 모자랍니다');
+        });
     }
   };
 
@@ -227,6 +235,10 @@ export default function FeedHomeScreen() {
           {selectModalType === 'open' && (
             <View style={styles.confirmModal}>
               <Text style={styles.confirmText}>포인트로 방명록 보기</Text>
+              <Text
+                style={
+                  styles.confirmText
+                }>{`보유 포인트 : ${userData?.point}`}</Text>
               <View style={styles.confirmButtonContainer}>
                 <Pressable
                   style={styles.confirimButton}
