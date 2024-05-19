@@ -89,6 +89,11 @@ public class SpotService implements SpotUseCase {
         return milvusPort.deleteSpotList(command);
     }
 
+    @Override
+    public Boolean deleteALl() {
+        return milvusPort.deleteAll();
+    }
+
     private double getDistance(double latStart, double lonStart, double latEnd, double lonEnd) {
         final double KM_PER_LAT = 111.2D;
         final double KM_PER_LON = 89.85D;
