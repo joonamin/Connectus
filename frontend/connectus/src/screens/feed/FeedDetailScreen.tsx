@@ -125,6 +125,9 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
   if (isError || data === undefined) {
     return <Text>요청에 실패했습니다...</Text>;
   }
+  if (isLoading) {
+    return <MainText>게시글을 불러오는 중입니다</MainText>;
+  }
 
   return (
     <>
@@ -174,9 +177,10 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
             <MainText>{data.content}</MainText>
           </View>
           <View style={styles.commentListContainer}>
-            {data.commentList.map((comment: comment, index) => {
-              return <Comment key={index} params={comment} />;
-            })}
+            {data.commentList &&
+              data.commentList.map((comment: comment, index) => {
+                return <Comment key={index} params={comment} />;
+              })}
           </View>
           <View style={styles.defaultBottomPadding} />
           <View style={isUseKeyBoard ? styles.keyboardBottomPadding : null} />
