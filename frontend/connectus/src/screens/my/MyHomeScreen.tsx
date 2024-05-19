@@ -1,11 +1,9 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
 import React from 'react';
 import MainContainer from '@/components/containers/MainContainer';
-import CustomButton from '@/components/buttons/CustomButton';
 import IconItemButton from '@/components/containers/IconItemButton';
 import ProfileOverview from '@/components/my/ProfileOverview';
 import LightText from '@/components/text/LightText';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {StackScreenProps} from '@react-navigation/stack';
 import {MyStackParamList} from '@/navigations/stack/MyStackNavigator';
 import useAuthStore from '@/store/useAuthStore';
