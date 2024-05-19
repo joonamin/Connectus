@@ -82,7 +82,7 @@ export default function MonthlySummary({
       <Badge
         icon={<MaterialIcons name="location-pin" style={styles.icon} />}
         value={distance.toFixed(2)}
-        label="외출 거리 (km)"
+        label="산책 거리 (km)"
       />
       <Badge
         icon={
@@ -93,7 +93,7 @@ export default function MonthlySummary({
           ':' +
           minutes.toString().padStart(2, '0')
         }
-        label="외출 시간"
+        label="산책 시간"
       />
     </ListItem>
   );

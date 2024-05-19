@@ -67,7 +67,7 @@ export default function MyHomeScreen({
               <IconItemButton
                 iconType="MaterialIcons"
                 iconName="list"
-                text="외출 기록"
+                text="산책 기록"
                 onPress={gotoHistory}
               />
               <IconItemButton

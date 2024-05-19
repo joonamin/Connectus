@@ -42,7 +42,7 @@ const Status = ({children, ...props}: ViewProps) => (
 );
 
 /**
- * 외출 기록을 표시합니다
+ * 산책 기록을 표시합니다
  *
  * @returns WalkHistory
  */
