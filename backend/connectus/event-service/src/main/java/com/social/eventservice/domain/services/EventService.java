@@ -59,4 +59,9 @@ public class EventService implements EventUseCase {
 		// 유저가 달성하지 않은 ping에 대해서만 ping을 뿌려준다.
 		return eventPort.spreadPings(userId, eventId);
 	}
+
+    @Override
+    public List<Event> getOngoingEventList() {
+        return eventPort.getOngoingEventList();
+    }
 }

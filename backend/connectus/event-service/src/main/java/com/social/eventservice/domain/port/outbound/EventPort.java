@@ -13,4 +13,6 @@ public interface EventPort {
 	EventDetailsResponse detailsEvent(Long eventId);
 	List<PingsDetailsResponse> spreadPings(Long userId, Long eventId);
 	Event initSpotInfo(Long eventId, InitSpotInfoCommand command);
+
+    List<Event> getOngoingEventList();
 }
