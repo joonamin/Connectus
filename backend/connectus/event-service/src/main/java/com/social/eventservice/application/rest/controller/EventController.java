@@ -7,6 +7,8 @@ import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.util.List;
 
+import com.social.eventservice.application.rest.response.EventListResponse;
+import com.social.eventservice.domain.model.Event;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
@@ -56,6 +58,12 @@ public class EventController {
 	@GetMapping("/pings")
 	public ResponseEntity<List<PingsDetailsResponse>> getSpreadedPings(@RequestParam SpreadPingsRequest request) {
 		return ResponseEntity.ok(eventUseCase.spreadPings(request.getUserId(), request.getEventId()));
+	}
+
+	@GetMapping("/list/ongoing")
+	public ResponseEntity<EventListResponse> getOngoingEventList(){
+		List<Event> eventList = eventUseCase.getOngoingEventList();
+		return ResponseEntity.ok(EventListResponse.from(eventList));
 	}
 
 	@InitBinder
