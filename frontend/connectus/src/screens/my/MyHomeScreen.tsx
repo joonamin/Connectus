@@ -58,6 +58,8 @@ export default function MyHomeScreen({
                 iconName="person"
                 text="아바타 변경"
               />
+            </MainContainer>
+            <MainContainer style={styles.listGroup}>
               <IconItemButton
                 iconType="Ionicons"
                 iconName="trophy"
