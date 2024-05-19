@@ -6,6 +6,10 @@ import EventBanner from '@/components/event/EventBanner';
 import colors from '@/constants/colors';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {EventStackParamList} from '@/navigations/stack/EventStackNavigator';
+import {useQuery} from '@tanstack/react-query';
+import {queryKeys} from '@/constants';
+import {getOngoingEventList} from '@/api/event';
+import LightText from '@/components/text/LightText';
 
 type Navigation = NavigationProp<EventStackParamList>;
 
@@ -18,9 +22,38 @@ export default function EventHomeScreen() {
     navigation.navigate('EventCreate');
   };
 
+  const {isPending, isError, data} = useQuery({
+    queryKey: [queryKeys.GET_ONGOING_EVENT_LIST],
+    queryFn: async () => (await getOngoingEventList()).data,
+  });
+
+  if (isPending) {
+    return (
+      <MainContainer style={styles.mainContainer}>
+        <LightText>이벤트 목록을 불러오는 중입니다</LightText>
+      </MainContainer>
+    );
+  } else if (isError) {
+    return (
+      <MainContainer style={styles.mainContainer}>
+        <LightText>이벤트 목록을 불러오는 데 실패했습니다</LightText>
+      </MainContainer>
+    );
+  }
+
+  const list = data.eventList;
+
   return (
     <MainContainer style={styles.mainContainer}>
-      <EventBanner />
+      {isPending ? (
+        <LightText>이벤트 목록을 불러오는 중입니다</LightText>
+      ) : isError ? (
+        <LightText>이벤트 목록을 불러오는 데 실패했습니다</LightText>
+      ) : list.length === 0 ? (
+        <LightText>진행중인 이벤트가 없습니다</LightText>
+      ) : (
+        <EventBanner />
+      )}
       <Pressable style={styles.rbButton} onPress={handlePressCreate}>
         <FontAwesome5 name="calendar-check" size={44} color={colors.white} />
       </Pressable>
