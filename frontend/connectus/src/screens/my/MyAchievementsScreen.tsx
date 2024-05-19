@@ -17,38 +17,6 @@ import {Modal, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
  * @returns MyAchievementsScreen
  */
 export default function MyAchievementsScreen() {
-  const styles = StyleSheet.create({
-    container: {
-      gap: 30,
-    },
-    section: {
-      gap: 15,
-    },
-    modalContainer: {
-      flex: 1,
-      flexDirection: 'column',
-      width: '100%',
-      justifyContent: 'center',
-      alignItems: 'stretch',
-      height: '100%',
-      backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    },
-    modal: {
-      borderRadius: 15,
-      margin: 15,
-      gap: 30,
-      alignItems: 'stretch',
-      backgroundColor: colors.buttonBackground,
-    },
-    modalContents: {
-      gap: 30,
-      alignItems: 'center',
-    },
-    achievementIcon: {
-      flexBasis: 128,
-    },
-  });
-
   // 업적 상세 정보 표시를 위한 modal 설정
   const {
     isVisible: detailVisibility,
@@ -149,3 +117,35 @@ export default function MyAchievementsScreen() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    gap: 30,
+  },
+  section: {
+    gap: 15,
+  },
+  modalContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'stretch',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  },
+  modal: {
+    borderRadius: 15,
+    margin: 15,
+    gap: 30,
+    alignItems: 'stretch',
+    backgroundColor: colors.buttonBackground,
+  },
+  modalContents: {
+    gap: 30,
+    alignItems: 'center',
+  },
+  achievementIcon: {
+    flexBasis: 128,
+  },
+});
