@@ -74,6 +74,14 @@ interface UserInfo {
   imageUrl: string;
 }
 
+interface Achievement {
+  achievementCode: string;
+  title: string;
+  content: string;
+  imageUrl: string;
+  reward: number;
+}
+
 export type {
   postDetail,
   comment,
@@ -83,4 +91,5 @@ export type {
   Walk,
   domainType,
   UserInfo,
+  Achievement,
 };

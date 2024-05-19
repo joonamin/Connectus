@@ -1,5 +1,5 @@
 import {authAxios, axiosInstance} from '@/api/axios';
-import {UserInfo} from '@/types';
+import {Achievement, UserInfo} from '@/types';
 
 /**
  * user domain의 URL prefix입니다
@@ -98,5 +98,31 @@ export type GetUserInfoResponse = UserInfo;
 export async function getUserInfo(userId: number) {
   return await axiosInstance.get<GetUserInfoResponse>(
     `${prefix}/info/${userId}`,
+  );
+}
+
+/**
+ * 달성 업적 조회의 응답 데이터입니다
+ */
+export type GetUserCompletedAchievementResponse = {
+  /**
+   * 완료한 업적 목록
+   */
+  completedAchievement: Achievement[];
+  /**
+   * 완료하지 못한 업적 목록
+   */
+  uncompletedAchievement: Achievement[];
+};
+
+/**
+ * 지정한 ID를 가진 사용자의 완료한 업적 목록을 불러옵니다
+ *
+ * @param userId 사용자 ID
+ * @returns 완료한 업적
+ */
+export async function getUserCompletedAchievement(userId: number) {
+  return await axiosInstance.get<GetUserCompletedAchievementResponse>(
+    `${prefix}/completed-achievement/${userId}`
   );
 }
