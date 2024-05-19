@@ -21,6 +21,11 @@ export default function MyHomeScreen({
   const gotoHistory = () => {
     navigation.navigate('MyWalkHistory');
   };
+  const gotoChangeAvatar = () => {
+    if (typeof data !== 'undefined') {
+      navigation.navigate('MyChangeAvatar', {currentAvatar: data.imageUrl});
+    }
+  };
 
   // 로그아웃 기능 수행
   const {user, invalidate} = useAuthStore();
@@ -59,6 +64,7 @@ export default function MyHomeScreen({
                 iconType="MaterialIcons"
                 iconName="person"
                 text="아바타 변경"
+                onPress={gotoChangeAvatar}
               />
             </MainContainer>
             <MainContainer style={styles.listGroup}>
