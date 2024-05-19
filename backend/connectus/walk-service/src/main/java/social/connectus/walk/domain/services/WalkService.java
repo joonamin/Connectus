@@ -6,6 +6,7 @@ import social.connectus.walk.application.rest.request.CreatePostRequest;
 import social.connectus.walk.application.rest.request.PostRequestForWalk;
 import social.connectus.walk.application.rest.response.AchievementResponse;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
+import social.connectus.walk.application.rest.response.MyLikeWalkResponse;
 import social.connectus.walk.common.customannotations.UseCase;
 import social.connectus.walk.common.exception.AlreadyExistsDataException;
 import social.connectus.walk.common.utils.SliceResponse;
@@ -180,7 +181,7 @@ public class WalkService implements WalkUseCase {
     }
 
     @Override
-    public List<Long> getRouteLikeList(Long userId) {
+    public List<MyLikeWalkResponse> getRouteLikeList(Long userId) {
         return walkPort.getRouteLikeList(userId);
     }
 }

@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LikeResponse {
-	List<Long> likedPostIdList;
-	List<Long> likedWalkIdList;
+	List<MyLikePost> likedPostList;
+	List<MyLikeWalk> likedWalkList;
 }

@@ -3,10 +3,12 @@ package social.connectus.userservice.domain.port.client;
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import social.connectus.userservice.application.response.MyLikeWalk;
 import social.connectus.userservice.domain.port.client.response.MyWalkRecordResponse;
 import social.connectus.userservice.domain.port.client.response.WalkRouteResponse;
 
@@ -24,6 +26,6 @@ public interface WalkClient {
 	@GetMapping("/walk/{id}")
 	List<WalkRouteResponse> getWalkRoute(@PathVariable Long walkId);
 
-	@GetMapping("/route-like-list/{userId}")
-	List<Long> getRouteLikeList(@PathVariable Long userId);
+	@GetMapping("/walk/route-like-list/{userId}")
+	List<MyLikeWalk> getMyLikeWalk(@PathVariable Long userId);
 }
