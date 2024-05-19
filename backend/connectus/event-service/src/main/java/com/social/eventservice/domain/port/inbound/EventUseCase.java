@@ -15,4 +15,6 @@ public interface EventUseCase {
 	List<PingsDetailsResponse> spreadPings(Long userId, Long eventId);
 
     List<Event> getOngoingEventList();
+
+	Event finishEvent(Long eventId);
 }
