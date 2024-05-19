@@ -9,7 +9,7 @@ import EventSelectPosScreen from '@/screens/event/EventSelectPosScreen';
 
 export type EventStackParamList = {
   EventHome: undefined;
-  EventDetail: undefined;
+  EventDetail: {eventId: number};
   EventCreate: undefined;
   EventPosSelect: undefined;
 };
