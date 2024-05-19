@@ -6,12 +6,14 @@ import MyAchievementsScreen from '@/screens/my/MyAchievementsScreen';
 import MyWalkHistoryScreen from '@/screens/my/MyWalkHistoryScreen';
 import MyWalkDetailScreen from '@/screens/my/MyWalkDetailScreen';
 import {fonts} from '@/constants';
+import MyChangeAvatarScreen from '@/screens/my/MyChangeAvatarScreen';
 
 export type MyStackParamList = {
   MyHome: undefined;
   MyAchievements: undefined;
   MyWalkHistory: undefined;
   MyWalkDetail: {walkId: number};
+  MyChangeAvatar: {currentAvatar: string};
 };
 
 const Stack = createStackNavigator<MyStackParamList>();
@@ -49,6 +51,11 @@ function MyStackNavigator() {
         name="MyWalkDetail"
         component={MyWalkDetailScreen}
         options={{title: '기록 상세'}}
+      />
+      <Stack.Screen
+        name="MyChangeAvatar"
+        component={MyChangeAvatarScreen}
+        options={{title: '아바타 변경'}}
       />
     </Stack.Navigator>
   );

@@ -123,6 +123,32 @@ export type GetUserCompletedAchievementResponse = {
  */
 export async function getUserCompletedAchievement(userId: number) {
   return await axiosInstance.get<GetUserCompletedAchievementResponse>(
-    `${prefix}/completed-achievement/${userId}`
+    `${prefix}/completed-achievement/${userId}`,
+  );
+}
+
+/**
+ * 아바타 변경 시 요청 데이터입니다
+ */
+export type UpdateAvatarRequest = {
+  /**
+   * 변경할 아바타의 이미지 URL
+   */
+  imageUrl: string;
+};
+
+/**
+ * 아바타 변경을 요청합니다
+ *
+ * @param userId 아바타를 변경할 사용자의 ID
+ * @param request 요청 데이터
+ */
+export async function updateAvatar(
+  userId: number,
+  request: UpdateAvatarRequest,
+) {
+  return await axiosInstance.post<string>(
+    `${prefix}/${userId}/update-avatar`,
+    request,
   );
 }
