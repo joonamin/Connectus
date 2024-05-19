@@ -115,8 +115,8 @@ public class UserController {
 	}
 
 	@PostMapping("/{userId}/update-avatar")
-	public ResponseEntity<String> updateAvatar(@PathVariable("userId") Long userId, @RequestBody String imageUrl) {
-		return ResponseEntity.ok(userUseCase.updateAvatar(userId, imageUrl));
+	public ResponseEntity<String> updateAvatar(@PathVariable("userId") Long userId, @RequestBody UpdateAvatarRequest request) {
+		return ResponseEntity.ok(userUseCase.updateAvatar(userId, request));
 	}
 
 	@PostMapping("/insert-spot")

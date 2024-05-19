@@ -36,7 +36,7 @@ public class SpotService implements SpotUseCase {
 
     @Override
     public FindNearbyElementResponse findNearbyElement(FindNearbyElementCommand command) {
-        final long RADIUS = 2;
+        final double RADIUS = 2;
         R<QueryResults> resp = milvusPort.select(command.getLongitude(), command.getLatitude());
 //        System.out.println(resp);
 
