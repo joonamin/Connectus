@@ -332,9 +332,9 @@ export default function TestMapWalkScreen() {
           />
         </MapView>
       )}
-      <View style={[styles.eventIndicator, {top: inset.top || 20}]}>
+      {/* <View style={[styles.eventIndicator, {top: inset.top || 20}]}>
         <EventIndicator />
-      </View>
+      </View> */}
       {/* 화면이 유저의 위치를 따라가는지 설정 가능한 버튼 */}
       <View style={styles.trackingButtonContainer}>
         <Pressable style={styles.trackingButton} onPress={handleTrackingMode}>
