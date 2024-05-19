@@ -19,7 +19,7 @@ import {gatherDetail, gatherDone, gatherWant, gatherReach} from '@/api/gather';
 import {ScreenProps} from 'react-native-screens';
 import {BottomSheetStackParamList} from '@/navigations/stack/BottomSheetQuickStackNavigator';
 import {StackScreenProps} from '@react-navigation/stack';
-import {useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery} from '@tanstack/react-query';
 import {queryKeys} from '@/constants/keys';
 import useAuthStore from '@/store/useAuthStore';
 import {LatLng} from 'react-native-maps';
@@ -27,6 +27,9 @@ import Geolocation from '@react-native-community/geolocation';
 import useInterval from '@/hooks/useInterval';
 import {getDistance, getPosition} from '@/utils';
 import useModal from '@/hooks/useModal';
+import {axiosInstance} from '@/api/axios';
+import {getUserInfo} from '@/api/user';
+import queryClient from '@/api/queryClient';
 
 type GatherScreenProps = StackScreenProps<BottomSheetStackParamList, 'Gather'>;
 
@@ -46,6 +49,7 @@ export default function GatherScreen({route}: GatherScreenProps) {
   const {user} = useAuthStore();
   const [remainTime, setRemainTime] = useState<any>();
   const {show, hide, isVisible} = useModal();
+  const [selectedType, setSelecteType] = useState<string>('');
   /**
    * 데이터를 요청할 useQuery
    * data에 정보들이 담겨있습니다.
@@ -53,6 +57,34 @@ export default function GatherScreen({route}: GatherScreenProps) {
   const {data, isLoading, isError, isSuccess} = useQuery({
     queryFn: () => gatherDetail(gatherId),
     queryKey: [queryKeys.GET_GATHER, gatherId],
+  });
+
+  const {data: userInfo, isLoading: userInfoLoading} = useQuery({
+    queryFn: async () => {
+      return (await getUserInfo(data.hostId)).data;
+    },
+    queryKey: [queryKeys.GET_USER_INFO, user?.userId],
+  });
+
+  /**
+   * 모여라 모집을 희망
+   */
+  const wantJoin = useMutation({
+    mutationFn: () =>
+      gatherWant({
+        gatherId: data.gatherId,
+        userId: user?.userId as number,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.GET_GATHER, gatherId],
+      });
+      setSelecteType('want');
+      show();
+    },
+    onError: () => {
+      Alert.alert('이미 종료된 모여라입니다');
+    },
   });
 
   const detectDistnace = async () => {
@@ -88,25 +120,57 @@ export default function GatherScreen({route}: GatherScreenProps) {
    * 요청을 희망하는 유저가 호출할 axios요청입니다
    * @todo useId 수정
    */
-  const handleWantJoin = async () => {
-    if (data && user) {
-      const res = await gatherWant({
-        gatherId: data.gatherId,
-        userId: user?.userId,
-      });
-      if (res.msg === `Gather was already closed : ${data.gatherId}`) {
-        Alert.alert('이미 종료된 모여라입니다');
-      }
-    }
+  // const handleWantJoin = async () => {
+  //   if (data && user) {
+  //     const res = await gatherWant({
+  //       gatherId: data.gatherId,
+  //       userId: user?.userId,
+  //     }).then(() => {
+  //       // 추가한 코드
+  //       setSelecteType('want');
+  //       show();
+  //     });
+  //     if (res.msg === `Gather was already closed : ${data.gatherId}`) {
+  //       Alert.alert('이미 종료된 모여라입니다');
+  //     }
+  //   }
+  // };
+  const handleWantJoin = () => {
+    wantJoin.mutate();
   };
 
   /**
    * @todo 거리계산 후, 어느정도 거리 안에 들어온 유저가 호출할수있도록 수정필요
    */
-  const handleGatherReach = async () => {
-    if (data && user) {
-      await gatherReach({gatherId: data?.gatherId, userId: user?.userId});
-    }
+  // const handleGatherReach = async () => {
+  //   if (data && user) {
+  //     await gatherReach({gatherId: data?.gatherId, userId: user?.userId}).then(
+  //       () => {
+  //         // 추가한 코드
+  //         setSelecteType('reach');
+  //         show();
+  //       },
+  //     );
+  //   }
+  // };
+
+  const reachGather = useMutation({
+    mutationFn: () =>
+      gatherReach({gatherId: data?.gatherId, userId: user?.userId}),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [queryKeys.GET_GATHER, gatherId],
+      });
+      setSelecteType('reach');
+      show();
+    },
+    onError: () => {
+      Alert.alert('요청에 실패했습니다');
+    },
+  });
+
+  const handleGatherReach = () => {
+    reachGather.mutate();
   };
 
   useEffect(() => {
@@ -145,7 +209,7 @@ export default function GatherScreen({route}: GatherScreenProps) {
     }
   }, [isSuccess]);
 
-  if (isLoading) {
+  if (isLoading && userInfoLoading) {
     return (
       <MainContainer style={styles.mainContainer}>
         <MainText>모여라 데이터를 불러오는중입니다.</MainText>
@@ -184,7 +248,7 @@ export default function GatherScreen({route}: GatherScreenProps) {
               />
             </View>
             <View style={styles.userInfo}>
-              <Text style={styles.userName}>{data.hostId}</Text>
+              <Text style={styles.userName}>{userInfo?.nickname}</Text>
             </View>
           </View>
           <View style={styles.countContainer}>
@@ -229,12 +293,28 @@ export default function GatherScreen({route}: GatherScreenProps) {
       <Modal visible={isVisible} transparent={true} animationType="slide">
         <SafeAreaView style={styles.modalBackground}>
           <View style={styles.confirmModal}>
-            <MainText>산책 등록이 실패했습니다.</MainText>
+            {selectedType === 'want' && (
+              <>
+                <MainText>가는중 유저가 등록되었습니다</MainText>
+                <Pressable onPress={hide} style={styles.confirimButton}>
+                  <MainText>확인</MainText>
+                </Pressable>
+              </>
+            )}
+            {selectedType === 'reach' && (
+              <>
+                <MainText>참여가 완료되었습니다</MainText>
+                <Pressable onPress={hide} style={styles.confirimButton}>
+                  <MainText>확인</MainText>
+                </Pressable>
+              </>
+            )}
+            {/* <MainText>산책 등록이 실패했습니다.</MainText>
             <Pressable
-              // onPress={handleCheckErrorResult}
+              onPress={handleCheckErrorResult}
               style={styles.confirimButton}>
               <MainText>확인</MainText>
-            </Pressable>
+            </Pressable> */}
           </View>
         </SafeAreaView>
       </Modal>
