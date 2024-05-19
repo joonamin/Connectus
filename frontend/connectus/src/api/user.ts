@@ -1,4 +1,5 @@
-import {authAxios} from '@/api/axios';
+import {authAxios, axiosInstance} from '@/api/axios';
+import {UserInfo} from '@/types';
 
 /**
  * user domain의 URL prefix입니다
@@ -81,4 +82,21 @@ export async function login(request: LoginRequest) {
  */
 export async function register(request: RegisterRequest) {
   await authAxios.post<void>(`${prefix}/register`, request);
+}
+
+/**
+ * 사용자 정보 조회 응답 데이터입니다
+ */
+export type GetUserInfoResponse = UserInfo;
+
+/**
+ * 지정한 ID를 가진 사용자의 정보를 불러옵니다
+ *
+ * @param userId 사용자 ID
+ * @returns 사용자 정보
+ */
+export async function getUserInfo(userId: number) {
+  return await axiosInstance.get<GetUserInfoResponse>(
+    `${prefix}/info/${userId}`,
+  );
 }
