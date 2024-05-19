@@ -80,11 +80,6 @@ export default function MyHomeScreen({
                 text="산책 기록"
                 onPress={gotoHistory}
               />
-              <IconItemButton
-                iconType="Ionicons"
-                iconName="heart"
-                text="좋아요 기록"
-              />
             </MainContainer>
           </>
         ) : undefined}
