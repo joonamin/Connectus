@@ -172,7 +172,7 @@ export default function MapResultScreen({route}: ScreenProps) {
                 <Pressable
                   onPress={handleCheckErrorResult}
                   style={styles.confirimButton}>
-                  <MainText>학인</MainText>
+                  <MainText>확인</MainText>
                 </Pressable>
               </>
             )}
