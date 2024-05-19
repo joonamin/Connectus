@@ -52,7 +52,7 @@ export default function EventHomeScreen() {
       ) : list.length === 0 ? (
         <LightText>진행중인 이벤트가 없습니다</LightText>
       ) : (
-        <EventBanner />
+        list.map(event => <EventBanner key={event.eventId} event={event} />)
       )}
       <Pressable style={styles.rbButton} onPress={handlePressCreate}>
         <FontAwesome5 name="calendar-check" size={44} color={colors.white} />
