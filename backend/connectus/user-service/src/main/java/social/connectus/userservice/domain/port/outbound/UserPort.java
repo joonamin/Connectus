@@ -4,6 +4,7 @@ import java.util.List;
 
 import social.connectus.userservice.application.request.CreateUserPositionRequest;
 import social.connectus.userservice.application.request.InsertPostRequest;
+import social.connectus.userservice.application.request.UpdateAvatarRequest;
 import social.connectus.userservice.application.response.ChangePositionResponse;
 import social.connectus.userservice.application.response.PointResponse;
 import social.connectus.userservice.application.response.UserInfoResponse;
@@ -34,7 +35,7 @@ public interface UserPort {
 
 	PointResponse decreasePoint(PointChangeCommand command);
 
-	String updateAvatar(Long userId, String imageUrl);
+	String updateAvatar(Long userId, UpdateAvatarRequest request);
 
 	UserResponseForPost getUserResponseForPost(Long userId);
 

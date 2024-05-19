@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import social.connectus.userservice.application.request.CreateUserPositionRequest;
 import social.connectus.userservice.application.request.InsertPostRequest;
+import social.connectus.userservice.application.request.UpdateAvatarRequest;
 import social.connectus.userservice.application.response.ChangePositionResponse;
 import social.connectus.userservice.application.response.LikeResponse;
 import social.connectus.userservice.application.response.OpenedPostResponse;
@@ -188,9 +189,10 @@ public class UserAdapter implements UserPort {
 
 
 	@Override
-	public String updateAvatar(Long userId, String imageUrl) {
+	public String updateAvatar(Long userId, UpdateAvatarRequest request) {
 		User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("user doesn't exists"));
-		user.updateAvatar(imageUrl);
+		user.updateAvatar(request.getImageUrl());
+		userRepository.save(user);
 		return "avatar update!";
 	}
 	@Override
