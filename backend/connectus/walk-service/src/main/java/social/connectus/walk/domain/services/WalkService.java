@@ -62,7 +62,7 @@ public class WalkService implements WalkUseCase {
                 .build();
 
         // 달성한 업적 갱신 및 조회
-        int postCount = command.getPostList().isEmpty() ? 0 : command.getPostList().size();
+        int postCount = command.getPostList() == null ? 0 : command.getPostList().size();
 
         GetAchievementsCommand getAchievementsCommand = GetAchievementsCommand.builder()
                 .postCount(postCount)
