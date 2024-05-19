@@ -15,6 +15,7 @@ const queryKeys = {
   UPDATE_USER_POS: 'updateUserPos',
   GET_USER_INFO: 'getUserInfo',
   GET_USER_COMPLETED_ACHIEVEMENT: 'getUserCompletedAchievement',
+  GET_POST_DETAIL: 'getPostDetail',
 } as const;
 
 export {queryKeys};

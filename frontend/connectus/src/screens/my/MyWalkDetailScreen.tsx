@@ -12,7 +12,7 @@ import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {CompositeNavigationProp, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import React, {useRef} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import RouteMap from '@/components/map/RouteMap';
 import CustomButton from '@/components/buttons/CustomButton';
@@ -20,8 +20,9 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LightText from '@/components/text/LightText';
 import Share from 'react-native-share';
 import {useQuery} from '@tanstack/react-query';
-import {queryKeys} from '@/constants';
+import {fonts, queryKeys} from '@/constants';
 import {getRouteDetail} from '@/api/walk';
+import Post from '@/components/map/Post';
 
 export type Navigation = CompositeNavigationProp<
   StackNavigationProp<MyStackParamList>,
@@ -126,7 +127,19 @@ export default function MyWalkDetailScreen({route}: MyWalkDetailProps) {
         <WalkResult time={elapsed} distance={data.walkDistance} />
         {/* <Achievement achievs={data.achievements} /> */}
         <EventResult />
-        <RecordedPost />
+        <View style={styles.postContainer}>
+          <Text style={styles.postStatusText}>작성한 방명록</Text>
+          {data.postList.length === 0 ? (
+          <View style={styles.postContainer}>
+            <Text style={styles.postStatusText}>
+              작성된 방명록이 존재하지 않습니다
+            </Text>
+          </View>
+          ) : undefined}
+          {data.postList.map(postId => (
+            <Post key={postId} postId={postId} />
+          ))}
+        </View>
         <CustomTextButton
           backgroundColor={colors.primaryColorBlue}
           label="확인"
@@ -161,5 +174,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
     gap: 5,
+  },
+  postStatusText: {
+    fontFamily: fonts.medium,
+    fontSize: 20,
+    color: colors.white,
+  },
+  postContainer: {
+    gap: 15,
+    alignItems: 'stretch',
   },
 });
