@@ -86,8 +86,13 @@ const updateSaveUserPos = async (userId: number) => {
     longitude: pos.coords.longitude,
   };
   console.log('position updating', body);
-  const {data} = await axiosInstance.post('/user/update-spot', body);
-  return data;
+  try {
+    const {data} = await axiosInstance.post('/user/update-spot', body);
+    return data;
+  } catch (error) {
+    deleteSaveUserPos(userId);
+    throw error;
+  }
 };
 
 export {
