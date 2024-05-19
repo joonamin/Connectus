@@ -38,7 +38,7 @@ function MyStackNavigator() {
       <Stack.Screen
         name="MyAchievements"
         component={MyAchievementsScreen}
-        options={{title: '달성한 업적'}}
+        options={{title: '업적'}}
       />
       <Stack.Screen
         name="MyWalkHistory"
