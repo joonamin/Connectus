@@ -19,6 +19,7 @@ import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.application.request.*;
 import social.connectus.userservice.application.response.*;
+import social.connectus.userservice.common.exception.NotFoundException;
 import social.connectus.userservice.domain.command.PointChangeCommand;
 import social.connectus.userservice.domain.port.inbound.AchievementUseCase;
 import social.connectus.userservice.domain.port.inbound.PostUseCase;
@@ -123,21 +124,43 @@ public class UserController {
 
 	@PostMapping("/insert-spot")
 	public ResponseEntity<ChangePositionResponse> insertUserPosition(@RequestBody CreateUserPositionRequest request) {
-		log.debug("Log insertUserPosition request : ", request.toString());
-		return ResponseEntity.ok(userUseCase.insertUserPosition(request));
+		try{
+			log.info("Log insertUserPosition request : userId->"+request.getUserId()+", latitude->"+request.getLatitude()
+			+", longitude->"+request.getLongitude());
+			ChangePositionResponse resp = userUseCase.insertUserPosition(request);
+			if(resp == null) return ResponseEntity.badRequest().build();
+			return ResponseEntity.ok(resp);
+		}catch (NotFoundException e){
+			return ResponseEntity.notFound().build();
+		}catch (NullPointerException e){
+			return ResponseEntity.badRequest().build();
+		}
 	}
 
 	@PostMapping("/update-spot")
 	public ResponseEntity<ChangePositionResponse> updateUserPosition(@RequestBody CreateUserPositionRequest request) {
-		log.debug("Log updateUserPosition request : ", request.toString());
-		return ResponseEntity.ok(userUseCase.updateUserPosition(request));
+		try {
+			log.info("Log updateUserPosition request : userId->"+ request.getUserId()+", latitude->"+request.getLatitude()+
+					", longitude->"+request.getLongitude());
+			return ResponseEntity.ok(userUseCase.updateUserPosition(request));
+		}catch (NotFoundException e){
+			return ResponseEntity.notFound().build();
+		}catch (NullPointerException e){
+			return ResponseEntity.badRequest().build();
+		}
 	}
 
 	@PostMapping("/delete-spot/{userId}")
 	public ResponseEntity<String> deleteUserPosition(@PathVariable Long userId) {
-		log.debug("Log deleteUserPosition request : ", userId);
-		userUseCase.deleteUserPosition(userId);
-		return ResponseEntity.ok().body("Saved.");
+		try{
+			log.info("Log deleteUserPosition request : userId->"+userId);
+			userUseCase.deleteUserPosition(userId);
+			return ResponseEntity.ok().body("Saved.");
+		}catch (NotFoundException e){
+			return ResponseEntity.notFound().build();
+		}catch (NullPointerException e){
+			return ResponseEntity.badRequest().build();
+		}
 	}
 
 	@PostMapping("/increase-point")
