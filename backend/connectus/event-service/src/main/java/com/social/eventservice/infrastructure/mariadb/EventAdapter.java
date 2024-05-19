@@ -91,4 +91,13 @@ public class EventAdapter implements EventPort {
 		return eventList;
     }
 
+	@Override
+	public Event finishEvent(Long eventId) {
+		Event event = eventRepository.findById(eventId)
+				.orElseThrow(()-> new NotFoundException("event doesn't exists."));
+		event.setIsFinished(true);
+		eventRepository.save(event);
+		return event;
+	}
+
 }
