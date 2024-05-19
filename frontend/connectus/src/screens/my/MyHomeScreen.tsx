@@ -54,19 +54,6 @@ export default function MyHomeScreen({
             <ProfileOverview userInfo={data} />
             <MainContainer style={styles.listGroup}>
               <IconItemButton
-                iconType="MaterialCommunityIcons"
-                iconName="table-key"
-                text="이벤트 등록 권한 신청"
-              />
-              <CustomButton backgroundColor="transparent">
-                <View style={styles.detailButton}>
-                  <Ionicons name="information-circle" size={24} color="white" />
-                  <LightText>이벤트 등록 권한 신청?</LightText>
-                </View>
-              </CustomButton>
-            </MainContainer>
-            <MainContainer style={styles.listGroup}>
-              <IconItemButton
                 iconType="MaterialIcons"
                 iconName="person"
                 text="아바타 변경"
@@ -82,11 +69,6 @@ export default function MyHomeScreen({
                 iconName="list"
                 text="외출 기록"
                 onPress={gotoHistory}
-              />
-              <IconItemButton
-                iconType="MaterialIcons"
-                iconName="chat"
-                text="작성 댓글"
               />
               <IconItemButton
                 iconType="Ionicons"
