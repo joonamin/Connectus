@@ -86,6 +86,7 @@ const gatherWant = async (body: requestGather) => {
     return data;
   } catch (error: any) {
     console.log(error);
+    throw error;
   }
 };
 
