@@ -85,4 +85,10 @@ public class EventAdapter implements EventPort {
 		return eventRepository.saveAndFlush(event);
 	}
 
+    @Override
+    public List<Event> getOngoingEventList() {
+        List<Event> eventList = eventRepository.findByIsFinished(false);
+		return eventList;
+    }
+
 }
