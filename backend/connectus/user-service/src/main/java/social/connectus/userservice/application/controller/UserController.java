@@ -3,6 +3,7 @@ package social.connectus.userservice.application.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ import social.connectus.userservice.domain.port.inbound.command.*;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
 	private final UserUseCase userUseCase;
@@ -121,16 +123,19 @@ public class UserController {
 
 	@PostMapping("/insert-spot")
 	public ResponseEntity<ChangePositionResponse> insertUserPosition(@RequestBody CreateUserPositionRequest request) {
+		log.debug("Log insertUserPosition request : ", request.toString());
 		return ResponseEntity.ok(userUseCase.insertUserPosition(request));
 	}
 
 	@PostMapping("/update-spot")
 	public ResponseEntity<ChangePositionResponse> updateUserPosition(@RequestBody CreateUserPositionRequest request) {
+		log.debug("Log updateUserPosition request : ", request.toString());
 		return ResponseEntity.ok(userUseCase.updateUserPosition(request));
 	}
 
 	@PostMapping("/delete-spot/{userId}")
 	public ResponseEntity<String> deleteUserPosition(@PathVariable Long userId) {
+		log.debug("Log deleteUserPosition request : ", userId);
 		userUseCase.deleteUserPosition(userId);
 		return ResponseEntity.ok().body("Saved.");
 	}
