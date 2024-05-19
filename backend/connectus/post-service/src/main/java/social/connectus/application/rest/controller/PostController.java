@@ -220,9 +220,14 @@ public class PostController {
 	public ResponseEntity<String> test() {
 		return ResponseEntity.ok("Check Good!");
 	}
+	// 내가 작성한 postList
+	@GetMapping("/user/{userId}")
+	public ResponseEntity<List<MyPagePostResponse>> getMyPagePostList(@PathVariable Long userId) {
+		return ResponseEntity.ok(postListUseCase.getMyPagePostList(userId));
+	}
 
-	@GetMapping("/list/{userId}")
-	public ResponseEntity<List<Long>> getPostIdList(@PathVariable Long userId) {
-		return ResponseEntity.ok(postListUseCase.getPostIdList(userId));
+	@GetMapping("/list")
+	public ResponseEntity<List<MyPagePostResponse>> getMyLikePostList(@RequestParam List<Long> postIdList) {
+		return ResponseEntity.ok(postListUseCase.getMyLikePostList(postIdList));
 	}
 }
