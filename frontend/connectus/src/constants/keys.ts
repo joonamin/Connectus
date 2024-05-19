@@ -14,6 +14,7 @@ const queryKeys = {
   GET_MARKER_POSITION: 'getMarkerPosition',
   UPDATE_USER_POS: 'updateUserPos',
   GET_USER_INFO: 'getUserInfo',
+  GET_USER_COMPLETED_ACHIEVEMENT: 'getUserCompletedAchievement',
 } as const;
 
 export {queryKeys};

@@ -1,30 +1,16 @@
 import React from 'react';
-import {StyleSheet, ViewProps} from 'react-native';
+import {Image, StyleSheet, ViewProps} from 'react-native';
 import ListItem from '@/components/containers/ListItem';
 import MainText from '@/components/text/MainText';
 import CustomButton, {
   CustomButtonProps,
 } from '@/components/buttons/CustomButton';
-import AchievementIcon from '@/components/my/AchievementIcon';
+import {Achievement} from '@/types';
 
 /**
  * AchievementItem을 생성하기 위한 인자를 지정합니다
  */
-export interface AchievementItemProps extends ViewProps {
-  /**
-   * 업적을 표시할 icon
-   *
-   * Image 요소의 source 속성으로 지정됩니다
-   */
-  icon?: string;
-  /**
-   * 업적 이름
-   */
-  title: string;
-  /**
-   * 업적에 대한 설명
-   */
-  description?: string;
+export interface AchievementItemProps extends Achievement, ViewProps {
   /**
    * 버튼 선택 시 callback
    */
@@ -37,8 +23,9 @@ export interface AchievementItemProps extends ViewProps {
  * @returns AchievementItem
  */
 export default function AchievementItem({
-  icon,
+  imageUrl,
   title,
+  content,
   style,
   onPress,
   ...props
@@ -56,7 +43,7 @@ export default function AchievementItem({
   return (
     <CustomButton onPress={onPress}>
       <ListItem style={[styles.item, style]} {...props}>
-        <AchievementIcon style={styles.icon} icon={icon} />
+        {imageUrl ? <Image style={styles.icon} src={imageUrl} /> : undefined}
         <MainText>{title}</MainText>
       </ListItem>
     </CustomButton>
