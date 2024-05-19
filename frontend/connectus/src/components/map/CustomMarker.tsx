@@ -1,8 +1,13 @@
+import {axiosInstance} from '@/api/axios';
+import {getUserInfo} from '@/api/user';
+import {queryKeys} from '@/constants';
 import useLookUpPost from '@/store/useLookUpPost';
 import {domainType} from '@/types';
+import {useQuery} from '@tanstack/react-query';
 import React, {useEffect, useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {LatLng, MyMapMarkerProps, Marker} from 'react-native-maps';
+import {setGestureState} from 'react-native-reanimated';
 
 interface CustomMarkerProps extends MyMapMarkerProps {
   coordinate?: LatLng;
@@ -31,6 +36,17 @@ export default function CustomMarker({
   const onImageLoad = () => {
     setImageLoaded(true);
   };
+  const [imageUrl, setImageUrl] = useState<string>();
+
+  useEffect(() => {
+    const getUserImg = async () => {
+      const {data} = await axiosInstance.get(`/user/info/${markerId}`);
+      setImageUrl(data.imageUrl);
+    };
+    if (type === 'USER') {
+      getUserImg();
+    }
+  }, []);
 
   const markerView = (
     <View style={styles.container}>
@@ -66,7 +82,7 @@ export default function CustomMarker({
       {type === 'USER' && (
         <Image
           style={styles.image}
-          source={require('@/assets/giftImage.png')}
+          source={{uri: imageUrl}}
           resizeMode="cover"
           onLoad={onImageLoad}
         />
