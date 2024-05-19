@@ -1,5 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  Image,
+  Modal,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
 import MainContainer from '@/components/containers/MainContainer';
 import colors from '@/constants/colors';
@@ -17,6 +26,7 @@ import {LatLng} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import useInterval from '@/hooks/useInterval';
 import {getDistance, getPosition} from '@/utils';
+import useModal from '@/hooks/useModal';
 
 type GatherScreenProps = StackScreenProps<BottomSheetStackParamList, 'Gather'>;
 
@@ -35,7 +45,7 @@ export default function GatherScreen({route}: GatherScreenProps) {
   const {gatherId} = route.params;
   const {user} = useAuthStore();
   const [remainTime, setRemainTime] = useState<any>();
-
+  const {show, hide, isVisible} = useModal();
   /**
    * 데이터를 요청할 useQuery
    * data에 정보들이 담겨있습니다.
@@ -58,7 +68,7 @@ export default function GatherScreen({route}: GatherScreenProps) {
     };
 
     const dist = getDistance(userPos, markerPos);
-    if (dist < 0.001) {
+    if (dist < 0.02) {
       setIsReach(true);
     }
   };
@@ -216,6 +226,18 @@ export default function GatherScreen({route}: GatherScreenProps) {
           )}
         </>
       )}
+      <Modal visible={isVisible} transparent={true} animationType="slide">
+        <SafeAreaView style={styles.modalBackground}>
+          <View style={styles.confirmModal}>
+            <MainText>산책 등록이 실패했습니다.</MainText>
+            <Pressable
+              // onPress={handleCheckErrorResult}
+              style={styles.confirimButton}>
+              <MainText>확인</MainText>
+            </Pressable>
+          </View>
+        </SafeAreaView>
+      </Modal>
     </MainContainer>
   );
 }
@@ -278,5 +300,24 @@ const styles = StyleSheet.create({
   endImage: {
     width: '100%',
     height: '100%',
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  confirmModal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    padding: 35,
+    gap: 10,
+    backgroundColor: colors.buttonBackground,
+  },
+  confirimButton: {
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    backgroundColor: colors.background,
   },
 });

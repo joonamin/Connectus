@@ -82,7 +82,7 @@ export default function MapBottomTabsNavigator(
           options={({route}) => ({
             tabBarStyle: (route => {
               const routeName = getFocusedRouteNameFromRoute(route) ?? '';
-              if (routeName === 'MapWalk') {
+              if (routeName === 'WalkTest') {
                 return {display: 'none'};
               }
               return {

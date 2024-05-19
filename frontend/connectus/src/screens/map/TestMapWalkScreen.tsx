@@ -93,7 +93,9 @@ export default function TestMapWalkScreen() {
   const [indicateTime, setIndicateTime] = useState<string | null>(null);
   const [trace, setTrace] = useState<LatLng[]>([]);
   const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
-
+  const [userPosInterval, setUserPosInterval] = useState<number | undefined>(
+    5000,
+  );
   // 산책 종료 확인을 위한 모달을 열고닫는 state
   const {isVisible, show, hide} = useModal();
 
@@ -102,6 +104,7 @@ export default function TestMapWalkScreen() {
   //  바텀시트를 열고닫을 코드
   const handleBottomSheetOpen = () => bottomSheetRef.current?.expand();
   const handleBottomSheetClose = () => bottomSheetRef.current?.close();
+
   // ios 환경에서 노치를 계산해주는 함수
   const inset = useSafeAreaInsets();
   // 1초마다 time을 증가시키기 위해 useInterval에 넣어줄 코드입니다
@@ -132,7 +135,8 @@ export default function TestMapWalkScreen() {
    * 모달 창을 닫고 결과페이지로 이동합니다.
    */
   const handleWalkDone = async () => {
-    await deleteSaveUserPos(user.userId as number);
+    setUserPosInterval(undefined);
+    await deleteSaveUserPos(user?.userId as number);
     hide();
     navigation.pop();
     navigation.navigate('MapResult', {
@@ -159,7 +163,7 @@ export default function TestMapWalkScreen() {
   const {data: updateUser} = useQuery({
     queryFn: () => updateSaveUserPos(user?.userId as number),
     queryKey: [queryKeys.UPDATE_USER_POS],
-    refetchInterval: 5000,
+    refetchInterval: userPosInterval,
   });
 
   const handleMenuPress = () => {
