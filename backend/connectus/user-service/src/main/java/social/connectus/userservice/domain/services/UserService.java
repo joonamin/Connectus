@@ -116,6 +116,11 @@ public class UserService implements UserUseCase {
 	}
 
 	@Override
+	public LikeResponse getMyLikeList(Long userId) {
+		return userPort.getMyLikeList(userId);
+	}
+
+	@Override
 	public PointResponse insertPostHistory(InsertPostRequest request) {
 		PointResponse result = userPort.decreasePoint(new PointChangeCommand(request.getUserId(), 1));
 		userPort.updateOpenedPost(request.getUserId(), request.getPostId());

@@ -3,6 +3,7 @@ package social.connectus.walk.domain.ports.inbound;
 import org.springframework.data.domain.Slice;
 import social.connectus.walk.application.rest.response.AchievementResponse;
 import social.connectus.walk.application.rest.response.CreateWalkResponse;
+import social.connectus.walk.application.rest.response.MyLikeWalkResponse;
 import social.connectus.walk.common.utils.SliceResponse;
 import social.connectus.walk.domain.command.*;
 import social.connectus.walk.domain.model.entity.Walk;
@@ -33,5 +34,5 @@ public interface WalkUseCase {
 
     Slice<Walk> getWalksByPosition(GetWalksByPositionCommand from);
 
-    List<Long> getRouteLikeList(Long userId);
+    List<MyLikeWalkResponse> getRouteLikeList(Long userId);
 }
