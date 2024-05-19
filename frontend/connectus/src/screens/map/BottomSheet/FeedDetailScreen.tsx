@@ -1,6 +1,7 @@
 import {
   Dimensions,
   Image,
+  ImageBackground,
   Keyboard,
   Pressable,
   StyleSheet,
@@ -135,7 +136,11 @@ export default function FeedDetailScreen({route}: FeedDetailScreenProps) {
               </View>
             </View>
             <View style={styles.feedImageContainer}>
-              <Image style={styles.feedImage} source={{uri: data?.imageUrl}} />
+              <ImageBackground
+                blurRadius={data?.inRange ? 0 : 30}
+                style={styles.feedImage}
+                source={{uri: data?.imageUrl}}
+              />
             </View>
             <View style={styles.feedIndicator}>
               {data?.like ? (
