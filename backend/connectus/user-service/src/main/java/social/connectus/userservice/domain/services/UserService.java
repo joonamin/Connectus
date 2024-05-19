@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import social.connectus.userservice.application.request.InsertPostRequest;
 import social.connectus.userservice.application.request.CreateUserPositionRequest;
+import social.connectus.userservice.application.request.UpdateAvatarRequest;
 import social.connectus.userservice.application.response.*;
 import social.connectus.userservice.common.annotation.UseCase;
 import social.connectus.userservice.common.aop.annotation.YetNotImplemented;
@@ -90,8 +91,8 @@ public class UserService implements UserUseCase {
 	}
 
 	@Override
-	public String updateAvatar(Long userId, String imageUrl) {
-		return userPort.updateAvatar(userId, imageUrl);
+	public String updateAvatar(Long userId, UpdateAvatarRequest request) {
+		return userPort.updateAvatar(userId, request);
 	}
 
 	@Override
