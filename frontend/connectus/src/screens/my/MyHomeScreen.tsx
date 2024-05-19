@@ -10,6 +10,9 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {MyStackParamList} from '@/navigations/stack/MyStackNavigator';
 import useAuthStore from '@/store/useAuthStore';
 import {defaultColors} from '@/constants/colors';
+import {useQuery} from '@tanstack/react-query';
+import {queryKeys} from '@/constants';
+import {getUserInfo} from '@/api/user';
 
 export default function MyHomeScreen({
   navigation,
@@ -22,54 +25,77 @@ export default function MyHomeScreen({
   };
 
   // 로그아웃 기능 수행
-  const {invalidate} = useAuthStore();
+  const {user, invalidate} = useAuthStore();
+
+  // 프로필 정보 가져오기
+  const {isPending, isError, data} = useQuery({
+    queryKey: [queryKeys.GET_USER_INFO, user?.userId],
+    queryFn: async ({queryKey}) => {
+      const id = queryKey[1];
+
+      if (typeof id !== 'number') {
+        throw new Error('유효한 사용자 ID가 지정되어 있지 않습니다');
+      }
+      return (await getUserInfo(id)).data;
+    },
+  });
 
   return (
     <ScrollView>
       <MainContainer style={styles.maincontainer}>
-        <ProfileOverview />
-        <MainContainer style={styles.listGroup}>
-          <IconItemButton
-            iconType="MaterialCommunityIcons"
-            iconName="table-key"
-            text="이벤트 등록 권한 신청"
-          />
-          <CustomButton backgroundColor="transparent">
-            <View style={styles.detailButton}>
-              <Ionicons name="information-circle" size={24} color="white" />
-              <LightText>이벤트 등록 권한 신청?</LightText>
-            </View>
-          </CustomButton>
-        </MainContainer>
-        <MainContainer style={styles.listGroup}>
-          <IconItemButton
-            iconType="MaterialIcons"
-            iconName="person"
-            text="아바타 변경"
-          />
-          <IconItemButton
-            iconType="Ionicons"
-            iconName="trophy"
-            text="업적"
-            onPress={gotoAchievements}
-          />
-          <IconItemButton
-            iconType="MaterialIcons"
-            iconName="list"
-            text="외출 기록"
-            onPress={gotoHistory}
-          />
-          <IconItemButton
-            iconType="MaterialIcons"
-            iconName="chat"
-            text="작성 댓글"
-          />
-          <IconItemButton
-            iconType="Ionicons"
-            iconName="heart"
-            text="좋아요 기록"
-          />
-        </MainContainer>
+        {isPending ? (
+          <LightText style={styles.statusText}>사용자 정보를 불러오는 중입니다</LightText>
+        ) : undefined}
+        {isError ? (
+          <LightText style={styles.statusText}>사용자 정보를 불러오는 데 실패했습니다</LightText>
+        ) : undefined}
+        {!isPending && !isError ? (
+          <>
+            <ProfileOverview userInfo={data} />
+            <MainContainer style={styles.listGroup}>
+              <IconItemButton
+                iconType="MaterialCommunityIcons"
+                iconName="table-key"
+                text="이벤트 등록 권한 신청"
+              />
+              <CustomButton backgroundColor="transparent">
+                <View style={styles.detailButton}>
+                  <Ionicons name="information-circle" size={24} color="white" />
+                  <LightText>이벤트 등록 권한 신청?</LightText>
+                </View>
+              </CustomButton>
+            </MainContainer>
+            <MainContainer style={styles.listGroup}>
+              <IconItemButton
+                iconType="MaterialIcons"
+                iconName="person"
+                text="아바타 변경"
+              />
+              <IconItemButton
+                iconType="Ionicons"
+                iconName="trophy"
+                text="업적"
+                onPress={gotoAchievements}
+              />
+              <IconItemButton
+                iconType="MaterialIcons"
+                iconName="list"
+                text="외출 기록"
+                onPress={gotoHistory}
+              />
+              <IconItemButton
+                iconType="MaterialIcons"
+                iconName="chat"
+                text="작성 댓글"
+              />
+              <IconItemButton
+                iconType="Ionicons"
+                iconName="heart"
+                text="좋아요 기록"
+              />
+            </MainContainer>
+          </>
+        ) : undefined}
         <MainContainer style={styles.listGroup}>
           <IconItemButton
             onPress={invalidate}
@@ -87,6 +113,9 @@ export default function MyHomeScreen({
 const styles = StyleSheet.create({
   maincontainer: {
     gap: 30,
+  },
+  statusText: {
+    alignSelf: 'center',
   },
   detailButton: {
     padding: 10,

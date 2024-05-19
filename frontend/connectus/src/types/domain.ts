@@ -65,6 +65,15 @@ interface Walk {
   public: boolean;
 }
 
+interface UserInfo {
+  userId: number;
+  point: number;
+  postCount: number;
+  nickname: string;
+  completedAchieveCount: number;
+  imageUrl: string;
+}
+
 export type {
   postDetail,
   comment,
@@ -73,4 +82,5 @@ export type {
   spotListType,
   Walk,
   domainType,
+  UserInfo,
 };

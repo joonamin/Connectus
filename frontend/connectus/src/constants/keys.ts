@@ -13,6 +13,7 @@ const queryKeys = {
   GET_MARKER: 'getMarker',
   GET_MARKER_POSITION: 'getMarkerPosition',
   UPDATE_USER_POS: 'updateUserPos',
+  GET_USER_INFO: 'getUserInfo',
 } as const;
 
 export {queryKeys};
