@@ -42,10 +42,14 @@ export default function MyHomeScreen({
     <ScrollView>
       <MainContainer style={styles.maincontainer}>
         {isPending ? (
-          <LightText style={styles.statusText}>사용자 정보를 불러오는 중입니다</LightText>
+          <LightText style={styles.statusText}>
+            사용자 정보를 불러오는 중입니다
+          </LightText>
         ) : undefined}
         {isError ? (
-          <LightText style={styles.statusText}>사용자 정보를 불러오는 데 실패했습니다</LightText>
+          <LightText style={styles.statusText}>
+            사용자 정보를 불러오는 데 실패했습니다
+          </LightText>
         ) : undefined}
         {!isPending && !isError ? (
           <>
