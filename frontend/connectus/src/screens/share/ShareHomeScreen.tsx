@@ -96,7 +96,7 @@ export default function ShareHomeScreen() {
   const handleFollowApprove = () => {
     setIsVisible(false);
     updateWalker.mutate();
-    navigation.navigate('WalkTest');
+    navigation.navigate('MapHome');
   };
 
   // store에 저장된 루트를 삭제하고 modal창을 close

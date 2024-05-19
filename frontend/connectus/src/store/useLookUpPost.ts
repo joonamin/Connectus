@@ -3,7 +3,9 @@ import {create} from 'zustand';
 
 interface PosStore {
   lookUpFeed: number | null;
-  setPosition: (feedId: number) => void;
+  lookUpFeedPos: LatLng | null;
+  setId: (feedId: number) => void;
+  setPos: (pos: LatLng) => void;
   clearPosition: () => void;
 }
 
@@ -12,12 +14,25 @@ interface PosStore {
  */
 const useLookUpPost = create<PosStore>(set => ({
   lookUpFeed: null,
-  setPosition: (feedId: number) => {
-    console.log('setting position', feedId);
-    set({lookUpFeed: feedId});
+  lookUpFeedPos: null,
+  setId: (feedId: number) => {
+    console.log('setting id', feedId);
+    set(() => ({
+      lookUpFeed: feedId,
+    }));
+  },
+  setPos: (pos: LatLng) => {
+    console.log('setting position', pos);
+    set(() => ({
+      lookUpFeedPos: pos,
+    }));
   },
   clearPosition: () => {
-    return {lookUpFeed: null};
+    console.log('clearing position');
+    set(() => ({
+      lookUpFeed: null,
+      lookUpFeedPos: null,
+    }));
   },
 }));
 
