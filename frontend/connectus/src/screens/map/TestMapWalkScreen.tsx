@@ -6,7 +6,6 @@ import {
   Pressable,
   SafeAreaView,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 import {
@@ -51,7 +50,7 @@ import BottomSheetQuickStackNavigator from '@/navigations/stack/BottomSheetQuick
 import {useQuery} from '@tanstack/react-query';
 import {deleteSaveUserPos, getNearMarker, updateSaveUserPos} from '@/api/spot';
 import mapStyle from '@/style/mapStyle';
-import {domainType, spotListType} from '@/types';
+import {domainType} from '@/types';
 import {queryKeys} from '@/constants';
 import useLookUpPost from '@/store/useLookUpPost';
 import useAuthStore from '@/store/useAuthStore';
