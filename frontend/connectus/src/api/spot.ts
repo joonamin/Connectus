@@ -61,8 +61,12 @@ const startSaveUserPos = async (userId: number) => {
     latitude: pos.coords.latitude,
     longitude: pos.coords.longitude,
   };
-  const {data} = await axiosInstance.post('/user/insert-spot', body);
-  return data;
+  try {
+    const {data} = await axiosInstance.post('/user/insert-spot', body);
+    return data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 /**
@@ -70,6 +74,7 @@ const startSaveUserPos = async (userId: number) => {
  */
 const deleteSaveUserPos = async (userId: number) => {
   const {data} = await axiosInstance.post(`/user/delete-spot/${userId}`);
+  console.log('end walk', userId);
   return data;
 };
 
@@ -80,6 +85,7 @@ const updateSaveUserPos = async (userId: number) => {
     latitude: pos.coords.latitude,
     longitude: pos.coords.longitude,
   };
+  console.log('position updating', body);
   const {data} = await axiosInstance.post('/user/update-spot', body);
   return data;
 };
