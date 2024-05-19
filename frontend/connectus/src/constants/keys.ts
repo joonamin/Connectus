@@ -16,6 +16,8 @@ const queryKeys = {
   GET_USER_INFO: 'getUserInfo',
   GET_USER_COMPLETED_ACHIEVEMENT: 'getUserCompletedAchievement',
   GET_POST_DETAIL: 'getPostDetail',
+  GET_ONGOING_EVENT_LIST: 'getOngoingEventList',
+  GET_EVENT_DETAILS: 'getEventDetails',
 } as const;
 
 export {queryKeys};
