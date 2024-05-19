@@ -26,6 +26,12 @@ export default function CustomMarker({
   lookUpFeed,
   ...props
 }: CustomMarkerProps) {
+  const [imageLoaded, setImageLoaded] = useState<boolean>(false);
+
+  const onImageLoad = () => {
+    setImageLoaded(true);
+  };
+
   const markerView = (
     <View style={styles.container}>
       {/* 타입별로 이미지를 다르게합니다 */}
@@ -34,6 +40,7 @@ export default function CustomMarker({
           style={styles.image}
           source={require('@/assets/markers/eventMarker.png')}
           resizeMode="cover"
+          onLoad={onImageLoad}
         />
       )}
       {type === 'POST' && (
@@ -45,6 +52,7 @@ export default function CustomMarker({
               : require('@/assets/markers/feedMarker.png')
           }
           resizeMode="cover"
+          onLoad={onImageLoad}
         />
       )}
       {type === 'GATHER' && (
@@ -52,6 +60,7 @@ export default function CustomMarker({
           style={styles.image}
           source={require('@/assets/markers/gatherMarker.png')}
           resizeMode="cover"
+          onLoad={onImageLoad}
         />
       )}
       {type === 'USER' && (
@@ -59,13 +68,14 @@ export default function CustomMarker({
           style={styles.image}
           source={require('@/assets/giftImage.png')}
           resizeMode="cover"
+          onLoad={onImageLoad}
         />
       )}
     </View>
   );
 
   return coordinate ? (
-    <Marker coordinate={coordinate} {...props}>
+    <Marker coordinate={coordinate} tracksViewChanges={!imageLoaded} {...props}>
       {markerView}
     </Marker>
   ) : (
