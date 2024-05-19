@@ -5,6 +5,7 @@ import java.util.List;
 import social.connectus.userservice.application.request.InsertPostRequest;
 
 import social.connectus.userservice.application.request.CreateUserPositionRequest;
+import social.connectus.userservice.application.request.UpdateAvatarRequest;
 import social.connectus.userservice.application.response.*;
 import social.connectus.userservice.common.exception.FailedToLoginException;
 import social.connectus.userservice.common.exception.FailedToLogoutException;
@@ -35,7 +36,7 @@ public interface UserUseCase {
 	PointResponse increasePoint(PointChangeCommand from);
 
 	PointResponse decreasePoint(PointChangeCommand from);
-	String updateAvatar(Long userId, String imageUrl);
+	String updateAvatar(Long userId, UpdateAvatarRequest request);
 	PointResponse insertPostHistory(InsertPostRequest request);
 	ChangePositionResponse insertUserPosition(CreateUserPositionRequest request);
 
