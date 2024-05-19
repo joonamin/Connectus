@@ -15,6 +15,8 @@ import {queryKeys} from '@/constants/keys';
 import useAuthStore from '@/store/useAuthStore';
 import {LatLng} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
+import useInterval from '@/hooks/useInterval';
+import {getDistance, getPosition} from '@/utils';
 
 type GatherScreenProps = StackScreenProps<BottomSheetStackParamList, 'Gather'>;
 
@@ -27,21 +29,42 @@ type GatherScreenProps = StackScreenProps<BottomSheetStackParamList, 'Gather'>;
 export default function GatherScreen({route}: GatherScreenProps) {
   // 게시자를 확인하고 모집인원 아래의 ui를 변하게 합니다.
   const [isPublisher, setIsPublisher] = useState<boolean>(false);
-  const [isReach, setIsReach] = useState<boolean>(false);
   const [userPosition, setUserPostion] = useState<LatLng>();
-  const {user} = useAuthStore();
+  const [isReach, setIsReach] = useState<boolean>(false);
+  const [isEnd, setIsEnd] = useState<boolean>(false);
   const {gatherId} = route.params;
+  const {user} = useAuthStore();
+  const [remainTime, setRemainTime] = useState<any>();
 
   /**
    * 데이터를 요청할 useQuery
    * data에 정보들이 담겨있습니다.
    */
-  const {data, isLoading, isError} = useQuery({
+  const {data, isLoading, isError, isSuccess} = useQuery({
     queryFn: () => gatherDetail(gatherId),
     queryKey: [queryKeys.GET_GATHER, gatherId],
   });
 
-  console.log(data);
+  const detectDistnace = async () => {
+    const pos = await getPosition();
+
+    const userPos: LatLng = {
+      latitude: pos.coords.latitude,
+      longitude: pos.coords.longitude,
+    };
+    const markerPos: LatLng = {
+      latitude: data.latitude,
+      longitude: data.longitude,
+    };
+
+    const dist = getDistance(userPos, markerPos);
+    if (dist < 0.001) {
+      setIsReach(true);
+    }
+  };
+
+  useInterval(detectDistnace, 3000);
+
   /**
    * 모여라의 id와 user의 id를 제공해 모여라를 close
    */
@@ -76,27 +99,41 @@ export default function GatherScreen({route}: GatherScreenProps) {
     }
   };
 
-  Geolocation.getCurrentPosition(
-    info => {
-      const {latitude, longitude} = info.coords;
-      setUserPostion({latitude, longitude});
-    },
-    () => {
-      console.log('error');
-    },
-    {
-      enableHighAccuracy: true,
-      distanceFilter: 0,
-    },
-  );
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      info => {
+        const {latitude, longitude} = info.coords;
+        setUserPostion({latitude, longitude});
+      },
+      () => {
+        console.log('error');
+      },
+      {
+        enableHighAccuracy: true,
+        distanceFilter: 0,
+      },
+    );
+  }, []);
 
   useEffect(() => {
-    // axios 요청으로 받아온 hostid와 userId가 같다면 publisher로 설정합니다
-    // 추가로 제대로 작동하지 않을 시, 데이터 받아올때 문제가 있을 수 있으니, 아래 jsx return에서 수정을 해야합니다.
-    if (data?.hostId === user?.userId) {
-      setIsPublisher(true);
+    if (isSuccess) {
+      const currentTime = new Date();
+      const endTime = new Date(data.endTime);
+      const differenceInSeconds = Math.floor((endTime - currentTime) / 1000);
+      setRemainTime(differenceInSeconds);
+
+      if (data?.hostId === user?.userId) {
+        setIsPublisher(true);
+      }
+
+      if (currentTime > endTime) {
+        // console.log('끝났단 말이에욧!!!!!!!!!!!!!!');
+        setIsEnd(true);
+      } else {
+        setIsEnd(false);
+      }
     }
-  }, []);
+  }, [isSuccess]);
 
   if (isLoading) {
     return (
@@ -107,57 +144,77 @@ export default function GatherScreen({route}: GatherScreenProps) {
   }
 
   if (isError) {
-    return <MainText>데이터가 없어요</MainText>;
+    return (
+      <MainContainer style={styles.mainContainer}>
+        <MainText>존재하지 않는 모여라입니다.</MainText>
+      </MainContainer>
+    );
   }
+
   return (
     <MainContainer style={styles.mainContainer}>
-      <View style={styles.topIndicator}>
-        <View style={styles.imageContainer}>
-          <Image
-            source={require('@/assets/default-profile.png')}
-            style={styles.image}
-          />
+      {isEnd && (
+        <View style={styles.endGatherContainer}>
+          <View style={styles.endImageContainer}>
+            <Image
+              style={styles.endImage}
+              source={require('@/assets/crycat.png')}
+            />
+          </View>
+          <MainText>모여라가 종료되었어요</MainText>
         </View>
-        <View style={styles.userInfo}>
-          <Text style={styles.userName}>{data.hostId}</Text>
-        </View>
-      </View>
-      <View style={styles.countContainer}>
-        <CountdownCircleTimer
-          isPlaying
-          duration={3600}
-          colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-          colorsTime={[3600, 5, 2, 0]}>
-          {({remainingTime}) => {
-            const hours = Math.floor(remainingTime / 3600);
-            const minutes = Math.floor((remainingTime % 3600) / 60);
-            const seconds = remainingTime % 60;
+      )}
+      {!isEnd && (
+        <>
+          <View style={styles.topIndicator}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={require('@/assets/default-profile.png')}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.userInfo}>
+              <Text style={styles.userName}>{data.hostId}</Text>
+            </View>
+          </View>
+          <View style={styles.countContainer}>
+            <CountdownCircleTimer
+              isPlaying
+              duration={remainTime}
+              colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+              colorsTime={[3600, 5, 2, 0]}>
+              {({remainingTime}) => {
+                const hours = Math.floor(remainingTime / 3600);
+                const minutes = Math.floor((remainingTime % 3600) / 60);
+                const seconds = remainingTime % 60;
 
-            return (
-              <View style={styles.countText}>
-                <MainText>
-                  {hours}:{minutes}:{seconds}
-                </MainText>
-                <MainText>{`${data?.joinerList.length}/${data?.maxJoiner}`}</MainText>
-              </View>
-            );
-          }}
-        </CountdownCircleTimer>
-      </View>
-      <View style={styles.countContainer}>
-        <MainText>{`${data?.candidateList.length}명이 지금 오고 있습니다..`}</MainText>
-      </View>
-      <View style={styles.gatherContainer}>
-        <Text style={styles.gatherFont}>{data?.content}</Text>
-      </View>
-      {isPublisher && (
-        <CustomTextButton label="모여라 종료" onPress={handleGatherClose} />
-      )}
-      {!isPublisher && (
-        <CustomTextButton label="모여라 신청" onPress={handleWantJoin} />
-      )}
-      {isReach && !isPublisher && (
-        <CustomTextButton label="도착 완료" onPress={handleGatherReach} />
+                return (
+                  <View style={styles.countText}>
+                    <MainText>
+                      {hours}:{minutes}:{seconds}
+                    </MainText>
+                    <MainText>{`${data?.joinerList.length}/${data?.maxJoiner}`}</MainText>
+                  </View>
+                );
+              }}
+            </CountdownCircleTimer>
+          </View>
+          <View style={styles.countContainer}>
+            <MainText>{`${data?.candidateList.length}명이 지금 오고 있습니다..`}</MainText>
+          </View>
+          <View style={styles.gatherContainer}>
+            <Text style={styles.gatherFont}>{data?.content}</Text>
+          </View>
+          {isPublisher && (
+            <CustomTextButton label="모여라 종료" onPress={handleGatherClose} />
+          )}
+          {!isPublisher && !isReach && (
+            <CustomTextButton label="모여라 신청" onPress={handleWantJoin} />
+          )}
+          {isReach && !isPublisher && (
+            <CustomTextButton label="도착 완료" onPress={handleGatherReach} />
+          )}
+        </>
       )}
     </MainContainer>
   );
@@ -207,5 +264,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 15,
+  },
+  endGatherContainer: {
+    flex: 1,
+    gap: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  endImageContainer: {
+    width: 200,
+    height: 200,
+  },
+  endImage: {
+    width: '100%',
+    height: '100%',
   },
 });
