@@ -125,8 +125,6 @@ export default function MyWalkDetailScreen({route}: MyWalkDetailProps) {
         </View>
 
         <WalkResult time={elapsed} distance={data.walkDistance} />
-        {/* <Achievement achievs={data.achievements} /> */}
-        <EventResult />
         <View style={styles.postContainer}>
           <Text style={styles.postStatusText}>작성한 방명록</Text>
           {data.postList.length === 0 ? (
