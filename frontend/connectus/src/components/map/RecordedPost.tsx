@@ -32,8 +32,8 @@ export default function RecordedPost() {
                 }}>
                 <Ionicons name="close" size={32} color={colors.white} />
               </Pressable>
-              <MainText>2024년 5월 6일 16:17</MainText>
-              <Text style={styles.locationText}>여기에 주소가 나옵니다</Text>
+              {/* <MainText>2024년 5월 6일 16:17</MainText> */}
+              {/* <Text style={styles.locationText}>여기에 주소가 나옵니다</Text> */}
               <View style={styles.postImageContainer}>
                 {post.image === null && <MainText>이미지가 없습니다</MainText>}
                 {post.image !== null && (
