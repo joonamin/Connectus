@@ -112,7 +112,7 @@
 # 🐣 Frontend
 <div align="center">
 
- > React Native 기반의 Applicatino 개발
+ > React Native 기반의 Application 개발
 
 <img src="./img/frontend.png" style="width:80%;"></img>
 
