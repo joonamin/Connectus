@@ -120,294 +120,78 @@
 
 ### 파일 구조
 ```
-.
-└── frontend
-    └── connectus
-        ├── android
-        │   ├── app
-        │   │   ├── build.gradle
-        │   │   ├── debug.keystore
-        │   │   ├── proguard-rules.pro
-        │   │   └── src
-        │   │       ├── debug
-        │   │       │   └── AndroidManifest.xml
-        │   │       └── main
-        │   │           ├── AndroidManifest.xml
-        │   │           ├── assets
-        │   │           │   └── fonts
-        │   │           │       ├── GmarketSansTTFBold.ttf
-        │   │           │       ├── GmarketSansTTFLight.ttf
-        │   │           │       └── GmarketSansTTFMedium.ttf
-        │   │           ├── java
-        │   │           │   └── com
-        │   │           │       └── connectus
-        │   │           │           ├── MainActivity.kt
-        │   │           │           └── MainApplication.kt
-        │   │           └── res
-        │   │               ├── drawable
-        │   │               │   └── rn_edit_text_material.xml
-        │   │               ├── mipmap-hdpi
-        │   │               │   ├── ic_launcher.png
-        │   │               │   └── ic_launcher_round.png
-        │   │               ├── mipmap-mdpi
-        │   │               │   ├── ic_launcher.png
-        │   │               │   └── ic_launcher_round.png
-        │   │               ├── mipmap-xhdpi
-        │   │               │   ├── ic_launcher.png
-        │   │               │   └── ic_launcher_round.png
-        │   │               ├── mipmap-xxhdpi
-        │   │               │   ├── ic_launcher.png
-        │   │               │   └── ic_launcher_round.png
-        │   │               ├── mipmap-xxxhdpi
-        │   │               │   ├── ic_launcher.png
-        │   │               │   └── ic_launcher_round.png
-        │   │               └── values
-        │   │                   ├── strings.xml
-        │   │                   └── styles.xml
-        │   ├── build.gradle
-        │   ├── gradle
-        │   │   └── wrapper
-        │   │       ├── gradle-wrapper.jar
-        │   │       └── gradle-wrapper.properties
-        │   ├── gradle.properties
-        │   ├── gradlew
-        │   ├── gradlew.bat
-        │   ├── link-assets-manifest.json
-        │   └── settings.gradle
-        ├── app.json
-        ├── App.tsx
-        ├── assets
-        │   └── fonts
-        │       ├── GmarketSansTTFBold.ttf
-        │       ├── GmarketSansTTFLight.ttf
-        │       └── GmarketSansTTFMedium.ttf
-        ├── babel.config.js
-        ├── Gemfile
-        ├── index.js
-        ├── ios
-        │   ├── connectus
-        │   │   ├── AppDelegate.h
-        │   │   ├── AppDelegate.mm
-        │   │   ├── Images.xcassets
-        │   │   │   ├── AppIcon.appiconset
-        │   │   │   │   └── Contents.json
-        │   │   │   └── Contents.json
-        │   │   ├── Info.plist
-        │   │   ├── LaunchScreen.storyboard
-        │   │   ├── main.m
-        │   │   └── PrivacyInfo.xcprivacy
-        │   ├── connectusTests
-        │   │   ├── connectusTests.m
-        │   │   └── Info.plist
-        │   ├── connectus.xcodeproj
-        │   │   ├── project.pbxproj
-        │   │   └── xcshareddata
-        │   │       └── xcschemes
-        │   │           └── connectus.xcscheme
-        │   ├── connectus.xcworkspace
-        │   │   ├── contents.xcworkspacedata
-        │   │   └── xcshareddata
-        │   │       └── IDEWorkspaceChecks.plist
-        │   ├── link-assets-manifest.json
-        │   ├── Podfile
-        │   └── Podfile.lock
-        ├── jest.config.js
-        ├── metro.config.js
-        ├── package.json
-        ├── package-lock.json
-        ├── react-native.config.js
-        ├── README.md
-        ├── src
-        │   ├── api
-        │   │   ├── axios.ts
-        │   │   ├── event.ts
-        │   │   ├── gather.ts
-        │   │   ├── post.ts
-        │   │   ├── queries
-        │   │   │   └── useMutateUpdateRoute.ts
-        │   │   ├── queryClient.ts
-        │   │   ├── spot.ts
-        │   │   ├── user.ts
-        │   │   └── walk.ts
-        │   ├── assets
-        │   │   ├── crycat.png
-        │   │   ├── default-achievement.png
-        │   │   ├── default-profile.png
-        │   │   ├── feedImage.png
-        │   │   ├── giftImage.png
-        │   │   ├── markers
-        │   │   │   ├── eventMarker.png
-        │   │   │   ├── feedMarker.png
-        │   │   │   ├── gatherMarker.png
-        │   │   │   ├── goldfeedmarker.png
-        │   │   │   ├── ping_finish.png
-        │   │   │   └── ping_start.png
-        │   │   ├── sample-route.json
-        │   │   └── test-feed-image.jpg
-        │   ├── components
-        │   │   ├── buttons
-        │   │   │   ├── ButtonBase.tsx
-        │   │   │   ├── CustomButton.tsx
-        │   │   │   ├── CustomTextButton.tsx
-        │   │   │   ├── CustomTouchable.tsx
-        │   │   │   ├── PrimaryButton.tsx
-        │   │   │   ├── SecondaryButton.tsx
-        │   │   │   └── TertiaryButton.tsx
-        │   │   ├── containers
-        │   │   │   ├── Dialog.tsx
-        │   │   │   ├── IconItemButton.tsx
-        │   │   │   ├── IconListItem.tsx
-        │   │   │   ├── ListItem.tsx
-        │   │   │   ├── MainContainer.tsx
-        │   │   │   └── Shape.tsx
-        │   │   ├── event
-        │   │   │   └── EventBanner.tsx
-        │   │   ├── feed
-        │   │   │   ├── Comment.tsx
-        │   │   │   └── FeedPreview.tsx
-        │   │   ├── map
-        │   │   │   ├── Achievement.tsx
-        │   │   │   ├── BottomSheetFeedPreview.tsx
-        │   │   │   ├── CustomMarker.tsx
-        │   │   │   ├── EventResult.tsx
-        │   │   │   ├── FinishMarker.tsx
-        │   │   │   ├── HeadCountInput.tsx
-        │   │   │   ├── Post.tsx
-        │   │   │   ├── RecordedPost.tsx
-        │   │   │   ├── RouteMap.tsx
-        │   │   │   ├── StartMarker.tsx
-        │   │   │   └── WalkResult.tsx
-        │   │   ├── my
-        │   │   │   ├── AchievementItem.tsx
-        │   │   │   ├── DailyWalkHistory.tsx
-        │   │   │   ├── EventIndicator.tsx
-        │   │   │   ├── MonthlySummary.tsx
-        │   │   │   ├── MonthlyWalkHistory.tsx
-        │   │   │   ├── ProfileOverview.tsx
-        │   │   │   ├── StatisticsBadge.tsx
-        │   │   │   ├── WalkHistoryThumbnail.tsx
-        │   │   │   └── WalkHistory.tsx
-        │   │   ├── share
-        │   │   │   └── SharePost.tsx
-        │   │   └── text
-        │   │       ├── AuthInput.tsx
-        │   │       ├── body
-        │   │       │   ├── BodyLargeText.tsx
-        │   │       │   ├── BodyMediumText.tsx
-        │   │       │   └── BodySmallText.tsx
-        │   │       ├── CustomDatePicker.tsx
-        │   │       ├── display
-        │   │       │   ├── DisplayLargeText.tsx
-        │   │       │   ├── DisplayMediumText.tsx
-        │   │       │   └── DisplaySmallText.tsx
-        │   │       ├── HeadingText.tsx
-        │   │       ├── headline
-        │   │       │   ├── HeadlineLargeText.tsx
-        │   │       │   ├── HeadlineMediumText.tsx
-        │   │       │   └── HeadlineSmallText.tsx
-        │   │       ├── InputWithLabel.tsx
-        │   │       ├── label
-        │   │       │   ├── LabelLargeText.tsx
-        │   │       │   ├── LabelMediumText.tsx
-        │   │       │   └── LabelSmallText.tsx
-        │   │       ├── LightText.tsx
-        │   │       ├── MainText.tsx
-        │   │       └── title
-        │   │           ├── TitleLargeText.tsx
-        │   │           ├── TitleMediumText.tsx
-        │   │           └── TitleSmallText.tsx
-        │   ├── constants
-        │   │   ├── colors.ts
-        │   │   ├── fonts.ts
-        │   │   ├── index.ts
-        │   │   ├── keys.ts
-        │   │   └── themes.ts
-        │   ├── contexts
-        │   │   └── WalkHistoryContext.ts
-        │   ├── hooks
-        │   │   ├── useAppState.ts
-        │   │   ├── useImagePicker.ts
-        │   │   ├── useInterval.ts
-        │   │   ├── useModal.ts
-        │   │   ├── usePermission.ts
-        │   │   └── useUserLocation.ts
-        │   ├── navigations
-        │   │   ├── root
-        │   │   │   └── RootNavigator.tsx
-        │   │   ├── stack
-        │   │   │   ├── AuthStackNavigator.tsx
-        │   │   │   ├── BottomSheetQuickStackNavigator.tsx
-        │   │   │   ├── EventStackNavigator.tsx
-        │   │   │   ├── FeedStackNavigator.tsx
-        │   │   │   ├── MapStackNavigator.tsx
-        │   │   │   ├── MyStackNavigator.tsx
-        │   │   │   └── ShareStackNavigator.tsx
-        │   │   └── Tabs
-        │   │       ├── MapBottomSheetNavigator.tsx
-        │   │       └── MapBottomTabsNavigator.tsx
-        │   ├── screens
-        │   │   ├── auth
-        │   │   │   ├── AuthHomeScreen.tsx
-        │   │   │   ├── AuthLoginScreen.tsx
-        │   │   │   └── AuthRegisterScreen.tsx
-        │   │   ├── event
-        │   │   │   ├── EventCreateScreen.tsx
-        │   │   │   ├── EventDetailScreen.tsx
-        │   │   │   ├── EventHomeScreen.tsx
-        │   │   │   └── EventSelectPosScreen.tsx
-        │   │   ├── feed
-        │   │   │   ├── FeedDetailScreen.tsx
-        │   │   │   └── FeedHomeScreen.tsx
-        │   │   ├── map
-        │   │   │   ├── BottomSheet
-        │   │   │   │   ├── ChatListScreen.tsx
-        │   │   │   │   ├── CreateFeedScreen.tsx
-        │   │   │   │   ├── CreateGatherScreen.tsx
-        │   │   │   │   ├── FeedDetailScreen.tsx
-        │   │   │   │   ├── FeedListScreen.tsx
-        │   │   │   │   ├── GatherScreen.tsx
-        │   │   │   │   ├── MarkerSelectScreen.tsx
-        │   │   │   │   └── QuickMenuHomeScreen.tsx
-        │   │   │   ├── BottomSheetAchievmentsScreen.tsx
-        │   │   │   ├── MapHomeScreen.tsx
-        │   │   │   ├── MapResultScreen.tsx
-        │   │   │   ├── MapWalkScreen.tsx
-        │   │   │   └── TestMapWalkScreen.tsx
-        │   │   ├── my
-        │   │   │   ├── MyAchievementsScreen.tsx
-        │   │   │   ├── MyChangeAvatarScreen.tsx
-        │   │   │   ├── MyHomeScreen.tsx
-        │   │   │   ├── MyWalkDetailScreen.tsx
-        │   │   │   └── MyWalkHistoryScreen.tsx
-        │   │   └── share
-        │   │       ├── ShareDetailScreen.tsx
-        │   │       ├── ShareHomeScreen.tsx
-        │   │       └── ShareRecordScreen.tsx
-        │   ├── store
-        │   │   ├── useAuthStore.ts
-        │   │   ├── useEventPosStore.tsx
-        │   │   ├── useLookUpPost.ts
-        │   │   ├── usePostStore.tsx
-        │   │   ├── usePrivacyStore.ts
-        │   │   └── useRouteStore.tsx
-        │   ├── style
-        │   │   └── mapStyle.ts
-        │   ├── types
-        │   │   ├── domain.ts
-        │   │   └── index.ts
-        │   └── utils
-        │       ├── arrays.ts
-        │       ├── date.ts
-        │       ├── distance.ts
-        │       ├── images.ts
-        │       ├── index.ts
-        │       ├── marker.d.ts
-        │       ├── position.ts
-        │       ├── timer.ts
-        │       └── validate.ts
-        ├── __tests__
-        │   └── App.test.tsx
-        └── tsconfig.json
+connectus
+├── android
+│   ├── app
+│   │   └── src
+│   │       ├── debug
+│   │       └── main
+│   │           ├── assets
+│   │           │   └── fonts
+│   │           ├── java
+│   │           │   └── com
+│   │           │       └── connectus
+│   │           └── res
+│   │               ├── drawable
+│   │               ├── mipmap-hdpi
+│   │               ├── mipmap-mdpi
+│   │               ├── mipmap-xhdpi
+│   │               ├── mipmap-xxhdpi
+│   │               ├── mipmap-xxxhdpi
+│   │               └── values
+│   └── gradle
+│       └── wrapper
+├── assets
+│   └── fonts
+├── ios
+│   ├── connectus
+│   │   └── Images.xcassets
+│   │       └── AppIcon.appiconset
+│   ├── connectusTests
+│   ├── connectus.xcodeproj
+│   │   └── xcshareddata
+│   │       └── xcschemes
+│   └── connectus.xcworkspace
+│       └── xcshareddata
+├── src
+│   ├── api
+│   │   └── queries
+│   ├── assets
+│   │   └── markers
+│   ├── components
+│   │   ├── buttons
+│   │   ├── containers
+│   │   ├── event
+│   │   ├── feed
+│   │   ├── map
+│   │   ├── my
+│   │   ├── share
+│   │   └── text
+│   │       ├── body
+│   │       ├── display
+│   │       ├── headline
+│   │       ├── label
+│   │       └── title
+│   ├── constants
+│   ├── contexts
+│   ├── hooks
+│   ├── navigations
+│   │   ├── root
+│   │   ├── stack
+│   │   └── Tabs
+│   ├── screens
+│   │   ├── auth
+│   │   ├── event
+│   │   ├── feed
+│   │   ├── map
+│   │   │   └── BottomSheet
+│   │   ├── my
+│   │   └── share
+│   ├── store
+│   ├── style
+│   ├── types
+│   └── utils
+└── __tests__
 ```
 
 <br><br>
