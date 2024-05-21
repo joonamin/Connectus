@@ -1,0 +1,25 @@
+server:
+  port: 8102
+
+spring:
+  application:
+    name: gather-service
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://mariadb.connectus.social:3302/gather?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: ssafyE106!
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+
+eureka:
+  #  instance:
+  #    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka

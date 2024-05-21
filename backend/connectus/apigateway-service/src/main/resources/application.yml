@@ -1,0 +1,62 @@
+server:
+  port: 8000
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: apigateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: gather-service
+          uri: http://localhost:8102/
+          predicates:
+            - Path=/gather/**
+        - id: walk-service
+          uri: http://localhost:8106/
+          predicates:
+            - Path=/walk/**
+        - id: post-service
+          uri: http://localhost:8101/
+          predicates:
+            - Path=/post/**
+        - id: user-service
+          uri: http://localhost:8107/
+          predicates:
+            - Path=/user/**
+        - id: likes-service
+          uri: http://localhost:8108/
+          predicates:
+            - Path=/likes/**
+        - id: event-service
+          uri: http://localhost:8105/
+          predicates:
+            - Path=/event/**
+        - id: spot-service
+          uri: http://localhost:8103/
+          predicates:
+            - Path=/spot/**
+      default-filters:
+        - name: CustomAuthFilter
+          args:
+            excludedFilterPathPattern: "/user/(login|register)"
+  servlet:
+    multipart:
+      enabled: true # 멀티파트 업로드 지원여부 (default: true)
+      #      file-size-threshold: 0B # 파일을 디스크에 저장하지 않고 메모리에 저장하는 최소 크기 (default: 0B)
+      location: /users/charming/temp # 업로드된 파일이 임시로 저장되는 디스크 위치 (default: WAS가 결정)
+      max-file-size: 100MB # 한개 파일의 최대 사이즈 (default: 1MB)
+      max-request-size: 100MB # 한개 요청의 최대 사이즈 (default: 10MB)
+
+jwt:
+  secret-key: 9741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F79741AD2588AF89A25CBC596EA24F7
+
+logging:
+  level:
+    org.springframework.cloud.gateway: trace
