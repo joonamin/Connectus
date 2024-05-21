@@ -1,0 +1,44 @@
+server:
+  port: 8105
+
+spring:
+  application:
+    name: event-service
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://mariadb.connectus.social:3305/event?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: ssafyE106!
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  cloud:
+    aws:
+      s3:
+        bucket: e106-connectus
+      credentials:
+        access-key: AKIAUMBXWTXOEDLKEDYG
+        secret-key: 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
+      region:
+        static: ap-northeast-2
+        auto: false
+      stack:
+        auto: false
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+logging:
+  level:
+    org.springframework: TRACE
+
+external:
+  spot-service: http://localhost:8103/spot

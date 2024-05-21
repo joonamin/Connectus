@@ -1,0 +1,49 @@
+server:
+  port: 8101
+
+spring:
+  application:
+    name: post-service
+  redis:
+    host: localhost
+    port: 6379
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://mariadb.connectus.social:3301/post?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: ssafyE106!
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+    generate-ddl: true
+    defer-datasource-initialization: true
+  cloud:
+    aws:
+      s3:
+        bucket: e106-connectus
+        credentials:
+          access-key: AKIAUMBXWTXOPPW2YL5M
+          secret-key: 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
+      region:
+        static: ap-northeast-2
+        auto: false
+      stack:
+        auto: false
+  servlet:
+    multipart:
+      enabled: true # 멀티파트 업로드 지원여부 (default: true)
+      #      file-size-threshold: 0B # 파일을 디스크에 저장하지 않고 메모리에 저장하는 최소 크기 (default: 0B)
+      location: /users/charming/temp # 업로드된 파일이 임시로 저장되는 디스크 위치 (default: WAS가 결정)
+      max-file-size: 100MB # 한개 파일의 최대 사이즈 (default: 1MB)
+      max-request-size: 100MB # 한개 요청의 최대 사이즈 (default: 10MB)
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
